@@ -10,7 +10,7 @@
     @vite('resources/js/app.js')
 </head>
 
-<body id="app">
+<body id="app" class="text-slate-700 antialiased bg-stone-50">
 
 </body>
 

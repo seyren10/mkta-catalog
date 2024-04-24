@@ -1,12 +1,33 @@
 <template>
     <div>
-        <h1 class="text-blue-300 text-2xl">Main Layout</h1>
-        <router-view> </router-view>
+        <header class="fixed top-0 w-full z-10">
+            <NavApp></NavApp>
+        </header>
+
+        <main class="container mx-auto px-2">
+            <Index></Index>
+        </main>
+
+        <!-- extras -->
+        <img
+            src="/mk-images/background-pattern.png"
+            alt="pattern"
+            class="fixed left-[-10rem] top-0 -z-10 w-[30rem] opacity-10"
+        />
+        <img
+            src="/mk-images/background-pattern-2.png"
+            alt="pattern"
+            class="fixed bottom-10 right-[-10rem] -z-10 w-[30rem] opacity-10"
+        />
     </div>
 </template>
 
 <script>
-export default {};
+import NavApp from "@/components/NavApp.vue";
+import Index from "@/Pages/Home/Index.vue";
+export default {
+    components: { NavApp, Index },
+};
 </script>
 
 <style scoped></style>

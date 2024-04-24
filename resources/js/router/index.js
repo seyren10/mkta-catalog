@@ -7,14 +7,14 @@ const routes = [
         path: "/",
         name: "index",
         component: MainLayout,
-        redirect: { name: "home" },
-        children: [
-            {
-                path: "home",
-                name: "home",
-                component: () => import("@/Pages/Home/Index.vue"),
-            },
-        ],
+        beforeEnter(to, from, next) {
+            if (to.hash === "#home") {
+                next(); // No need to redirect
+            } else {
+                // Redirect to the same route with the hash fragment added
+                next({ path: "/", hash: "#home" });
+            }
+        },
     },
 ];
 
