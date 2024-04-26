@@ -1,10 +1,10 @@
 <template>
     <div>
-        <header class="fixed top-0 w-full z-10">
+        <header class="fixed top-0 z-10 w-full">
             <NavApp></NavApp>
         </header>
 
-        <main class="container mx-auto px-2">
+        <main class="container">
             <Index></Index>
         </main>
 

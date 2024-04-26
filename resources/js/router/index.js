@@ -8,7 +8,7 @@ const routes = [
         name: "index",
         component: MainLayout,
         beforeEnter(to, from, next) {
-            if (to.hash === "#home") {
+            if (to.hash) {
                 next(); // No need to redirect
             } else {
                 // Redirect to the same route with the hash fragment added

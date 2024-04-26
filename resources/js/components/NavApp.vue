@@ -8,7 +8,10 @@
                 v-for="link in links"
                 :key="link.title"
                 class="line-effect relative cursor-pointer"
-                :class="{ 'font-bold text-primary': $route.hash === link.to }"
+                :class="{
+                    'font-bold before:w-full before:opacity-100':
+                        $route.hash === link.to,
+                }"
             >
                 <a :href="link.to">
                     {{ link.title }}
@@ -20,7 +23,11 @@
             <span class="text-slate-300">|</span>
             <div class="flex gap-3">
                 <v-icon name="la-search-solid" scale="1.3"></v-icon>
-                <v-icon name="la-heart" scale="1.3"></v-icon>
+                <v-icon
+                    name="la-heart"
+                    scale="1.3"
+                    class="fill-accent"
+                ></v-icon>
                 <v-icon name="la-cog-solid" scale="1.3"></v-icon>
             </div>
         </div>

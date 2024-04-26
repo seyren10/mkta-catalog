@@ -4,6 +4,7 @@ import "../css/app.css";
 import { createApp } from "vue";
 import router from "./router/index";
 import App from "./App.vue";
+import VHeading from "./components/VHeading.vue";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
@@ -12,7 +13,7 @@ import {
     LaCogSolid,
     LaBarsSolid,
     LaTimesSolid,
-    LaChevronCircleDownSolid,
+    LaArrowCircleDownSolid,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -21,10 +22,11 @@ addIcons(
     LaCogSolid,
     LaBarsSolid,
     LaTimesSolid,
-    LaChevronCircleDownSolid,
+    LaArrowCircleDownSolid,
 );
 
 const app = createApp(App);
 app.use(router);
 app.component("v-icon", OhVueIcon);
+app.component("v-heading", VHeading);
 app.mount("#app");
