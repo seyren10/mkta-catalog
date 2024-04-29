@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserInfo;
+use App\Models\ProductTag;
 use Illuminate\Http\Request;
 
-class UserInfoController extends Controller
+class ProductTagController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class UserInfoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserInfo $userInfo)
+    public function show(ProductTag $productTag)
     {
         //
     }
@@ -42,7 +42,7 @@ class UserInfoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserInfo $userInfo)
+    public function edit(ProductTag $productTag)
     {
         //
     }
@@ -50,7 +50,7 @@ class UserInfoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserInfo $userInfo)
+    public function update(Request $request, ProductTag $productTag)
     {
         //
     }
@@ -58,7 +58,7 @@ class UserInfoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserInfo $userInfo)
+    public function destroy(ProductTag $productTag)
     {
         //
     }

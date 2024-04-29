@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_address_books', function (Blueprint $table) {
+        Schema::create('user_companies', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('company')->nullable();
-            $table->string('full_address')->nullable();
-            $table->string('contact_number')->nullable();
-
+            $table->foreignIdFor(\App\Models\CompanyCode::class)->nullable()->constrained('company_codes')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(\App\Models\User::class)->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
 
         });
@@ -28,9 +25,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_address_books', function (Blueprint $table) {
+        Schema::table('user_companies', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\CompanyCode::class);
             $table->dropForeignIdFor(\App\Models\User::class);
         });
-        Schema::dropIfExists('user_address_books');
+        Schema::dropIfExists('user_companies');
     }
 };

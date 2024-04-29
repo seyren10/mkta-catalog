@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(\App\Models\ProductAccessType::class)->nullable()->constrained('product_access_types')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('value')->nullable()->comment('Restriction value');
+            $table->integer('value')->nullable()->comment('Exemptions value');
             $table->foreignIdFor(\App\Models\Product::class)->nullable()->constrained('products')->cascadeOnDelete()->cascadeOnUpdate();
 
         });

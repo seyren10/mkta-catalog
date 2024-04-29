@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_infos', function (Blueprint $table) {
+        Schema::create('user_areas', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            
-            $table->string('area_code')->nullable();
-            $table->string('company_code')->nullable();
-            
+            $table->foreignIdFor(\App\Models\AreaCode::class)->nullable()->constrained('area_codes')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(\App\Models\User::class)->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-
         });
     }
 
@@ -28,9 +24,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_infos', function (Blueprint $table) {
+        Schema::table('user_areas', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\AreaCode::class);
             $table->dropForeignIdFor(\App\Models\User::class);
         });
-        Schema::dropIfExists('user_infos');
+        Schema::dropIfExists('user_areas');
     }
 };

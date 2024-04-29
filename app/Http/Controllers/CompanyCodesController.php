@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserAreaCode;
+use App\Models\CompanyCodes;
 use Illuminate\Http\Request;
 
-class UserAreaCodeController extends Controller
+class CompanyCodesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class UserAreaCodeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserAreaCode $userAreaCode)
+    public function show(CompanyCodes $companyCodes)
     {
         //
     }
@@ -42,7 +42,7 @@ class UserAreaCodeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserAreaCode $userAreaCode)
+    public function edit(CompanyCodes $companyCodes)
     {
         //
     }
@@ -50,7 +50,7 @@ class UserAreaCodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserAreaCode $userAreaCode)
+    public function update(Request $request, CompanyCodes $companyCodes)
     {
         //
     }
@@ -58,7 +58,7 @@ class UserAreaCodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserAreaCode $userAreaCode)
+    public function destroy(CompanyCodes $companyCodes)
     {
         //
     }

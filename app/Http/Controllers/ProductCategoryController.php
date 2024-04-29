@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserAddressBook;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
-class UserAddressBookController extends Controller
+class ProductCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class UserAddressBookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserAddressBook $userAddressBook)
+    public function show(ProductCategory $productCategory)
     {
         //
     }
@@ -42,7 +42,7 @@ class UserAddressBookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserAddressBook $userAddressBook)
+    public function edit(ProductCategory $productCategory)
     {
         //
     }
@@ -50,7 +50,7 @@ class UserAddressBookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserAddressBook $userAddressBook)
+    public function update(Request $request, ProductCategory $productCategory)
     {
         //
     }
@@ -58,7 +58,7 @@ class UserAddressBookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserAddressBook $userAddressBook)
+    public function destroy(ProductCategory $productCategory)
     {
         //
     }

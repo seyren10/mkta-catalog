@@ -28,9 +28,6 @@ return new class extends Migration
             $table->double('dimension_width',8,2)->default(0.0);
             $table->double('dimension_height',8,2)->default(0.0);
 
-            $table->foreignIdFor(\App\Models\Category::class)->nullable()->constrained('categories')->nullOnDelete()->cascadeOnUpdate();
-
-
     });
     }
 
@@ -39,10 +36,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\Category::class);
-
-        });
+        
         Schema::dropIfExists('products');
     }
 };

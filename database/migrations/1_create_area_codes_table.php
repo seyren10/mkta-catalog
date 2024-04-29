@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_area_codes', function (Blueprint $table) {
+        Schema::create('area_codes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->text('title');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_area_codes');
+        Schema::dropIfExists('area_codes');
     }
 };

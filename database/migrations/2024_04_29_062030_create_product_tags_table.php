@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_restrictions', function (Blueprint $table) {
+        Schema::create('product_tags', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            
-            $table->foreignIdFor(\App\Models\ProductAccessType::class)->nullable()->constrained('product_access_types')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('value')->nullable()->comment('Restriction value');
             $table->foreignIdFor(\App\Models\Product::class)->nullable()->constrained('products')->cascadeOnDelete()->cascadeOnUpdate();
-
+            $table->text('value');
         });
     }
 
@@ -27,10 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product_restrictions', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\ProductAccessType::class);
+        Schema::table('product_tags', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\Product::class);
         });
-        Schema::dropIfExists('product_restrictions');
+        Schema::dropIfExists('product_tags');
     }
 };
