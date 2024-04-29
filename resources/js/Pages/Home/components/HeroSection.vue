@@ -28,11 +28,19 @@
             </div>
         </div>
         <div>
-            <img
+            <VCircularImages
+                class="mx-auto"
+                :img-src="circleImageData"
+                base-img="/mk-images/rocket-removebg-preview.png"
+                :offset="300"
+                :circle-size="150"
+                :speed="0.03"
+            />
+            <!-- <img
                 src="/mk-images/rocket-removebg-preview.png"
                 alt="rocket"
                 class="mx-auto"
-            />
+            /> -->
         </div>
         <div
             class="absolute bottom-20 left-[50%] hidden -translate-x-[50%] md:block"
@@ -44,6 +52,22 @@
     </section>
 </template>
 
-<script setup></script>
+<script setup>
+import VCircularImages from "./VCircularImages.vue";
+import { computed } from "vue";
+
+const circleImageData = computed(() => {
+    return [
+        "/mk-images/rocket-removebg-preview.png",
+        "/mk-images/pumpkin-removebg-preview.png",
+        "/mk-images/bear-removebg-preview.png",
+        "/mk-images/nutcracker-removebg-preview.png",
+        "/mk-images/penguin-removebg-preview.png",
+        "/mk-images/plane-removebg-preview.png",
+        "/mk-images/dog-removebg-preview.png",
+        "/mk-images/parrot-removebg-preview.png",
+    ];
+});
+</script>
 
 <style scoped></style>
