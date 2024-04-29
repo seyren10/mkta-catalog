@@ -24,12 +24,13 @@ export default {
         },
         extend: {
             colors: {
-                primary: "#334155",
+                // primary: "#334155",
+                primary: '#082f49',
                 // accent: '#3b82f6' //blue
                 accent: "#d4af37 ", //gold
             },
             animation: {
-                appear: "appear 800ms ease-out forwards",
+                appear: "appear 800ms ease-out both",
                 wiggle: "wiggle 1s ease-in-out infinite",
             },
             keyframes: {

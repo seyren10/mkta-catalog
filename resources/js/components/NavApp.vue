@@ -107,8 +107,8 @@ export default {
                 { title: "Home", to: "#home" },
                 { title: "Our specialties", to: "#our-specialties" },
                 { title: "Work with us", to: "#work-with-us" },
-                { title: "Become a partner", to: "#become-a-partner" },
                 { title: "About", to: "#about" },
+                { title: "Become a partner", to: "#become-a-partner" },
             ];
         },
     },

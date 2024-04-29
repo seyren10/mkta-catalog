@@ -1,7 +1,7 @@
 <template>
     <component
         :is="type"
-        :class="`font-serif ${getSize} font-bold leading-tight `"
+        :class="`font-serif ${getSize} font-bold leading-tight text-primary`"
     >
         <slot></slot>
     </component>
@@ -22,7 +22,9 @@ export default {
                     return "text-[min(10vw,_3rem)] tracking-wide";
                 case "h2":
                     return "text-[min(9vw,_2.5rem)]";
-            
+                case "h3":
+                    return "text-[min(8vw,_2rem)]";
+
                 default:
                     break;
             }

@@ -6,9 +6,13 @@
                 v-for="(reason, index) in reasons"
                 :key="index"
                 role="listitem"
-                class="group relative isolate grid min-h-36 animate-appear cursor-default rounded-md border border-stone-300 p-3 opacity-0 transition-transform duration-300 hover:-translate-y-5 hover:bg-stone-300 hover:shadow-md"
+                class="group relative isolate grid min-h-36 cursor-default rounded-md border border-stone-300 p-3 transition-transform duration-300 hover:-translate-y-5 hover:bg-stone-300 hover:shadow-md"
+                :class="{
+                    'animate-appear': startAnimation,
+                    'opacity-1': !startAnimation,
+                }"
                 :style="{ animationDelay: `${(index + 1) * 200}ms` }"
-                v-animate="{ animationDelay: 200, baseAnimationDuration: 800 }"
+                ref="lists"
             >
                 <p class="mt-auto place-self-stretch">
                     {{ reason }}
@@ -24,6 +28,8 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+const lists = ref([]);
+const startAnimation = ref(true);
 
 const reasons = computed(() => {
     return [
@@ -41,17 +47,13 @@ const reasons = computed(() => {
     ];
 });
 
-const vAnimate = {
-    mounted: (el, binding) => {
-        const animationDuration =
-            binding.value.animationDelay * reasons.value.length +
-            binding.value.baseAnimationDuration;
+onMounted(() => {
+    const animationDuration = 200 * reasons.value.length + 800;
 
-        setTimeout(() => {
-            el.classList.remove("animate-appear", "opacity-0");
-        }, animationDuration);
-    },
-};
+    setTimeout(() => {
+        startAnimation.value = false;
+    }, animationDuration);
+});
 </script>
 
 <style scoped></style>
