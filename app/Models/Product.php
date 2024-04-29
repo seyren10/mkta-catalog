@@ -22,6 +22,6 @@ class Product extends Model
     }
     public function product_components()
     {
-        return $this->hasMany(ProductComponents::class, 'product_id', 'id')->orderBy('index', 'ASC');
+        return $this->hasMany(ProductComponent::class, 'product_id', 'id')->orderBy('index', 'ASC');
     }
 }
