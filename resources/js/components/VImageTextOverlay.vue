@@ -2,14 +2,14 @@
     <div
         class="group relative overflow-hidden"
         :class="{
-            'before:absolute before:inset-0 before:z-10 before:backdrop-grayscale before:transition-[backdrop-filter] before:duration-500 hover:before:backdrop-grayscale-0 hover:before:transition-[backdrop-filter]':
-                !appear,
+            'before:absolute before:inset-0 before:z-10 before:backdrop-saturate-50 before:transition-[backdrop-filter] before:duration-500 hover:before:backdrop-saturate-100 hover:before:transition-[backdrop-filter]':
+                !appear && !noFilter,
         }"
     >
         <img
             :src="src"
             :alt="src"
-            class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110"
+            class="h-full w-full object-cover transition-all duration-500 group-hover:scale-105"
         />
         <div
             v-if="!noPopup"
@@ -25,7 +25,7 @@
             >
                 <span>{{ title }}</span>
                 <v-icon
-                    name="la-heart"
+                    name="bi-heart-fill"
                     scale="1.3"
                     class="ml-auto fill-accent"
                 ></v-icon
@@ -45,6 +45,7 @@ const props = defineProps({
     src: { type: String },
     appear: { type: Boolean },
     noPopup: { type: Boolean },
+    noFilter: { type: Boolean },
 });
 </script>
 

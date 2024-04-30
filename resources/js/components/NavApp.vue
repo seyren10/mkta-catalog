@@ -106,6 +106,7 @@ export default {
             return [
                 { title: "Home", to: "#home" },
                 { title: "Our specialties", to: "#our-specialties" },
+                { title: "Our processes", to: "#our-processes" },
                 { title: "Work with us", to: "#work-with-us" },
                 { title: "About", to: "#about" },
                 { title: "Become a partner", to: "#become-a-partner" },

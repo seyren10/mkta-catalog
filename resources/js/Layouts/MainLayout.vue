@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header class="fixed top-0 z-10 w-full">
+        <header class="fixed top-0 z-50 w-full">
             <NavApp></NavApp>
         </header>
 

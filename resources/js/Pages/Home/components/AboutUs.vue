@@ -1,8 +1,50 @@
 <template>
     <section id="about" class="my-20">
         <v-heading class="mb-10 text-center">About us</v-heading>
-        <div class="grid gap-5 md:grid-cols-6 md:grid-rows-2">
-            <div class="space-y-3 text-center md:col-span-3 md:row-span-2">
+        <div class="grid gap-3 md:grid-cols-6 md:grid-rows-4">
+            <div
+                class="overflow-hidden rounded-md bg-red-100 md:col-span-3 md:max-h-56"
+            >
+                <VImageTextOverlay
+                    title="Nutcrackers"
+                    src="/mk-images/nutcrackers.jpg"
+                    class="h-full w-full"
+                    >We are the champion my friend, and we keep on fighting till
+                    the end.</VImageTextOverlay
+                >
+            </div>
+
+            <div class="overflow-hidden rounded-md bg-red-200">
+                <VImageTextOverlay
+                    title="Witch"
+                    src="/mk-images/halloween.jpg"
+                    class="h-full w-full"
+                    >We are the champion my friend, and we keep on fighting till
+                    the end.</VImageTextOverlay
+                >
+            </div>
+            <div class="overflow-hidden rounded-md bg-red-300 md:col-span-2">
+                <VImageTextOverlay
+                    title="InLiteFi"
+                    src="/mk-images/inlitefi.jpg"
+                    class="h-full w-full"
+                    >We are the champion my friend, and we keep on fighting till
+                    the end.</VImageTextOverlay
+                >
+            </div>
+            <div class="overflow-hidden rounded-md bg-red-400 md:row-span-2">
+                <VImageTextOverlay
+                    title="Winter"
+                    src="/mk-images/winter.jpg"
+                    class="h-full w-full"
+                    >We are the champion my friend, and we keep on fighting till
+                    the end.</VImageTextOverlay
+                >
+            </div>
+
+            <div
+                class="my-auto space-y-3 p-5 text-center md:col-span-4 md:row-span-2"
+            >
                 <p>
                     <span class="text-accent"
                         >MK Themed Attractions Philippines </span
@@ -30,17 +72,7 @@
             </div>
 
             <div
-                class="overflow-hidden rounded-md transition-all duration-300 hover:-translate-y-2 md:col-span-2 md:row-span-2"
-            >
-                <VImageTextOverlay
-                    title="Nutcrackers"
-                    src="/mk-images/nutcrackers.jpg"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
-                >
-            </div>
-            <div
-                class="overflow-hidden rounded-md transition-all duration-300 hover:-translate-y-2 md:row-span-3"
+                class="overflow-hidden rounded-md bg-red-700 md:col-span-1 md:row-span-2"
             >
                 <VImageTextOverlay
                     title="Witch"
@@ -51,18 +83,16 @@
                 >
             </div>
             <div
-                class="overflow-hidden rounded-md transition-all duration-300 hover:-translate-y-2 md:col-span-3 md:row-span-2"
+                class="overflow-hidden rounded-md bg-red-800 md:col-span-4 md:max-h-56"
             >
                 <VImageTextOverlay
-                    title="InLiteFi"
-                    src="/mk-images/inlitefi.jpg"
+                    src="/mk-images/creation_group.png"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
-                >
+                    no-popup
+                ></VImageTextOverlay>
             </div>
             <div
-                class="overflow-hidden rounded-md transition-all duration-300 hover:-translate-y-2 md:col-span-2 md:row-span-2"
+                class="overflow-hidden rounded-md bg-red-600 md:col-span-2 md:max-h-56"
             >
                 <VImageTextOverlay
                     title="Winter"
@@ -71,20 +101,6 @@
                     >We are the champion my friend, and we keep on fighting till
                     the end.</VImageTextOverlay
                 >
-                <!-- <img
-                    src="/mk-images/winter.jpg"
-                    alt=" "
-                    class="h-full w-full transition-all duration-300 hover:scale-110 hover:filter-none md:grayscale"
-                /> -->
-            </div>
-            <div
-                class="overflow-hidden rounded-md bg-stone-300 transition-all duration-300 hover:-translate-y-2"
-            >
-                <VImageTextOverlay
-                    src="/mk-images/creation_group.png"
-                    class="h-full w-full"
-                    no-popup
-                ></VImageTextOverlay>
             </div>
         </div>
     </section>

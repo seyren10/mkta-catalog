@@ -1,59 +1,59 @@
 <template>
-    <section
-        id="our-specialties"
-        class="mt-20 grid overflow-hidden rounded-lg md:grid-cols-2"
-    >
-        <div class="md:order-2">
-            <img
-                loading="lazy"
-                src="/mk-images/1.png"
-                alt=""
-                class="aspect-[3/2] w-[100%] object-cover"
-            />
-        </div>
-        <div
-            class="relative isolate grid place-content-center p-2 text-center md:order-1"
-        >
-            <div class="p-16 md:p-20">
-                <v-heading type="h2" class="mb-3">Our specialties</v-heading>
-                <p>
-                    Custom Projects, Themed and Architectural Projects,
-                    Animatronics, Lighting, Theming Design, Festive Lightning,
-                    Indoor and Outdoor Theming, Fiberglass Decorations, Themed
-                    Attractions, Themed Parks, Leisure and Tourism Attractions,
-                    3D Design, Themed Scultptures, Themed Decorations
-                </p>
-            </div>
-            <div class="background-plane absolute inset-0 -z-10"></div>
-        </div>
-
-        <div class="md:order-3">
+    <section id="our-specialties" class="grid gap-5 md:grid-cols-2">
+        <div class="-z-10 col-start-1 row-start-1 overflow-hidden rounded-md">
             <img
                 loading="lazy"
                 src="/mk-images/2.png"
                 alt=""
-                class="aspect-[3/2] w-[100%] object-cover"
+                class="h-full w-full object-cover object-bottom"
             />
         </div>
-        <div class="relative isolate grid place-content-center p-20 md:order-4">
-            <div class="background-pumpkin absolute inset-0 -z-10"></div>
-            <div>
-                <div class="text-center">
-                    <v-heading type="h2">Mission</v-heading>
-                    <p>
-                        To be the reason of today's smile on our partners
-                        visitors worldwide.
-                    </p>
+        <div
+            class="z-10 col-start-1 row-start-1 my-auto rounded-md p-3 text-white backdrop-blur-sm md:mx-20"
+        >
+            <v-heading type="h2" class="mb-3 border-b-2 text-white"
+                >Our specialties</v-heading
+            >
+            <p>
+                Custom Projects, Themed and Architectural Projects,
+                Animatronics, Lighting, Theming Design, Festive Lightning,
+                Indoor and Outdoor Theming, Fiberglass Decorations, Themed
+                Attractions, Themed Parks, Leisure and Tourism Attractions, 3D
+                Design, Themed Scultptures, Themed Decorations
+            </p>
+        </div>
+        <div>
+            <div class="overflow-hidden rounded-md bg-stone-200 text-center">
+                <div class="md:order-2">
+                    <img
+                        loading="lazy"
+                        src="/illustrations/mission.jpg"
+                        class="aspect-[1/.4] object-cover"
+                        alt=""
+                    />
                 </div>
-                <div class="mt-10 text-center">
-                    <v-heading type="h2">Vision</v-heading>
-                    <p>
-                        To be one of the world's leading producers and providers
-                        themed turnkey solutions and using its portfolio of high
-                        quality procedures to differentiate its content, service
-                        and design.
-                    </p>
-                </div>
+                <v-heading type="h2">Mission</v-heading>
+                <p class="px-5 pb-5">
+                    To be the reason of today's smile on our partners visitors
+                    worldwide.
+                </p>
+            </div>
+            <div
+                class="mt-10 overflow-hidden rounded-md bg-stone-200 text-center"
+            >
+                <img
+                    loading="lazy"
+                    src="/illustrations/vision.jpg"
+                    class="aspect-[1/.4] object-cover object-top"
+                    alt=""
+                />
+                <v-heading type="h2">Vision</v-heading>
+                <p class="px-5 pb-5">
+                    To be one of the world's leading producers and providers
+                    themed turnkey solutions and using its portfolio of high
+                    quality procedures to differentiate its content, service and
+                    design.
+                </p>
             </div>
         </div>
     </section>

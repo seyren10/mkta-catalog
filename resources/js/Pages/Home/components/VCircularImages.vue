@@ -2,6 +2,7 @@
     <div class="relative isolate -z-50">
         <img :src="baseImg" alt="" class="m-auto" />
         <div
+            v-if="!isMatched"
             v-for="(img, index) in imgSrc"
             :key="img"
             class="absolute z-[-100] aspect-square overflow-hidden rounded-full"
@@ -18,6 +19,7 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useMedia } from "@/composables/useMedia";
 
 const props = defineProps({
     imgSrc: {
@@ -51,6 +53,8 @@ const stopTimer = () => {
     clearInterval(timerId.value);
     timer.value = 0;
 };
+
+const { isMatched } = useMedia("(max-width: 767px)");
 
 onMounted(() => {
     timerId.value = setInterval(() => {

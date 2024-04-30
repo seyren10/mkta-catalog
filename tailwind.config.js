@@ -25,10 +25,10 @@ export default {
         extend: {
             colors: {
                 // primary: "#334155",
-                primary: '#082f49',
+                primary: "#082f49",
                 // primary: "#083344",
                 // accent: '#3b82f6' //blue
-                accent: "#d4af37 ", //gold
+                accent: "#d4af37", //gold
             },
             animation: {
                 appear: "appear 800ms ease-out both",
