@@ -3,8 +3,13 @@
         id="home"
         class="relative grid animate-appear items-center gap-10 opacity-0 md:h-screen md:grid-cols-2"
     >
+        <!-- <Teleport to="body">
+            <div
+                class="bg-hero-background absolute inset-0 -z-10 bg-cover bg-fixed bg-top"
+            ></div>
+        </Teleport> -->
         <div
-            class="relative mt-[4rem] text-center md:order-2 md:mt-0 md:text-left"
+            class="text-center md:order-2 relative mt-[4rem] md:mt-0 md:text-left"
         >
             <v-heading type="display">
                 Festive Lighting Solutions & Themed Decorations

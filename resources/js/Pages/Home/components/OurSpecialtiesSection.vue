@@ -63,47 +63,4 @@
 export default {};
 </script>
 
-<style scoped>
-.background-plane {
-    /* background: linear-gradient(
-            135deg,
-            #ffffff 20%,
-            transparent 20%,
-            transparent 80%,
-            #ffffff 80%
-        ),
-        linear-gradient(
-            45deg,
-            #ffffff 40%,
-            #d6d3d1 40%,
-            #d6d3d1 60%,
-            #d6d3d1 60%,
-            #ffffff 60%
-        ),
-        linear-gradient(
-            135deg,
-            #ffffff 20%,
-            #d6d3d1 20%,
-            #d6d3d1 80%,
-            #ffffff 80%
-        );
-    background-size: 6em 6em;
-    background-attachment: fixed;
-    background-color: #ffffff;
-    opacity: 0.5; */
-    background: url("/mk-images/plane-removebg-preview.png") no-repeat;
-    background-position: bottom;
-    opacity: 0.2;
-}
-.background-pumpkin {
-    /* background: radial-gradient(circle, #d6d3d1 10%, transparent 11%);
-    background-size: 6em 6em;
-    background-color: #ffffff;
-    background-attachment: fixed;
-
-    opacity: 1; */
-    background: url("/mk-images/pumpkin-removebg-preview.png") no-repeat;
-    background-position: bottom;
-    opacity: 0.2;
-}
-</style>
+<style scoped></style>

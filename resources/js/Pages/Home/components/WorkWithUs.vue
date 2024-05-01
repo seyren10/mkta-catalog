@@ -41,27 +41,27 @@ const startAnimation = ref(true);
 const reasons = computed(() => {
     return [
         {
-            title: "We shipped an average of <span class='text-accent text-xl'>400</span> containers yearly.",
+            title: "<span class='text-accent text-xl'>400</span> containers shipped yearly ensure timely delivery.",
             img: "/illustrations/loading-van.jpg",
         },
         {
-            title: "We have a hard working  <span class='text-accent text-xl'>500</span> employees.",
+            title: "<span class='text-accent text-xl'>500</span> hardworking employees ensure quality and efficiency.",
             img: "/illustrations/employees.jpg",
         },
         {
-            title: "We have more than  <span class='text-accent text-xl'>4000+</span> items in our catalog, in fiberglass.",
+            title: "Over <span class='text-accent text-xl'>4000</span> products made from fiberglass material, offering durability and versatility in various applications",
             img: "/illustrations/products.jpg",
         },
         {
-            title: "We have more that  <span class='text-accent text-xl'>2000+</span> items in our light collection.",
+            title: "Over <span class='text-accent text-xl'>2000</span> lighting products, providing a diverse range of lighting solutions for different settings and preferences.",
             img: "/illustrations/products.jpg",
         },
         {
-            title: "Our factory is  <span class='text-accent text-xl'>300,000</span> sq. ft.",
+            title: "Operating in a <span class='text-accent text-xl'>300,000 sq. ft.</span> factory ensures scale and quality.",
             img: "/illustrations/factory.jpg",
         },
         {
-            title: "We export our items to all seven continents",
+            title: "Exporting to all <span class='text-accent text-xl'>seven</span> continents signifies experience and reliability.",
             img: "/illustrations/port.jpg",
         },
     ];

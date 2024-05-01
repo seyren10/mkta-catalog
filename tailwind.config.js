@@ -44,6 +44,9 @@ export default {
                     "50%": { transform: "rotate(3deg)" },
                 },
             },
+            backgroundImage: {
+                "hero-background": "url('/mk-images/hero-background.jpg')",
+            },
         },
     },
     plugins: [],

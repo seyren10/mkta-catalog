@@ -18,6 +18,8 @@ import {
     BiHeartFill,
     LaArrowCircleLeftSolid,
     LaArrowCircleRightSolid,
+    FaQuoteRight,
+    FaQuoteLeft,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -30,6 +32,8 @@ addIcons(
     BiHeartFill,
     LaArrowCircleLeftSolid,
     LaArrowCircleRightSolid,
+    FaQuoteRight,
+    FaQuoteLeft,
 );
 
 const app = createApp(App);
