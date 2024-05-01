@@ -10,33 +10,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $fillable = [ 'name', 'email', 'password', ];
+    protected $hidden = [ 'password', 'remember_token', ];
+    protected $with = ['permissions'];
     protected function casts(): array
     {
         return [
@@ -44,4 +20,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function permissions(){ 
+        return $this->hasManyThrough( 
+            Permission::class, 
+            UserPermission::class, 
+            'user_id', 
+            'id', 
+            'id', 
+            'permission_id' 
+        ); 
+    }
+    public function role_permissions(){ 
+        return $this->hasManyThrough( 
+            Permission::class, 
+            UserPermission::class, 
+            'user_id', 
+            'id', 
+            'id', 
+            'permission_id' 
+        ); 
+    }
+
 }
