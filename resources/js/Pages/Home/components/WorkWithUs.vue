@@ -1,6 +1,6 @@
 <template>
-    <section id="work-with-us" class="mt-20">
-        <v-heading class="mb-10 text-center">Reasons to work with us</v-heading>
+    <section id="work-with-us">
+        <v-heading class="text-center">Reasons to work with us</v-heading>
         <div role="list" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             <div
                 v-for="(reason, index) in reasons"
@@ -58,7 +58,7 @@ const reasons = computed(() => {
         },
         {
             title: "Operating in a <span class='text-accent text-xl'>300,000 sq. ft.</span> factory ensures scale and quality.",
-            img: "/illustrations/factory.jpg",
+            img: "/mk-images/mk-building.jpg",
         },
         {
             title: "Exporting to all <span class='text-accent text-xl'>seven</span> continents signifies experience and reliability.",

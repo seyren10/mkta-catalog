@@ -9,7 +9,7 @@
             ></div>
         </Teleport> -->
         <div
-            class="text-center md:order-2 relative mt-[4rem] md:mt-0 md:text-left"
+            class="relative mt-[4rem] text-center md:order-2 md:mt-0 md:text-left"
         >
             <v-heading type="display">
                 Festive Lighting Solutions & Themed Decorations
@@ -39,7 +39,7 @@
                 base-img="/mk-images/rocket-removebg-preview.png"
                 :offset="300"
                 :circle-size="150"
-                :speed="0.03"
+                :speed="0.05"
             />
         </div>
         <div
@@ -58,14 +58,14 @@ import { computed } from "vue";
 
 const circleImageData = computed(() => {
     return [
-        "/mk-images/rocket-removebg-preview.png",
-        "/mk-images/pumpkin-removebg-preview.png",
-        "/mk-images/bear-removebg-preview.png",
-        "/mk-images/nutcracker-removebg-preview.png",
-        "/mk-images/penguin-removebg-preview.png",
-        "/mk-images/plane-removebg-preview.png",
-        "/mk-images/dog-removebg-preview.png",
-        "/mk-images/parrot-removebg-preview.png",
+        "/mk-images/hero-images/1.png",
+        "/mk-images/hero-images/2.png",
+        "/mk-images/hero-images/3.png",
+        "/mk-images/hero-images/4.png",
+        "/mk-images/hero-images/5.png",
+        "/mk-images/hero-images/6.png",
+        "/mk-images/hero-images/7.png",
+        "/mk-images/hero-images/8.png",
     ];
 });
 </script>

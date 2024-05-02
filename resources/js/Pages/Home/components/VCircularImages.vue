@@ -1,6 +1,6 @@
 <template>
     <div class="relative isolate -z-50">
-        <img :src="baseImg" alt="" class="m-auto" />
+        <img :src="baseImg" alt="" class="m-auto -z-100" />
         <div
             v-if="!isMatched"
             v-for="(img, index) in imgSrc"
@@ -10,7 +10,7 @@
             top: 38%;
             left: 38%;
             width: ${circleSize}px;
-            transform: translate(calc(cos(${index * degrees + timer * speed}deg) * ${offset}px), calc(sin(${index * degrees + timer * speed}deg) * ${offset}px));`"
+            transform: translate(calc(cos(${index * degrees + timer * (speed)}deg) * ${offset}px), calc(sin(${index * degrees + timer * (speed )}deg) * ${offset}px));`"
         >
             <img :src="img" alt="" class="h-full w-full object-cover" />
         </div>

@@ -1,6 +1,6 @@
 <template>
-    <section id="about" class="my-20">
-        <v-heading class="mb-10 text-center">About us</v-heading>
+    <section id="about">
+        <v-heading class="text-center">About us</v-heading>
         <div class="grid gap-3 md:grid-cols-6 md:grid-rows-4">
             <div
                 class="overflow-hidden rounded-md bg-red-100 md:col-span-3 md:max-h-56"

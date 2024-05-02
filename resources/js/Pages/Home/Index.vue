@@ -1,9 +1,12 @@
 <template>
-    <HeroSection />
-    <OurSpecialtiesSection class="mt-20" />
-    <OurProcesses class="mt-20" />
-    <WorkWithUs />
-    <AboutUs />
+    <main class="space-y-20">
+        <HeroSection />
+        <OurSpecialtiesSection />
+        <OurProcesses />
+        <WorkWithUs />
+        <AboutUs />
+        <BecomeAPartner />
+    </main>
 </template>
 
 <script setup>
@@ -12,6 +15,7 @@ import OurSpecialtiesSection from "./components/OurSpecialtiesSection.vue";
 import WorkWithUs from "./components/WorkWithUs.vue";
 import AboutUs from "./components/AboutUs.vue";
 import OurProcesses from "./components/OurProcesses.vue";
+import BecomeAPartner from "./components/BecomeAPartner.vue";
 </script>
 
 <style scoped></style>
