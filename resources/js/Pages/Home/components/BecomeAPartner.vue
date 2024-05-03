@@ -1,11 +1,20 @@
 <template>
     <div>
-        <div class="flex gap-4">
-            <select name="" id="">
-                <option value="tae">1</option>
-                <option value="tae">2</option>
-                <option value="tae">3</option>
-            </select>
+        <div class="grid grid-cols-2">
+            <v-text-field
+                prepend-inner-icon="la-heart"
+                label="Email"
+                v-model="email"
+            ></v-text-field>
+            <v-textarea prepend-inner-icon="la-heart" label="Comment">
+            </v-textarea>
+            <v-select
+                label="Region"
+                :items="regions"
+                item-title="region"
+                prepend-inner-icon="la-heart"
+                v-model="region"
+            ></v-select>
         </div>
         <div>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis
@@ -16,6 +25,22 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, ref } from "vue";
+
+const email = ref("");
+const region = ref(null);
+
+const regions = computed(() => {
+    return [
+        { id: "as", region: "Asia" },
+        { id: "af", region: "Africa" },
+        { id: "au", region: "Australia" },
+        { id: "eu", region: "Europe" },
+        { id: "na", region: "North America" },
+        { id: "sa", region: "South America" },
+    ];
+});
+</script>
 
 <style scoped></style>
