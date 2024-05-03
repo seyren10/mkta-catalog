@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\AreaCodeController;
 use App\Http\Controllers\CompanyCodeController;
-use App\Http\Controllers\NonWishlistController;
-use App\Http\Controllers\NonWishlistUsersController;
+use App\Http\Controllers\SingleActionController\NonWishlistController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
