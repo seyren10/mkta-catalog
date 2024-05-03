@@ -29,8 +29,6 @@ return new class extends Migration
         Schema::table('product_categories', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\Product::class);
             $table->dropForeignIdFor(\App\Models\Category::class);
-
-
         });
         Schema::dropIfExists('product_categories');
     }

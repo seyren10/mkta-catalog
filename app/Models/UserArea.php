@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class UserArea extends Model
 {
     use HasFactory;
+    protected $fillable = [ 
+        'area_code_id', 
+        'user_id', 
+    ];
+    protected $hidden = ["id", "created_at", "updated_at"];
 }

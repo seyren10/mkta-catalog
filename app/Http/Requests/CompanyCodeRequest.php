@@ -5,9 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RoleRequest extends FormRequest
+class CompanyCodeRequest extends FormRequest
 {
-
     //protected $stopOnFirstFailure = true;
 
     public function authorize(): bool
@@ -34,13 +33,13 @@ class RoleRequest extends FormRequest
     } 
     public function rules(): array
     {
-        $id = $this->route('role') ? $this->route('role')->id : null;
+        $id = $this->route('company_code') ? $this->route('company_code')->id : null;
         return [
                 "title" => [
                     'required',
                     'string',
                     'min:5',
-                    Rule::unique('roles','title')->ignore($id),
+                    Rule::unique('company_codes','title')->ignore($id),
                 ]
         ];
     }

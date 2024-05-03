@@ -10,7 +10,8 @@ class Product extends Model
     use HasFactory;
     public $incrementing = false;
     protected $keyType = "string";
-    protected $with = ['non_wishlist_users', 'product_images'];
+    protected $hidden = ["laravel_through_key", 'udpated_at'];
+    protected $with = ['non_wishlist_users', 'product_images', 'product_components'];
 
     public function non_wishlist_users()
     {

@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Models\AreaCode;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
-class RoleRequest extends FormRequest
+class AreaCodeRequest extends FormRequest
 {
-
     //protected $stopOnFirstFailure = true;
 
     public function authorize(): bool
@@ -32,16 +33,33 @@ class RoleRequest extends FormRequest
 
         return $value;
     } 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'name' => trim($this->name),
+            'description' => trim($this->description),
+        ]);
+    }
+    protected function passedValidation()
+    {
+        $this->merge([
+            'name' => trim($this->name),
+            'description' => trim($this->description),
+            // Trim other fields as needed
+        ]);
+    }
+    
+
     public function rules(): array
     {
-        $id = $this->route('role') ? $this->route('role')->id : null;
-        return [
+        $id = in_array($this->getMethod(), ["PUT", "PATCH"]) ? $this->route('area_code')->id : null;
+            return [
                 "title" => [
-                    'required',
-                    'string',
-                    'min:5',
-                    Rule::unique('roles','title')->ignore($id),
-                ]
+                        'required',
+                        'string',
+                        'min:5',
+                        Rule::unique('area_codes','title')->ignore($id),
+                    ]
         ];
     }
     public function messages()
@@ -56,4 +74,16 @@ class RoleRequest extends FormRequest
     {
         throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
     }
+
+    // public function validated()
+    // {
+    //     $validated = parent::validated();
+
+    //     // Trim the validated data
+    //     foreach ($validated as $key => $value) {
+    //         $validated[$key] = is_string($value) ? trim($value) : $value;
+    //     }
+
+    //     return $validated;
+    // }
 }

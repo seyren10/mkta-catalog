@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('role_permissions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(\App\Models\Permission::class)->nullable()->constrained('permissions')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(\App\Models\Role::class)->nullable()->constrained('roles')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(\App\Models\Permission::class)->nullable()->constrained('permissions')->cascadeOnDelete()->cascadeOnUpdate();
 
         });
     }

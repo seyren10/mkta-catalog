@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class UserCompany extends Model
 {
     use HasFactory;
+    protected $fillable = [ 
+        'company_code_id', 
+        'user_id', 
+    ];
+    protected $hidden = ["id", "created_at", "updated_at"];
 }

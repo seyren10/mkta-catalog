@@ -41,7 +41,7 @@ class UserData
             "email" => $this->email,
             "password"  => Hash::make('password'),
             "is_active" => true,
-            "role_id" => 2,
+            "role_id" => $this->role_id,
             'created_at' => now(),
             'updated_at' => now()
         ];

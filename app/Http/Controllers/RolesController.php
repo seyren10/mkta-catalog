@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleRequest;
 use App\Http\Resources\RoleResource;
+use App\Models\Permission;
 use App\Models\Role;
+use App\Models\RolePermission;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
@@ -17,6 +19,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RolesController extends Controller
 {
+
+    #region Default Function for Controllers
     /**
      * Display a listing of the resource.
      */
@@ -64,9 +68,12 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
-        //
+        $role->title =ucwords($request->title) ?? $role->title;
+        $role->description = ucfirst($request->description) ?? $role->description;
+        $role->save();
+        return response()->json(['message' => 'Role updated successfully', 'role' => $role], 200);
     }
 
     /**
@@ -74,6 +81,36 @@ class RolesController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return response()->json(['message' => 'Role deleted successfully'], 200);
+
+    }
+    #endregion
+    public static function modifyRolesPermission(Role $role, $action, Permission $permission){
+        if(!$role || !$permission ){
+            return response()->json(["message" => "Role or Permission not found"], 201);
+        }
+        switch ($action) {
+            case 'append':
+                $RolePermission = RolePermission::where('role_id', $role->id)->where('permission_id', $permission->id);
+                if( $RolePermission->get()->count() > 0 ){
+                    return response()->json(["message" => "Role ".$role->title." with permission ".$permission->title." is already included"], 201);
+                }
+                RolePermission::create(
+                    array(
+                        "permission_id" => $permission->id,
+                        "role_id" => $role->id
+                    )
+                );
+                return response()->json(["message" => "Permission ".$permission->title." is added in the Role ".$role->title], 200);
+                break;
+            case 'remove':
+                $RolePermission = RolePermission::where('role_id', $role->id)->where('permission_id', $permission->id)->delete();
+                return response()->json(["message" => "Permission ".$permission->title." is removed in the Role ".$role->title], 200);
+                break;
+            default:
+                return response()->json(["message" => "Method not found"], 404);
+                break;
+        }
     }
 }
