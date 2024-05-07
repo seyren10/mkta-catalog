@@ -25,7 +25,7 @@ import {
     FaQuoteLeft,
     IoMailOutline,
     OiComment,
-    LaArrowsAltVSolid,
+    MdArrowdropdownRound,
     LaCheckSolid,
 } from "oh-vue-icons/icons";
 
@@ -43,7 +43,7 @@ addIcons(
     FaQuoteLeft,
     IoMailOutline,
     OiComment,
-    LaArrowsAltVSolid,
+    MdArrowdropdownRound,
     LaCheckSolid,
 );
 

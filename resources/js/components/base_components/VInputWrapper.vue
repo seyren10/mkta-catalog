@@ -21,6 +21,7 @@
                     v-if="appendInnerIcon"
                     :name="appendInnerIcon"
                     scale="1.5"
+                    color="#78716c"
                 ></v-icon>
                 <slot name="append-inner"></slot>
             </div>

@@ -13,9 +13,9 @@
                             : items[0][title]
                     }}</span>
                     <v-icon
-                        name="la-arrows-alt-v-solid"
-                        scale="1.2"
-                        class="ml-auto cursor-pointer fill-stone-500"
+                        name="md-arrowdropdown-round"
+                        scale="1.5"
+                        class="ml-auto cursor-pointer"
                     ></v-icon>
                 </div>
             </button>
@@ -38,10 +38,14 @@
                         v-for="item in items"
                         :key="item[title]"
                         class="p-3 duration-300 hover:bg-stone-400 hover:text-white"
+                        :class="{ 'text-accent': modelValue === item[value] }"
                         @click="handleSelected(item[value] ?? item)"
                     >
                         <div class="flex items-center gap-2">
-                            <v-icon name="la-check-solid"></v-icon>
+                            <v-icon
+                                name="la-check-solid"
+                                v-if="modelValue === item[value]"
+                            ></v-icon>
                             <span>{{ item[title] }}</span>
                         </div>
                     </li>

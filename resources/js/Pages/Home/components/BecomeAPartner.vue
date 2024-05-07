@@ -12,7 +12,8 @@
                 label="Region"
                 :items="regions"
                 item-title="region"
-                prepend-inner-icon="la-heart"
+                item-value="abr"
+                prepend-inner-icon="io-mail-outline"
                 v-model="region"
             ></v-select>
         </div>
@@ -29,16 +30,16 @@
 import { computed, ref } from "vue";
 
 const email = ref("");
-const region = ref(null);
+const region = ref("as");
 
 const regions = computed(() => {
     return [
-        { id: "as", region: "Asia" },
-        { id: "af", region: "Africa" },
-        { id: "au", region: "Australia" },
-        { id: "eu", region: "Europe" },
-        { id: "na", region: "North America" },
-        { id: "sa", region: "South America" },
+        { abr: "as", region: "Asia" },
+        { abr: "af", region: "Africa" },
+        { abr: "au", region: "Australia" },
+        { abr: "eu", region: "Europe" },
+        { abr: "na", region: "North America" },
+        { abr: "sa", region: "South America" },
     ];
 });
 </script>
