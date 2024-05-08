@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RoleRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
 
     //protected $stopOnFirstFailure = true;
@@ -32,13 +32,13 @@ class RoleRequest extends FormRequest
     } 
     public function rules(): array
     {
-        $id = $this->route('role') ? $this->route('role')->id : null;
+        $id = $this->route('category') ? $this->route('category')->id : null;
         return [
                 "title" => [
                     'required',
                     'string',
                     'min:5',
-                    Rule::unique('roles','title')->ignore($id),
+                    Rule::unique('categories','title')->ignore($id),
                 ]
         ];
     }

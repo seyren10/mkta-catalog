@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    #region Default Function for Controllers
     /**
      * Display a listing of the resource.
      */
@@ -62,4 +63,7 @@ class ProductController extends Controller
     {
         //
     }
+    #endregion
+    
+
 }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RoleRequest extends FormRequest
+class ProductTagRequest extends FormRequest
 {
 
     //protected $stopOnFirstFailure = true;
@@ -32,24 +32,17 @@ class RoleRequest extends FormRequest
     } 
     public function rules(): array
     {
-        $id = $this->route('role') ? $this->route('role')->id : null;
-        return [
-                "title" => [
-                    'required',
-                    'string',
-                    'min:5',
-                    Rule::unique('roles','title')->ignore($id),
-                ]
+        $id = $this->route('product') ? $this->route('product')->id : null;
+        $rules = [
+                    "value" =>'required|string|min:5|max:255|unique:product_tags,value,NULL,id,product_id,' . $id,
         ];
+        return $rules;
     }
-    public function messages()
-    {
-        return [
-            'title.required' => 'Title is required.',
-            'title.min' => 'Title should be :min characters and above.',
-            'title.unique' => 'Title is already registered, it should be unique.'
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //     ];
+    // }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['errors' => $validator->errors()], 422));

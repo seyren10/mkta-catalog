@@ -65,7 +65,7 @@ class PermissionController extends Controller
         $permission->title =ucwords($request->title) ?? $permission->title;
         $permission->description = ucfirst($request->description) ??  $permission->description;
         $permission->save();
-        return response()->json(['message' => 'Permission updated successfully', 'Permission' => $permission], 200);
+        return response()->json(['message' => 'Permission updated successfully', 'permission' => $permission], 200);
     }
 
     /**

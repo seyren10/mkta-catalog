@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    #region Default Function for Controllers
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return CategoryResource::collection(Category::get());
     }
 
     /**
@@ -26,9 +29,13 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        $category = Category::create(array(
+            "title" => ucwords($request->title),
+            "description" => ucfirst($request->description) ?? "",
+        ));
+        return response()->json(['message' => 'Category created successfully', 'category' => $category], 200);
     }
 
     /**
@@ -36,7 +43,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return new CategoryResource($category);
     }
 
     /**
@@ -44,7 +51,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+       //
     }
 
     /**
@@ -52,7 +59,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->title =ucwords($request->title) ?? $category->title;
+        $category->description = ucfirst($request->description) ??  $category->description;
+        $category->save();
+        return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
     }
 
     /**
@@ -62,4 +72,5 @@ class CategoryController extends Controller
     {
         //
     }
+    #endregion
 }
