@@ -6,7 +6,7 @@
                 @click="showSelection = !showSelection"
                 @blur="showSelection = false"
             >
-                <div class="flex">
+                <div class="flex items-center">
                     <span>{{
                         modelValue
                             ? items.find((e) => e[value] === modelValue)[title]

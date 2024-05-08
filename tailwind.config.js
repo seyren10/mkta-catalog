@@ -28,7 +28,7 @@ export default {
                 primary: "#082f49",
                 // primary: "#083344",
                 // accent: '#3b82f6' //blue
-                accent: "#d4af37", //gold
+                accent: "#ae9a64", //gold
             },
             animation: {
                 appear: "appear 800ms ease-out both",

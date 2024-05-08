@@ -9,6 +9,8 @@ import VSvg from "./components/VSvg.vue";
 import VTextField from "./components/VTextField.vue";
 import VTextArea from "./components/VTextArea.vue";
 import VSelect from "./components/VSelect.vue";
+import VTextIcon from "./components/VTextIcon.vue";
+import VButton from "./components/VButton.vue";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
@@ -24,9 +26,14 @@ import {
     FaQuoteRight,
     FaQuoteLeft,
     IoMailOutline,
-    OiComment,
+    FaRegularCommentAlt,
     MdArrowdropdownRound,
     LaCheckSolid,
+    IoLocationOutline,
+    CoMailRu,
+    PrGlobe,
+    RiBuilding2Line,
+    PrSend,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -42,9 +49,14 @@ addIcons(
     FaQuoteRight,
     FaQuoteLeft,
     IoMailOutline,
-    OiComment,
+    FaRegularCommentAlt,
     MdArrowdropdownRound,
     LaCheckSolid,
+    IoLocationOutline,
+    CoMailRu,
+    PrGlobe,
+    RiBuilding2Line,
+    PrSend,
 );
 
 const app = createApp(App);
@@ -55,4 +67,6 @@ app.component("v-svg", VSvg);
 app.component("v-text-field", VTextField);
 app.component("v-textarea", VTextArea);
 app.component("v-select", VSelect);
+app.component("v-text-icon", VTextIcon);
+app.component("v-button", VButton);
 app.mount("#app");
