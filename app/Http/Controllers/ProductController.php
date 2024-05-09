@@ -42,7 +42,7 @@ class ProductController extends Controller
     }
     public function update(ProductRequest $request, Product $product)
     {
-        foreach ($request['data'] as $key => $value) {
+        foreach ($request->all() as $key => $value) {
             $product[$key] = $value;
         }
         $product->save();

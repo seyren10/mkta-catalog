@@ -18,26 +18,44 @@ class ProductRequest extends FormRequest
     {
         $id = $this->route('product') ? $this->route('product')->id : null;
         $rules = [
-                    "id" =>'required|string|max:255|unique:products,id'
+                    "id" =>'required|string|max:255|unique:products,id',
+                    "title" =>'required|string|max:255|unique:products,title',
         ];
         if($this->getMethod() ==  'PUT'){
             $rules = [
-                "id" => [
+                // "id" => [
+                //     'required',
+                //     'string',
+                //     'max:255',
+                //     Rule::unique('products','id')->ignore($id),
+                // ],
+                "title" => [
                     'required',
                     'string',
                     'max:255',
                     Rule::unique('products','id')->ignore($id),
                 ],
-                "title" => "required|string|max:255"
             ];
         }
         return $rules;
     }
+    public function all($keys = null)
+    {
+        $data = parent::all($keys);
+        if( $this->getMethod() != 'PUT'){
+            $data["volume"] = trim($data["volume"]) ?? 0.0;
+            $data["weight_net"] = trim($data["weight_net"]) ?? 0.0;
+            $data["weight_gross"] = trim($data["weight_gross"]) ?? 0.0;
+            $data["dimension_length"] = trim($data["dimension_length"]) ?? 0.0;
+            $data["dimension_width"] = trim($data["dimension_width"]) ?? 0.0;
+            $data["dimension_height"] = trim($data["dimension_height"]) ?? 0.0;
+        }
+        return $data;
+    }
     public function messages()
     {
         return [
-            'id.required' => 'Product ID is required',
-            'id.unique' => 'Product ID is already in use',
+            'id.unique' => "The Product ID has already been taken."
         ];
     }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
