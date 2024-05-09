@@ -68,10 +68,10 @@
 
                 <v-button
                     prepend-inner-icon="pr-send"
-                    class="bg-red-500"
-                    parent-class="bg-red-500"
-                    >Send</v-button
+                    class="ml-auto bg-accent text-white"
                 >
+                    Send
+                </v-button>
             </div>
         </div>
     </section>

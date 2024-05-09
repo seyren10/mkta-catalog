@@ -6,8 +6,8 @@
         </div>
         <div class="grid grow">
             <div
-                class=""
-                :class="parentClass"
+                class="peer order-2 flex min-h-10 items-center gap-1 rounded-md border border-stone-400 bg-white px-2 py-1 duration-300 has-[:disabled]:bg-stone-200 has-[:focus]:ring-2 has-[:focus]:ring-accent has-[:focus]:ring-offset-2"
+                v-bind="$attrs"
             >
                 <v-icon
                     v-if="prependInnerIcon"
@@ -41,6 +41,9 @@
 
 <script setup>
 import { useInput } from "@/composables/useInput";
+defineOptions({
+    inheritAttrs: false,
+});
 
 const props = defineProps(useInput());
 
