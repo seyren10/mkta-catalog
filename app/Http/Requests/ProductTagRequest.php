@@ -38,11 +38,6 @@ class ProductTagRequest extends FormRequest
         ];
         return $rules;
     }
-    // public function messages()
-    // {
-    //     return [
-    //     ];
-    // }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['errors' => $validator->errors()], 422));

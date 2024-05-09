@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductComponentRequest;
+use App\Http\Resources\ProductComponentResource;
 use App\Models\Product;
 use App\Models\ProductComponent;
 use Illuminate\Http\Request;
@@ -10,13 +11,6 @@ use Illuminate\Http\Request;
 class ProductComponentController extends Controller
 {
     public static function createProductComponents(ProductComponentRequest $request, Product $product){
-
-    }
-    public static function showProductComponents( ProductComponentRequest $request,Product $product){
-        
-    }
-    public function store(Request $request, Product $product)
-    {
         ProductComponent::create(
             array(
                 "type" => $request->type,
@@ -28,6 +22,9 @@ class ProductComponentController extends Controller
             )
         );
         return response()->json(["message" => "Components have been added to ".$product->id], 200);
+    }
+    public static function showProductComponents(Product $product){
+        return ProductComponentResource::collection(ProductComponent::where('product_id', $product->id)->get());
     }
     public function update(Request $request, ProductComponent $product_component)
     {
