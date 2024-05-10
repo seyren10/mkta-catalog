@@ -1,12 +1,6 @@
 <template>
     <div>
-        <header class="fixed top-0 z-50 w-full">
-            <NavApp></NavApp>
-        </header>
-
-        <main class="container">
-            <Index></Index>
-        </main>
+        <Index></Index>
 
         <!-- extras -->
         <img
@@ -25,6 +19,7 @@
 <script>
 import NavApp from "@/components/NavApp.vue";
 import Index from "@/Pages/Home/Index.vue";
+
 export default {
     components: { NavApp, Index },
 };

@@ -12,7 +12,7 @@
                     accusantium.
                 </p>
 
-                <v-text-icon :items="infoList" class="my-5 grid gap-3" />
+                <v-text-icon :items="infoList" class="my-5 grid " />
 
                 <div class="mx-auto h-[20rem] overflow-hidden rounded-md">
                     <LMap
@@ -21,7 +21,7 @@
                         :center="location"
                     >
                         <LTileLayer
-                            url="https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
+                            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
                             :min-zoom="8"
                         ></LTileLayer>
 
@@ -63,6 +63,7 @@
                 <v-textarea
                     prepend-inner-icon="fa-regular-comment-alt"
                     label="Comment"
+                    rows="7"
                 >
                 </v-textarea>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center">
+    <div class="flex items-center" v-if="!icon">
         <slot name="prepend"></slot>
 
         <template v-if="prependIcon">
@@ -7,21 +7,27 @@
         </template>
         <button
             v-bind="$attrs"
-            class="group relative isolate flex items-center justify-center overflow-hidden rounded-md px-3 py-2"
+            class="group relative isolate flex items-center justify-center overflow-hidden rounded-md px-3 py-2 disabled:cursor-not-allowed"
+            :disabled="loading"
         >
-            <!-- HOVERING EFFECT -->
-            <div
-                class="absolute inset-0 -z-10 duration-500 group-hover:backdrop-brightness-75"
-            ></div>
-            <!-- /HOVERING EFFECT -->
-            <template v-if="prependInnerIcon">
-                <v-icon
-                    :name="prependInnerIcon"
-                    class="mr-1"
-                    scale="1.3"
-                ></v-icon>
+            <template v-if="!loading">
+                <!-- HOVERING EFFECT -->
+                <div
+                    class="absolute inset-0 -z-10 duration-500 group-hover:backdrop-brightness-125"
+                ></div>
+                <!-- /HOVERING EFFECT -->
+                <template v-if="prependInnerIcon">
+                    <v-icon
+                        :name="prependInnerIcon"
+                        class="mr-1"
+                        scale="1.3"
+                    ></v-icon>
+                </template>
+                <slot name="prepend-inner"></slot>
             </template>
-            <slot name="prepend-inner"></slot>
+            <template v-else>
+                <VLoader class="mr-1" scale="1.3" />
+            </template>
 
             <slot />
 
@@ -40,10 +46,20 @@
             <v-icon :name="appendIcon" class="ml-2" scale="1.3"></v-icon>
         </template>
     </div>
+    <button
+        v-else="icon"
+        v-bind="$attrs"
+        :disabled="loading"
+        class="grid items-center rounded-full p-1 duration-500 hover:bg-stone-300 disabled:cursor-not-allowed"
+    >
+        <v-icon :name="icon" scale="1.5" v-if="!loading"></v-icon>
+        <VLoader v-else />
+    </button>
 </template>
 
 <script setup>
 import { useInput } from "@/composables/useInput";
+import VLoader from "./base_components/VLoader.vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -51,6 +67,7 @@ defineOptions({
 
 const props = defineProps({
     ...useInput(),
+    icon: { type: String },
 });
 </script>
 

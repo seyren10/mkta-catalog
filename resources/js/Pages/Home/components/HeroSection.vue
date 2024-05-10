@@ -14,12 +14,12 @@
             <v-heading type="display">
                 Festive Lighting Solutions & Themed Decorations
             </v-heading>
-            <p class="mt-5">
+            <p class="mt-5 font-medium text-slate-500">
                 Creating magical experiences through design ingenuity and
                 world-class craftsmanship to leisure centers and shopping malls
                 worldwide.
             </p>
-            <div class="mt-2 flex justify-center md:justify-start">
+            <div class="mt-5 flex justify-center md:justify-start">
                 <button
                     class="relative mt-4 block animate-[appear_1s_ease-out_forwards_800ms] rounded-md bg-accent p-2 px-5 text-lg text-white opacity-0"
                 >

@@ -11,7 +11,6 @@
 </head>
 
 <body id="app" class="text-slate-800 antialiased bg-stone-100">
-
 </body>
 
 </html>

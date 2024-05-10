@@ -15,5 +15,8 @@ export const useInput = () => {
         label: {
             type: String,
         },
+        loading: {
+            type: Boolean,
+        },
     };
 };

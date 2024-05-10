@@ -1,5 +1,9 @@
 <template>
-    <main class="space-y-20">
+    <header>
+        <NavApp class="fixed top-0 z-50 w-full" />
+    </header>
+
+    <main class="container space-y-20">
         <HeroSection />
         <OurSpecialtiesSection />
         <OurProcesses />
@@ -7,6 +11,10 @@
         <AboutUs />
         <BecomeAPartner />
     </main>
+
+    <footer>
+        <Footer class="mt-20" />
+    </footer>
 </template>
 
 <script setup>
@@ -16,6 +24,8 @@ import WorkWithUs from "./components/WorkWithUs.vue";
 import AboutUs from "./components/AboutUs.vue";
 import OurProcesses from "./components/OurProcesses.vue";
 import BecomeAPartner from "./components/BecomeAPartner.vue";
+import Footer from "./components/Footer.vue";
+import NavApp from "../../components/NavApp.vue";
 </script>
 
 <style scoped></style>
