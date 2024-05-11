@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreaCodeController;
 use App\Http\Controllers\CompanyCodeController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\ProductComponentController;
@@ -20,6 +21,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 $except = ['create', 'edit', 'destroy'];
+
+Route::get('current', [FileController::class, 'useExampleService']);
 
 Route::put('nonwishlist/{user}/{action}/{product}', NonWishlistController::class);
 

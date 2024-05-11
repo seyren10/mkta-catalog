@@ -42,10 +42,11 @@ class ProductRequest extends FormRequest
     public function all($keys = null)
     {
         $data = parent::all($keys);
-        if( $this->getMethod() != 'PUT'){
+        if( $this->getMethod() == 'PUT'){
             $data["volume"] = trim($data["volume"]) ?? 0.0;
             $data["weight_net"] = trim($data["weight_net"]) ?? 0.0;
             $data["weight_gross"] = trim($data["weight_gross"]) ?? 0.0;
+            
             $data["dimension_length"] = trim($data["dimension_length"]) ?? 0.0;
             $data["dimension_width"] = trim($data["dimension_width"]) ?? 0.0;
             $data["dimension_height"] = trim($data["dimension_height"]) ?? 0.0;

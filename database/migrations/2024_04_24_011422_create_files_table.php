@@ -16,7 +16,6 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title');
             $table->string('filename');
-            $table->foreignIdFor(\App\Models\User::class)->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -26,7 +25,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\User::class);
         });
         Schema::dropIfExists('files');
     }

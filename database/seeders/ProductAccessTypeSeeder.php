@@ -19,9 +19,30 @@ class ProductAccessTypeSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
         ProductAccessType::insert(
             [
-                (new ProductAccessTypeData('area-code','Area Code', 'Allow or Deny access to a user in certain Area Code'))->toArray(),
-                (new ProductAccessTypeData('company-code', 'Company Code', 'Allow or Deny access to a user in a certain Company Code'))->toArray(),
-                (new ProductAccessTypeData('customer', 'Customer', 'Allow or Deny access to a certain user'))->toArray(),
+                (new ProductAccessTypeData(
+                                        'area-code',
+                                        'Area Code', 
+                                        'Allow or Deny access to a user in certain Area Code',
+                                        'indirect',
+                                        'user_areas',
+                                        'area_code_id'
+                                        ))->toArray(),
+                (new ProductAccessTypeData(
+                                        'company-code', 
+                                        'Company Code', 
+                                        'Allow or Deny access to a user in a certain Company Code',
+                                        'indirect',
+                                        'user_companies',
+                                        'company_code_id'
+                                        ))->toArray(),
+                (new ProductAccessTypeData(
+                                        'customer', 
+                                        'Customer', 
+                                        'Allow or Deny access to a certain user',
+                                        'direct',
+                                        'users',
+                                        'id'
+                                        ))->toArray(),
             ]
         );
     }
@@ -29,7 +50,15 @@ class ProductAccessTypeSeeder extends Seeder
 class ProductAccessTypeData
 {
 
-    public function __construct(public $type, public $title, public $desc)
+    public function __construct(
+        public $type, 
+        public $title, 
+        public $desc, 
+
+        public $ref_type,
+        public $ref_table,
+        public $ref_column
+        )
     {
     }
 
@@ -39,6 +68,9 @@ class ProductAccessTypeData
             'type' => $this->type,
             'title' => $this->title,
             'description' => $this->desc,
+            "ref_type" => $this->ref_type,
+            "ref_table" => $this->ref_table,
+            "ref_column" => $this->ref_column,
             'created_at' => now(),
             'updated_at' => now()
         ];

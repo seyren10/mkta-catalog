@@ -12,12 +12,23 @@ use App\Models\User;
 use App\Models\UserArea;
 use App\Models\UserCompany;
 use App\Models\UserPermission;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+
+
+    protected $UserServices;
+
+    public function __construct(UserServices $UserServices)
+    {
+        $this->UserServices = $UserServices;
+        
+        
+    }
     #region Default Function for Controllers
     /**
      * Display a listing of the resource.
