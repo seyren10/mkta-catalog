@@ -1,78 +1,99 @@
 <template>
     <section id="work-with-us">
         <v-heading class="text-center">Reasons to work with us</v-heading>
-        <div role="list" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            <div
-                v-for="(reason, index) in reasons"
-                :key="index"
-                role="listitem"
-                class="group relative isolate grid min-h-60 cursor-default rounded-md border border-stone-300 p-3 transition-transform duration-500 hover:-translate-y-5 hover:bg-stone-300 hover:shadow-md"
-                :class="{
-                    'animate-appear': startAnimation,
-                    'opacity-1': !startAnimation,
-                }"
-                :style="{ animationDelay: `${(index + 1) * 200}ms` }"
-                ref="lists"
+        <div class="relative rounded-md">
+            <Transition
+                enter-from-class="opacity-0"
+                leave-to-class="opacity-0"
+                leave-active-class="duration-1000 ease absolute"
+                enter-active-class="duration-1000 ease"
             >
                 <img
-                    :src="reason.img"
-                    alt=""
-                    class="aspect-video w-full object-cover"
+                    :key="activeImage"
+                    :src="activeImage"
+                    class="aspect-[16/9] w-full rounded-md object-fill"
                 />
-                <p
-                    class="mt-5 place-self-stretch text-center group-hover:font-bold"
-                    v-html="reason.title"
-                ></p>
+            </Transition>
 
-                <span
-                    class="absolute left-5 top-5 z-10 text-6xl font-bold text-stone-300 transition-colors duration-500 group-hover:text-accent"
-                    >{{ 1 + index > 9 ? "" : "0" }}{{ ++index }}</span
+            <ul
+                class="inset-x-28 bottom-10 grid items-end gap-3 md:absolute md:grid-cols-3"
+            >
+                <li
+                    v-for="(reason, index) in reasons"
+                    :key="reason.title"
+                    class="group rounded-md p-3 text-slate-300 backdrop-brightness-[.4] duration-500 hover:bg-primary"
+                    ref="lists"
+                    @mouseover="activeImage = reason.img"
+                    @mouseleave="activeImage = defaultImage"
                 >
-            </div>
+                    <span class="text-2xl font-bold"
+                        >{{ 1 + index > 9 ? "" : "0" }}{{ ++index }}</span
+                    >
+                    <v-heading type="h3" class="text-white">{{
+                        reason.title
+                    }}</v-heading>
+                    <div
+                        class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]"
+                    >
+                        <p
+                            class="overflow-hidden font-light text-white"
+                            v-html="reason.description"
+                        ></p>
+                    </div>
+                </li>
+            </ul>
         </div>
     </section>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
-const lists = ref([]);
-const startAnimation = ref(true);
+import { computed, ref } from "vue";
 
+//non-reactive
+let defaultImage = "/mk-images/hero-background.jpg";
+//reactives
+const lists = ref(null);
+const activeImage = ref(defaultImage);
+
+//devired properties
 const reasons = computed(() => {
     return [
         {
-            title: "<span class='text-accent text-xl'>400</span> containers shipped yearly ensure timely delivery.",
-            img: "/illustrations/loading-van.jpg",
+            title: "Timely Delivery Assurance",
+            description:
+                "<span class='text-accent text-xl'>400</span> containers shipped yearly ensure timely delivery.",
+            img: "/mk-images/Containers.jpg",
         },
         {
-            title: "<span class='text-accent text-xl'>500</span> hardworking employees ensure quality and efficiency.",
+            title: "Quality Workforce Guarantee",
+            description: `<span class='text-accent text-xl'>500</span> hardworking employees ensure quality and efficiency. `,
             img: "/illustrations/employees.jpg",
         },
         {
-            title: "Over <span class='text-accent text-xl'>4000</span> products made from fiberglass material, offering durability and versatility in various applications",
+            title: "Fiberglass Durability",
+            description:
+                "Over <span class='text-accent text-xl'>4000</span> products made from fiberglass material, offering durability and versatility in various applications",
             img: "/illustrations/products.jpg",
         },
         {
-            title: "Over <span class='text-accent text-xl'>2000</span> lighting products, providing a diverse range of lighting solutions for different settings and preferences.",
+            title: "Illuminating Diversity",
+            description:
+                "Over <span class='text-accent text-xl'>2000</span> lighting products, providing a diverse range of lighting solutions for different settings and preferences.",
             img: "/illustrations/products.jpg",
         },
         {
-            title: "Operating in a <span class='text-accent text-xl'>300,000 sq. ft.</span> factory ensures scale and quality.",
+            title: "Scale and Quality Hub",
+            description:
+                "Operating in a <span class='text-accent text-xl'>300,000 sq. ft.</span> factory ensures scale and quality.",
             img: "/mk-images/mk-building.jpg",
         },
         {
-            title: "Exporting to all <span class='text-accent text-xl'>seven</span> continents signifies experience and reliability.",
-            img: "/illustrations/port.jpg",
+            title: "Global Reliability",
+            description:
+                "Exporting to all <span class='text-accent text-xl'>seven</span> continents signifies experience and reliability.",
+            img: "/mk-images/reason-8.jpg",
         },
     ];
-});
-
-onMounted(() => {
-    const animationDuration = 200 * reasons.value.length + 800;
-
-    setTimeout(() => {
-        startAnimation.value = false;
-    }, animationDuration);
 });
 </script>
 

@@ -5,7 +5,8 @@
         <template v-if="prependIcon">
             <v-icon :name="prependIcon" class="mr-2" scale="1.3"></v-icon>
         </template>
-        <button
+        <component
+            :is="tag"
             v-bind="$attrs"
             class="group relative isolate flex items-center justify-center overflow-hidden rounded-md px-3 py-2 disabled:cursor-not-allowed"
             :disabled="loading"
@@ -39,7 +40,7 @@
                 ></v-icon>
             </template>
             <slot name="append-inner"></slot>
-        </button>
+        </component>
 
         <slot name="append"></slot>
         <template v-if="appendIcon">
@@ -68,6 +69,7 @@ defineOptions({
 const props = defineProps({
     ...useInput(),
     icon: { type: String },
+    tag: { type: String, default: "button" },
 });
 </script>
 

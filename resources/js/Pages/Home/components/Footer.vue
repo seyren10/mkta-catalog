@@ -32,8 +32,15 @@
                 </template>
             </v-text-icon>
         </div>
-        <div class="self-end">
-            <Disclaimer />
+        <div class="grow self-end text-end">
+            <div class="inline-flex gap-3">
+                <Disclaimer />
+                <PrivacyStatement />
+            </div>
+            <div class="text-slate-500">
+                &copy; MK Themed Attractions Philippines Inc. All Rights
+                Reserved.
+            </div>
         </div>
     </div>
 </template>
@@ -42,6 +49,7 @@
 import { computed } from "vue";
 
 import Disclaimer from "./Disclaimer.vue";
+import PrivacyStatement from "./PrivacyStatement.vue";
 
 const locations = computed(() => {
     return [

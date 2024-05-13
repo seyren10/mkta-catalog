@@ -10,7 +10,7 @@
 
 @layer components {
     .line-effect {
-        @apply hover:font-medium before:transition-all before:duration-300 before:ease-in-out before:absolute before:-bottom-1 before:h-[2px] before:w-0 before:opacity-0 before:hover:w-full before:hover:opacity-100 before:rounded-full before:bg-accent before:content-[''];
+        @apply hover:font-medium before:transition-all before:duration-300 before:ease-in-out before:absolute before:-bottom-1 before:h-[3px] before:w-0 before:opacity-0 before:hover:w-full before:hover:opacity-100 before:rounded-full before:bg-accent before:content-[''];
     }
 
 }

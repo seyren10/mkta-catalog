@@ -19,7 +19,7 @@
             </li>
         </ul>
         <div class="hidden items-center gap-7 md:flex">
-            <button class="font-bold text-primary">Login</button>
+            <Login></Login>
             <span class="text-slate-300">|</span>
             <div class="flex gap-3">
                 <v-icon name="la-search-solid" scale="1.3"></v-icon>
@@ -44,7 +44,7 @@
         <Teleport to="body">
             <div
                 v-if="expanded"
-                class="fixed right-0 z-20 min-h-[100vh] w-[70%] border-l bg-white p-3"
+                class="fixed right-0 z-[999] min-h-[100vh] w-[70%] border-l bg-white p-3"
             >
                 <v-icon
                     name="la-times-solid"
@@ -93,7 +93,10 @@
 
 <script>
 import { useMedia } from "@/composables/useMedia";
+import Login from "./Login.vue";
+
 export default {
+    components: { Login },
     setup() {
         const { isMatched } = useMedia("(min-width: 768px )");
 

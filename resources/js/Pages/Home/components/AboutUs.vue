@@ -9,8 +9,9 @@
                     title="Nutcrackers"
                     src="/mk-images/nutcrackers.jpg"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
+                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugiat magnam fugit enim in sint quis nemo nobis modi
+                    quaerat.</VImageTextOverlay
                 >
             </div>
 
@@ -19,8 +20,9 @@
                     title="Witch"
                     src="/mk-images/halloween.jpg"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
+                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugiat magnam fugit enim in sint quis nemo nobis modi
+                    quaerat.</VImageTextOverlay
                 >
             </div>
             <div class="overflow-hidden rounded-md bg-red-300 md:col-span-2">
@@ -28,8 +30,9 @@
                     title="InLiteFi"
                     src="/mk-images/inlitefi.jpg"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
+                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugiat magnam fugit enim in sint quis nemo nobis modi
+                    quaerat.</VImageTextOverlay
                 >
             </div>
             <div class="overflow-hidden rounded-md bg-red-400 md:row-span-2">
@@ -37,8 +40,9 @@
                     title="Winter"
                     src="/mk-images/winter.jpg"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
+                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugiat magnam fugit enim in sint quis nemo nobis modi
+                    quaerat.</VImageTextOverlay
                 >
             </div>
 
@@ -78,8 +82,9 @@
                     title="Witch"
                     src="/mk-images/halloween.jpg"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
+                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugiat magnam fugit enim in sint quis nemo nobis modi
+                    quaerat.</VImageTextOverlay
                 >
             </div>
             <div
@@ -98,8 +103,9 @@
                     title="Winter"
                     src="/mk-images/winter.jpg"
                     class="h-full w-full"
-                    >We are the champion my friend, and we keep on fighting till
-                    the end.</VImageTextOverlay
+                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugiat magnam fugit enim in sint quis nemo nobis modi
+                    quaerat.</VImageTextOverlay
                 >
             </div>
         </div>

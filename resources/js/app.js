@@ -12,6 +12,7 @@ import VSelect from "./components/VSelect.vue";
 import VTextIcon from "./components/VTextIcon.vue";
 import VButton from "./components/VButton.vue";
 import VDialog from "./components/VDialog.vue";
+import VToolbar from "./components/VToolbar.vue";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 
@@ -41,6 +42,7 @@ import {
     RiTwitterLine,
     RiInstagramLine,
     MdCloseRound,
+    RiKey2Line,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -69,6 +71,7 @@ addIcons(
     RiTwitterLine,
     RiInstagramLine,
     MdCloseRound,
+    RiKey2Line,
 );
 
 const app = createApp(App);
@@ -83,4 +86,5 @@ app.component("v-select", VSelect);
 app.component("v-text-icon", VTextIcon);
 app.component("v-button", VButton);
 app.component("v-dialog", VDialog);
+app.component("v-toolbar", VToolbar);
 app.mount("#app");

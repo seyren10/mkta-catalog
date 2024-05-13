@@ -13,12 +13,12 @@
                 />
             </div>
             <div
-                class="z-10 col-start-1 row-start-1 my-auto rounded-md p-3 text-white backdrop-blur-sm md:mx-20"
+                class="z-10 col-start-1 row-start-1 my-auto rounded-md p-3 text-white backdrop-brightness-[.7] md:mx-20"
             >
                 <v-heading type="h2" class="mb-3 border-b-2 text-white"
                     >Our specialties</v-heading
                 >
-                <p>
+                <p class="text-slate-100">
                     Custom Projects, Themed and Architectural Projects,
                     Animatronics, Lighting, Theming Design, Festive Lightning,
                     Indoor and Outdoor Theming, Fiberglass Decorations, Themed

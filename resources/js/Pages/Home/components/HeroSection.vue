@@ -20,16 +20,20 @@
                 worldwide.
             </p>
             <div class="mt-5 flex justify-center md:justify-start">
-                <button
+                <v-button
+                    tag="a"
+                    href="#become-a-partner"
                     class="relative mt-4 block animate-[appear_1s_ease-out_forwards_800ms] rounded-md bg-accent p-2 px-5 text-lg text-white opacity-0"
                 >
-                    <v-icon
-                        name="la-search-solid"
-                        class="mr-2"
-                        animation="wrench"
-                    ></v-icon>
+                    <template #prepend-inner>
+                        <v-icon
+                            name="la-search-solid"
+                            class="mr-2"
+                            animation="wrench"
+                        ></v-icon>
+                    </template>
                     <span>Browse our catalog</span>
-                </button>
+                </v-button>
             </div>
         </div>
         <div>
