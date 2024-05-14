@@ -19,7 +19,17 @@
             </li>
         </ul>
         <div class="hidden items-center gap-7 md:flex">
-            <Login></Login>
+            <v-button v-if="!user" class="font-bold" @click="dialog = true"
+                >Login</v-button
+            >
+            <div
+                v-else
+                class="text-sm font-medium underline underline-offset-1"
+            >
+                <span>Welcome Back, </span
+                ><span class="text-accent"> {{ user.name }}!</span>
+            </div>
+            <button @click="$router.push({ name: 'catalog' })">catalog</button>
             <span class="text-slate-300">|</span>
             <div class="flex gap-3">
                 <v-icon name="la-search-solid" scale="1.3"></v-icon>
@@ -56,12 +66,14 @@
                     <div>
                         <img src="/Logo.svg" alt="" />
                     </div>
-                    <button
-                        class="rounded-lg bg-primary p-2 font-bold text-white"
+                    <Login v-if="!user" class="bg-accent"></Login>
+                    <div
+                        v-else
+                        class="text-center font-medium underline underline-offset-1"
                     >
-                        Login
-                    </button>
-
+                        <span>Welcome Back, </span
+                        ><span class="text-accent"> {{ user.name }}!</span>
+                    </div>
                     <div class="flex justify-evenly gap-3">
                         <v-icon name="la-search-solid" scale="1.3"></v-icon>
                         <v-icon name="la-heart" scale="1.3"></v-icon>
@@ -88,11 +100,15 @@
                 </div>
             </div>
         </Teleport>
+
+        <!-- Login -->
+        <Login v-model="dialog" @submit="handleSubmit"></Login>
     </nav>
 </template>
 
 <script>
 import { useMedia } from "@/composables/useMedia";
+import { useAuthStore } from "../stores/authStore";
 import Login from "./Login.vue";
 
 export default {
@@ -100,8 +116,10 @@ export default {
     setup() {
         const { isMatched } = useMedia("(min-width: 768px )");
 
+        const authStore = useAuthStore();
         return {
             isMatched,
+            authStore,
         };
     },
     computed: {
@@ -120,6 +138,7 @@ export default {
         return {
             expanded: false,
             active: true,
+            dialog: false,
         };
     },
     watch: {
@@ -127,6 +146,12 @@ export default {
             if (newValue) {
                 this.expanded = false;
             }
+        },
+    },
+    inject: ["user"],
+    methods: {
+        async handleSubmit() {
+            await this.authStore.login();
         },
     },
 };

@@ -13,6 +13,13 @@
     </router-view>
 </template>
 
-<script>
-export default {};
+<script setup>
+import { useUserStore } from "@/stores/userStore";
+import { storeToRefs } from "pinia";
+import { provide } from "vue";
+
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
+
+provide("user", user);
 </script>

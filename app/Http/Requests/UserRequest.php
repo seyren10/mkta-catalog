@@ -32,21 +32,21 @@ class UserRequest extends FormRequest
         }
 
         return $value;
-    }    
+    }
     public function rules(): array
     {
         $id = $this->route('user') ? $this->route('user')->id : null;
         $rules = [
             'name' => 'required|string|max:255',
-            'email' =>[
+            'email' => [
                 'required',
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users','email')->ignore($id)
+                Rule::unique('users', 'email')->ignore($id)
             ],
         ];
-        if($this->getMethod() ==  'PUT'){
+        if ($this->getMethod() ==  'PUT') {
             $rules = [
                 'password' => [
                     'required',

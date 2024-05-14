@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SingleActionController\NonWishlistController;
 use App\Http\Controllers\UserController;
+use App\Http\Resources\UserResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    return new UserResource($request->user());
 })->middleware('auth:sanctum');
 
 $except = ['create', 'edit', 'destroy'];
@@ -38,29 +39,41 @@ Route::apiResource('product', ProductController::class)->except($except);
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except($except);
 
 Route::apiResource('product-components', ProductComponentController::class)->only(['update', 'destroy']);
-Route::get('product-components/{product}', [ProductComponentController::class, 'showProductComponents'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
-Route::post('product-components/{product}', [ProductComponentController::class, 'createProductComponents'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+Route::get('product-components/{product}', [ProductComponentController::class, 'showProductComponents']);
+Route::post('product-components/{product}', [ProductComponentController::class, 'createProductComponents']);
 
 
 Route::put('users/change-password/{user}', [UserController::class, 'changePassword'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });
 
 Route::post('users/reset-password/{user}', [UserController::class, 'resetPassword'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });
 
 Route::post('users/{user}/{action}/area-code/{areacode}', [UserController::class, 'modifyUserAreaCodes'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });
 
 Route::post('users/{user}/{action}/area-code/{areacode}', [UserController::class, 'modifyUserAreaCodes'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });
 
 Route::post('users/{user}/{action}/company-code/{company_code}', [UserController::class, 'modifyUserCompanyCode'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });
 
 Route::post('users/{user}/{action}/permissions/{permission}', [UserController::class, 'modifyUserPermissions'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });
 
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission'])
-->fallback( function(){ return response()->json(["message"=>"Page not Found"],404); } );
+    ->fallback(function () {
+        return response()->json(["message" => "Page not Found"], 404);
+    });

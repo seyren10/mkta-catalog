@@ -2,9 +2,7 @@
     <div>
         <slot name="activator"></slot>
 
-        <template v-if="!$slots.activator">
-            <v-button>Open Dialog</v-button>
-        </template>
+        <template v-if="!$slots.activator"> </template>
 
         <Teleport to="body" v-if="modelValue">
             <VDialogContent
