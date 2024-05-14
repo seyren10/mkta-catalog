@@ -51,3 +51,4 @@ Route::group(['users'], function (){
     Route::post('/{user}/{action}/permissions/{permission}', [UserController::class, 'modifyUserPermissions']);
 });
 
+Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);
