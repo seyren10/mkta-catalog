@@ -25,7 +25,9 @@ class ProductAccessTypeSeeder extends Seeder
                                         'Allow or Deny access to a user in certain Area Code',
                                         'indirect',
                                         'user_areas',
-                                        'area_code_id'
+                                        'area_code_id',
+                                        'area_codes',
+                                        'title'
                                         ))->toArray(),
                 (new ProductAccessTypeData(
                                         'company-code', 
@@ -33,7 +35,9 @@ class ProductAccessTypeSeeder extends Seeder
                                         'Allow or Deny access to a user in a certain Company Code',
                                         'indirect',
                                         'user_companies',
-                                        'company_code_id'
+                                        'company_code_id',
+                                        'company_codes',
+                                        'title'
                                         ))->toArray(),
                 (new ProductAccessTypeData(
                                         'customer', 
@@ -41,7 +45,9 @@ class ProductAccessTypeSeeder extends Seeder
                                         'Allow or Deny access to a certain user',
                                         'direct',
                                         'users',
-                                        'id'
+                                        'id',
+                                        'users',
+                                        'name'
                                         ))->toArray(),
             ]
         );
@@ -57,7 +63,9 @@ class ProductAccessTypeData
 
         public $ref_type,
         public $ref_table,
-        public $ref_column
+        public $ref_column,
+        public $source_table,
+        public $source_column,
         )
     {
     }
@@ -71,6 +79,8 @@ class ProductAccessTypeData
             "ref_type" => $this->ref_type,
             "ref_table" => $this->ref_table,
             "ref_column" => $this->ref_column,
+            "source_table" => $this->source_table,
+            "source_column" => $this->source_column,
             'created_at' => now(),
             'updated_at' => now()
         ];

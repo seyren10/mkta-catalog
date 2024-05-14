@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductAccessTypeResource;
 use App\Models\File;
+use App\Models\ProductAccessType;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
 
+    public static function useExampleService(ProductAccessType $product_access_type){
+        
+        return response()->json(["message" => new ProductAccessTypeResource($product_access_type)],200);
+    }
     /**
      * Display a listing of the resource.
      */
