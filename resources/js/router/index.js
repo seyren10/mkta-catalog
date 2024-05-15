@@ -6,6 +6,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 import ActionNotAllowed from "@/components/ActionNotAllowed.vue";
+
 const routes = [
     {
         path: "/",
@@ -21,14 +22,6 @@ const routes = [
         },
     },
     {
-        path: "/catalog",
-        name: "catalog",
-        component: CatalogLayout,
-        meta: {
-            requiresAuth: true,
-        },
-    },
-    {
         path: "/admin",
         name: "admin",
         component: AdminLayout,
@@ -36,7 +29,26 @@ const routes = [
             requiresAuth: true,
             // allowedRoles:
         },
-        children: [],
+        children: [
+            {
+                path: "dashboard",
+                name: "dashboard",
+                component: () => import("@/Pages/Admin/Dashboard/Index.vue"),
+            },
+            {
+                path: "products",
+                name: "products",
+                component: () => import("@/Pages/Admin/Products/Index.vue"),
+            },
+        ],
+    },
+    {
+        path: "/catalog",
+        name: "catalog",
+        component: CatalogLayout,
+        meta: {
+            requiresAuth: true,
+        },
     },
     {
         path: "/fallback",
@@ -64,15 +76,12 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-    if (to.meta.requiresAuth) {
-        const userStore = useUserStore();
-        await userStore.getUser();
+    const userStore = useUserStore();
+    await userStore.getUser();
 
-        const { user } = userStore;
-
-        if (!user) {
-            return { name: "fallback", query: { type: "unAuthorized" } };
-        }
+    const { user } = userStore;
+    if (to.meta.requiresAuth && !user) {
+        return { name: "fallback", query: { type: "unAuthorized" } };
     }
 });
 

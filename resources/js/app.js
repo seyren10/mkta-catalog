@@ -49,6 +49,7 @@ import {
     PrCheckCircle,
     PrTimesCircle,
     PrExclamationCircle,
+    HiMenuAlt4,
 } from "oh-vue-icons/icons";
 import { createPinia } from "pinia";
 
@@ -83,6 +84,7 @@ addIcons(
     PrCheckCircle,
     PrTimesCircle,
     PrExclamationCircle,
+    HiMenuAlt4,
 );
 
 const pinia = createPinia();
@@ -102,4 +104,5 @@ app.component("v-button", VButton);
 app.component("v-dialog", VDialog);
 app.component("v-toolbar", VToolbar);
 app.component("v-alert", VAlert);
+
 app.mount("#app");

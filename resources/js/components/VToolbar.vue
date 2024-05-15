@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-between bg-stone-200 p-2">
+    <div class="flex items-center justify-between p-2">
         <slot name="title"></slot>
         <v-heading type="h3" v-if="!$slots.title" class="font-normal">{{
             title
