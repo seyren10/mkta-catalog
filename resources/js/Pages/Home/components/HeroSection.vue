@@ -45,7 +45,12 @@
             class="absolute bottom-20 left-[50%] hidden -translate-x-[50%] md:block"
         >
             <div class="animate-bounce">
-                <v-icon name="la-arrow-circle-down-solid" scale="2"></v-icon>
+                <a href="#our-specialties">
+                    <v-icon
+                        name="la-arrow-circle-down-solid"
+                        scale="2"
+                    ></v-icon>
+                </a>
             </div>
         </div>
     </section>

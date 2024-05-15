@@ -54,12 +54,15 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-    const userStore = useUserStore();
-    await userStore.getUser();
+    if (to.meta.requiresAuth) {
+        const userStore = useUserStore();
+        await userStore.getUser();
 
-    const { user } = userStore;
-    if (to.meta.requiresAuth && !user) {
-        return { name: "fallback", query: { type: "unAuthorized" } };
+        const { user } = userStore;
+
+        if (!user) {
+            return { name: "fallback", query: { type: "unAuthorized" } };
+        }
     }
 });
 

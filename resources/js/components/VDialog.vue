@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { onUpdated } from "vue";
+import { onUpdated, onUnmounted } from "vue";
 import VDialogContent from "./derived_components/VDialogContent.vue";
 
 const props = defineProps(["modelValue", "maxWidth", "title", "persistent"]);
@@ -39,6 +39,12 @@ onUpdated(() => {
             .querySelector("body")
             .classList.remove("h-full", "overflow-hidden");
     }
+});
+
+onUnmounted(() => {
+    document
+        .querySelector("body")
+        .classList.remove("h-full", "overflow-hidden");
 });
 </script>
 
