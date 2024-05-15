@@ -4,7 +4,7 @@
 
         <template v-if="!$slots.activator"> </template>
 
-        <Teleport to="body" v-if="modelValue">
+        <Teleport to="#overlay" v-if="modelValue">
             <VDialogContent
                 v-bind="{ maxWidth, title, persistent }"
                 @close="$emit('update:modelValue', false)"

@@ -1,5 +1,5 @@
 <template>
-    <Teleport to="body">
+    <Teleport to="#overlay">
         <v-dialog v-model="dialog" persistent>
             <template #header>
                 <v-button
@@ -83,17 +83,16 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 
 //reactives
-const emit = defineEmits(["submit"]);
 const dialog = defineModel(false);
 
 //stores
 const authStore = useAuthStore();
 const { form, loading, errors } = storeToRefs(authStore);
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
 
-    emit("submit");
+    await authStore.login();
 };
 </script>
 

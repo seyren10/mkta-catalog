@@ -67,6 +67,7 @@
                         become our partner</a
                     >
                 </p>
+                <router-link :to="{ name: 'catalog' }">catalog</router-link>
             </div>
         </div>
     </div>

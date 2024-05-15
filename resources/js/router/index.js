@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
 
-import MainLayout from "@/Layouts/MainLayout.vue";
 import CatalogLayout from "@/Layouts/CatalogLayout.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 import Login from "@/Pages/Auth/Login.vue";
 
 import ActionNotAllowed from "@/components/ActionNotAllowed.vue";
-
 const routes = [
     {
         path: "/",
@@ -29,12 +28,6 @@ const routes = [
             requiresAuth: true,
         },
     },
-    {
-        path: "/login",
-        name: "login",
-        component: Login,
-    },
-
     {
         path: "/fallback",
         name: "fallback",
@@ -61,17 +54,12 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-   
+    const userStore = useUserStore();
+    await userStore.getUser();
 
-   
-    if (to.meta.requiresAuth) {
-        const userStore = useUserStore();
-        await userStore.getUser();
-
-        const { user } = userStore;
-        if(!user) {
-            return { name: "fallback", query: { type: "unAuthorized" } };
-        }
+    const { user } = userStore;
+    if (to.meta.requiresAuth && !user) {
+        return { name: "fallback", query: { type: "unAuthorized" } };
     }
 });
 

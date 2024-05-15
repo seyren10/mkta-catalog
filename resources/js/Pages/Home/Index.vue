@@ -25,7 +25,7 @@ import AboutUs from "./components/AboutUs.vue";
 import OurProcesses from "./components/OurProcesses.vue";
 import BecomeAPartner from "./components/BecomeAPartner.vue";
 import Footer from "./components/Footer.vue";
-import NavApp from "../../components/NavApp.vue";
+import NavApp from "@/components/NavApp.vue";
 </script>
 
 <style scoped></style>

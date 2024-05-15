@@ -10,7 +10,10 @@
     @vite('resources/js/app.js')
 </head>
 
-<body id="app" class="text-slate-800 antialiased bg-stone-100 ">
+<body class="text-slate-800 antialiased bg-stone-100 ">
+    <div id="overlay"></div>
+    <div id="app">
+    </div>
 </body>
 
 </html>

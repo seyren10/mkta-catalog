@@ -29,7 +29,6 @@
                 <span>Welcome Back, </span
                 ><span class="text-accent"> {{ user.name }}!</span>
             </div>
-            <button @click="$router.push({ name: 'catalog' })">catalog</button>
             <span class="text-slate-300">|</span>
             <div class="flex gap-3">
                 <v-icon name="la-search-solid" scale="1.3"></v-icon>
@@ -51,7 +50,7 @@
         </div>
 
         <!-- Navigation for mobile -->
-        <Teleport to="body">
+        <Teleport to="#overlay">
             <div
                 v-if="expanded"
                 class="fixed right-0 z-[999] min-h-[100vh] w-[70%] border-l bg-white p-3"
@@ -102,59 +101,44 @@
         </Teleport>
 
         <!-- Login -->
-        <Login v-model="dialog" @submit="handleSubmit"></Login>
+        <Login v-model="dialog"></Login>
     </nav>
 </template>
 
-<script>
+<script setup>
+import { ref, watch, inject, computed } from "vue";
 import { useMedia } from "@/composables/useMedia";
-import { useAuthStore } from "../stores/authStore";
+
 import Login from "./Login.vue";
 
-export default {
-    components: { Login },
-    setup() {
-        const { isMatched } = useMedia("(min-width: 768px )");
+//reactives
+const { isMatched } = useMedia("(min-width: 768px )");
+const expanded = ref(false);
+const active = ref(true);
+const dialog = ref(false);
+//stores
 
-        const authStore = useAuthStore();
-        return {
-            isMatched,
-            authStore,
-        };
-    },
-    computed: {
-        links() {
-            return [
-                { title: "Home", to: "#home" },
-                { title: "Our specialties", to: "#our-specialties" },
-                { title: "Our processes", to: "#our-processes" },
-                { title: "Work with us", to: "#work-with-us" },
-                { title: "About", to: "#about" },
-                { title: "Become a partner", to: "#become-a-partner" },
-            ];
-        },
-    },
-    data() {
-        return {
-            expanded: false,
-            active: true,
-            dialog: false,
-        };
-    },
-    watch: {
-        isMatched(newValue) {
-            if (newValue) {
-                this.expanded = false;
-            }
-        },
-    },
-    inject: ["user"],
-    methods: {
-        async handleSubmit() {
-            await this.authStore.login();
-        },
-    },
-};
+//derived props
+const links = computed(() => {
+    return [
+        { title: "Home", to: "#home" },
+        { title: "Our specialties", to: "#our-specialties" },
+        { title: "Our processes", to: "#our-processes" },
+        { title: "Work with us", to: "#work-with-us" },
+        { title: "About", to: "#about" },
+        { title: "Become a partner", to: "#become-a-partner" },
+    ];
+});
+
+//watchers
+watch(isMatched, (newValue) => {
+    if (newValue) {
+        expanded.value = false;
+    }
+});
+
+//injects
+const user = inject("user");
 </script>
 
 <style scoped></style>

@@ -16,13 +16,8 @@
     </div>
 </template>
 
-<script>
-import NavApp from "@/components/NavApp.vue";
+<script setup>
 import Index from "@/Pages/Home/Index.vue";
-
-export default {
-    components: { NavApp, Index },
-};
 </script>
 
 <style scoped></style>
