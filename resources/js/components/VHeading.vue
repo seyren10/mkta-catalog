@@ -1,5 +1,8 @@
 <template>
-    <component :is="type" :class="`font-serif ${getSize}  text-primary`">
+    <component
+        :is="type === 'display' ? 'h1' : type"
+        :class="`font-serif ${getSize}  text-primary`"
+    >
         <slot></slot>
     </component>
 </template>

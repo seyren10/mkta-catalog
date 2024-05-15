@@ -3,7 +3,7 @@ import { useUserStore } from "@/stores/userStore";
 
 import CatalogLayout from "@/Layouts/CatalogLayout.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
-import Login from "@/Pages/Auth/Login.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 import ActionNotAllowed from "@/components/ActionNotAllowed.vue";
 const routes = [
@@ -27,6 +27,16 @@ const routes = [
         meta: {
             requiresAuth: true,
         },
+    },
+    {
+        path: "/admin",
+        name: "admin",
+        component: AdminLayout,
+        meta: {
+            requiresAuth: true,
+            // allowedRoles:
+        },
+        children: [],
     },
     {
         path: "/fallback",
