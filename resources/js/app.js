@@ -6,6 +6,8 @@ import router from "./router/index";
 import App from "./App.vue";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
+import VAccordion from "./components/VAccordion.vue";
+
 import {
     LaHeart,
     LaSearchSolid,
@@ -27,4 +29,5 @@ addIcons(
 const app = createApp(App);
 app.use(router);
 app.component("v-icon", OhVueIcon);
+app.component("v-accordion", VAccordion);
 app.mount("#app");
