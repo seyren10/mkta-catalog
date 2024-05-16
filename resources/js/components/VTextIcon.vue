@@ -1,11 +1,20 @@
 <template>
     <div>
         <div
-            class="flex gap-2 rounded-md p-2"
+            class="gap-2 rounded-md p-2"
+            :class="{
+                'flex items-center': !stacked,
+                'grid text-center': stacked,
+            }"
             v-for="item in items"
             :key="item.title"
         >
-            <v-icon v-if="item.icon" :name="item.icon" scale="1.5"></v-icon>
+            <v-icon
+                v-if="item.icon"
+                :name="item.icon"
+                scale="1.5"
+                :class="{ 'mx-auto': stacked }"
+            ></v-icon>
             <div>
                 <div :class="titleClass" v-if="!$slots.title">
                     {{ item.title }}
@@ -29,6 +38,10 @@ const props = defineProps({
     valueClass: {
         type: String,
         default: "text-slate-500",
+    },
+    stacked: {
+        type: Boolean,
+        default: false,
     },
 });
 </script>
