@@ -18,6 +18,8 @@ import VAlert from "./components/VAlert.vue";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 
+import VAccordion from "./components/VAccordion.vue";
+
 import {
     LaHeart,
     LaSearchSolid,
@@ -105,4 +107,5 @@ app.component("v-dialog", VDialog);
 app.component("v-toolbar", VToolbar);
 app.component("v-alert", VAlert);
 
+app.component("v-accordion", VAccordion);
 app.mount("#app");
