@@ -3,12 +3,18 @@
         class="group cursor-pointer overflow-hidden rounded-md"
         @click="expanded = !expanded"
     >
+        <!-- backdrop -->
+
         <div
-            :class="`flex items-center justify-between bg-stone-200 p-2 ${densityValue}`"
+            :class="`relative isolate flex items-center justify-between bg-stone-200 p-2 ${densityValue}`"
         >
+            <div
+                class="absolute inset-0 -z-10 duration-500"
+                :class="{ 'backdrop-brightness-75': expanded }"
+            ></div>
             <slot name="title"></slot>
             <p v-if="!$slots.title">{{ title }}</p>
-            <v-icon :name="icon"></v-icon>
+            <v-icon :name="icon" :flip="expanded ? 'vertical' : null"></v-icon>
         </div>
 
         <div
