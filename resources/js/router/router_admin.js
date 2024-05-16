@@ -23,7 +23,7 @@ const admin_routes = [
             {
                 path: "/categories",
                 name: "categories",
-                component: AdminLayout,
+                component: () => import("@/Pages/Admin/Categories/Index.vue"),
             }
         ],
     }
