@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-wrap gap-5 bg-stone-700 px-10 pb-3 pt-10 text-slate-300 text-sm"
+        class="flex flex-wrap gap-5 bg-stone-700 px-10 pb-3 pt-10 text-sm text-slate-300"
     >
         <div class="basis-[10rem]">
             <img

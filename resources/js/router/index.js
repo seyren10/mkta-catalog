@@ -25,6 +25,7 @@ const routes = [
         path: "/admin",
         name: "admin",
         component: AdminLayout,
+        redirect: { name: "dashboard" },
         meta: {
             requiresAuth: true,
             // allowedRoles:
