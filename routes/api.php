@@ -19,6 +19,7 @@ $except = ['create', 'edit', 'destroy'];
 
 
 Route::get('/user', function (Request $request) {
+    $request->merge(['includeRoleData' => true]);
     return new UserResource($request->user());
 })->middleware('auth:sanctum');
 
