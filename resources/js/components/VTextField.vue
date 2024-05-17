@@ -1,11 +1,17 @@
 <template>
-    <VInputWrapper v-slot="props" v-bind="props">
-        <input
-            type="text"
-            class="outline-none"
-            v-bind="{ ...$attrs, ...props }"
-            v-model="model"
-        />
+    <VInputWrapper v-bind="props">
+        <template v-for="(_, slotName) in $slots" #[slotName]>
+            <slot :name="slotName" />
+        </template>
+
+        <template v-slot:default="props">
+            <input
+                type="text"
+                class="outline-none"
+                v-bind="{ ...$attrs, ...props }"
+                v-model="model"
+            />
+        </template>
     </VInputWrapper>
 </template>
 

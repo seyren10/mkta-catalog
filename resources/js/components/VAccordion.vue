@@ -3,11 +3,10 @@
         class="group cursor-pointer overflow-hidden rounded-md"
         @click="expanded = !expanded"
     >
-        <!-- backdrop -->
-
         <div
-            :class="`relative isolate flex items-center justify-between bg-stone-200 p-2 ${densityValue}`"
+            :class="`relative isolate flex items-center justify-between bg-stone-200 ${densityValue}`"
         >
+            <!-- backdrop -->
             <div
                 class="absolute inset-0 -z-10 duration-500"
                 :class="{ 'backdrop-brightness-75': expanded }"
@@ -41,12 +40,10 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useDensity, useDensityValues } from "@/composables/useInput";
 
 const props = defineProps({
-    density: {
-        type: String,
-        default: "default",
-    },
+    ...useDensity(),
     title: {
         type: String,
         default: "Accordion",
@@ -57,25 +54,11 @@ const props = defineProps({
     },
 });
 
+const densityValue = useDensityValues(props.density);
 //reactives
 const expanded = ref(false);
 
 //derived props
-
-const densityValue = computed(() => {
-    switch (props.density) {
-        case "default":
-            return "p-3";
-        case "compact": {
-            return "p-2";
-        }
-        case "comfortable": {
-            return "p-4";
-        }
-        default:
-            break;
-    }
-});
 </script>
 
 <style lang="scss" scoped></style>

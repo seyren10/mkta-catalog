@@ -47,9 +47,17 @@ const routes = [
         path: "/catalog",
         name: "catalog",
         component: CatalogLayout,
+        redirect: { name: "catalogHome" },
         meta: {
             requiresAuth: true,
         },
+        children: [
+            {
+                path: "",
+                name: "catalogHome",
+                component: () => import("@/Pages/Catalog/Index.vue"),
+            },
+        ],
     },
     {
         path: "/fallback",
