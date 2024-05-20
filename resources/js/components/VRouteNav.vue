@@ -1,5 +1,5 @@
 <template>
-    <ul class="flex flex-wrap gap-1">
+    <ul class="flex flex-wrap gap-1 overflow-auto max-h-[80vh]">
         <li
             v-for="item in items"
             class="grow overflow-hidden rounded-md duration-500 hover:bg-stone-200"

@@ -56,6 +56,160 @@ const items = [
         to: "categories",
         icon: "pr-globe",
     },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
+    {
+        title: "Dashboard",
+        to: "admin",
+        icon: "la-heart",
+    },
+
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "pr-globe",
+    },
     // {
     //     title: "Customers",
     //     icon: "pr-send",
