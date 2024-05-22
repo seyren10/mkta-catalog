@@ -67,7 +67,7 @@ const reasons = computed(() => {
         {
             title: "Quality Workforce Guarantee",
             description: `<span class='text-accent text-xl'>500</span> hardworking employees ensure quality and efficiency. `,
-            img: "/illustrations/employees.jpg",
+            img: "/mk-images/VISSION.jpg",
         },
         {
             title: "Fiberglass Durability",
@@ -79,7 +79,7 @@ const reasons = computed(() => {
             title: "Illuminating Diversity",
             description:
                 "Over <span class='text-accent text-xl'>2000</span> lighting products, providing a diverse range of lighting solutions for different settings and preferences.",
-            img: "/illustrations/products.jpg",
+            img: "/mk-images/INLITEFI PICTURE.jpg",
         },
         {
             title: "Scale and Quality Hub",

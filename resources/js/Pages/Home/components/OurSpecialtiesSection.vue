@@ -1,6 +1,6 @@
 <template>
     <section id="our-specialties">
-        <v-heading class="text-center">Our Specialties</v-heading>
+        <!-- <v-heading class="text-center">Our Specialties</v-heading> -->
         <div class="grid gap-5 md:grid-cols-2">
             <div
                 class="-z-10 col-start-1 row-start-1 overflow-hidden rounded-md"
@@ -33,8 +33,8 @@
                     <div class="md:order-2">
                         <img
                             loading="lazy"
-                            src="/illustrations/mission.jpg"
-                            class="aspect-[1/.4] object-cover"
+                            src="/mk-images/VISSION.jpg"
+                            class="aspect-[1/.5] object-cover"
                             alt=""
                         />
                     </div>
@@ -50,7 +50,7 @@
                     <img
                         loading="lazy"
                         src="/illustrations/vision.jpg"
-                        class="aspect-[1/.4] object-cover object-top"
+                        class="aspect-[1/.5] object-cover object-top"
                         alt=""
                     />
                     <v-heading type="h2">Vision</v-heading>

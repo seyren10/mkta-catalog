@@ -17,6 +17,7 @@ import VToolbar from "./components/VToolbar.vue";
 import VAlert from "./components/VAlert.vue";
 import VTooltip from "./components/VTooltip.vue";
 import VMenu from "./components/VMenu.vue";
+import VDataTable from "./components/VDataTable.vue";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 
@@ -55,6 +56,13 @@ import {
     PrExclamationCircle,
     HiMenuAlt4,
     MdKeyboardarrowdownRound,
+    OiStar,
+    RiCustomerService2Line,
+    RiBug2Line,
+    MdKeyboardarrowleftRound,
+    MdKeyboardarrowrightRound,
+    MdKeyboarddoublearrowrightRound,
+    MdKeyboarddoublearrowleftRound,
 } from "oh-vue-icons/icons";
 import { createPinia } from "pinia";
 
@@ -91,6 +99,13 @@ addIcons(
     PrExclamationCircle,
     HiMenuAlt4,
     MdKeyboardarrowdownRound,
+    OiStar,
+    RiCustomerService2Line,
+    RiBug2Line,
+    MdKeyboardarrowleftRound,
+    MdKeyboardarrowrightRound,
+    MdKeyboarddoublearrowrightRound,
+    MdKeyboarddoublearrowleftRound,
 );
 
 const pinia = createPinia();
@@ -113,5 +128,6 @@ app.component("v-alert", VAlert);
 app.component("v-accordion", VAccordion);
 app.component("v-tooltip", VTooltip);
 app.component("v-menu", VMenu);
+app.component("v-data-table", VDataTable);
 
 app.mount("#app");

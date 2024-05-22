@@ -1,6 +1,6 @@
 <template>
     <div>
-        <slot name="activator" @click="showMenu" ref="parent"></slot>
+        <slot name="activator" @click="showMenu"></slot>
 
         <Teleport to="#overlay">
             <Transition
@@ -62,6 +62,7 @@ const started = ref(false);
 
 const handleCloseMenu = (event) => {
     if (menu.value.contains(event.target)) {
+        console.log("pasok");
     } else if (started.value) {
         show.value = false;
         document.body.removeEventListener("click", handleCloseMenu);
@@ -93,12 +94,7 @@ const showMenu = async (e) => {
             menu.value.style.left = `${parentBound.right - menu.value.getBoundingClientRect().width}px`;
         } else {
             menu.value.style.left = parentBound.left + "px";
-            menu.value.style.right = "20px";
         }
-
-        // console.log(menu.value.getBoundingClientRect());
-        // console.log(parentBound);
-        // console.dir(e.target);
     } else {
         show.value = false;
         document.body.removeEventListener("click", handleCloseMenu);

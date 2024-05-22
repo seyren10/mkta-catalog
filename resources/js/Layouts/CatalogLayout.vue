@@ -1,9 +1,9 @@
 <template>
-    <div class="text-sm text-slate-100">
+    <div class="bg-slate-100 text-sm text-slate-100">
         <header class="sticky top-0 z-[2000]">
             <CatalogNav></CatalogNav>
         </header>
-        
+
         <main class="text-slate-600">
             <router-view></router-view>
         </main>

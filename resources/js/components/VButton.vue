@@ -14,6 +14,7 @@
             <template v-if="!loading">
                 <!-- HOVERING EFFECT -->
                 <div
+                    v-if="!noHoverEffect"
                     class="absolute inset-0 -z-10 duration-500 group-hover:backdrop-brightness-125"
                 ></div>
                 <!-- /HOVERING EFFECT -->
@@ -51,7 +52,7 @@
         v-else="icon"
         v-bind="$attrs"
         :disabled="loading"
-        class="grid items-center rounded-full p-1 duration-500 hover:bg-stone-300 disabled:cursor-not-allowed"
+        :class="`grid items-center rounded-full p-1 duration-500 disabled:cursor-not-allowed ${!noHoverEffect ? 'hover:bg-stone-300' : ''}`"
     >
         <v-icon :name="icon" scale="1.5" v-if="!loading"></v-icon>
         <VLoader v-else />
@@ -72,6 +73,7 @@ const props = defineProps({
     icon: { type: String },
     tag: { type: String, default: "button" },
     outlined: { type: Boolean, default: false },
+    noHoverEffect: { type: Boolean, default: false },
 });
 
 const densityValue = useDensityValues(props.density);
