@@ -19,6 +19,9 @@ export const useInput = () => {
         loading: {
             type: Boolean,
         },
+        wrapperClass: {
+            type: String,
+        },
     };
 };
 

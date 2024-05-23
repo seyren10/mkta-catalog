@@ -120,9 +120,9 @@
                     </div>
                 </v-menu>
 
-                <div class="hidden flex-wrap gap-2 sm:flex md:gap-2">
+                <div class="hidden flex-wrap gap-3 sm:flex">
                     <v-button
-                        class="w-max px-1 py-0.5 text-[.75rem] text-slate-400"
+                        class="w-max px-0.5 text-[.75rem] text-slate-400"
                         no-hover-effect
                         v-for="feature in features"
                         :key="feature.title"

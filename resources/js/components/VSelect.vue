@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <VInputWrapper v-bind="props" v-slot="props">
+        <VInputWrapper v-bind="{ ...props, densityValues }" v-slot="props">
             <button
                 v-bind="{ ...$attrs, ...props }"
                 @click="showSelection = !showSelection"
@@ -58,7 +58,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VInputWrapper from "./base_components/VInputWrapper.vue";
-import { useInput } from "@/composables/useInput";
+import { useInput, useDensity, useDensityValues } from "@/composables/useInput";
 
 defineOptions({
     inheritAttrs: false,
@@ -66,6 +66,7 @@ defineOptions({
 
 const props = defineProps({
     ...useInput(),
+    ...useDensity(),
     position: { type: String, default: "top" },
     items: { type: Array },
     itemTitle: { type: String },
@@ -76,7 +77,9 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const showSelection = ref(false);
+const densityValues = useDensityValues(props.density);
 
+//computed
 const title = computed(() => {
     return props.itemTitle ?? "title";
 });
@@ -85,6 +88,7 @@ const value = computed(() => {
     return props.itemValue ?? "id";
 });
 
+//methods
 const handleSelected = (value) => {
     emit("update:modelValue", value);
 };
