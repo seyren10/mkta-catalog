@@ -1,7 +1,7 @@
 <template>
     <div
         ref="el"
-        class="invisible absolute left-0 z-[1000] w-max scale-75 rounded-md bg-[#00000094] p-1 px-3 text-[.9rem] text-white opacity-0 duration-100 ease-out group-hover/tooltip:visible group-hover/tooltip:scale-100 group-hover/tooltip:opacity-100"
+        class="invisible absolute left-0 z-[1000] w-max scale-75 rounded-lg bg-[#00000094] p-1 px-3 text-[.9rem] text-white opacity-0 duration-100 ease-out group-hover/tooltip:visible group-hover/tooltip:scale-100 group-hover/tooltip:opacity-100"
         :class="{
             'top-[105%]': align === 'bottom',
             'bottom-[105%]': align === 'top',

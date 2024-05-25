@@ -13,7 +13,7 @@
             class="absolute right-0 top-[50%] -rotate-12 opacity-30 mix-blend-color-dodge"
         />
         <div
-            class="grid overflow-hidden rounded-md border border-white bg-white p-5 shadow-xl"
+            class="grid overflow-hidden rounded-lg border border-white bg-white p-5 shadow-xl"
         >
             <div class="p-6">
                 <v-heading class="text-center" type="h2">Login</v-heading>

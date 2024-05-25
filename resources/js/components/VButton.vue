@@ -3,12 +3,12 @@
         <slot name="prepend"></slot>
 
         <template v-if="prependIcon">
-            <v-icon :name="prependIcon" class="mr-2" scale="1.3"></v-icon>
+            <v-icon :name="prependIcon" class="mr-2" :scale="iconSize"></v-icon>
         </template>
         <component
             :is="tag"
             v-bind="$attrs"
-            :class="`group relative isolate flex items-center justify-center overflow-hidden rounded-md ${densityValue} disabled:cursor-not-allowed ${outlined ? 'border' : ''}`"
+            :class="`group relative isolate flex items-center justify-center overflow-hidden rounded-lg ${densityValue} disabled:cursor-not-allowed ${outlined ? 'border' : ''}`"
             :disabled="loading"
         >
             <template v-if="!loading">
@@ -22,13 +22,13 @@
                     <v-icon
                         :name="prependInnerIcon"
                         class="mr-1"
-                        scale="1.3"
+                        :scale="iconSize"
                     ></v-icon>
                 </template>
                 <slot name="prepend-inner"></slot>
             </template>
             <template v-else>
-                <VLoader class="mr-1" scale="1.3" />
+                <VLoader class="mr-1" :scale="iconSize" />
             </template>
 
             <slot />
@@ -37,7 +37,7 @@
                 <v-icon
                     :name="appendInnerIcon"
                     class="ml-1"
-                    scale="1.3"
+                    :scale="iconSize"
                 ></v-icon>
             </template>
             <slot name="append-inner"></slot>
@@ -45,7 +45,7 @@
 
         <slot name="append"></slot>
         <template v-if="appendIcon">
-            <v-icon :name="appendIcon" class="ml-2" scale="1.3"></v-icon>
+            <v-icon :name="appendIcon" class="ml-2" :scale="iconSize"></v-icon>
         </template>
     </div>
     <button
@@ -74,6 +74,10 @@ const props = defineProps({
     tag: { type: String, default: "button" },
     outlined: { type: Boolean, default: false },
     noHoverEffect: { type: Boolean, default: false },
+    iconSize: {
+        type: String,
+        default: "1.3",
+    },
 });
 
 const densityValue = useDensityValues(props.density);

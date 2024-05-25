@@ -27,7 +27,7 @@
                 leave-active-class="duration-300 ease"
             >
                 <ul
-                    class="absolute inset-x-0 z-[2000] overflow-hidden rounded-md border border-stone-400 bg-white"
+                    class="absolute inset-x-0 z-[2000] overflow-hidden rounded-lg border border-stone-400 bg-white"
                     :class="{
                         'bottom-[80%]': position === 'top',
                         'top-[110%]': position === 'bottom',

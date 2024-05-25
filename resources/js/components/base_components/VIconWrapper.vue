@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-1">
+    <div class="flex gap-3">
         <slot name="prepend"></slot>
         <v-icon scale="1.5" :name="prependIcon" v-if="prependIcon"></v-icon>
         <div v-bind="$attrs" class="grow">
@@ -30,7 +30,7 @@ import { useIcon } from "@/composables/useIcon";
 defineOptions({
     inheritAttrs: false,
 });
-const props = defineProps(useIcon());
+const props = defineProps({ ...useIcon(), parentClass: String });
 </script>
 
 <style lang="scss" scoped></style>

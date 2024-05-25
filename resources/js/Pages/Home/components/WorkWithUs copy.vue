@@ -6,7 +6,7 @@
                 v-for="(reason, index) in reasons"
                 :key="index"
                 role="listitem"
-                class="group relative isolate grid min-h-60 cursor-default rounded-md border border-stone-300 p-3 transition-transform duration-500 hover:-translate-y-5 hover:bg-stone-300 hover:shadow-md"
+                class="group relative isolate grid min-h-60 cursor-default rounded-lg border border-stone-300 p-3 transition-transform duration-500 hover:-translate-y-5 hover:bg-stone-300 hover:shadow-md"
                 :class="{
                     'animate-appear': startAnimation,
                     'opacity-1': !startAnimation,

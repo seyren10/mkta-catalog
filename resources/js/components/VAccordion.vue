@@ -1,6 +1,6 @@
 <template>
     <div
-        class="group cursor-pointer overflow-hidden rounded-md"
+        class="group cursor-pointer overflow-hidden rounded-lg"
         @click="expanded = !expanded"
     >
         <div

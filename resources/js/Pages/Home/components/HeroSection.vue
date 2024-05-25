@@ -19,7 +19,7 @@
                     v-if="!user"
                     tag="a"
                     href="#become-a-partner"
-                    class="relative mt-4 block animate-[appear_1s_ease-out_forwards_800ms] rounded-md bg-accent p-2 px-5 text-lg text-white opacity-0"
+                    class="relative mt-4 block animate-[appear_1s_ease-out_forwards_800ms] rounded-lg bg-accent p-2 px-5 text-lg text-white opacity-0"
                 >
                     <template #prepend-inner>
                         <v-icon
@@ -34,7 +34,7 @@
                     v-else
                     tag="router-link"
                     :to="{ name: 'catalog' }"
-                    class="relative mt-4 block animate-[appear_1s_ease-out_forwards_800ms] rounded-md bg-accent p-2 px-5 text-lg text-white opacity-0"
+                    class="relative mt-4 block animate-[appear_1s_ease-out_forwards_800ms] rounded-lg bg-accent p-2 px-5 text-lg text-white opacity-0"
                 >
                     <template #prepend-inner>
                         <v-icon

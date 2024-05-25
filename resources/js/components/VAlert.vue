@@ -1,6 +1,6 @@
 <template>
     <VIconWrapper
-        class="flex gap-2 rounded-md px-2 py-3"
+        class="flex gap-2 rounded-lg px-2 py-3"
         :class="alertType.class"
         :prepend-inner-icon="alertType.icon"
     >

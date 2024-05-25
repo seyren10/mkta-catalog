@@ -14,7 +14,7 @@
 
                 <v-text-icon :items="infoList" class="my-5 grid " />
 
-                <div class="mx-auto h-[20rem] overflow-hidden rounded-md">
+                <div class="mx-auto h-[20rem] overflow-hidden rounded-lg">
                     <LMap
                         :useGlobalLeaflet="false"
                         v-model:zoom="zoom"

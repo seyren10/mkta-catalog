@@ -7,7 +7,7 @@
             enter-active-class="duration-300 ease-out"
         >
             <div
-                class="relative grid overflow-hidden rounded-md bg-white shadow-lg"
+                class="relative grid overflow-hidden rounded-lg bg-white shadow-lg"
                 :style="maxWidth ? `max-width: ${maxWidth}px` : ''"
                 v-closable
             >

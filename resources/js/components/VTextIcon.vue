@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="gap-2 rounded-md"
+            class="gap-2 rounded-lg"
             :class="`${!stacked ? 'flex items-center' : 'grid text-center'} ${densityValues}`"
             v-for="item in items"
             :key="item.title"

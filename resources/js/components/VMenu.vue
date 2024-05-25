@@ -11,7 +11,7 @@
             >
                 <div
                     v-bind="$attrs"
-                    class="fixed left-0 z-[2001] rounded-md bg-white text-sm shadow-xl"
+                    class="fixed left-0 z-[2001] rounded-lg bg-white text-sm shadow-xl"
                     v-show="show"
                     ref="menu"
                 >

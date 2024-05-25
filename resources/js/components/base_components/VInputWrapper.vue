@@ -6,7 +6,7 @@
         </div>
         <div class="grid grow">
             <div
-                :class="`peer order-2 flex  items-center gap-1 rounded-md border bg-white duration-300 has-[:disabled]:bg-stone-200 has-[:focus]:ring-2 has-[:focus]:ring-accent has-[:focus]:ring-offset-2 ${wrapperClass} ${$attrs.densityValues}`"
+                :class="`peer order-2 flex  items-center gap-1 rounded-lg border bg-white duration-300 has-[:disabled]:bg-stone-200 has-[:focus]:ring-2 has-[:focus]:ring-accent has-[:focus]:ring-offset-2 ${wrapperClass} ${$attrs.densityValues}`"
             >
                 <v-icon
                     v-if="prependInnerIcon"

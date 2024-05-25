@@ -1,7 +1,7 @@
 <template>
     <section id="work-with-us">
         <v-heading class="text-center">Reasons to work with us</v-heading>
-        <div class="relative rounded-md">
+        <div class="relative rounded-lg">
             <Transition
                 enter-from-class="opacity-0"
                 leave-to-class="opacity-0"
@@ -11,7 +11,7 @@
                 <img
                     :key="activeImage"
                     :src="activeImage"
-                    class="aspect-[16/9] w-full rounded-md object-fill"
+                    class="aspect-[16/9] w-full rounded-lg object-fill"
                 />
             </Transition>
 
@@ -21,7 +21,7 @@
                 <li
                     v-for="(reason, index) in reasons"
                     :key="reason.title"
-                    class="group rounded-md p-3 text-slate-300 backdrop-brightness-[.4] duration-500 hover:bg-primary"
+                    class="group rounded-lg p-3 text-slate-300 backdrop-brightness-[.4] duration-500 hover:bg-primary"
                     ref="lists"
                     @mouseover="activeImage = reason.img"
                     @mouseleave="activeImage = defaultImage"

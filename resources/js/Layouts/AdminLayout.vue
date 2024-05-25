@@ -16,7 +16,7 @@
                 <hr class="my-2" />
 
                 <div
-                    class="mb-4 flex min-h-20 items-center gap-3 rounded-md bg-stone-200 p-2"
+                    class="mb-4 flex min-h-20 items-center gap-3 rounded-lg bg-stone-200 p-2"
                 >
                     <div class="max-w-[4rem] rounded-full bg-white">
                         <img src="/mk-images/hero-images/7.png" alt="" />

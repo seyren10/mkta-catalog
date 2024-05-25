@@ -18,105 +18,20 @@ import VAlert from "./components/VAlert.vue";
 import VTooltip from "./components/VTooltip.vue";
 import VMenu from "./components/VMenu.vue";
 import VDataTable from "./components/VDataTable.vue";
-
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-
 import VAccordion from "./components/VAccordion.vue";
+import VCard from "./components/VCard.vue";
+import VCarousel2 from "./components/VCarousel2.vue";
 
-import {
-    LaHeart,
-    LaSearchSolid,
-    LaCogSolid,
-    LaBarsSolid,
-    LaTimesSolid,
-    LaArrowCircleDownSolid,
-    BiHeartFill,
-    LaArrowCircleLeftSolid,
-    LaArrowCircleRightSolid,
-    FaQuoteRight,
-    FaQuoteLeft,
-    IoMailOutline,
-    FaRegularCommentAlt,
-    MdArrowdropdownRound,
-    MdArrowdropupRound,
-    LaCheckSolid,
-    IoLocationOutline,
-    CoMailRu,
-    PrGlobe,
-    RiBuilding2Line,
-    PrSend,
-    RiLoaderLine,
-    RiFacebookLine,
-    RiTwitterLine,
-    RiInstagramLine,
-    MdCloseRound,
-    RiKey2Line,
-    PrInfoCircle,
-    PrCheckCircle,
-    PrTimesCircle,
-    PrExclamationCircle,
-    HiMenuAlt4,
-    MdKeyboardarrowdownRound,
-    OiStar,
-    RiCustomerService2Line,
-    RiBug2Line,
-    MdKeyboardarrowleftRound,
-    MdKeyboardarrowrightRound,
-    MdKeyboarddoublearrowrightRound,
-    MdKeyboarddoublearrowleftRound,
-} from "oh-vue-icons/icons";
 import { createPinia } from "pinia";
 
-addIcons(
-    LaHeart,
-    LaSearchSolid,
-    LaCogSolid,
-    LaBarsSolid,
-    LaTimesSolid,
-    LaArrowCircleDownSolid,
-    BiHeartFill,
-    LaArrowCircleLeftSolid,
-    LaArrowCircleRightSolid,
-    FaQuoteRight,
-    FaQuoteLeft,
-    IoMailOutline,
-    FaRegularCommentAlt,
-    MdArrowdropdownRound,
-    MdArrowdropupRound,
-    LaCheckSolid,
-    IoLocationOutline,
-    CoMailRu,
-    PrGlobe,
-    RiBuilding2Line,
-    PrSend,
-    RiLoaderLine,
-    RiFacebookLine,
-    RiTwitterLine,
-    RiInstagramLine,
-    MdCloseRound,
-    RiKey2Line,
-    PrInfoCircle,
-    PrCheckCircle,
-    PrTimesCircle,
-    PrExclamationCircle,
-    HiMenuAlt4,
-    MdKeyboardarrowdownRound,
-    OiStar,
-    RiCustomerService2Line,
-    RiBug2Line,
-    MdKeyboardarrowleftRound,
-    MdKeyboardarrowrightRound,
-    MdKeyboarddoublearrowrightRound,
-    MdKeyboarddoublearrowleftRound,
-);
-
+import OhVueIcons from "./icons";
 const pinia = createPinia();
 const app = createApp(App);
 
 app.use(pinia);
 app.use(router);
 
-app.component("v-icon", OhVueIcon);
+app.component("v-icon", OhVueIcons);
 app.component("v-heading", VHeading);
 app.component("v-svg", VSvg);
 app.component("v-text-field", VTextField);
@@ -131,5 +46,7 @@ app.component("v-accordion", VAccordion);
 app.component("v-tooltip", VTooltip);
 app.component("v-menu", VMenu);
 app.component("v-data-table", VDataTable);
+app.component("v-card", VCard);
+app.component("v-carousel-2", VCarousel2);
 
 app.mount("#app");

@@ -4,14 +4,14 @@
             <slot :name="slotName"></slot>
         </template>
 
-        <div class="flex items-center justify-between p-2">
+        <header class="flex items-center justify-between p-2">
             <slot name="title"></slot>
             <v-heading type="h3" v-if="!$slots.title" class="font-normal">{{
                 title
             }}</v-heading>
 
             <slot />
-        </div>
+        </header>
     </VIconWrapper>
 </template>
 
