@@ -72,6 +72,16 @@
         </div>
         <div class="bg-slate-700">
             <div class="container mt-3 flex items-center gap-4 py-1">
+                <div class="hidden flex-wrap sm:flex">
+                    <a
+                        class="rounded-lg px-2 py-1 text-[.75rem] text-slate-400 duration-300 hover:bg-black hover:bg-opacity-10 hover:text-white"
+                        v-for="feature in features"
+                        :key="feature.title"
+                        href="#"
+                    >
+                        {{ feature.title }}</a
+                    >
+                </div>
                 <v-menu class="p-3">
                     <template #activator="props">
                         <v-button
@@ -82,19 +92,15 @@
                         >
                     </template>
                     <div
-                        class="scrollbar max-h-[70vh] max-w-[60rem] overflow-y-auto p-2"
+                        class="scrollbar max-h-[70vh] max-w-[50rem] overflow-y-auto overscroll-contain bg-slate-700 p-5"
                     >
                         <div class="mb-8">
                             <h1 class="mb-2 text-lg tracking-wide text-accent">
                                 All Categories
                             </h1>
                             <p class="text-[.85rem] text-slate-400">
-                                Lorem ipsum, dolor sit amet consectetur
-                                adipisicing elit. Consequuntur pariatur hic
-                                atque laudantium, quod voluptas, quos
-                                consectetur harum ad ducimus obcaecati eius
-                                quam? Accusamus nisi laborum architecto nesciunt
-                                deleniti tenetur.
+                                Explore our massive amount of fiberglass and
+                                inlitefi products.
                             </p>
                         </div>
                         <div
@@ -136,17 +142,6 @@
                         </div>
                     </div>
                 </v-menu>
-
-                <div class="hidden flex-wrap sm:flex">
-                    <a
-                        class="rounded-lg px-2 py-1 text-[.75rem] text-slate-400 duration-300 hover:bg-black hover:bg-opacity-10 hover:text-white"
-                        v-for="feature in features"
-                        :key="feature.title"
-                        href="#"
-                    >
-                        {{ feature.title }}</a
-                    >
-                </div>
             </div>
         </div>
     </nav>

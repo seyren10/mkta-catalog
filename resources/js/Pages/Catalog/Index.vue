@@ -4,23 +4,33 @@
             :items="[
                 {
                     img: '/carousel-test/1.jpg',
-                    title: 'Ang Emperador lights',
-                    description: 'isang tagal para sa tagumpay',
+                    title: 'Main Attraction',
+                    description: 'lorem',
                 },
                 {
                     img: '/carousel-test/2.jpg',
-                    title: 'bakit ka walang jowa?',
-                    description:
-                        'Halinat ating paynilay-nilayan ang iyong kagaguhan kapatid',
+                    title: 'Plausible Effect',
+                    description: 'if you can read this, youre gay',
                 },
                 {
                     img: '/carousel-test/3.jpg',
-                    title: 'Bading sa intramuros, naglalakad',
+                    title: 'Exaggerated Hamster',
+                    description: 'none of this is true, we are just...',
+                },
+                {
+                    img: '/carousel-test/4.jpg',
+                    title: 'Equilibrium McDonalds',
+                    description: 'Just dont.',
+                },
+                {
+                    img: '/carousel-test/5.jpg',
+                    title: 'Think of Laura',
                     description:
-                        'Balitang punong puno ng impormasyon. Skkkirrrttt!',
+                        'laught, dont cry, i know she want it that way',
                 },
             ]"
-        ></v-carousel-2>
+        >
+        </v-carousel-2>
         <v-card density="comfortable">
             <template #header>
                 <header
@@ -60,7 +70,6 @@
             striped
             density="comfortable"
         ></v-data-table>
-        {{ typeof {} }}
     </div>
 </template>
 
