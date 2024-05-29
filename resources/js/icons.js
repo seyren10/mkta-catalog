@@ -42,6 +42,10 @@ import {
     MdKeyboarddoublearrowleftRound,
     OiDot,
     OiDotFill,
+    RiFireLine,
+    MdNewreleasesOutlined,
+    MdFibernew,
+    IoBookmark,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -87,6 +91,10 @@ addIcons(
     MdKeyboarddoublearrowleftRound,
     OiDot,
     OiDotFill,
+    RiFireLine,
+    MdNewreleasesOutlined,
+    MdFibernew,
+    IoBookmark,
 );
 
 export default OhVueIcon;

@@ -54,7 +54,7 @@
         :disabled="loading"
         :class="`grid items-center rounded-full p-1 duration-500 disabled:cursor-not-allowed ${!noHoverEffect ? 'hover:bg-stone-300' : ''}`"
     >
-        <v-icon :name="icon" scale="1.5" v-if="!loading"></v-icon>
+        <v-icon :name="icon" :scale="iconSize" v-if="!loading"></v-icon>
         <VLoader v-else />
     </button>
 </template>

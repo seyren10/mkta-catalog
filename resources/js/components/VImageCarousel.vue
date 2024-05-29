@@ -10,14 +10,15 @@
                 transform: `translateX(${scrollOffset}%)`,
             }"
         >
-            <img
-                v-for="image in images"
-                alt=""
-                class="aspect-[3/1] min-w-full object-cover"
-                :key="image"
-                :src="image"
-            />
-            <!-- </TransitionGroup> -->
+            <slot name="content" :items="images">
+                <img
+                    v-for="image in images"
+                    alt=""
+                    class="min-h-full min-w-full object-cover"
+                    :key="image"
+                    :src="image"
+                />
+            </slot>
         </div>
         <button
             @click.="handlePrev"
@@ -48,11 +49,12 @@
         <!--#region DOT INDICATOR -->
         <div
             class="absolute bottom-2 left-[50%] z-10 flex translate-x-[-50%] items-center"
+            v-if="!noIndicator"
         >
             <v-icon
                 v-for="(index, _) in images"
                 :key="index"
-                :name="index === currentImage ? 'oi-dot-fill' : 'oi-dot'"
+                name="oi-dot-fill"
                 :scale="index === currentImage ? '1.3' : '1'"
                 class="cursor-pointer p-0 text-white"
                 :class="{ 'fill-accent': index === currentImage }"
@@ -75,6 +77,7 @@ const props = defineProps({
         type: [String, Number],
         default: 5000,
     },
+    noIndicator: Boolean,
 });
 
 //reacives
@@ -97,6 +100,7 @@ const images = computed(() => {
         }, []);
     } else return props.items;
 });
+
 const currentImage = computed(() => {
     return images.value[currentIndex.value];
 });

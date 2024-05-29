@@ -1,5 +1,5 @@
 <template>
-    <nav class="bg-slate-600">
+    <nav class="primary-gradient">
         <div class="container">
             <div
                 class="hidden justify-end pt-1 text-[min(1vw_+_.3rem,.7rem)] text-slate-400 md:flex"
@@ -70,29 +70,20 @@
                 </div>
             </div>
         </div>
-        <div class="bg-slate-700">
+        <div>
             <div class="container mt-3 flex items-center gap-4 py-1">
-                <div class="hidden flex-wrap sm:flex">
-                    <a
-                        class="rounded-lg px-2 py-1 text-[.75rem] text-slate-400 duration-300 hover:bg-black hover:bg-opacity-10 hover:text-white"
-                        v-for="feature in features"
-                        :key="feature.title"
-                        href="#"
-                    >
-                        {{ feature.title }}</a
-                    >
-                </div>
                 <v-menu class="p-3">
                     <template #activator="props">
                         <v-button
                             v-bind="props"
+                            ref="parent"
                             class="text-[.8rem] text-slate-300"
                             append-inner-icon="md-keyboardarrowdown-round"
                             >All Categories</v-button
                         >
                     </template>
                     <div
-                        class="scrollbar max-h-[70vh] max-w-[50rem] overflow-y-auto overscroll-contain bg-slate-700 p-5"
+                        class="scrollbar primary-gradient max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain p-5"
                     >
                         <div class="mb-8">
                             <h1 class="mb-2 text-lg tracking-wide text-accent">
@@ -125,11 +116,11 @@
                                     </h2>
                                 </div>
                                 <ul
-                                    class="flex max-h-[10rem] cursor-pointer flex-col flex-wrap space-y-1 pl-1 pt-2 text-[.8rem] text-slate-500 md:max-h-fit md:flex-nowrap"
+                                    class="flex max-h-[10rem] cursor-pointer flex-col flex-wrap space-y-1 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
                                 >
                                     <li
                                         v-for="child in category.subCategories"
-                                        class="group flex items-center overflow-hidden duration-200 hover:text-slate-700"
+                                        class="group flex items-center overflow-hidden duration-200 hover:text-accent"
                                     >
                                         <v-icon
                                             class="w-0 duration-200 group-hover:w-5"
@@ -142,203 +133,20 @@
                         </div>
                     </div>
                 </v-menu>
+                <FeatureCategory></FeatureCategory>
             </div>
         </div>
     </nav>
 </template>
 
 <script setup>
-import { inject } from "vue";
-const categories = [
-    {
-        name: "Christmas",
-        img: "/mk-images/categories/christmas.jpg",
-        subCategories: [
-            "Christmas Balls",
-            "Christmas Characters",
-            "Elves",
-            "Reindeers",
-            "Snowmen",
-            "Gingerbreads",
-            "Nutcrackers",
-            "Sleighs",
-            "Archways",
-            "Trees",
-            "Candies",
-            "Photo Ops",
-            "Chairs & Tables",
-            "Toys",
-            "Props",
-            "Winter",
-        ],
-    },
-    {
-        name: "Halloween",
-        img: "/mk-images/categories/halloween.jpg",
-        subCategories: [
-            "Halloween Characters",
-            "Pumpkins",
-            "Skeletons",
-            "Mice",
-            "Scarecrows",
-            "Chairs & Tables",
-            "Trees",
-            "Coffins",
-            "Archways",
-            "Photo Ops",
-            "Gravestones",
-            "Props",
-        ],
-    },
-    {
-        name: "Easter",
-        img: "/mk-images/categories/easter.jpg",
-        subCategories: [
-            "Easter Eggs",
-            "Easter Characters",
-            "Bunnies",
-            "Lambs",
-            "Chairs & Tables",
-            "Photo Ops",
-            "Archways",
-            "Props",
-            "Candies",
-        ],
-    },
-    {
-        name: "Summer and Spring",
-        img: "/mk-images/categories/summer.jpg",
-        subCategories: ["Flowers", "Animals", "Food & Beverages"],
-    },
-    {
-        name: "Animals",
-        img: "/mk-images/categories/animals.jpg",
-        subCategories: [
-            "Safari",
-            "Forest",
-            "Reptiles",
-            "Insects",
-            "Marine",
-            "Farm",
-            "Domestic",
-            "Birds",
-            "Arctic",
-        ],
-    },
-    {
-        name: "Dinosaurs",
-        img: "mk-images/categories/dinosaurs.jpg",
-        subCategories: ["Coming soon..."],
-    },
-    {
-        name: "Pirates",
-        img: "mk-images/categories/pirates.jpg",
-        subCategories: [
-            "Pirate Characters",
-            "Chairs & Tables",
-            "Crates",
-            "Barrels",
-            "Props",
-        ],
-    },
-    {
-        name: "Wild West",
-        img: "mk-images/categories/wild_west.jfif",
-        subCategories: [
-            "Wild West Characters",
-            "Chairs & Tables",
-            "Crates",
-            "Barrels",
-            "Hays",
-            "Photo Ops",
-            "Props",
-        ],
-    },
-    {
-        name: "Food and Beverage",
-        img: "mk-images/categories/food_and_beverages.jpg",
-        subCategories: [
-            "Christmas",
-            "Halloween",
-            "Easter",
-            "Gingerbreads",
-            "Food & Beverages",
-            "Animals",
-            "Cars",
-            "Farm",
-            "Pirates",
-            "Wild West",
-        ],
-    },
-    {
-        name: "Wall Decor",
-        img: "mk-images/categories/wall_decor.jpg",
-        subCategories: [
-            "Animals",
-            "Pre-Historic",
-            "Food & Beverages",
-            "Halloween",
-            "Cars",
-            "Medieval",
-        ],
-    },
-    {
-        name: "Archways",
-        img: "mk-images/categories/archways.jpg",
-        subCategories: ["Christmas", "Halloween", "Easter"],
-    },
-    {
-        name: "Photo ops",
-        img: "mk-images/categories/photo_ops.jpg",
-        subCategories: [
-            "Christmas",
-            "Halloween",
-            "Easter",
-            "Food & Beverages",
-            "All-Year",
-        ],
-    },
-    {
-        name: "Comics",
-        img: "mk-images/categories/comics.jpg",
-        subCategories: [
-            "Panda",
-            "Penguins",
-            "Farm Animals",
-            "Photo Ops",
-            "Props",
-            "Play Equipments",
-        ],
-    },
-    {
-        name: "Space",
-        img: "mk-images/categories/space.jfif",
-        subCategories: ["Aliens", "UFO", "Astronaut"],
-    },
-    {
-        name: "Statues",
-        img: "mk-images/categories/statues.jpg",
-        subCategories: [
-            "Stones",
-            "Christmas Characters",
-            "Mermaids",
-            "Comic Sports",
-            "Celebrities",
-        ],
-    },
-    {
-        name: "Inlitefi",
-        img: "mk-images/inlitefi.jpg",
-        subCategories: [
-            "Christmas",
-            "Halloween",
-            "Easter",
-            "Summer",
-            "Animals",
-            "All-Year",
-        ],
-    },
-];
+import { inject, ref } from "vue";
+import { useCategoryStore } from "@/stores/categoryStore";
+import FeatureCategory from "./FeatureCategory.vue";
+
+//stores
+const categoryStore = useCategoryStore();
+const categories = categoryStore.categories;
 
 const features = [
     { title: "Holloween" },
@@ -359,6 +167,10 @@ const headerData = [
     { title: "Asia", icon: "pr-globe" },
 ];
 
+//reactives
+const parent = ref(null);
+
+//injects
 const user = inject("user");
 </script>
 

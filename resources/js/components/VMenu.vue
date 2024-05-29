@@ -3,38 +3,26 @@
         <slot name="activator" @click="showMenu"></slot>
 
         <Teleport to="#overlay">
-            <!-- <Transition
+            <Transition
                 enter-active-class="duration-300 ease-out"
                 leave-active-class="duration-300 ease-out"
-                enter-from-class="opacity-0 scale-90"
-                leave-to-class="opacity-0 scale-90"
-            > -->
-            <div
-                class="fixed z-[2001] overflow-hidden rounded-lg bg-white text-sm shadow-lg"
-                ref="menu"
-                v-show="show"
+                enter-from-class="opacity-0"
+                leave-to-class="opacity-0 "
             >
-                <slot
-                    ><div v-bind="$attrs">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Inventore ipsum facere, ducimus distinctio porro
-                        excepturi maxime! Perspiciatis quia quas quam impedit
-                        adipisci esse fugiat dignissimos. Id praesentium labore
-                        dolor totam? Lorem ipsum dolor sit amet consectetur
-                        adipisicing elit. Natus, ipsam? Voluptatibus, quis?
-                        Repellat consequuntur pariatur sed illo tempore
-                        molestiae, sequi doloribus ipsam cum libero quia
-                        laboriosam a! Perspiciatis, in sequi!
-                    </div>
-                </slot>
-            </div>
-            <!-- </Transition> -->
+                <div
+                    class="fixed z-[2001] overflow-hidden rounded-lg bg-white text-sm shadow-lg"
+                    ref="menu"
+                    v-show="show"
+                >
+                    <slot><div v-bind="$attrs"></div> </slot>
+                </div>
+            </Transition>
         </Teleport>
     </div>
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 defineOptions({
     inheritAttrs: false,
 });
@@ -50,17 +38,17 @@ const props = defineProps({
     },
 });
 
+const model = defineModel();
+
 //reactives
 const show = ref(false);
 const menu = ref(null);
-
 const started = ref(false);
 
 //methods
 
 const handleCloseMenu = (event) => {
-    if (menu.value.contains(event.target)) {
-        console.log("pasok");
+    if (menu.value.contains(event.target ?? model.value)) {
     } else if (started.value) {
         show.value = false;
         document.body.removeEventListener("click", handleCloseMenu);
@@ -78,43 +66,59 @@ const showMenu = async (e) => {
 
         show.value = true;
         await nextTick();
-
-        const parentBound = e.currentTarget.getBoundingClientRect();
-        const parentTop = parentBound.top;
-        const parentHeight = parentBound.height;
-        const menuBound = menu.value.getBoundingClientRect();
-        const windowWidth = window.innerWidth;
-
-        menu.value.style.top = parentTop + parentHeight + 8 + "px";
-
-        //limit the menu width to be the screen size if it is larger than it.
-        if (parentBound.left > windowWidth / 2) {
-            //the parent element is on the right side of the screen
-
-            if (
-                menuBound.width <
-                windowWidth - (windowWidth - parentBound.right)
-            ) {
-                menu.value.style.left = `${parentBound.right - menuBound.width}px`;
-            }
-        } else {
-            //the parent element is on the left side of the screen
-
-            console.log("left most");
-            menu.value.style.left = parentBound.left + "px";
-        }
-        if (menuBound.width < windowWidth - (windowWidth - parentBound.right)) {
-            menu.value.style.marginInline = "0";
-        } else {
-            menu.value.style.marginInline = ".5rem";
-        }
+        handleShowMenu(
+            e.currentTarget ? e.currentTarget : model.value,
+            menu.value,
+        );
     } else {
         show.value = false;
         document.body.removeEventListener("click", handleCloseMenu);
     }
 };
 
+const handleShowMenu = (parent, child) => {
+    const parentBound = parent.getBoundingClientRect();
+    const parentTop = parentBound.top;
+    const parentHeight = parentBound.height;
+    const childBound = child.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+
+    child.style.top = parentTop + parentHeight + 8 + "px";
+
+    if (parentBound.left > windowWidth / 2) {
+        //the parent element is on the right side of the screen
+
+        //when the menu is placed on the right, and its width cant fit on the screen
+        //relative to its parent right's position. place it as it be, otherwise, align its right
+        //position to be its parent's right position.
+        if (
+            childBound.width <
+            windowWidth - (windowWidth - parentBound.right)
+        ) {
+            child.style.left = `${parentBound.right - childBound.width}px`;
+        }
+    } else {
+        //the parent element is on the left side of the screen
+        child.style.left = parentBound.left + "px";
+    }
+
+    //add a margin, when the menu width is occupying the whole screen
+    if (childBound.width < windowWidth - (windowWidth - parentBound.right)) {
+        child.style.marginInline = "0";
+    } else {
+        child.style.marginInline = ".5rem";
+    }
+};
+
+//hooks
 onMounted(() => {});
+
+//watch
+watch(model, (newValue) => {
+    show.value = false;
+    console.log(newValue);
+    showMenu(newValue);
+});
 </script>
 
 <style lang="scss" scoped></style>

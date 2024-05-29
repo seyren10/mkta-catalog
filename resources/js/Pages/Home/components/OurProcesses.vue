@@ -36,13 +36,13 @@
                     ></v-icon>
                 </div>
             </div>
-            <VCarousel :items="carouselData" />
+            <Carousel :items="carouselData" />
         </div>
     </section>
 </template>
 
 <script setup>
-import VCarousel from "@/components/VCarousel.vue";
+import Carousel from "./sub_components/Carousel.vue";
 import { computed } from "vue";
 
 const carouselData = computed(() => {

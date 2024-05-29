@@ -20,7 +20,9 @@ import VMenu from "./components/VMenu.vue";
 import VDataTable from "./components/VDataTable.vue";
 import VAccordion from "./components/VAccordion.vue";
 import VCard from "./components/VCard.vue";
-import VCarousel2 from "./components/VCarousel2.vue";
+import VImageCarousel from "./components/VImageCarousel.vue";
+import VTextOnImage from "./components/VTextOnImage.vue";
+import VHorizontalScroller from "./components/VHorizontalScroller.vue";
 
 import { createPinia } from "pinia";
 
@@ -47,6 +49,8 @@ app.component("v-tooltip", VTooltip);
 app.component("v-menu", VMenu);
 app.component("v-data-table", VDataTable);
 app.component("v-card", VCard);
-app.component("v-carousel-2", VCarousel2);
+app.component("v-image-carousel", VImageCarousel);
+app.component("v-text-on-image", VTextOnImage);
+app.component("v-horizontal-scroller", VHorizontalScroller);
 
 app.mount("#app");

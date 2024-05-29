@@ -14,10 +14,12 @@
                 <slot name="header"></slot>
                 <!-- TOOLBAR -->
                 <v-toolbar v-if="!$slots.header" :title="title">
-                    <v-button
-                        icon="md-close-round"
-                        @click="$emit('close')"
-                    ></v-button>
+                    <template #append>
+                        <v-button
+                            icon="md-close-round"
+                            @click="$emit('close')"
+                        ></v-button>
+                    </template>
                 </v-toolbar>
                 <!-- /TOOLBAR -->
 
