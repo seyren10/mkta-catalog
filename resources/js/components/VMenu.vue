@@ -8,9 +8,10 @@
                 leave-active-class="duration-300 ease-out"
                 enter-from-class="opacity-0"
                 leave-to-class="opacity-0 "
+                @after-leave="emits('close')"
             >
                 <div
-                    class="fixed z-[2001] overflow-hidden rounded-lg bg-white text-sm shadow-lg"
+                    class="fixed z-[2001] overflow-hidden rounded-lg bg-white text-sm shadow-lg duration-200"
                     ref="menu"
                     v-show="show"
                 >
@@ -37,7 +38,7 @@ const props = defineProps({
         default: false,
     },
 });
-
+const emits = defineEmits(["close"]);
 const model = defineModel();
 
 //reactives
@@ -46,11 +47,11 @@ const menu = ref(null);
 const started = ref(false);
 
 //methods
-
 const handleCloseMenu = (event) => {
-    if (menu.value.contains(event.target ?? model.value)) {
+    if (menu.value.contains(event.target)) {
     } else if (started.value) {
         show.value = false;
+        model.value = null;
         document.body.removeEventListener("click", handleCloseMenu);
     }
 
@@ -66,10 +67,7 @@ const showMenu = async (e) => {
 
         show.value = true;
         await nextTick();
-        handleShowMenu(
-            e.currentTarget ? e.currentTarget : model.value,
-            menu.value,
-        );
+        handleShowMenu(e.currentTarget, menu.value);
     } else {
         show.value = false;
         document.body.removeEventListener("click", handleCloseMenu);
@@ -114,10 +112,20 @@ const handleShowMenu = (parent, child) => {
 onMounted(() => {});
 
 //watch
-watch(model, (newValue) => {
-    show.value = false;
-    console.log(newValue);
-    showMenu(newValue);
+watch(model, async (newValue) => {
+    //if you are using this component without an activator (using v-model)
+    if (newValue === null) {
+        show.value = false;
+    } else {
+        started.value = false;
+        show.value = true;
+
+        if (!props.persistent)
+            document.body.addEventListener("click", handleCloseMenu);
+
+        await nextTick();
+        handleShowMenu(newValue, menu.value);
+    }
 });
 </script>
 

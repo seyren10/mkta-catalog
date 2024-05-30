@@ -6,6 +6,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 import ActionNotAllowed from "@/components/ActionNotAllowed.vue";
+import { storeToRefs } from "pinia";
 
 const routes = [
     {
@@ -88,7 +89,7 @@ router.beforeEach(async (to, from) => {
     const userStore = useUserStore();
     await userStore.getUser();
 
-    const { user } = userStore;
+    const { user } = storeToRefs(userStore);
     if (to.meta.requiresAuth && !user) {
         return { name: "fallback", query: { type: "unAuthorized" } };
     }

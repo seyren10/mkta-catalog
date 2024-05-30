@@ -116,7 +116,7 @@
                                     </h2>
                                 </div>
                                 <ul
-                                    class="flex max-h-[10rem] cursor-pointer flex-col flex-wrap space-y-1 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
+                                    class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap space-y-1 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
                                 >
                                     <li
                                         v-for="child in category.subCategories"
@@ -143,10 +143,11 @@
 import { inject, ref } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import FeatureCategory from "./FeatureCategory.vue";
+import { storeToRefs } from "pinia";
 
 //stores
 const categoryStore = useCategoryStore();
-const categories = categoryStore.categories;
+const { categories } = storeToRefs(categoryStore);
 
 const features = [
     { title: "Holloween" },

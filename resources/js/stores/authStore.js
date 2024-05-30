@@ -23,5 +23,5 @@ export const useAuthStore = defineStore("auth", () => {
         } catch (e) {}
     };
 
-    return { login, loading, errors, form };
+    return { login, loading, errors, form, exec };
 });

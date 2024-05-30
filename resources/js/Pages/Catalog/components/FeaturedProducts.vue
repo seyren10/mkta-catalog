@@ -15,9 +15,7 @@
             </div>
         </template>
 
-        <div
-            class="grid grid-cols-2 items-start gap-3 sm:grid-cols-3 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
             <div
                 v-for="item in items"
                 :class="`overflow-hidden rounded-lg ${item.imageClass}`"
