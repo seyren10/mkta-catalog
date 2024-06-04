@@ -2,7 +2,7 @@
     <v-card class="relative border-none">
         <template #header>
             <div
-                class="primary-gradient sticky top-[8.5rem] z-[10] flex items-center justify-center gap-3 rounded-lg py-5 text-white md:top-[9.75rem]"
+                class="bg-white sticky top-[8.5rem] z-[10] flex items-center justify-center gap-3 rounded-lg py-5 text-primary md:top-[9.75rem]"
             >
                 <v-icon
                     :name="titleIcon"
@@ -63,7 +63,7 @@
                                 :item="{ ...item, class: 'float-left mr-2' }"
                             >
                                 <div
-                                    class="float-left mr-2 inline-flex items-center gap-1 rounded-lg bg-red-500 px-1 text-white"
+                                    class="float-left mr-2 inline-flex items-center gap-1 rounded-lg bg-accent px-1 text-white"
                                 >
                                     <v-icon
                                         name="ri-fire-line"
@@ -75,7 +75,7 @@
                                 </div>
                             </slot>
                             <h3
-                                class="text-[min(1.5vw+.1rem,_.8rem)] font-bold [text-overflow:ellipsis]"
+                                class="text-[.8rem] font-bold [text-overflow:ellipsis]"
                             >
                                 {{ item.details.description }}
                             </h3>
@@ -105,6 +105,11 @@ const props = defineProps({
     title: String,
     imageProps: Object,
 });
+
+//functions
+const handleIntersect = (entry) => {
+    console.log(entry.target);
+};
 </script>
 
 <style lang="scss" scoped></style>

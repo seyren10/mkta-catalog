@@ -1,9 +1,12 @@
 <template>
-    <div class="group relative overflow-hidden rounded-lg">
+    <div
+        class="group/toi relative overflow-hidden rounded-lg"
+        v-intersect="handleIntersect"
+    >
         <img
-            :src="image"
+            src="/Logo.svg"
             alt=""
-            class="h-full w-full object-cover duration-300 group-hover:scale-105"
+            class="h-full w-full object-cover duration-300 group-hover/toi:scale-105"
         />
 
         <slot
@@ -13,7 +16,7 @@
             v-if="!noOverlay"
             class="duration-500"
             :class="{
-                'invisible translate-y-[100%] group-hover:visible group-hover:translate-y-[0]':
+                'invisible translate-y-[100%] group-hover/toi:visible group-hover/toi:translate-y-[0]':
                     !appear,
             }"
         >
@@ -23,7 +26,7 @@
                     'left-[.5rem]': align === 'start',
                     'left-[50%] translate-x-[-50%]': align === 'center',
                     'right-[.5rem]': align === 'end',
-                    'invisible translate-y-[100%] group-hover:visible group-hover:translate-y-[0]':
+                    'invisible translate-y-[100%] group-hover/toi:visible group-hover/toi:translate-y-[0]':
                         !appear,
                 }"
             >
@@ -55,6 +58,11 @@ const props = defineProps({
     noOverlay: Boolean,
     appear: Boolean,
 });
+
+//methods
+const handleIntersect = (entry) => {
+    entry.target.firstChild.setAttribute("src", props.image);
+};
 </script>
 
 <style lang="scss" scoped></style>

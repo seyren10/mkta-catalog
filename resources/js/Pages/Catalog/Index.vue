@@ -1,15 +1,25 @@
 <template>
     <div class="container my-8 space-y-10">
+        <!-- #region hero -->
         <div class="grid gap-3 md:grid-cols-[1fr_auto]">
-            <v-image-carousel
-                class="row-span-2 aspect-[2/1]"
+            <v-horizontal-scroller
+                class="row-span-2"
+                auto-scroll
                 :items="[
                     '/carousel-test/carousel-1.jpg',
                     '/carousel-test/carousel-2.jpg',
                     '/carousel-test/carousel-3.jpg',
                 ]"
+                item-size="100"
             >
-            </v-image-carousel>
+                <template #default="{ item }">
+                    <v-text-on-image
+                        :image="item"
+                        no-overlay
+                        class="aspect-[3/1]"
+                    ></v-text-on-image>
+                </template>
+            </v-horizontal-scroller>
 
             <v-text-on-image
                 image="/carousel-test/10416177.jpg"
@@ -29,7 +39,9 @@
                 </template>
             </v-text-on-image>
         </div>
+        <!-- #endregion hero -->
 
+        <!-- #region featured-products -->
         <section class="space-y-10">
             <FeaturedProducts
                 :items="christmasProducts"
@@ -45,7 +57,7 @@
             >
                 <template #overlay="data">
                     <span
-                        class="absolute left-0 top-0 bg-red-500 p-1 text-[.7rem] text-white [border-bottom-right-radius:.5rem]"
+                        class="absolute left-0 top-0 bg-accent p-1 text-[.7rem] text-white [border-bottom-right-radius:.5rem]"
                         >new</span
                     >
 
@@ -54,7 +66,7 @@
                 <template #content.icon="{ item }">
                     <div
                         v-bind="item"
-                        class="rounded-md bg-red-500 px-1 text-[.7rem] text-white"
+                        class="rounded-md bg-accent px-1 text-[.7rem] text-white"
                     >
                         MK Mall
                     </div>
@@ -62,15 +74,65 @@
             </FeaturedProducts>
 
             <FeaturedProducts
-                :items="productStore.products"
-                titleIcon="oi-star"
-                title="all products"
+                :items="animalProducts"
+                titleIcon="bi-snow"
+                title="Seasonal"
             >
                 <template #content.icon="{ item }">
                     <div :class="item.class"></div>
                 </template>
             </FeaturedProducts>
         </section>
+        <!-- #endregion -->
+
+        <!-- #region subcategories -->
+        <section>
+            <v-horizontal-scroller
+                scrim
+                no-indicator
+                columns="2"
+                :items="categories"
+                item-size="16.7"
+                class="rounded-lg bg-white p-3"
+            >
+                <template #header>
+                    <div class="grid md:grid-cols-2">
+                        <div
+                            class="m-auto max-w-[49ch] space-y-[1.5rem] self-start"
+                        >
+                            <h1
+                                class="text-[min(4vw_+_.5rem,_2rem)] font-medium tracking-wide text-primary"
+                            >
+                                Sub Categories
+                            </h1>
+                            <p>
+                                Looking for something specific? We've got you
+                                covered. Explore our wide range of products.
+                            </p>
+                        </div>
+                        <div>
+                            <img
+                                src="/mk-images/astronaut-photo-op-removebg-preview.png"
+                                alt=""
+                                class="mx-auto max-w-full"
+                            />
+                        </div>
+                    </div>
+                </template>
+                <template #default="{ item }">
+                    <div class="p-2">
+                        <v-text-on-image
+                            :image="item.img"
+                            no-overlay
+                            class="aspect-square"
+                        >
+                        </v-text-on-image>
+                        <h3 class="mt-2 text-center">{{ item.name }}</h3>
+                    </div>
+                </template>
+            </v-horizontal-scroller>
+        </section>
+        <!-- #endregion subcategories -->
 
         <!-- <v-card density="comfortable">
             <template #header>
@@ -126,6 +188,7 @@
 <script setup>
 import { ref } from "vue";
 import { useProductStore } from "../../stores/productStore";
+import { useCategoryStore } from "@/stores/categoryStore";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
 
@@ -133,10 +196,16 @@ import FeaturedProducts from "./components/FeaturedProducts.vue";
 const productStore = useProductStore();
 const { getProductsWithCategoryId, getNewProducts } = productStore;
 const christmasProducts = getProductsWithCategoryId(1);
+const animalProducts = getProductsWithCategoryId(5);
 const newProducts = getNewProducts(10);
 
+const categoryStore = useCategoryStore();
+const categories = categoryStore.categories;
+
+//reactives
 const items = ref(null);
 
+//async
 await fetch("https://jsonplaceholder.typicode.com/todos")
     .then((res) => res.json())
     .then((json) => (items.value = json));

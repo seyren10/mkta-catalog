@@ -15,7 +15,7 @@
                     ref="menu"
                     v-show="show"
                 >
-                    <slot><div v-bind="$attrs"></div> </slot>
+                    <slot :loaded="loaded"><div v-bind="$attrs"></div> </slot>
                 </div>
             </Transition>
         </Teleport>
@@ -45,6 +45,7 @@ const model = defineModel();
 const show = ref(false);
 const menu = ref(null);
 const started = ref(false);
+const loaded = ref(false); // use this to load the menu content only when its actually opened (lazy-load)
 
 //methods
 const handleCloseMenu = (event) => {
@@ -75,6 +76,7 @@ const showMenu = async (e) => {
 };
 
 const handleShowMenu = (parent, child) => {
+    loaded.value = true;
     const parentBound = parent.getBoundingClientRect();
     const parentTop = parentBound.top;
     const parentHeight = parentBound.height;

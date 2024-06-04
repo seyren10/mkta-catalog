@@ -52,7 +52,7 @@
                         </v-button>
                     </div>
                     <div class="cursor-pointer">
-                        <v-tooltip>Wishlist</v-tooltip>
+                        <v-tooltip activator="parent">Wishlist</v-tooltip>
                         <v-icon name="la-heart" scale="1.5" class="fill-accent">
                         </v-icon>
                     </div>
@@ -82,56 +82,62 @@
                             >All Categories</v-button
                         >
                     </template>
-                    <div
-                        class="scrollbar primary-gradient max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain p-5"
-                    >
-                        <div class="mb-8">
-                            <h1 class="mb-2 text-lg tracking-wide text-accent">
-                                All Categories
-                            </h1>
-                            <p class="text-[.85rem] text-slate-400">
-                                Explore our massive amount of fiberglass and
-                                inlitefi products.
-                            </p>
-                        </div>
+
+                    <template #default="{ loaded }">
                         <div
-                            class="grid gap-x-3 gap-y-5 md:grid-cols-3 lg:grid-cols-5"
+                            v-if="loaded"
+                            class="scrollbar primary-gradient max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain p-5"
                         >
+                            <div class="mb-8">
+                                <h1
+                                    class="mb-2 text-lg tracking-wide text-accent"
+                                >
+                                    All Categories
+                                </h1>
+                                <p class="text-[.85rem] text-slate-400">
+                                    Explore our massive amount of fiberglass and
+                                    inlitefi products.
+                                </p>
+                            </div>
                             <div
-                                v-for="category in categories"
-                                :key="category.name"
+                                class="grid gap-x-3 gap-y-5 md:grid-cols-3 lg:grid-cols-5"
                             >
                                 <div
-                                    class="group relative cursor-pointer overflow-hidden rounded-lg"
+                                    v-for="category in categories"
+                                    :key="category.name"
                                 >
-                                    <img
-                                        :src="category.img"
-                                        alt=""
-                                        class="aspect-video object-cover brightness-75 duration-300 group-hover:scale-110 group-hover:brightness-100"
-                                    />
-                                    <h2
-                                        class="absolute bottom-2 left-2 font-medium text-white"
+                                    <v-text-on-image
+                                        :image="category.img"
+                                        :title="category.name"
+                                        appear
+                                        class="aspect-[2/1]"
                                     >
-                                        {{ category.name }}
-                                    </h2>
+                                        <template #overlay="data">
+                                            <div
+                                                class="absolute left-0 top-0 bg-accent px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
+                                            >
+                                                {{ data.title }}
+                                            </div>
+                                        </template>
+                                    </v-text-on-image>
+                                    <ul
+                                        class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap gap-3 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
+                                    >
+                                        <li
+                                            v-for="child in category.subCategories"
+                                            class="group flex items-center overflow-hidden duration-200 hover:text-accent"
+                                        >
+                                            <v-icon
+                                                class="w-0 duration-200 group-hover:w-5"
+                                                name="md-keyboardarrowright-round"
+                                            ></v-icon>
+                                            <span>{{ child }}</span>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul
-                                    class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap space-y-1 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
-                                >
-                                    <li
-                                        v-for="child in category.subCategories"
-                                        class="group flex items-center overflow-hidden duration-200 hover:text-accent"
-                                    >
-                                        <v-icon
-                                            class="w-0 duration-200 group-hover:w-5"
-                                            name="md-keyboardarrowright-round"
-                                        ></v-icon>
-                                        <span>{{ child }}</span>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
-                    </div>
+                    </template>
                 </v-menu>
                 <FeatureCategory></FeatureCategory>
             </div>
