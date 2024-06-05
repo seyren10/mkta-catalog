@@ -14,6 +14,12 @@ export const useProductStore = defineStore("products", () => {
                 materials: "RESIN",
                 finish: "HANDPAINTED",
             },
+            meta: {
+                sold: "1.5k",
+                isHot: true,
+                isNew: true,
+                illuminated: true,
+            },
             category_id: 5,
             created_at: "2024-01-15 12:34:56",
         },
@@ -262,6 +268,9 @@ export const useProductStore = defineStore("products", () => {
             },
             category_id: 1,
             created_at: "2024-05-25 11:23:12",
+            meta: {
+                illuminated: true,
+            },
         },
         {
             id: 22,

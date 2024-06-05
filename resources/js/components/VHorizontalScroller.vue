@@ -8,7 +8,7 @@
                 class="relative left-0 grid grid-flow-col duration-500"
                 :style="{
                     gridTemplateRows: `repeat(${+columns},1fr)`,
-                    gridAutoColumns: `${+itemSize}%`,
+                    gridAutoColumns: `${itemSize}`,
                 }"
                 ref="scroller"
             >

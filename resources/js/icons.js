@@ -47,6 +47,7 @@ import {
     MdFibernew,
     IoBookmark,
     BiSnow,
+    GiFox,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -97,6 +98,7 @@ addIcons(
     MdFibernew,
     IoBookmark,
     BiSnow,
+    GiFox,
 );
 
 export default OhVueIcon;

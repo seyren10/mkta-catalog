@@ -10,14 +10,16 @@
                     '/carousel-test/carousel-2.jpg',
                     '/carousel-test/carousel-3.jpg',
                 ]"
-                item-size="100"
+                item-size="100%"
             >
                 <template #default="{ item }">
-                    <v-text-on-image
-                        :image="item"
-                        no-overlay
-                        class="aspect-[3/1]"
-                    ></v-text-on-image>
+                    <div>
+                        <v-text-on-image
+                            :image="item"
+                            no-overlay
+                            class="aspect-[3/1]"
+                        ></v-text-on-image>
+                    </div>
                 </template>
             </v-horizontal-scroller>
 
@@ -48,6 +50,14 @@
                 titleIcon="ri-fire-line"
                 title="Top selling"
             >
+                <template #content.icon="{ item }">
+                    <div
+                        :class="item.class"
+                        class="rounded-md bg-red-500 px-1 text-[.7rem] text-white"
+                    >
+                        16% off
+                    </div>
+                </template>
             </FeaturedProducts>
 
             <FeaturedProducts
@@ -55,17 +65,9 @@
                 titleIcon="md-newreleases-outlined"
                 title="New Arrivals"
             >
-                <template #overlay="data">
-                    <span
-                        class="absolute left-0 top-0 bg-accent p-1 text-[.7rem] text-white [border-bottom-right-radius:.5rem]"
-                        >new</span
-                    >
-
-                    ></template
-                >
                 <template #content.icon="{ item }">
                     <div
-                        v-bind="item"
+                        :class="item.class"
                         class="rounded-md bg-accent px-1 text-[.7rem] text-white"
                     >
                         MK Mall
@@ -90,9 +92,9 @@
             <v-horizontal-scroller
                 scrim
                 no-indicator
-                columns="2"
+                columns="1"
                 :items="categories"
-                item-size="16.7"
+                item-size="10rem"
                 class="rounded-lg bg-white p-3"
             >
                 <template #header>
@@ -120,7 +122,7 @@
                     </div>
                 </template>
                 <template #default="{ item }">
-                    <div class="p-2">
+                    <div class="min-w-[10rem] p-2">
                         <v-text-on-image
                             :image="item.img"
                             no-overlay
@@ -191,6 +193,7 @@ import { useProductStore } from "../../stores/productStore";
 import { useCategoryStore } from "@/stores/categoryStore";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
+import Product from "../../components/Product.vue";
 
 //stores
 const productStore = useProductStore();
