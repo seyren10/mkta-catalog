@@ -1,9 +1,9 @@
 <template>
     <section id="our-specialties">
-        <v-heading class="text-center">Our Specialties</v-heading>
+        <!-- <v-heading class="text-center">Our Specialties</v-heading> -->
         <div class="grid gap-5 md:grid-cols-2">
             <div
-                class="-z-10 col-start-1 row-start-1 overflow-hidden rounded-md"
+                class="-z-10 col-start-1 row-start-1 overflow-hidden rounded-lg"
             >
                 <img
                     loading="lazy"
@@ -13,7 +13,7 @@
                 />
             </div>
             <div
-                class="z-10 col-start-1 row-start-1 my-auto rounded-md p-3 text-white backdrop-brightness-[.7] md:mx-20"
+                class="z-10 col-start-1 row-start-1 my-auto rounded-lg p-3 text-white backdrop-brightness-[.7] md:mx-20"
             >
                 <v-heading type="h2" class="mb-3 border-b-2 text-white"
                     >Our specialties</v-heading
@@ -28,13 +28,13 @@
             </div>
             <div>
                 <div
-                    class="overflow-hidden rounded-md bg-stone-200 text-center"
+                    class="overflow-hidden rounded-lg bg-stone-200 text-center"
                 >
                     <div class="md:order-2">
                         <img
                             loading="lazy"
-                            src="/illustrations/mission.jpg"
-                            class="aspect-[1/.4] object-cover"
+                            src="/mk-images/VISSION.jpg"
+                            class="aspect-[1/.5] object-cover"
                             alt=""
                         />
                     </div>
@@ -45,12 +45,12 @@
                     </p>
                 </div>
                 <div
-                    class="mt-10 overflow-hidden rounded-md bg-stone-200 text-center"
+                    class="mt-10 overflow-hidden rounded-lg bg-stone-200 text-center"
                 >
                     <img
                         loading="lazy"
                         src="/illustrations/vision.jpg"
-                        class="aspect-[1/.4] object-cover object-top"
+                        class="aspect-[1/.5] object-cover object-top"
                         alt=""
                     />
                     <v-heading type="h2">Vision</v-heading>

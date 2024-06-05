@@ -7,17 +7,19 @@
             enter-active-class="duration-300 ease-out"
         >
             <div
-                class="relative grid overflow-hidden rounded-md bg-white shadow-lg"
+                class="relative grid overflow-hidden rounded-lg bg-white shadow-lg"
                 :style="maxWidth ? `max-width: ${maxWidth}px` : ''"
                 v-closable
             >
                 <slot name="header"></slot>
                 <!-- TOOLBAR -->
                 <v-toolbar v-if="!$slots.header" :title="title">
-                    <v-button
-                        icon="md-close-round"
-                        @click="$emit('close')"
-                    ></v-button>
+                    <template #append>
+                        <v-button
+                            icon="md-close-round"
+                            @click="$emit('close')"
+                        ></v-button>
+                    </template>
                 </v-toolbar>
                 <!-- /TOOLBAR -->
 

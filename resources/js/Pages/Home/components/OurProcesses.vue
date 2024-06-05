@@ -1,12 +1,12 @@
 <template>
-    <section id="our-processes" class="rounded-md bg-stone-200 p-3">
+    <section id="our-processes" class="rounded-lg bg-stone-200 p-3">
         <v-heading class="text-center">Our Processes</v-heading>
         <div class="grid gap-5 md:grid-cols-2">
             <div class="grid">
                 <video
                     controls
                     src="/videos/werewolf fin2 1.mp4"
-                    class="h-full rounded-md"
+                    class="h-full rounded-lg"
                     poster="/Logo.svg"
                 ></video>
 
@@ -36,13 +36,13 @@
                     ></v-icon>
                 </div>
             </div>
-            <VCarousel :items="carouselData" />
+            <Carousel :items="carouselData" />
         </div>
     </section>
 </template>
 
 <script setup>
-import VCarousel from "@/components/VCarousel.vue";
+import Carousel from "./sub_components/Carousel.vue";
 import { computed } from "vue";
 
 const carouselData = computed(() => {

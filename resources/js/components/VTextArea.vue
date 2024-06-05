@@ -1,5 +1,5 @@
 <template>
-    <VInputWrapper v-slot="props" v-bind="props">
+    <VInputWrapper v-slot="props" v-bind="{ ...props, densityValues }">
         <textarea
             class="w-full outline-none"
             v-bind="{ ...$attrs, ...props }"
@@ -10,14 +10,15 @@
 
 <script setup>
 import VInputWrapper from "./base_components/VInputWrapper.vue";
-import { useInput } from "@/composables/useInput";
+import { useInput, useDensity, useDensityValues } from "@/composables/useInput";
 
 defineOptions({
     inheritAttrs: false,
 });
 
-const props = defineProps(useInput());
+const props = defineProps({ ...useInput(), ...useDensity() });
 const model = defineModel();
+const densityValues = useDensityValues(props.density);
 </script>
 
 <style lang="scss" scoped></style>

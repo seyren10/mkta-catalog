@@ -14,5 +14,5 @@ export const useUserStore = defineStore("user", () => {
         } catch (err) {}
     };
 
-    return { user, getUser, loading, errors };
+    return { user, getUser, loading, errors, exec };
 });

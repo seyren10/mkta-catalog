@@ -2,7 +2,7 @@
     <ul class="flex flex-wrap gap-1 overflow-auto max-h-[80vh]">
         <li
             v-for="item in items"
-            class="grow overflow-hidden rounded-md duration-500 hover:bg-stone-200"
+            class="grow overflow-hidden rounded-lg duration-500 hover:bg-stone-200"
         >
             <div v-if="item.children && item.children.length" class="p-2">
                 <div class="flex items-center gap-2">
@@ -15,7 +15,7 @@
                     <router-link
                         v-for="child in item.children"
                         :to="{ name: child.to }"
-                        class="block rounded-md p-2"
+                        class="block rounded-lg p-2"
                         active-class="bg-accent text-white"
                         :key="child.to"
                     >

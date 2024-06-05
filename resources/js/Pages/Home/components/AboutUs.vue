@@ -3,7 +3,7 @@
         <v-heading class="text-center">About us</v-heading>
         <div class="grid gap-3 md:grid-cols-6 md:grid-rows-4">
             <div
-                class="overflow-hidden rounded-md bg-red-100 md:col-span-3 md:max-h-56"
+                class="overflow-hidden rounded-lg bg-red-100 md:col-span-3 md:max-h-56"
             >
                 <VImageTextOverlay
                     title="Nutcrackers"
@@ -15,7 +15,7 @@
                 >
             </div>
 
-            <div class="overflow-hidden rounded-md bg-red-200">
+            <div class="overflow-hidden rounded-lg bg-red-200">
                 <VImageTextOverlay
                     title="Witch"
                     src="/mk-images/halloween.jpg"
@@ -25,7 +25,7 @@
                     quaerat.</VImageTextOverlay
                 >
             </div>
-            <div class="overflow-hidden rounded-md bg-red-300 md:col-span-2">
+            <div class="overflow-hidden rounded-lg bg-red-300 md:col-span-2">
                 <VImageTextOverlay
                     title="InLiteFi"
                     src="/mk-images/inlitefi.jpg"
@@ -35,7 +35,7 @@
                     quaerat.</VImageTextOverlay
                 >
             </div>
-            <div class="overflow-hidden rounded-md bg-red-400 md:row-span-2">
+            <div class="overflow-hidden rounded-lg bg-red-400 md:row-span-2">
                 <VImageTextOverlay
                     title="Winter"
                     src="/mk-images/winter.jpg"
@@ -76,7 +76,7 @@
             </div>
 
             <div
-                class="overflow-hidden rounded-md bg-red-700 md:col-span-1 md:row-span-2"
+                class="overflow-hidden rounded-lg bg-red-700 md:col-span-1 md:row-span-2"
             >
                 <VImageTextOverlay
                     title="Witch"
@@ -88,7 +88,7 @@
                 >
             </div>
             <div
-                class="overflow-hidden rounded-md bg-red-800 md:col-span-4 md:max-h-56"
+                class="overflow-hidden rounded-lg bg-red-800 md:col-span-4 md:max-h-56"
             >
                 <VImageTextOverlay
                     src="/mk-images/creation_group.png"
@@ -97,7 +97,7 @@
                 ></VImageTextOverlay>
             </div>
             <div
-                class="overflow-hidden rounded-md bg-red-600 md:col-span-2 md:max-h-56"
+                class="overflow-hidden rounded-lg bg-red-600 md:col-span-2 md:max-h-56"
             >
                 <VImageTextOverlay
                     title="Winter"

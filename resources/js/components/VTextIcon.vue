@@ -1,18 +1,15 @@
 <template>
     <div>
         <div
-            class="gap-2 rounded-md p-2"
-            :class="{
-                'flex items-center': !stacked,
-                'grid text-center': stacked,
-            }"
+            class="gap-2 rounded-lg"
+            :class="`${!stacked ? 'flex items-center' : 'grid text-center'} ${densityValues}`"
             v-for="item in items"
             :key="item.title"
         >
             <v-icon
                 v-if="item.icon"
                 :name="item.icon"
-                scale="1.5"
+                :scale="+iconSize"
                 :class="{ 'mx-auto': stacked }"
             ></v-icon>
             <div>
@@ -27,13 +24,15 @@
 </template>
 
 <script setup>
+import { useDensity, useDensityValues } from "@/composables/useInput";
 const props = defineProps({
+    ...useDensity(),
     items: {
         type: Array,
     },
     titleClass: {
         type: String,
-        default: "mb-0.5 font-medium",
+        default: " font-medium",
     },
     valueClass: {
         type: String,
@@ -43,7 +42,13 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    iconSize: {
+        type: [String, Number],
+        default: "1.5",
+    },
 });
+
+const densityValues = useDensityValues(props.density);
 </script>
 
 <style lang="scss" scoped></style>

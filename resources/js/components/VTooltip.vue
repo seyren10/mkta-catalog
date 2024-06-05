@@ -1,35 +1,88 @@
 <template>
-    <div
-        ref="el"
-        class="invisible absolute left-[50%] z-[1000] translate-x-[-50%] scale-75 rounded-md bg-[#00000060] p-3 text-white opacity-0 duration-100 ease-out group-hover/tooltip:visible group-hover/tooltip:scale-100 group-hover/tooltip:opacity-100"        :class="{
-            'top-[105%]': align === 'bottom',
-            'bottom-[105%]': align === 'top',
-        }"
-        :style="{ 'max-width': `${+maxWidth}px` }"
-    >
-        <slot></slot>
+    <div class="hidden" ref="activator">
+        <Teleport to="#overlay">
+            <div
+                class="fixed z-[2001] rounded-lg bg-black bg-opacity-25 px-2 py-1 text-[.7rem] text-white"
+                v-show="model"
+                ref="el"
+            >
+                <slot>This is a tooltip</slot>
+            </div>
+        </Teleport>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from "vue";
+
 const props = defineProps({
-    align: {
+    activator: {
         type: String,
-        default: "bottom",
-    },
-    maxWidth: {
-        type: String,
-        default: "300",
     },
 });
+const model = defineModel(false);
+
+//reactives
 const el = ref(null);
+const activator = ref(null);
+
+//functions
+const handleShow = async (event) => {
+    model.value = true;
+
+    await nextTick();
+    handleShowMenu(event.currentTarget, el.value);
+
+    event.currentTarget.removeEventListener("mouseover", handleShow);
+};
+
+const handleShowMenu = (parent, child) => {
+    const parentBound = parent.getBoundingClientRect();
+    const parentTop = parentBound.top;
+    const parentHeight = parentBound.height;
+    const childBound = child.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+
+    child.style.top = parentTop + parentHeight + "px";
+
+    if (parentBound.left > windowWidth / 2) {
+        if (
+            childBound.width <
+            windowWidth - (windowWidth - parentBound.right)
+        ) {
+            child.style.left = `${parentBound.right - childBound.width}px`;
+        }
+    } else {
+        child.style.left = parentBound.left + "px";
+    }
+
+    if (childBound.width < windowWidth - (windowWidth - parentBound.right)) {
+        child.style.marginInline = "0";
+    } else {
+        child.style.marginInline = ".5rem";
+    }
+};
+
+const handleClose = (event) => {
+    model.value = false;
+
+    event.currentTarget.addEventListener("mouseover", handleShow);
+};
 
 onMounted(() => {
-    const parent = el.value.parentElement;
-    console.log(parent);
-    parent.classList.add("relative", "group/tooltip");
-    parent.classList.remove("overflow-hidden");
+    if (props.activator === "parent") {
+        activator.value = activator.value.parentElement;
+
+        activator.value.addEventListener("mouseover", handleShow);
+        activator.value.addEventListener("mouseleave", handleClose);
+    }
+});
+
+onUnmounted(() => {
+    if (props.activator === "parent") {
+        activator.value.removeEventListener("mouseover", handleShow);
+        activator.value.removeEventListener("mouseleave", handleClose);
+    }
 });
 </script>
 

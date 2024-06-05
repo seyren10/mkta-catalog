@@ -65,7 +65,7 @@
                     <div>
                         <img src="/Logo.svg" alt="" />
                     </div>
-                    <Login v-if="!user" class="bg-accent"></Login>
+                    <v-button v-if="!user" class="bg-accent w-full text-white" @click="dialog = true">Login</v-button>
                     <div
                         v-else
                         class="text-center font-medium underline underline-offset-1"

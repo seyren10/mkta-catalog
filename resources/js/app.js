@@ -5,6 +5,7 @@ import { createApp } from "vue";
 import router from "./router/index";
 import App from "./App.vue";
 
+//components
 import VHeading from "./components/VHeading.vue";
 import VSvg from "./components/VSvg.vue";
 import VTextField from "./components/VTextField.vue";
@@ -15,88 +16,30 @@ import VButton from "./components/VButton.vue";
 import VDialog from "./components/VDialog.vue";
 import VToolbar from "./components/VToolbar.vue";
 import VAlert from "./components/VAlert.vue";
-
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-
+import VTooltip from "./components/VTooltip.vue";
+import VMenu from "./components/VMenu.vue";
+import VDataTable from "./components/VDataTable.vue";
 import VAccordion from "./components/VAccordion.vue";
 import VTooltip from "./components/VTooltip.vue";
+import VCard from "./components/VCard.vue";
+import VTextOnImage from "./components/VTextOnImage.vue";
+import VHorizontalScroller from "./components/VHorizontalScroller.vue";
 
-import {
-    LaHeart,
-    LaSearchSolid,
-    LaCogSolid,
-    LaBarsSolid,
-    LaTimesSolid,
-    LaArrowCircleDownSolid,
-    BiHeartFill,
-    LaArrowCircleLeftSolid,
-    LaArrowCircleRightSolid,
-    FaQuoteRight,
-    FaQuoteLeft,
-    IoMailOutline,
-    FaRegularCommentAlt,
-    MdArrowdropdownRound,
-    LaCheckSolid,
-    IoLocationOutline,
-    CoMailRu,
-    PrGlobe,
-    RiBuilding2Line,
-    PrSend,
-    RiLoaderLine,
-    RiFacebookLine,
-    RiTwitterLine,
-    RiInstagramLine,
-    MdCloseRound,
-    RiKey2Line,
-    PrInfoCircle,
-    PrCheckCircle,
-    PrTimesCircle,
-    PrExclamationCircle,
-    HiMenuAlt4,
-} from "oh-vue-icons/icons";
+//custom directives
+import intersect from "@/directives/intersectionObserver.js";
+import hideOnScroll from "@/directives/hideOnScroll.js";
+
 import { createPinia } from "pinia";
 
-addIcons(
-    LaHeart,
-    LaSearchSolid,
-    LaCogSolid,
-    LaBarsSolid,
-    LaTimesSolid,
-    LaArrowCircleDownSolid,
-    BiHeartFill,
-    LaArrowCircleLeftSolid,
-    LaArrowCircleRightSolid,
-    FaQuoteRight,
-    FaQuoteLeft,
-    IoMailOutline,
-    FaRegularCommentAlt,
-    MdArrowdropdownRound,
-    LaCheckSolid,
-    IoLocationOutline,
-    CoMailRu,
-    PrGlobe,
-    RiBuilding2Line,
-    PrSend,
-    RiLoaderLine,
-    RiFacebookLine,
-    RiTwitterLine,
-    RiInstagramLine,
-    MdCloseRound,
-    RiKey2Line,
-    PrInfoCircle,
-    PrCheckCircle,
-    PrTimesCircle,
-    PrExclamationCircle,
-    HiMenuAlt4,
-);
-
+import OhVueIcons from "./icons";
 const pinia = createPinia();
 const app = createApp(App);
 
 app.use(pinia);
 app.use(router);
 
-app.component("v-icon", OhVueIcon);
+//components
+app.component("v-icon", OhVueIcons);
 app.component("v-heading", VHeading);
 app.component("v-svg", VSvg);
 app.component("v-text-field", VTextField);
@@ -109,6 +52,14 @@ app.component("v-toolbar", VToolbar);
 app.component("v-alert", VAlert);
 app.component("v-accordion", VAccordion);
 app.component("v-tooltip", VTooltip);
+app.component("v-menu", VMenu);
+app.component("v-data-table", VDataTable);
+app.component("v-card", VCard);
+app.component("v-text-on-image", VTextOnImage);
+app.component("v-horizontal-scroller", VHorizontalScroller);
 
-app.component("v-accordion", VAccordion);
+//directives
+app.directive("intersect", intersect);
+app.directive("hideOnScroll", hideOnScroll);
+
 app.mount("#app");
