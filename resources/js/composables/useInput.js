@@ -22,6 +22,11 @@ export const useInput = () => {
         wrapperClass: {
             type: String,
         },
+        clearable: {
+            type: Boolean,
+        },
+        hint: String,
+        persistentHint: Boolean,
     };
 };
 
