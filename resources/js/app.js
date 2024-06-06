@@ -20,7 +20,6 @@ import VTooltip from "./components/VTooltip.vue";
 import VMenu from "./components/VMenu.vue";
 import VDataTable from "./components/VDataTable.vue";
 import VAccordion from "./components/VAccordion.vue";
-import VTooltip from "./components/VTooltip.vue";
 import VCard from "./components/VCard.vue";
 import VTextOnImage from "./components/VTextOnImage.vue";
 import VHorizontalScroller from "./components/VHorizontalScroller.vue";

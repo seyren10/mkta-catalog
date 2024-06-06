@@ -25,7 +25,28 @@
                         }}</span>
                     </div>
                 </div>
-                <VRouteNav :items="items"></VRouteNav>
+
+                <VRouteNav
+                    :title="'User Management'"
+                    :items="user_management"
+                />
+                
+                <VRouteNav
+                    :title="'Product Management'"
+                    :items="product_management"
+                />
+                <VRouteNav
+
+                    :title="'Customer Management'"
+                    :items="cutomer_management"
+                />
+                <VRouteNav
+
+                    :title="'File Management'"
+                    :items="file_management"
+                />
+
+                
             </div>
         </template>
 
@@ -41,186 +62,77 @@ import { ref, watch, inject, computed } from "vue";
 import ZTELayout from "./components/ZTELayout.vue";
 import VRouteNav from "../components/VRouteNav.vue";
 
-import VHotLinks from "./components/AdminLayout/global/VHotLinks.vue"
+import VHotLinks from "./components/AdminLayout/global/VHotLinks.vue";
 
 //reactives
-const items = [
+const user_management = [
     {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
+        title: "Users",
+        to: "users",
+        icon: "fa-users",
     },
     {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
+        title: "Permissions",
+        to: "permissions",
+        icon: "gi-checked-shield",
     },
     {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
+        title: "Roles",
+        to: "roles",
+        icon: "fa-user-cog",
     },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    {
-        title: "Dashboard",
-        to: "admin",
-        icon: "la-heart",
-    },
-
-    {
-        title: "Categories",
-        to: "categories",
-        icon: "pr-globe",
-    },
-    // {
-    //     title: "Customers",
-    //     icon: "pr-send",
-    //     children: [
-    //         { title: "Transactions", to: "dashboard" },
-    //         { title: "Purchase History", to: "products" },
-    //         { title: "Mama mo pink", to: "dashboard" },
-    //     ],
-    // }
 ];
-
+const cutomer_management = [
+    {
+        title: "Continent",
+        to: "admin",
+        icon: "la-map-marked-alt-solid",
+    },
+    {
+        title: "Companies",
+        to: "admin",
+        icon: "px-buildings",
+    },
+    {
+        title: "Customers",
+        to: "admin",
+        icon: "la-users-solid",
+    },
+];
+const product_management = [
+    {
+        title: "Categories",
+        to: "categories",
+        icon: "md-category",
+    },
+    {
+        title: "Product Item",
+        to: "categories",
+        icon: "bi-cart4",
+    },
+    {
+        title: "Product Images",
+        to: "categories",
+        icon: "fa-images",
+    },
+    {
+        title: "Tags",
+        to: "categories",
+        icon: "fa-tags",
+    },
+    {
+        title: "Product Access types",
+        to: "categories",
+        icon: "ai-closed-access",
+    },
+];
+const file_management = [
+    {
+        title: "Files",
+        to: "categories",
+        icon: "fa-folder-open",
+    },
+];
 //provide/inject
 const user = inject("user");
 </script>

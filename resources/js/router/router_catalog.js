@@ -6,12 +6,18 @@ const catalog_routes =[
                 path: "/catalog",
                 name: "catalog",
                 component: CatalogLayout,
+                redirect: { name: "catalogHome" },
                 meta: {
-                        requiresAuth: true,
+                    requiresAuth: true,
                 },
                 children: [
+                    {
+                        path: "",
+                        name: "catalogHome",
+                        component: () => import("@/Pages/Catalog/Index.vue"),
+                    },
                 ],
-        }
+            },
 ];
 
 export default catalog_routes;

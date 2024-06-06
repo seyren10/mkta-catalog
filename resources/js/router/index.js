@@ -11,57 +11,6 @@ import catalog_routes from "./router_catalog.js"
 
 const routes = [
     {
-        path: "/",
-        name: "index",
-        component: MainLayout,
-        beforeEnter(to, from, next) {
-            if (to.hash) {
-                next(); // No need to redirect
-            } else {
-                // Redirect to the same route with the hash fragment added
-                next({ path: "/", hash: "#home" });
-            }
-        },
-    },
-    {
-        path: "/admin",
-        name: "admin",
-        component: AdminLayout,
-        redirect: { name: "dashboard" },
-        meta: {
-            requiresAuth: true,
-            // allowedRoles:
-        },
-        children: [
-            {
-                path: "dashboard",
-                name: "dashboard",
-                component: () => import("@/Pages/Admin/Dashboard/Index.vue"),
-            },
-            {
-                path: "products",
-                name: "products",
-                component: () => import("@/Pages/Admin/Products/Index.vue"),
-            },
-        ],
-    },
-    {
-        path: "/catalog",
-        name: "catalog",
-        component: CatalogLayout,
-        redirect: { name: "catalogHome" },
-        meta: {
-            requiresAuth: true,
-        },
-        children: [
-            {
-                path: "",
-                name: "catalogHome",
-                component: () => import("@/Pages/Catalog/Index.vue"),
-            },
-        ],
-    },
-    {
         path: "/fallback",
         name: "fallback",
         component: ActionNotAllowed,

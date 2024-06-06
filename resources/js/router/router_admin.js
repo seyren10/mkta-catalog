@@ -1,5 +1,6 @@
 // adminRouter.js
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { MdChildcareTwotone } from "oh-vue-icons/icons";
 
 const admin_routes = [
     {
@@ -11,10 +12,29 @@ const admin_routes = [
         },
         children: [
             {
-                path: "dashboard",
-                name: "dashboard",
-                component: () => import("@/Pages/Admin/Dashboard/Index.vue"),
+                path: "users",
+                name: "users",
+                component: () => import("@/Pages/Admin/Users/Index.vue"),
+                children: [
+                    {
+                        path: "users",
+                        name: "users",
+                        component: () =>
+                            import("@/Pages/Admin/Users/Index.vue"),
+                    },
+                ],
             },
+            {
+                path: "permissions",
+                name: "permissions",
+                component: () => import("@/Pages/Admin/Permissions/Index.vue"),
+            },
+            {
+                path: "roles",
+                name: "roles",
+                component: () => import("@/Pages/Admin/Roles/Index.vue"),
+            },
+
             {
                 path: "products",
                 name: "products",
@@ -24,9 +44,9 @@ const admin_routes = [
                 path: "/categories",
                 name: "categories",
                 component: () => import("@/Pages/Admin/Categories/Index.vue"),
-            }
+            },
         ],
-    }
+    },
 ];
 
 export default admin_routes;
