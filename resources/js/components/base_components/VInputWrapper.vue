@@ -27,13 +27,7 @@
                     scale="1.3"
                     color="#78716c"
                 ></v-icon>
-                <slot name="append-inner">
-                    <div v-if="clearable">
-                        <div @click="model = ''" class="cursor-pointer">
-                            <v-icon name="md-close-round" />
-                        </div>
-                    </div>
-                </slot>
+                <slot name="append-inner"> </slot>
             </div>
 
             <label
@@ -41,7 +35,14 @@
                 class="order-1 mb-0.5 text-sm duration-300 peer-has-[:focus]:text-accent"
                 >{{ label }}</label
             >
-            <div class="order-3 ml-2 min-h-5"></div>
+            <div class="order-3 ml-2 min-h-5">
+                <div
+                    class="text-[.75rem] text-slate-400"
+                    v-if="isFocused || persistentHint"
+                >
+                    {{ hint }}
+                </div>
+            </div>
         </div>
 
         <div class="ml-1">
