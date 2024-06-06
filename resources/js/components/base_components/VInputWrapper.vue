@@ -15,14 +15,25 @@
                     class="mr-2"
                 ></v-icon>
                 <slot name="prepend-inner"></slot>
-                <slot :id="id" class="grow"></slot>
+                <slot
+                    :id="id"
+                    class="grow"
+                    @focus="isFocused = true"
+                    @blur="isFocused = false"
+                ></slot>
                 <v-icon
                     v-if="appendInnerIcon"
                     :name="appendInnerIcon"
                     scale="1.3"
                     color="#78716c"
                 ></v-icon>
-                <slot name="append-inner"></slot>
+                <slot name="append-inner">
+                    <div v-if="clearable">
+                        <div @click="model = ''" class="cursor-pointer">
+                            <v-icon name="md-close-round" />
+                        </div>
+                    </div>
+                </slot>
             </div>
 
             <label
@@ -30,7 +41,9 @@
                 class="order-1 mb-0.5 text-sm duration-300 peer-has-[:focus]:text-accent"
                 >{{ label }}</label
             >
+            <div class="order-3 ml-2 min-h-5"></div>
         </div>
+
         <div class="ml-1">
             <v-icon v-if="appendIcon" :name="appendIcon" scale="1.3"></v-icon>
             <slot name="append"></slot>
@@ -39,6 +52,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useInput } from "@/composables/useInput";
 
 defineOptions({
@@ -48,6 +62,7 @@ defineOptions({
 const props = defineProps(useInput());
 
 const id = Math.random();
+const isFocused = ref(false);
 </script>
 
 <style lang="scss" scoped></style>
