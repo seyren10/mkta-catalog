@@ -86,13 +86,13 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 6,
             name: "Dinosaurs",
-            img: "mk-images/categories/dinosaurs.jpg",
+            img: "/mk-images/categories/dinosaurs.jpg",
             subCategories: ["Coming soon..."],
         },
         {
             id: 7,
             name: "Pirates",
-            img: "mk-images/categories/pirates.jpg",
+            img: "/mk-images/categories/pirates.jpg",
             subCategories: [
                 "Pirate Characters",
                 "Chairs & Tables",
@@ -104,7 +104,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 8,
             name: "Wild West",
-            img: "mk-images/categories/wild_west.jfif",
+            img: "/mk-images/categories/wild_west.jfif",
             subCategories: [
                 "Wild West Characters",
                 "Chairs & Tables",
@@ -118,7 +118,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 9,
             name: "Food and Beverage",
-            img: "mk-images/categories/food_and_beverages.jpg",
+            img: "/mk-images/categories/food_and_beverages.jpg",
             subCategories: [
                 "Christmas",
                 "Halloween",
@@ -135,7 +135,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 10,
             name: "Wall Decor",
-            img: "mk-images/categories/wall_decor.jpg",
+            img: "/mk-images/categories/wall_decor.jpg",
             subCategories: [
                 "Animals",
                 "Pre-Historic",
@@ -148,13 +148,13 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 11,
             name: "Archways",
-            img: "mk-images/categories/archways.jpg",
+            img: "/mk-images/categories/archways.jpg",
             subCategories: ["Christmas", "Halloween", "Easter"],
         },
         {
             id: 12,
             name: "Photo ops",
-            img: "mk-images/categories/photo_ops.jpg",
+            img: "/mk-images/categories/photo_ops.jpg",
             subCategories: [
                 "Christmas",
                 "Halloween",
@@ -166,7 +166,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 13,
             name: "Comics",
-            img: "mk-images/categories/comics.jpg",
+            img: "/mk-images/categories/comics.jpg",
             subCategories: [
                 "Panda",
                 "Penguins",
@@ -179,13 +179,13 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 14,
             name: "Space",
-            img: "mk-images/categories/space.jfif",
+            img: "/mk-images/categories/space.jfif",
             subCategories: ["Aliens", "UFO", "Astronaut"],
         },
         {
             id: 15,
             name: "Statues",
-            img: "mk-images/categories/statues.jpg",
+            img: "/mk-images/categories/statues.jpg",
             subCategories: [
                 "Stones",
                 "Christmas Characters",
@@ -197,7 +197,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 16,
             name: "Inlitefi",
-            img: "mk-images/inlitefi.jpg",
+            img: "/mk-images/inlitefi.jpg",
             subCategories: [
                 "Christmas",
                 "Halloween",
@@ -209,5 +209,9 @@ export const useCategoryStore = defineStore("categories", () => {
         },
     ]);
 
-    return { categories };
+    //methods
+    const getCategoryWithId = (id) => {
+        return categories.find((e) => e.id === +id);
+    };
+    return { categories, getCategoryWithId };
 });

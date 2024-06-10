@@ -1,6 +1,10 @@
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, computed, onBeforeUnmount, watch } from "vue";
 
-export const useHorizontalScroller = (autoScroll = false, interval = 5000) => {
+export const useHorizontalScroller = (
+    autoScroll = false,
+    interval = 5000,
+    activator,
+) => {
     //reactives
     const scroller = ref(null);
     const transitioning = ref(false);
@@ -80,21 +84,43 @@ export const useHorizontalScroller = (autoScroll = false, interval = 5000) => {
             clearInterval(id.value);
         }
     };
-    //hooks
-    onMounted(() => {
+
+    const addEvents = () => {
+        if (!scroller.value) return;
         scroller.value.addEventListener("transitionstart", startTransition);
         scroller.value.addEventListener("transitionend", stopTransition);
 
         setAutoScroll();
-    });
+    };
 
-    onUnmounted(() => {
+    const removeEvents = () => {
+        if (!scroller.value) return;
         scroller.value.removeEventListener("transitionstart", startTransition);
         scroller.value.removeEventListener("transitionend", stopTransition);
 
         clearAutoScroll();
+    };
+
+    //hooks
+    onMounted(() => {
+        addEvents();
     });
 
+    onBeforeUnmount(() => {
+        removeEvents();
+    });
+
+    //watchers
+    watch(
+        activator,
+        (newValue) => {
+            if (newValue) {
+                scroller.value = newValue;
+                addEvents();
+            } else removeEvents();
+        },
+        { immediate: true },
+    );
     return {
         scroller,
         transitioning,

@@ -1,26 +1,40 @@
 <template>
     <div class="flex gap-3">
-        <slot name="prepend"></slot>
-        <v-icon scale="1.5" :name="prependIcon" v-if="prependIcon"></v-icon>
-        <div v-bind="$attrs" class="grow">
-            <slot name="prepend-inner"></slot>
+        <slot name="prepend">
             <v-icon
-                scale="1.5"
-                :name="prependInnerIcon"
-                v-if="prependInnerIcon"
+                :scale="iconSize"
+                :name="prependIcon"
+                v-if="prependIcon"
             ></v-icon>
+        </slot>
 
+        <div v-bind="$attrs" class="grow flex items-center">
+            <slot name="prepend-inner">
+                <v-icon
+                    :scale="iconSize"
+                    :name="prependInnerIcon"
+                    v-if="prependInnerIcon"
+                ></v-icon>
+            </slot>
+
+            <!-- main slot -->
             <slot />
 
-            <slot name="append-inner"></slot>
-            <v-icon
-                scale="1.5"
-                :name="appendInnerIcon"
-                v-if="appendInnerIcon"
-            ></v-icon>
+            <slot name="append-inner">
+                <v-icon
+                    :scale="iconSize"
+                    :name="appendInnerIcon"
+                    v-if="appendInnerIcon"
+                ></v-icon>
+            </slot>
         </div>
-        <slot name="append"></slot>
-        <v-icon scale="1.5" :name="appendIcon" v-if="!$slots.append"></v-icon>
+        <slot name="append">
+            <v-icon
+                :scale="iconSize"
+                :name="appendIcon"
+                v-if="appendIcon"
+            ></v-icon>
+        </slot>
     </div>
 </template>
 
@@ -30,7 +44,14 @@ import { useIcon } from "@/composables/useIcon";
 defineOptions({
     inheritAttrs: false,
 });
-const props = defineProps({ ...useIcon(), parentClass: String });
+const props = defineProps({
+    ...useIcon(),
+    parentClass: String,
+    iconSize: {
+        type: [Number, String],
+        default: "1.5",
+    },
+});
 </script>
 
 <style lang="scss" scoped></style>

@@ -57,6 +57,12 @@ const routes = [
                 name: "catalogHome",
                 component: () => import("@/Pages/Catalog/Index.vue"),
             },
+            {
+                path: "categories/:id",
+                name: "categories",
+                props: true,
+                component: () => import("@/Pages/Catalog/Categories/Index.vue"),
+            },
         ],
     },
     {

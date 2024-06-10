@@ -72,17 +72,13 @@
         </div>
         <div>
             <div class="container mt-3 flex items-center gap-4 py-1">
-                <v-menu class="p-3">
-                    <template #activator="props">
-                        <v-button
-                            v-bind="props"
-                            ref="parent"
-                            class="text-[.8rem] text-slate-300"
-                            append-inner-icon="md-keyboardarrowdown-round"
-                            >All Categories</v-button
-                        >
-                    </template>
-
+                <v-button
+                    class="text-[.8rem] text-slate-300"
+                    append-inner-icon="md-keyboardarrowdown-round"
+                    @click="(e) => (menu = e.currentTarget)"
+                    >All Categories</v-button
+                >
+                <v-menu class="p-3" v-model="menu">
                     <template #default="{ loaded }">
                         <div
                             v-if="loaded"
@@ -101,25 +97,33 @@
                             </div>
                             <div
                                 class="grid gap-x-3 gap-y-5 md:grid-cols-3 lg:grid-cols-5"
+                                @click="menu = null"
                             >
                                 <div
                                     v-for="category in categories"
-                                    :key="category.name"
+                                    :key="category.id"
                                 >
-                                    <v-text-on-image
-                                        :image="category.img"
-                                        :title="category.name"
-                                        appear
-                                        class="aspect-[2/1]"
+                                    <router-link
+                                        :to="{
+                                            name: 'categories',
+                                            params: { id: category.id },
+                                        }"
                                     >
-                                        <template #overlay="data">
-                                            <div
-                                                class="absolute left-0 top-0 bg-accent px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
-                                            >
-                                                {{ data.title }}
-                                            </div>
-                                        </template>
-                                    </v-text-on-image>
+                                        <v-text-on-image
+                                            :image="category.img"
+                                            :title="category.name"
+                                            appear
+                                            class="aspect-[2/1]"
+                                        >
+                                            <template #overlay="data">
+                                                <div
+                                                    class="absolute left-0 top-0 bg-accent px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
+                                                >
+                                                    {{ data.title }}
+                                                </div>
+                                            </template>
+                                        </v-text-on-image>
+                                    </router-link>
                                     <ul
                                         class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap gap-3 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
                                     >
@@ -154,31 +158,17 @@ import { storeToRefs } from "pinia";
 //stores
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
+//reactives
+const menu = ref(false);
 
-const features = [
-    { title: "Holloween" },
-    { title: "Christmas" },
-    { title: "Archways" },
-    { title: "Summer" },
-    { title: "Comics" },
-    { title: "Cartoons" },
-    { title: "Anime" },
-    { title: "Dragons" },
-    { title: "Nutcrackers" },
-    { title: "Dont Blame the Kids" },
-];
+//injects
+const user = inject("user");
 
 const headerData = [
     { title: "Contact Sales Support", icon: "ri-customer-service-2-line" },
     { title: "Report a problem", icon: "ri-bug-2-line" },
     { title: "Asia", icon: "pr-globe" },
 ];
-
-//reactives
-const parent = ref(null);
-
-//injects
-const user = inject("user");
 </script>
 
 <style lang="scss" scoped></style>

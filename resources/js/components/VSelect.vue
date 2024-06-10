@@ -7,14 +7,14 @@
                 @blur="showSelection = false"
             >
                 <div class="flex items-center">
-                    <span>{{
+                    <span class="mr-2">{{
                         modelValue
                             ? items.find((e) => e[value] === modelValue)[title]
                             : items[0][title]
                     }}</span>
                     <v-icon
-                        name="md-arrowdropdown-round"
-                        scale="1.5"
+                        name="md-keyboardarrowdown-round"
+                        scale="1"
                         class="ml-auto cursor-pointer"
                     ></v-icon>
                 </div>
@@ -27,9 +27,9 @@
                 leave-active-class="duration-300 ease"
             >
                 <ul
-                    class="absolute inset-x-0 z-[2000] overflow-hidden rounded-lg border border-stone-400 bg-white"
+                    class="absolute inset-x-0 z-[2000] overflow-hidden rounded-lg border bg-white"
                     :class="{
-                        'bottom-[80%]': position === 'top',
+                        'bottom-[110%]': position === 'top',
                         'top-[110%]': position === 'bottom',
                     }"
                     v-show="showSelection"
@@ -37,7 +37,7 @@
                     <li
                         v-for="item in items"
                         :key="item[title]"
-                        class="p-3 duration-300 hover:bg-stone-400 hover:text-white"
+                        class="p-3 duration-300 hover:bg-slate-200"
                         :class="{ 'text-accent': modelValue === item[value] }"
                         @click="handleSelected(item[value] ?? item)"
                     >

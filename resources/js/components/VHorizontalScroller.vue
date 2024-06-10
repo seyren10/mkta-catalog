@@ -4,18 +4,24 @@
             <h1>{{ title }}</h1>
         </slot>
         <div class="group/scroller relative overflow-hidden rounded-lg">
-            <div
-                class="relative left-0 grid grid-flow-col duration-500"
-                :style="{
-                    gridTemplateRows: `repeat(${+columns},1fr)`,
-                    gridAutoColumns: `${itemSize}`,
-                }"
-                ref="scroller"
+            <slot
+                name="items"
+                :items="items"
+                class="relative left-0 duration-500"
             >
-                <div v-for="item in items" class="overflow-hidden">
-                    <slot :item="item"> </slot>
+                <div
+                    class="relative left-0 grid grid-flow-col duration-500"
+                    :style="{
+                        gridTemplateRows: `repeat(${+columns},1fr)`,
+                        gridAutoColumns: `${itemSize}`,
+                    }"
+                    ref="scroller"
+                >
+                    <div v-for="item in items" class="overflow-hidden">
+                        <slot :item="item"> {{ item }} </slot>
+                    </div>
                 </div>
-            </div>
+            </slot>
 
             <button
                 @click="next"
@@ -55,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useHorizontalScroller } from "@/composables/useHorizontalScroller";
 
 const props = defineProps({
@@ -65,10 +71,7 @@ const props = defineProps({
     },
     itemSize: {
         type: [String, Number],
-        validator: (value) => {
-            return +value > 0 && +value <= 100;
-        },
-        default: "10",
+        default: "auto",
     },
     items: {
         type: Array,
@@ -84,14 +87,17 @@ const props = defineProps({
     },
     scrim: Boolean,
     noIndicator: Boolean,
+    activator: Object,
 });
 
 //reactives
+const isHovering = ref(false);
+const activator = computed(() => props.activator);
 const horizontalScroller = useHorizontalScroller(
     props.autoScroll,
     +props.interval,
+    activator,
 );
-const isHovering = ref(false);
 
 const {
     scroller,

@@ -77,7 +77,10 @@ defineOptions({
 });
 
 const props = defineProps({
-    item: Object,
+    item: {
+        type: Object,
+        default: {},
+    },
 });
 </script>
 

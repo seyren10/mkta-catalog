@@ -48,6 +48,9 @@ export default {
             backgroundImage: {
                 "hero-background": "url('/mk-images/hero-background.jpg')",
             },
+            fontSize: {
+                head: "min(4vw + .5rem, 2rem)",
+            },
         },
     },
     plugins: [],
