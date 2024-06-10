@@ -49,6 +49,10 @@ import {
     BiSnow,
     GiFox,
     MdCategoryOutlined,
+    MdColorlensOutlined,
+    BiCheck,
+    MdSpacebarRound,
+    MdClearallRound,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -101,6 +105,10 @@ addIcons(
     BiSnow,
     GiFox,
     MdCategoryOutlined,
+    MdColorlensOutlined,
+    BiCheck,
+    MdSpacebarRound,
+    MdClearallRound,
 );
 
 export default OhVueIcon;

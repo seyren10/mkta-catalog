@@ -50,10 +50,10 @@ const handleShowMenu = (parent, child) => {
             childBound.width <
             windowWidth - (windowWidth - parentBound.right)
         ) {
-            child.style.left = `${parentBound.right - childBound.width}px`;
+            child.style.left = `${parentBound.left - parentBound.width / 2}px`;
         }
     } else {
-        child.style.left = parentBound.left + "px";
+        child.style.left = parentBound.left - parentBound.width / 2 + "px";
     }
 
     if (childBound.width < windowWidth - (windowWidth - parentBound.right)) {

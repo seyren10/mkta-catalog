@@ -1,10 +1,8 @@
 <template>
-    <div
-        class="group cursor-pointer overflow-hidden rounded-lg"
-        @click="expanded = !expanded"
-    >
+    <div class="group overflow-hidden rounded-lg">
         <div
-            :class="`relative isolate flex items-center justify-between bg-stone-200 ${densityValue}`"
+            :class="`relative isolate flex cursor-pointer items-center justify-between ${densityValue} ${bg}`"
+            @click="expanded = !expanded"
         >
             <!-- backdrop -->
             <div
@@ -39,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useDensity, useDensityValues } from "@/composables/useInput";
 
 const props = defineProps({
@@ -52,11 +50,13 @@ const props = defineProps({
         type: String,
         default: "md-arrowdropdown-round",
     },
+    bg: String,
+    expanded: Boolean,
 });
 
 const densityValue = useDensityValues(props.density);
 //reactives
-const expanded = ref(false);
+const expanded = ref(props.expanded);
 
 //derived props
 </script>
