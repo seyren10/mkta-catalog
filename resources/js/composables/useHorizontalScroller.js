@@ -1,4 +1,11 @@
-import { ref, onMounted, computed, onBeforeUnmount, watch } from "vue";
+import {
+    ref,
+    onMounted,
+    computed,
+    onBeforeUnmount,
+    watch,
+    onUpdated,
+} from "vue";
 
 export const useHorizontalScroller = (
     autoScroll = false,

@@ -6,7 +6,7 @@
         <img
             src="/Logo.svg"
             alt=""
-            class="h-full w-full object-cover duration-300 group-hover/toi:scale-105"
+            class="h-full w-full object-cover duration-300 group-hover/toi:scale-105 bg-primary"
         />
 
         <slot

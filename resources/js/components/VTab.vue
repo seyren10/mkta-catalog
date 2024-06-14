@@ -34,7 +34,7 @@
                 leave-to-class="opacity-0"
             >
                 <div
-                    class="basis-full p-5"
+                    class="basis-full"
                     v-for="tab in tabs"
                     v-show="model === tab.value"
                     :key="tab.value"

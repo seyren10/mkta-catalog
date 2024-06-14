@@ -1,8 +1,9 @@
 <template>
     <nav class="primary-gradient">
         <div class="container">
+            <!-- #region toolbar-header -->
             <div
-                class="hidden justify-end pt-1 text-[min(1vw_+_.3rem,.7rem)] text-slate-400 md:flex"
+                class="flex justify-end pt-1 text-[min(1vw_+_.3rem,.7rem)] text-slate-400"
             >
                 <div class="flex items-center">
                     <v-text-icon
@@ -13,7 +14,9 @@
                     ></v-text-icon>
                 </div>
             </div>
+            <!-- #endregion toolbar-header -->
 
+            <!-- #region user-avatar -->
             <div class="ml-auto flex w-fit items-center gap-2 py-2 md:hidden">
                 <span class="cursor-pointer text-slate-200 underline">{{
                     user.name
@@ -24,13 +27,19 @@
                     class="max-w-5 rounded-full bg-white ring ring-slate-700"
                 />
             </div>
+            <!-- #endregion user-avatar -->
+
             <div class="mt-3 flex items-center justify-between gap-5">
+                <!-- #region mk-logo -->
                 <img
                     src="/MKLogo-White.svg"
                     alt=""
-                    class="mr-3 hidden max-w-[6rem] sm:block"
+                    class="mr-3 hidden max-w-[6rem] cursor-pointer sm:block"
+                    @click="$router.push({ name: 'catalog' })"
                 />
+                <!-- #endregion mk-logo -->
 
+                <!-- #region searchbar -->
                 <div class="inline-flex grow items-center gap-5 sm:grow-0">
                     <div
                         class="flex grow overflow-hidden rounded-lg bg-white duration-500 has-[:focus]:ring-4 has-[:focus]:ring-accent sm:w-[max(35vw_+_1rem,_25rem)]"
@@ -57,19 +66,24 @@
                         </v-icon>
                     </div>
                 </div>
+                <!-- #endregion searchbar -->
 
+                <!-- #region mobile-user-avatar -->
                 <div class="hidden items-center gap-2 md:flex">
                     <span class="cursor-pointer underline">{{
                         user.name
                     }}</span>
                     <img
-                        src="/mk-images/hero-images/3.png"
+                        src="/mk-images/hero-images/4.png"
                         alt="profile"
                         class="max-w-10 rounded-full bg-white ring ring-slate-700"
                     />
                 </div>
+                <!-- #endregion mobile-user-avatar -->
             </div>
         </div>
+
+        <!-- #region footer -->
         <div>
             <div class="container mt-3 flex items-center gap-4 py-1">
                 <v-button
@@ -146,6 +160,7 @@
                 <FeatureCategory></FeatureCategory>
             </div>
         </div>
+        <!-- #endregion footer -->
     </nav>
 </template>
 
@@ -164,6 +179,7 @@ const menu = ref(false);
 //injects
 const user = inject("user");
 
+//non-reactives
 const headerData = [
     { title: "Contact Sales Support", icon: "ri-customer-service-2-line" },
     { title: "Report a problem", icon: "ri-bug-2-line" },

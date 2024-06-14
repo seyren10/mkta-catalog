@@ -17,7 +17,10 @@
                     }"
                     ref="scroller"
                 >
-                    <div v-for="item in items" class="overflow-hidden">
+                    <div
+                        v-for="(item, index) in items"
+                        class="overflow-hidden"
+                    >
                         <slot :item="item"> {{ item }} </slot>
                     </div>
                 </div>
@@ -61,7 +64,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useHorizontalScroller } from "@/composables/useHorizontalScroller";
 
 const props = defineProps({
@@ -90,6 +93,8 @@ const props = defineProps({
     activator: Object,
 });
 
+const model = defineModel();
+
 //reactives
 const isHovering = ref(false);
 const activator = computed(() => props.activator);
@@ -101,13 +106,14 @@ const horizontalScroller = useHorizontalScroller(
 
 const {
     scroller,
-    next,
-    prev,
+    next: scrollNext,
+    prev: scrollPrev,
     currentScroll,
     maxScroll,
     setAutoScroll,
     clearAutoScroll,
     goTo,
+    transitioning,
 } = horizontalScroller;
 
 //methods
@@ -122,6 +128,31 @@ const handleHoverLeave = () => {
     isHovering.value = false;
     setAutoScroll();
 };
+
+const next = () => {
+    scrollNext();
+    model.value = currentScroll.value;
+};
+const prev = () => {
+    scrollPrev();
+    model.value = currentScroll.value;
+};
+
+//watchers
+let runOnce = false;
+watch(model, (newValue, oldValue) => {
+    if (!transitioning.value) {
+        goTo(+newValue);
+    } else {
+        //prevent recursion from happening
+        if (!runOnce) {
+            model.value = oldValue; //this will result in a recursion without runOnce
+            runOnce = true;
+        } else {
+            runOnce = false;
+        }
+    }
+});
 </script>
 
 <style lang="scss" scoped></style>

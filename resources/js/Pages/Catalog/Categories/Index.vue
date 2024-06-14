@@ -16,7 +16,9 @@
                 />
             </div>
             <div>
-                <h1 class="my-5 text-head">
+                <h1
+                    class="my-5 text-head font-light uppercase tracking-wide text-primary"
+                >
                     {{ category?.name }}
                 </h1>
                 <p class="max-w-[50ch] text-slate-500 md:order-1">
@@ -30,7 +32,7 @@
             <ul class="flex flex-wrap gap-3">
                 <li
                     v-for="item in category.subCategories"
-                    class="min-w-fit rounded-lg bg-slate-200 px-3 py-1 text-[.75rem] text-slate-500"
+                    class="min-w-fit rounded-lg bg-slate-300 px-3 py-1 text-[.75rem] text-slate-500"
                 >
                     {{ item }}
                 </li>
@@ -76,7 +78,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useProductStore } from "@/stores/productStore";
 
@@ -105,6 +107,13 @@ const category = computed(() => {
 
 //reactives
 const sortBy = ref(0);
+
+//non-reactives
+const tabData = [
+    { title: "Tab 1", value: "tab1" },
+    { title: "Tab 2", value: "tab2" },
+    { title: "Tab 3", value: "tab3" },
+];
 </script>
 
 <style lang="scss" scoped></style>

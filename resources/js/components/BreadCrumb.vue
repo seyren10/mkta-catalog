@@ -7,7 +7,7 @@
         >
             <router-link
                 :key="link.path"
-                :to="{ name: link.name }"
+                :to="link.path"
                 v-if="index !== links.length - 1"
                 class="underline-offset-4 hover:underline"
             >
@@ -22,18 +22,23 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
+const props = defineProps({
+    items: Array,
+});
+
 const route = useRoute();
 
 const links = computed(() => {
-    return route.matched.map((e) => {
-        return {
-            name: e.name,
-            path: e.path,
-        };
-    });
+    if (props.items) {
+        return props.items;
+    } else
+        return route.matched.map((e) => {
+            return {
+                name: e.name,
+                path: e.path,
+            };
+        });
 });
-
-console.log(links.value);
 </script>
 
 <style lang="scss" scoped></style>

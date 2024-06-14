@@ -20,6 +20,17 @@ export const useProductStore = defineStore("products", () => {
                 isNew: true,
                 illuminated: true,
             },
+            album: [
+                "/carousel-test/animal2.jpg",
+                "/carousel-test/animal3.jpg",
+                "/carousel-test/animal4.jpg",
+                "/carousel-test/animal5.jpg",
+                "/carousel-test/animal6.jpg",
+                "/carousel-test/animal7.jpg",
+                "/carousel-test/animal4.jpg",
+                "/carousel-test/animal6.jpg",
+                "/carousel-test/animal3.jpg",
+            ],
             category_id: 5,
             created_at: "2024-01-15 12:34:56",
         },
@@ -429,5 +440,14 @@ export const useProductStore = defineStore("products", () => {
             .splice(0, count);
     };
 
-    return { products, getProductsWithCategoryId, getNewProducts };
+    const getProductWithId = (id) => {
+        return products.find((e) => e.id === +id);
+    };
+
+    return {
+        products,
+        getProductsWithCategoryId,
+        getNewProducts,
+        getProductWithId,
+    };
 });

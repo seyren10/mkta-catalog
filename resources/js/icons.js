@@ -53,6 +53,12 @@ import {
     BiCheck,
     MdSpacebarRound,
     MdClearallRound,
+    OiFileZip,
+    BiExclamation,
+    RiZoomInLine,
+    RiZoomOutLine,
+    BiMouse,
+    MdFullscreenRound,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -109,6 +115,12 @@ addIcons(
     BiCheck,
     MdSpacebarRound,
     MdClearallRound,
+    OiFileZip,
+    BiExclamation,
+    RiZoomInLine,
+    RiZoomOutLine,
+    BiMouse,
+    MdFullscreenRound,
 );
 
 export default OhVueIcon;

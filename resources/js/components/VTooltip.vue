@@ -78,12 +78,12 @@ onMounted(() => {
     }
 });
 
-onUnmounted(() => {
-    if (props.activator === "parent") {
-        activator.value.removeEventListener("mouseover", handleShow);
-        activator.value.removeEventListener("mouseleave", handleClose);
-    }
-});
+// onUnmounted(() => {
+//     if (props.activator === "parent") {
+//         activator.value.removeEventListener("mouseover", handleShow);
+//         activator.value.removeEventListener("mouseleave", handleClose);
+//     }
+// });
 </script>
 
 <style lang="scss" scoped></style>

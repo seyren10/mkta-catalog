@@ -63,6 +63,12 @@ const routes = [
                 props: true,
                 component: () => import("@/Pages/Catalog/Categories/Index.vue"),
             },
+            {
+                path: "product/:id",
+                name: "product",
+                props: true,
+                component: () => import("@/Pages/Catalog/Products/Show.vue"),
+            },
         ],
     },
     {
@@ -88,6 +94,14 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return { top: 0 };
+        }
+    },
 });
 
 router.beforeEach(async (to, from) => {

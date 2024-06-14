@@ -6,7 +6,7 @@
                     <th
                         v-for="item in headers.length
                             ? headers
-                            : Object.keys(items[0])"
+                            : Object.keys(items[0] || [])"
                         :key="item"
                         :class="`text-start ${densityValues} `"
                         v-show="!item.hidden"
@@ -66,7 +66,7 @@
 
                 <tr v-if="!paginated.length">
                     <td
-                        :colspan="Object.keys(items[0]).length"
+                        :colspan="Object.keys(items[0] || []).length"
                         class="w-fit p-3 text-center"
                     >
                         {{ noDataText }}
@@ -135,12 +135,7 @@ const props = defineProps({
     ...useDensity(),
     items: {
         type: Array,
-        default: [
-            { id: 0, name: "Roy Victor", age: 25 },
-            { id: 1, name: "John Ricky", age: 21 },
-            { id: 2, name: "Mathew", age: 30 },
-            { id: 3, name: "Melvin", age: 18 },
-        ],
+        default: [],
     },
     headers: {
         type: Array,

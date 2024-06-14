@@ -1,19 +1,29 @@
 <template>
-    <div class="hidden flex-wrap sm:flex">
-        <v-button
-            class="rounded-lg px-1 py-1 text-[.70rem] text-slate-400 duration-300 hover:bg-white hover:bg-opacity-10 hover:text-white"
-            append-inner-icon="md-keyboardarrowdown-round"
-            iconSize=".8"
+    <div class="hidden flex-wrap gap-2 text-[.7rem] text-slate-400 sm:flex">
+        <div
+            class="flex cursor-pointer items-center overflow-hidden rounded-lg border border-slate-500 duration-300 hover:border-slate-500"
             v-for="feature in categories"
             :key="feature.id"
-            :class="{
-                'bg-white bg-opacity-10 text-white':
-                    feature.id === selectedFeature?.id,
-            }"
-            @click="(e) => setTarget(e, feature)"
         >
-            {{ feature.name }}</v-button
-        >
+            <div
+                @click="
+                    $router.push({
+                        name: 'categories',
+                        params: { id: feature.id },
+                    })
+                "
+                class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white"
+            >
+                {{ feature.name }}
+            </div>
+
+            <div
+                class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white"
+                @click="(e) => setTarget(e, feature)"
+            >
+                <v-icon name="md-keyboardarrowdown-round" scale=".7"></v-icon>
+            </div>
+        </div>
     </div>
 
     <v-menu v-model="target" @close="selectedFeature = null">
@@ -56,7 +66,6 @@ const setTarget = (event, payload) => {
     selectedFeature.value = payload;
 
     if (target.value === event.currentTarget) {
-        console.log(target.value);
         unsetTarget();
     } else target.value = event.currentTarget;
 };

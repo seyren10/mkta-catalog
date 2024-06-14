@@ -21,9 +21,12 @@
 <script setup>
 import CatalogNav from "./components/catalog/CatalogNav.vue";
 
+//methods
 const handleHide = (el, hidden) => {
     el.classList.toggle("bottom-[1%]", !hidden);
 };
+
+//hooks
 </script>
 
 <style lang="scss" scoped></style>

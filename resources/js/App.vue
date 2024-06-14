@@ -14,13 +14,16 @@
 </template>
 
 <script setup>
-import { useUserStore } from "@/stores/userStore";
 import { storeToRefs } from "pinia";
 import { provide } from "vue";
 import { RouterView } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import { useCategoryStore } from "@/stores/categoryStore";
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
+const categoryStore = useCategoryStore();
 provide("user", user);
+provide("categoryStore", categoryStore);
 </script>
