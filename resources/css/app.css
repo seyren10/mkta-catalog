@@ -24,7 +24,7 @@
 
 
     .primary-gradient {
-        @apply bg-gradient-to-r from-slate-900 via-primary to-slate-900 via-75%;
+        @apply bg-gradient-to-r from-primary to-slate-800 from-[70%];
     }
 }
 

@@ -17,10 +17,7 @@
                     }"
                     ref="scroller"
                 >
-                    <div
-                        v-for="(item, index) in items"
-                        class="overflow-hidden"
-                    >
+                    <div v-for="(item, index) in items" class="overflow-hidden">
                         <slot :item="item"> {{ item }} </slot>
                     </div>
                 </div>
@@ -28,14 +25,14 @@
 
             <button
                 @click="next"
-                class="absolute inset-y-0 right-[-10%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:right-0"
+                class="absolute inset-y-0 right-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:right-0"
                 :class="{ 'bg-black bg-opacity-15': scrim }"
             >
                 <v-icon name="md-keyboardarrowright-round" scale="1.5"></v-icon>
             </button>
             <button
                 @click="prev"
-                class="absolute inset-y-0 left-[-10%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:left-0"
+                class="absolute inset-y-0 left-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:left-0"
                 :class="{ 'bg-black bg-opacity-15': scrim }"
             >
                 <v-icon name="md-keyboardarrowleft-round" scale="1.5"></v-icon>

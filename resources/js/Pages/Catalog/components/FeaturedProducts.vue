@@ -2,7 +2,7 @@
     <v-card class="relative border-none">
         <template #header>
             <div
-                class="sticky top-[8.5rem] z-[10] flex items-center justify-center gap-3 rounded-lg bg-white py-5 text-primary md:top-[9.75rem]"
+                class="sticky top-[10rem] z-[10] flex items-center justify-center gap-3 rounded-lg bg-white py-5 text-primary md:top-[9.75rem]"
             >
                 <v-icon
                     :name="titleIcon"

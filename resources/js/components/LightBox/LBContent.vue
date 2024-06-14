@@ -3,9 +3,13 @@
         class="fixed inset-0 z-[2003] grid grid-rows-[auto,1fr,auto] bg-black bg-opacity-50 text-white"
     >
         <div class="container flex items-center py-3 text-sm">
-            <p class="flex items-center">
-                <v-icon name="bi-mouse" scale="1.5"></v-icon> use your
-                <strong>&nbsp; mouse wheel &nbsp;</strong> to zoom-in and out
+            <p class="flex items-center text-[min(2vw+.1rem,_.8rem)]">
+                <v-icon name="bi-mouse" scale="1.5"></v-icon>
+                <span>
+                    use your
+                    <strong>&nbsp; mouse wheel &nbsp;</strong> to zoom-in and
+                    out
+                </span>
             </p>
             <div class="ml-auto flex gap-4">
                 <v-button
@@ -29,7 +33,7 @@
             />
 
             <div
-                class="absolute right-[-10%] top-0 m-3 grid gap-5 rounded-lg bg-black bg-opacity-20 px-3 py-5 duration-500 group-hover:right-0"
+                class="absolute right-[-30%] top-0 m-3 grid gap-5 rounded-lg bg-black bg-opacity-20 px-3 py-5 duration-500 group-hover:right-0"
             >
                 <v-button
                     icon="ri-zoom-in-line"

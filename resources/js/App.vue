@@ -19,11 +19,15 @@ import { provide } from "vue";
 import { RouterView } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
 import { useCategoryStore } from "@/stores/categoryStore";
+import { useProductStore } from "./stores/productStore";
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
 const categoryStore = useCategoryStore();
+const productStore = useProductStore();
+
 provide("user", user);
 provide("categoryStore", categoryStore);
+provide("productStore", productStore);
 </script>

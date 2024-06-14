@@ -1,0 +1,21 @@
+<template>
+    <section class="container my-8 space-y-5">
+        <v-sheet class="grid gap-5 overflow-y-hidden md:grid-cols-2">
+            <slot name="header"></slot>
+        </v-sheet>
+
+        <div class="flex gap-5">
+            <div class="max-w-[15rem] text-slate-500">
+                <slot name="aside"></slot>
+            </div>
+
+            <v-sheet class="grow">
+                <slot name="related"></slot>
+            </v-sheet>
+        </div>
+    </section>
+</template>
+
+<script setup></script>
+
+<style lang="scss" scoped></style>
