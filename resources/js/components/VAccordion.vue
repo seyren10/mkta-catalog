@@ -1,26 +1,29 @@
 <template>
-    <div
-        class="group cursor-pointer overflow-hidden rounded-lg"
-        @click="expanded = !expanded"
-    >
+    <div class="group cursor-pointer overflow-hidden rounded-lg">
         <div
+            @click="expanded.value = !expanded.value"
             :class="`relative isolate flex items-center justify-between bg-stone-200 ${densityValue}`"
         >
             <!-- backdrop -->
             <div
                 class="absolute inset-0 -z-10 duration-500"
-                :class="{ 'backdrop-brightness-75': expanded }"
+                :class="{ 'backdrop-brightness-75': expanded.value }"
             ></div>
-            <slot name="title"></slot>
-            <p v-if="!$slots.title">{{ title }}</p>
-            <v-icon :name="icon" :flip="expanded ? 'vertical' : null"></v-icon>
+            <slot name="title" :expanded="expanded"></slot>
+            <p v-if="!$slots.title">
+                {{ title }}
+            </p>
+            <v-icon
+                :name="icon"
+                :flip="expanded.value ? 'vertical' : null"
+            ></v-icon>
         </div>
 
         <div
             class="grid overflow-hidden transition-[grid-template-rows] duration-300"
             :class="{
-                'grid-rows-[0fr]': !expanded,
-                'grid-rows-[1fr]': expanded,
+                'grid-rows-[0fr]': !expanded.value,
+                'grid-rows-[1fr]': expanded.value,
             }"
         >
             <div class="overflow-hidden bg-white">
@@ -39,7 +42,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useDensity, useDensityValues } from "@/composables/useInput";
 
 const props = defineProps({
@@ -52,11 +55,13 @@ const props = defineProps({
         type: String,
         default: "md-arrowdropdown-round",
     },
+    bg: String,
+    expanded: Boolean,
 });
 
 const densityValue = useDensityValues(props.density);
 //reactives
-const expanded = ref(false);
+const expanded = ref({ value: false });
 
 //derived props
 </script>

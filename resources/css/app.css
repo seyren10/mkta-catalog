@@ -14,15 +14,17 @@
     }
 
     .scrollbar::-webkit-scrollbar {
-        @apply w-2
+        @apply w-1
     }
 
     .scrollbar::-webkit-scrollbar-thumb {
-        @apply bg-slate-500 rounded-full
+        @apply bg-slate-300 rounded-full
     }
 
+
+
     .primary-gradient {
-        @apply bg-gradient-to-r from-slate-900 via-primary to-slate-900 via-75%;
+        @apply bg-gradient-to-r from-primary to-slate-800 from-[70%];
     }
 }
 

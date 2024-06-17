@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::get());
+        return CategoryResource::collection(Category::where('parent_id',0)->get());
     }
 
     /**
@@ -34,6 +34,7 @@ class CategoryController extends Controller
         $category = Category::create(array(
             "title" => ucwords($request->title),
             "description" => ucfirst($request->description) ?? "",
+            "parent_id" => ucfirst($request->parent_id) ?? null
         ));
         return response()->json(['message' => 'Category created successfully', 'category' => $category], 200);
     }
@@ -70,7 +71,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
     }
     #endregion
 }

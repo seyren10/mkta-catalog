@@ -1,8 +1,9 @@
 <template>
     <nav class="primary-gradient">
         <div class="container">
+            <!-- #region toolbar-header -->
             <div
-                class="hidden justify-end pt-1 text-[min(1vw_+_.3rem,.7rem)] text-slate-400 md:flex"
+                class="flex justify-end pt-1 text-[min(1vw_+_.3rem,.7rem)] text-slate-400"
             >
                 <div class="flex items-center">
                     <v-text-icon
@@ -13,7 +14,9 @@
                     ></v-text-icon>
                 </div>
             </div>
+            <!-- #endregion toolbar-header -->
 
+            <!-- #region user-avatar -->
             <div class="ml-auto flex w-fit items-center gap-2 py-2 md:hidden">
                 <span class="cursor-pointer text-slate-200 underline">{{
                     user.name
@@ -24,13 +27,19 @@
                     class="max-w-5 rounded-full bg-white ring ring-slate-700"
                 />
             </div>
+            <!-- #endregion user-avatar -->
+
             <div class="mt-3 flex items-center justify-between gap-5">
+                <!-- #region mk-logo -->
                 <img
                     src="/MKLogo-White.svg"
                     alt=""
-                    class="mr-3 hidden max-w-[6rem] sm:block"
+                    class="mr-3 hidden max-w-[6rem] cursor-pointer sm:block"
+                    @click="$router.push({ name: 'catalog' })"
                 />
+                <!-- #endregion mk-logo -->
 
+                <!-- #region searchbar -->
                 <div class="inline-flex grow items-center gap-5 sm:grow-0">
                     <div
                         class="flex grow overflow-hidden rounded-lg bg-white duration-500 has-[:focus]:ring-4 has-[:focus]:ring-accent sm:w-[max(35vw_+_1rem,_25rem)]"
@@ -57,32 +66,33 @@
                         </v-icon>
                     </div>
                 </div>
+                <!-- #endregion searchbar -->
 
+                <!-- #region mobile-user-avatar -->
                 <div class="hidden items-center gap-2 md:flex">
                     <span class="cursor-pointer underline">{{
                         user.name
                     }}</span>
                     <img
-                        src="/mk-images/hero-images/3.png"
+                        src="/mk-images/hero-images/4.png"
                         alt="profile"
                         class="max-w-10 rounded-full bg-white ring ring-slate-700"
                     />
                 </div>
+                <!-- #endregion mobile-user-avatar -->
             </div>
         </div>
+
+        <!-- #region footer -->
         <div>
             <div class="container mt-3 flex items-center gap-4 py-1">
-                <v-menu class="p-3">
-                    <template #activator="props">
-                        <v-button
-                            v-bind="props"
-                            ref="parent"
-                            class="text-[.8rem] text-slate-300"
-                            append-inner-icon="md-keyboardarrowdown-round"
-                            >All Categories</v-button
-                        >
-                    </template>
-
+                <v-button
+                    class="text-[.8rem] text-slate-300"
+                    append-inner-icon="md-keyboardarrowdown-round"
+                    @click="(e) => (menu = e.currentTarget)"
+                    >All Categories</v-button
+                >
+                <v-menu class="p-3" v-model="menu">
                     <template #default="{ loaded }">
                         <div
                             v-if="loaded"
@@ -101,25 +111,33 @@
                             </div>
                             <div
                                 class="grid gap-x-3 gap-y-5 md:grid-cols-3 lg:grid-cols-5"
+                                @click="menu = null"
                             >
                                 <div
                                     v-for="category in categories"
-                                    :key="category.name"
+                                    :key="category.id"
                                 >
-                                    <v-text-on-image
-                                        :image="category.img"
-                                        :title="category.name"
-                                        appear
-                                        class="aspect-[2/1]"
+                                    <router-link
+                                        :to="{
+                                            name: 'categories',
+                                            params: { id: category.id },
+                                        }"
                                     >
-                                        <template #overlay="data">
-                                            <div
-                                                class="absolute left-0 top-0 bg-accent px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
-                                            >
-                                                {{ data.title }}
-                                            </div>
-                                        </template>
-                                    </v-text-on-image>
+                                        <v-text-on-image
+                                            :image="category.img"
+                                            :title="category.name"
+                                            appear
+                                            class="aspect-[2/1]"
+                                        >
+                                            <template #overlay="data">
+                                                <div
+                                                    class="absolute left-0 top-0 bg-accent px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
+                                                >
+                                                    {{ data.title }}
+                                                </div>
+                                            </template>
+                                        </v-text-on-image>
+                                    </router-link>
                                     <ul
                                         class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap gap-3 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
                                     >
@@ -142,6 +160,7 @@
                 <FeatureCategory></FeatureCategory>
             </div>
         </div>
+        <!-- #endregion footer -->
     </nav>
 </template>
 
@@ -154,20 +173,13 @@ import { storeToRefs } from "pinia";
 //stores
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
+//reactives
+const menu = ref(false);
 
-const features = [
-    { title: "Holloween" },
-    { title: "Christmas" },
-    { title: "Archways" },
-    { title: "Summer" },
-    { title: "Comics" },
-    { title: "Cartoons" },
-    { title: "Anime" },
-    { title: "Dragons" },
-    { title: "Nutcrackers" },
-    { title: "Dont Blame the Kids" },
-];
+//injects
+const user = inject("user");
 
+//non-reactives
 const headerData = [
     { title: "Contact Sales Support", icon: "ri-customer-service-2-line" },
     { title: "Report a problem", icon: "ri-bug-2-line" },
@@ -178,7 +190,7 @@ const headerData = [
 const parent = ref(null);
 
 //injects
-const user = inject("user");
+const user = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

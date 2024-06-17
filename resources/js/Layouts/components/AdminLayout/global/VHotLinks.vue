@@ -49,7 +49,7 @@
 import { ref, watch, inject, computed } from "vue";
 
 
-const user = inject("user");
+const user = inject("currentUser");
 const titleClass  = "text-wrap";
 const hotlinks = [
     {

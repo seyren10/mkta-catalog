@@ -1,7 +1,10 @@
+import { computed, reactive, ref, shallowRef } from "vue";
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { useAxios } from "@/composables/useAxios";
 
 export const useCategoryStore = defineStore("categories", () => {
+    const { loading, errors, exec } = useAxios();
+    /*
     const categories = reactive([
         {
             id: 1,
@@ -86,13 +89,13 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 6,
             name: "Dinosaurs",
-            img: "mk-images/categories/dinosaurs.jpg",
+            img: "/mk-images/categories/dinosaurs.jpg",
             subCategories: ["Coming soon..."],
         },
         {
             id: 7,
             name: "Pirates",
-            img: "mk-images/categories/pirates.jpg",
+            img: "/mk-images/categories/pirates.jpg",
             subCategories: [
                 "Pirate Characters",
                 "Chairs & Tables",
@@ -104,7 +107,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 8,
             name: "Wild West",
-            img: "mk-images/categories/wild_west.jfif",
+            img: "/mk-images/categories/wild_west.jfif",
             subCategories: [
                 "Wild West Characters",
                 "Chairs & Tables",
@@ -118,7 +121,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 9,
             name: "Food and Beverage",
-            img: "mk-images/categories/food_and_beverages.jpg",
+            img: "/mk-images/categories/food_and_beverages.jpg",
             subCategories: [
                 "Christmas",
                 "Halloween",
@@ -135,7 +138,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 10,
             name: "Wall Decor",
-            img: "mk-images/categories/wall_decor.jpg",
+            img: "/mk-images/categories/wall_decor.jpg",
             subCategories: [
                 "Animals",
                 "Pre-Historic",
@@ -148,13 +151,13 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 11,
             name: "Archways",
-            img: "mk-images/categories/archways.jpg",
+            img: "/mk-images/categories/archways.jpg",
             subCategories: ["Christmas", "Halloween", "Easter"],
         },
         {
             id: 12,
             name: "Photo ops",
-            img: "mk-images/categories/photo_ops.jpg",
+            img: "/mk-images/categories/photo_ops.jpg",
             subCategories: [
                 "Christmas",
                 "Halloween",
@@ -166,7 +169,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 13,
             name: "Comics",
-            img: "mk-images/categories/comics.jpg",
+            img: "/mk-images/categories/comics.jpg",
             subCategories: [
                 "Panda",
                 "Penguins",
@@ -179,13 +182,13 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 14,
             name: "Space",
-            img: "mk-images/categories/space.jfif",
+            img: "/mk-images/categories/space.jfif",
             subCategories: ["Aliens", "UFO", "Astronaut"],
         },
         {
             id: 15,
             name: "Statues",
-            img: "mk-images/categories/statues.jpg",
+            img: "/mk-images/categories/statues.jpg",
             subCategories: [
                 "Stones",
                 "Christmas Characters",
@@ -197,7 +200,7 @@ export const useCategoryStore = defineStore("categories", () => {
         {
             id: 16,
             name: "Inlitefi",
-            img: "mk-images/inlitefi.jpg",
+            img: "/mk-images/inlitefi.jpg",
             subCategories: [
                 "Christmas",
                 "Halloween",
@@ -208,6 +211,92 @@ export const useCategoryStore = defineStore("categories", () => {
             ],
         },
     ]);
+     */
+    const categories = ref([]);
+    const category = ref([]);
+    const form = reactive({
+        img: "",
+        title: "",
+        description: "",
+        parent_id: 0,
+        file_id: 0,
+    });
+    const resetForm = () => {
+        form.title = "";
+        form.description = "";
+        form.parent_id = 0;
+        form.file_id = 0;
+    };
+    const addCategory = async () => {
+        try {
+            const res = await exec("/api/categories", "post", form);
+            if (form.parent_id != 0) {
+                getCategory(form.parent_id);
+            } else {
+                getCategories();
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const updateCategory = async (id) => {
+        try {
+            const res = await exec("/api/categories/" + id, "put", form);
+            getCategory(id);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const deleteCategory = async (id) => {
+        try {
+            const res = await exec("/api/categories/" + id, "delete");
+            await getCategories();
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const getCategory = async (id, requestData = null) => {
+        try {
+            let defaultData = {
+                includeSubCategories: true,
+                includeFile: true,
+                includeParentCategory: true
+            };
+            const res = await exec("/api/categories/" + id, "get", {
+                ...requestData,
+                ...defaultData,
+            });
+            category.value = res.data.data;
+            form.title = category.value.title;
+            form.description = category.value.description;
+            form.parent_id = category.value.parent_id
+            form.file_id = category.value.file_id ?? category.img;
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const getCategories = async (requestData = null) => {
+        try {
+            const res = await exec("/api/categories", "get", requestData);
+            categories.value = res.data.data;
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
-    return { categories };
+    return {
+        form,
+        category,
+        categories,
+        loading,
+        errors,
+        exec,
+
+        resetForm,
+        addCategory,
+        updateCategory,
+        deleteCategory,
+        getCategory,
+        getCategories,
+    };
 });

@@ -11,9 +11,8 @@
                 v-bind="{ ...props, ...$attrs }"
                 v-model="model"
             />
-            <span class="text-sm">{{ hint }}</span>
         </template>
-        <template #append-inner v-if="clearable && model.length > 0">
+        <template #append-inner v-if="clearable && model?.length > 0">
             <div @click="model = ''" class="cursor-pointer">
                 <v-icon name="md-close-round" />
             </div>
@@ -34,9 +33,6 @@ const model = defineModel();
 const props = defineProps({
     ...useInput(),
     ...useDensity(),
-    clearable: Boolean,
-    persistentHint: Boolean,
-    hint : { type: String, default: '' },
 });
 
 const densityValues = useDensityValues(props.density);

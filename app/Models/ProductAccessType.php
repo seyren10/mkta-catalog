@@ -13,7 +13,7 @@ class ProductAccessType extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "key",
+        "type",
         "title", 
         "description",
 

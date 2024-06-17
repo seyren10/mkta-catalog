@@ -103,7 +103,7 @@
                             class="m-auto max-w-[49ch] space-y-[1.5rem] self-start"
                         >
                             <h1
-                                class="text-[min(4vw_+_.5rem,_2rem)] font-medium tracking-wide text-primary"
+                                class="text-head font-medium tracking-wide text-primary"
                             >
                                 Sub Categories
                             </h1>

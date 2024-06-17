@@ -19,9 +19,9 @@
                         <img src="/mk-images/hero-images/7.png" alt="" />
                     </div>
                     <div>
-                        <div class="font-bold">{{ user.name }}</div>
+                        <div class="font-bold">{{ currentUser.name }}</div>
                         <span class="text-[.8rem] text-slate-400">{{
-                            user.role_data.title
+                            currentUser.role_data.title
                         }}</span>
                     </div>
                 </div>
@@ -30,23 +30,22 @@
                     :title="'User Management'"
                     :items="user_management"
                 />
-                
+
                 <VRouteNav
+                    v-if="true"
                     :title="'Product Management'"
                     :items="product_management"
                 />
                 <VRouteNav
-
+                    v-if="true"
                     :title="'Customer Management'"
                     :items="cutomer_management"
                 />
                 <VRouteNav
-
+                    v-if="false"
                     :title="'File Management'"
                     :items="file_management"
                 />
-
-                
             </div>
         </template>
 
@@ -78,51 +77,51 @@ const user_management = [
     },
     {
         title: "Roles",
-        to: "roles",
+        to: "rolesIndex",
         icon: "fa-user-cog",
     },
 ];
 const cutomer_management = [
     {
-        title: "Continent",
-        to: "admin",
+        title: "Areas",
+        to: "areasIndex",
         icon: "la-map-marked-alt-solid",
     },
     {
         title: "Companies",
-        to: "admin",
+        to: "companiesIndex",
         icon: "px-buildings",
     },
     {
         title: "Customers",
-        to: "admin",
+        to: "customerIndex",
         icon: "la-users-solid",
     },
 ];
 const product_management = [
     {
         title: "Categories",
-        to: "categories",
+        to: "categoryIndex",
         icon: "md-category",
     },
     {
         title: "Product Item",
-        to: "categories",
+        to: "productItemIndex",
         icon: "bi-cart4",
     },
-    {
-        title: "Product Images",
-        to: "categories",
-        icon: "fa-images",
-    },
-    {
-        title: "Tags",
-        to: "categories",
-        icon: "fa-tags",
-    },
+    // {
+    //     title: "Product Images",
+    //     to: "admin",
+    //     icon: "fa-images",
+    // },
+    // {
+    //     title: "Tags",
+    //     to: "admin",
+    //     icon: "fa-tags",
+    // },
     {
         title: "Product Access types",
-        to: "categories",
+        to: "productAccessTypeIndex",
         icon: "ai-closed-access",
     },
 ];
@@ -134,7 +133,7 @@ const file_management = [
     },
 ];
 //provide/inject
-const user = inject("user");
+const currentUser = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

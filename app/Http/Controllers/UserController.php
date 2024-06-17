@@ -15,11 +15,11 @@ use App\Models\UserPermission;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-
 
     protected $UserServices;
 
@@ -31,9 +31,15 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return UserResource::collection(User::get());
+        $currentRouteName = Route::currentRouteName();
+        if ($currentRouteName == 'users.index') {
+            return UserResource::collection(User::where('role_id', '!=', 2)->get());
+        }
+        if ($currentRouteName == 'customers.index') {
+            return UserResource::collection(User::where('role_id', 2)->get());
+        }
     }
 
     /**
@@ -52,16 +58,18 @@ class UserController extends Controller
         $password = Str::random(10);
         $user = User::create(
             array(
-                "name"      => $request->name,
-                "email"     => $request->email,
-                "password"  => Hash::make($password),
+                "name" => $request->name,
+                "email" => $request->email,
+                "password" => Hash::make($password),
 
                 "is_active" => true,
-                "role_id"   => $request->has('role_id') ? $request->role_id : 2,
+                "role_id" => $request->role_id ?? 2,
             )
         );
-        $user['password'] = $password;
-        return response()->json(['message' => 'User created successfully', 'user' => $user, 'password' => $password], 200);
+        return response()->json([
+            'message' => 'User created successfully',
+            'user' => $user,
+            'password' => $password], 200);
     }
 
     /**
@@ -85,6 +93,8 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $user->name = $request->name ?? $user->name;
+        $user->is_active = $request->is_active ? ($request->is_active ? 1 : 0) : $user->is_active;
+        $user->role_id = $request->role_id;
         $user->save();
         return response()->json(["message" => "User updated successfully"], 200);
     }
@@ -130,7 +140,7 @@ class UserController extends Controller
                     UserPermission::create(
                         array(
                             "permission_id" => $permission->id,
-                            "user_id" => $user->id
+                            "user_id" => $user->id,
                         )
                     );
                     return response()->json(["message" => "Permission " . $permission->title . " is added to " . $user->name], 200);
@@ -159,7 +169,7 @@ class UserController extends Controller
                     UserArea::create(
                         array(
                             "area_code_id" => $areacode->id,
-                            "user_id" => $user->id
+                            "user_id" => $user->id,
                         )
                     );
                     return response()->json(["message" => $user->name . " is added to " . $areacode->title], 200);
@@ -188,7 +198,7 @@ class UserController extends Controller
                     UserCompany::create(
                         array(
                             "company_code_id" => $company_code->id,
-                            "user_id" => $user->id
+                            "user_id" => $user->id,
                         )
                     );
                     return response()->json(["message" => $user->name . " is added to " . $company_code->title], 200);

@@ -1,16 +1,29 @@
 <template>
     <div class="pt-2">
-        <v-heading type="h2">Permissions </v-heading>
-        <p>
-            Efficiently manage access control and ensure data security within
-            the Catalog.
-        </p>
+        <div>
+            <v-heading type="h2">
+                <v-icon
+                    v-if="$route.meta.redirectTo"
+                    @click="
+                        () => {
+                            router.push({ name: $route.meta.redirectTo });
+                        }
+                    "
+                    name="la-arrow-circle-left-solid"
+                    scale="1.8"
+                ></v-icon
+                >{{ $route.meta.title }}</v-heading
+            >
+            <p>
+                {{ $route.meta.description }}
+            </p>
+        </div>
         <div class="ml-auto w-fit">
             <v-button
                 outlined
                 prepend-inner-icon="gi-checked-shield"
                 class="float-end block rounded-lg bg-accent p-2 text-white"
-                @click="showDialog = true"
+                @click="(showInsert = true), permissionStore.resetForm()"
                 >New Permission</v-button
             >
         </div>
@@ -48,12 +61,55 @@
                         hidden: !true,
                         sortable: false,
                     },
+                    {
+                        value: '',
+                        key: 'action',
+                        hidden: false,
+                        sortable: false,
+                    },
                 ]"
                 :items="permissions"
                 :search="search"
                 striped
                 border
             >
+                <template #item.action="{ item }">
+                    <div class="max-w-40">
+                        <v-button
+                            class="w-full bg-red-600 text-white"
+                            @click="
+                                () => {
+                                    showDelete = true;
+                                    current_permission = item.raw.id;
+                                    form.title = item.raw.title;
+                                    form.key = item.raw.key;
+                                    form.description = item.raw.description;
+                                }
+                            "
+                            outlined
+                            prepend-inner-icon="fa-trash-alt"
+                        >
+                            Delete
+                        </v-button>
+                        <v-button
+                            class="w-full bg-accent text-white"
+                            @click="
+                                () => {
+                                    showUpdate = true;
+                                    current_permission = item.raw.id;
+
+                                    form.title = item.raw.title;
+                                    form.key = item.raw.key;
+                                    form.description = item.raw.description;
+                                }
+                            "
+                            outlined
+                            prepend-inner-icon="hi-solid-pencil-alt"
+                        >
+                            Edit
+                        </v-button>
+                    </div>
+                </template>
                 <template #item.title="{ item }">
                     <p class="text-xl">{{ item.value }}</p>
                     <span class="text-gray-400">{{ item.raw.key }}</span>
@@ -61,27 +117,38 @@
             </v-data-table>
         </div>
         <!-- </template> -->
-        <v-dialog v-model="showDialog" persistent title="Permission">
+        <v-dialog
+            v-model="showInsert"
+            persistent
+            title="Permission"
+            @close="permissionStore.resetForm()"
+        >
             <div class="min-w-[800px] p-5">
                 <div class="">
                     <v-text-field
                         label="Title"
                         v-model="form.title"
+                        @keyup="
+                            form.key = form.title
+                                .trim()
+                                .toLowerCase()
+                                .replace(/ /g, '-')
+                        "
                         prepend-inner-icon="px-subtitles"
                         clearable
                     />
-                    <hr class="my-2 " width="0%" />
+                    <hr class="my-1" width="0%" />
                     <v-text-field
                         v-model="form.key"
                         label="Key"
                         prepend-inner-icon="bi-filetype-key"
                         clearable
                     />
-                    <hr class="my-2 " width="0%" />
+                    <hr class="my-1" width="0%" />
                     <v-textarea
                         rows="5"
-                        v-model="form.desc"
-                        label="Title"
+                        v-model="form.description"
+                        label="Description"
                         clearable
                     >
                         <template #prepend-inner>
@@ -92,13 +159,129 @@
                         </template>
                     </v-textarea>
                 </div>
-
                 <div class="ml-auto w-fit">
                     <v-button
                         prepend-inner-icon="md-save-round"
                         outlined
-                        class="my-2 block rounded-lg bg-accent p-2 text-lg text-white"
+                        :loading="loading"
+                        v-show="!isExist"
+                        @click="
+                            () => {
+                                permissionStore.addPermission();
+                                permissionStore.getPermissions();
+                                showInsert = false;
+                            }
+                        "
+                        class="my-2 block rounded-lg bg-accent p-2 text-lg text-white disabled:bg-gray-500"
                         >Save Permission</v-button
+                    >
+                </div>
+            </div>
+        </v-dialog>
+        <v-dialog
+            v-model="showUpdate"
+            persistent
+            title="Permission"
+            @close="permissionStore.resetForm()"
+        >
+            <div class="min-w-[800px] p-5">
+                <div class="">
+                    <v-text-field
+                        label="Title"
+                        v-model="form.title"
+                        @keyup="
+                            form.key = form.title
+                                .trim()
+                                .toLowerCase()
+                                .replace(/ /g, '-')
+                        "
+                        prepend-inner-icon="px-subtitles"
+                        clearable
+                    />
+                    <hr class="my-1" width="0%" />
+                    <v-text-field
+                        v-model="form.key"
+                        label="Key"
+                        prepend-inner-icon="bi-filetype-key"
+                        clearable
+                    />
+                    <hr class="my-1" width="0%" />
+                    <v-textarea
+                        rows="5"
+                        v-model="form.description"
+                        label="Description"
+                        clearable
+                    >
+                        <template #prepend-inner>
+                            <v-icon
+                                name="bi-text-paragraph"
+                                class="self-start"
+                            ></v-icon>
+                        </template>
+                    </v-textarea>
+                </div>
+                <div class="ml-auto w-fit">
+                    <v-button
+                        prepend-inner-icon="md-save-round"
+                        outlined
+                        :loading="loading"
+                        @click="
+                            () => {
+                                permissionStore.updatePermission(
+                                    current_permission,
+                                );
+                                permissionStore.getPermissions();
+                                showUpdate = false;
+                            }
+                        "
+                        class="my-2 block rounded-lg bg-accent p-2 text-lg text-white disabled:bg-gray-500"
+                        >Save Permission</v-button
+                    >
+                </div>
+            </div>
+        </v-dialog>
+        <v-dialog
+            v-model="showDelete"
+            persistent
+            title="Permission"
+            @close="permissionStore.resetForm()"
+        >
+            <div class="min-w-[800px] p-5">
+                <div class="">
+                    Are you sure you want to delete
+                    <span class="rounded-lg bg-black px-2 text-white">{{
+                        form.title
+                    }}</span>
+                    Permission?
+                    <br />
+                </div>
+                <span class="mt-9 text-xs"
+                    >Note: Source Code needs to be updated.</span
+                >
+                <div class="mt-11 flex justify-between">
+                    <v-button
+                        class="bg-red-500 text-white"
+                        @click="
+                            () => {
+                                permissionStore.deletePermission(
+                                    current_permission,
+                                );
+                                permissionStore.getPermissions();
+                                showDelete = false;
+                            }
+                        "
+                        >Yes</v-button
+                    >
+                    <v-button
+                        class="bg-green-500 text-white"
+                        @click="
+                            () => {
+                                current_permission = -1;
+                                showDelete = false;
+                                permissionStore.resetForm();
+                            }
+                        "
+                        >No</v-button
                     >
                 </div>
             </div>
@@ -107,18 +290,22 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 
 import { usePermissionStore } from "@/stores/permissionStore";
-
 const permissionStore = usePermissionStore();
-const { permissions, form, loading, errors } = storeToRefs(permissionStore);
+const { isExist, permissions, form, loading, errors } =
+    storeToRefs(permissionStore);
+await permissionStore.getPermissions();
+
 const search = ref("");
 
-const showDialog = ref(false);
+const showInsert = ref(false);
+const showUpdate = ref(false);
+const showDelete = ref(false);
 
-await permissionStore.getPermissions();
+const current_permission = ref(0);
 </script>
 
 <style lang="scss" scoped></style>

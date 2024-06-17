@@ -50,10 +50,10 @@ const handleShowMenu = (parent, child) => {
             childBound.width <
             windowWidth - (windowWidth - parentBound.right)
         ) {
-            child.style.left = `${parentBound.right - childBound.width}px`;
+            child.style.left = `${parentBound.left - parentBound.width / 2}px`;
         }
     } else {
-        child.style.left = parentBound.left + "px";
+        child.style.left = parentBound.left - parentBound.width / 2 + "px";
     }
 
     if (childBound.width < windowWidth - (windowWidth - parentBound.right)) {
@@ -78,12 +78,12 @@ onMounted(() => {
     }
 });
 
-onUnmounted(() => {
-    if (props.activator === "parent") {
-        activator.value.removeEventListener("mouseover", handleShow);
-        activator.value.removeEventListener("mouseleave", handleClose);
-    }
-});
+// onUnmounted(() => {
+//     if (props.activator === "parent") {
+//         activator.value.removeEventListener("mouseover", handleShow);
+//         activator.value.removeEventListener("mouseleave", handleClose);
+//     }
+// });
 </script>
 
 <style lang="scss" scoped></style>

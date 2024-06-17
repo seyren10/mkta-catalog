@@ -34,12 +34,19 @@ class ProductAccessTypeRequest extends FormRequest
     {
         $id = $this->route('product_access_type') ? $this->route('product_access_type')->id : null;
         return [
-                "title" => [
+                "type" => [
                     'required',
                     'string',
                     'min:5',
-                    Rule::unique('categories','title')->ignore($id),
-                ]
+                    Rule::unique('product_access_types','type')->ignore($id),
+                ],
+                "title" => ['required'],
+
+                "ref_type" => ['required'],
+                "ref_table" => ['required'],
+                "ref_column" => ['required'],
+                "source_table" => ['required'],
+                "source_column" => ['required'],
         ];
     }
     public function messages()

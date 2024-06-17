@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import { useAxios } from "@/composables/useAxios";
 import { useRouter } from "vue-router";
@@ -7,31 +7,111 @@ export const usePermissionStore = defineStore("permissions", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
 
-    const current_permission = reactive({
+    const permission = reactive({
         id: 0,
         key: "",
         title: "",
-        desc: "",
+        description: "",
     });
     const permissions = ref([]);
     const form = reactive({
         key: "",
         title: "",
-        desc: "",
+        description: "",
     });
-
-    const isExist = () => {
-        return false;
+    const resetForm = ()=>{
+            form.key = "";
+            form.title = "";
+            form.description = "";
+    }
+    const isExist = computed(() => {
+        if (
+            form.title.trim().length == 0 ||
+            form.key.trim().length == 0 ||
+            form.description.trim().length == 0
+        ) {
+            return true;
+        }
+        return permissions.value.some((element) => {
+            return (
+                element.key.trim().toLowerCase() ==
+                    form.key.trim().toLowerCase() ||
+                element.title.trim().toLowerCase() ==
+                    form.title.trim().toLowerCase()
+            );
+        });
+    });
+    const addPermission = async () => {
+        try {
+            form.key = form.key.trim().toLowerCase();
+            form.title = form.title.trim();
+            form.description = form.description.trim();
+            const res = await exec("/api/permissions", "post", form);
+            form = {
+                key: "",
+                title: "",
+                description: "",
+            };
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const updatePermission = async (id) => {
+        try {
+            const res = await exec(
+                "/api/permissions/" + id,
+                "put", form
+            );
+            form = {
+                key: "",
+                title: "",
+                description: "",
+            };
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const deletePermission = async (id) => {
+        try {
+            const res = await exec(
+                "/api/permissions/" + id,
+                "delete",
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const getPermission = async () => {
+        try {
+            const res = await exec("/api/permissions/" + permission.id);
+            permissions.value = res.data.data;
+        } catch (e) {
+            console.log(e);
+        }
     };
     const getPermissions = async () => {
         try {
             const res = await exec("/api/permissions");
-            console.log(res.data.data);
             permissions.value = res.data.data;
         } catch (e) {
             console.log(e);
         }
     };
 
-    return { getPermissions, permissions, loading, errors, form, exec };
+    return {
+        resetForm,
+        addPermission,
+        updatePermission,
+        deletePermission,
+        getPermission,
+        getPermissions,
+
+        isExist,
+        permission,
+        permissions,
+        loading,
+        errors,
+        form,
+        exec,
+    };
 });

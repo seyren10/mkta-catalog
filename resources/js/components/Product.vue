@@ -4,6 +4,7 @@
             v-bind="$attrs"
             :class="`aspect-square cursor-pointer rounded-none`"
             :image="item.image"
+            @click="$router.push({ name: 'product', params: { id: item.id } })"
         >
             <template #overlay="overlayProps">
                 <slot name="overlay" :item="item">
@@ -77,7 +78,10 @@ defineOptions({
 });
 
 const props = defineProps({
-    item: Object,
+    item: {
+        type: Object,
+        default: {},
+    },
 });
 </script>
 

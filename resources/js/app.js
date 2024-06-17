@@ -23,6 +23,9 @@ import VAccordion from "./components/VAccordion.vue";
 import VCard from "./components/VCard.vue";
 import VTextOnImage from "./components/VTextOnImage.vue";
 import VHorizontalScroller from "./components/VHorizontalScroller.vue";
+import VCheckbox from "./components/VCheckbox.vue";
+import VTab from "./components/VTab.vue";
+import VSheet from "./components/VSheet.vue";
 
 //custom directives
 import intersect from "@/directives/intersectionObserver.js";
@@ -56,6 +59,9 @@ app.component("v-data-table", VDataTable);
 app.component("v-card", VCard);
 app.component("v-text-on-image", VTextOnImage);
 app.component("v-horizontal-scroller", VHorizontalScroller);
+app.component("v-checkbox", VCheckbox);
+app.component("v-tab", VTab);
+app.component("v-sheet", VSheet);
 
 //directives
 app.directive("intersect", intersect);
