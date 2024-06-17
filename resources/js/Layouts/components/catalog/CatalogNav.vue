@@ -177,7 +177,6 @@ const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
 
 //injects
-const user = inject("user");
 
 //non-reactives
 const headerData = [

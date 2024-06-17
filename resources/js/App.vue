@@ -16,7 +16,6 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { provide } from "vue";
-import { RouterView } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useProductStore } from "./stores/productStore";
@@ -29,7 +28,6 @@ const router = useRouter()
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 
-provide("user", user);
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
 provide("router", router)

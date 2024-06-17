@@ -50,20 +50,19 @@
             :items="product_items"
             :search="search"
         >
-            <template #item.fuck="{ item }">
-                <div>FUCK</div>
-            </template>
             <template #item.content="{ item }">
                 <div class="grid w-full grid-cols-10 gap-x-2">
                     <div class="col-span-10 md:col-span-2">
-                        <div class="flex flex-col justify-center">
+                        <div class="grid justify-items-center ">
                             <v-text-on-image
-                                class="h-[150px] max-h-[150px] max-w-[150px] border"
+                                class="h-[150px] max-h-[150px] max-w-[150px] w-[150px] border"
                                 title="Thumbnail"
                                 :noOverlay="true"
                                 :image="'/fuck'"
                             />
-                            <span class="w-full text-center">{{ item.raw.id }}</span>
+                            <div>
+                                <span class="text-center">{{ item.raw.id }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-span-4 md:col-span-6">
