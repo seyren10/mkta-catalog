@@ -46,14 +46,12 @@
 <script setup>
 import { computed, nextTick, provide, ref } from "vue";
 
+//definitions
 const props = defineProps({
     clearable: Boolean,
     items: Array,
     appendable: Boolean,
-    modelValue: {
-        type: Object,
-        default: [],
-    },
+
 });
 
 // const props.modelValue = defineModel('props.modelValue', { default: [], required : false });
@@ -86,6 +84,8 @@ const searchSuggestions = computed(() => {
         return e.value.toLowerCase().includes(input.value.toLowerCase());
     });
 });
+
+
 
 //methods
 const handleAddItem = () => {
