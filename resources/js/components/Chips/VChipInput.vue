@@ -1,39 +1,65 @@
 <template>
-    <v-chip-group :items="collection" @delete="handleRemoveItem">
+    <v-chip-group
+        :items="collection"
+        @delete="handleRemoveItem"
+        @click="handleFocusOnInput"
+        ref="parentElement"
+    >
         <template #append>
-            <div class="relative grow">
-                <input
-                    type="text"
-                    class="w-full outline-none"
-                    @keydown.enter="handleAddItem"
-                    v-model="input"
-                    @focus="isInputFocus = true"
-                    @blur="handleInputBlur"
-                    ref="el"
-                />
-                <!-- #region overlay -->
-                <div
-                    v-if="isInputFocus"
-                    class="absolute inset-x-0 top-[120%] z-[1000] overflow-hidden rounded-lg bg-white shadow-lg"
-                >
-                    <ul class="grid gap-2">
-                        <li
-                            v-for="item in searchSuggestions"
-                            @click="handleAddSuggestion(item)"
-                            class="cursor-pointer p-2 hover:bg-slate-200"
-                        >
-                            {{ item.value }}
-                        </li>
-                    </ul>
-                </div>
-                <!-- #endregion -->
-            </div>
+            <input
+                type="text"
+                class="grow outline-none"
+                @keydown.enter="handleAddItem"
+                v-model="input"
+                @focus="handleInputFocus"
+                @blur="handleInputBlur"
+                ref="inputElement"
+                @keydown="handleOverlayKeydown"
+                @input="overlayIndex = 0"
+            />
         </template>
     </v-chip-group>
+
+    <!-- #region overlay -->
+    <Teleport to="#overlay" v-if="isInputFocus">
+        <div
+            class="fixed z-[2000] overflow-hidden rounded-lg bg-white shadow-lg"
+            ref="overlayElement"
+            @mouseover="
+                () => {
+                    isInsideOverlay = true;
+                    overlayIndex = null;
+                }
+            "
+            @mouseleave="
+                () => {
+                    isInsideOverlay = false;
+                    overlayIndex = 0;
+                }
+            "
+        >
+            <ul class="grid">
+                <li
+                    v-for="(item, index) in searchSuggestions"
+                    :key="index"
+                    @click="handleAddSuggestion(item)"
+                    class="cursor-pointer p-3 duration-300 hover:bg-slate-200"
+                    :class="{ 'bg-slate-200': overlayIndex === index }"
+                >
+                    {{ item.value }}
+                </li>
+                <li class="p-3" v-if="!searchSuggestions.length">
+                    No Data Available
+                </li>
+            </ul>
+        </div>
+    </Teleport>
+
+    <!-- #endregion -->
 </template>
 
 <script setup>
-import { computed, nextTick, provide, ref } from "vue";
+import { computed, nextTick, provide, ref, watch } from "vue";
 
 const props = defineProps({
     clearable: Boolean,
@@ -41,15 +67,28 @@ const props = defineProps({
     appendable: Boolean,
 });
 
+const emits = defineEmits(["remove", "add"]);
+
 const collection = ref([]);
 const input = ref("");
-const el = ref(null);
 const isInputFocus = ref(false);
 const excludedSuggestions = ref([]);
+const isInsideOverlay = ref(false);
+const model = defineModel();
+
+const inputElement = ref(null);
+const parentElement = ref(null);
+const overlayElement = ref(null);
+const overlayIndex = ref(0);
 
 //provide
 provide("clearable", props.clearable);
 
+//watchers
+watch(collection.value, (newValue) => {
+    console.log('yes')
+    model.value = newValue;
+});
 //derives
 const excludedSuggestionsComputed = computed(() => {
     if (!excludedSuggestions.value.length) return props.items;
@@ -67,13 +106,26 @@ const searchSuggestions = computed(() => {
     });
 });
 
-//methods
+// #region methods
 const handleAddItem = () => {
-    collection.value.push({ id: Math.random(), value: input.value });
+    const item = searchSuggestions.value.at(overlayIndex.value) || {
+        id: Math.random(),
+        value: input.value,
+    };
+    if (!props.appendable && !item) {
+        return;
+    }
+
+    handleAddSuggestion(item);
+    emits("add", item);
+
     input.value = "";
 };
 
 const handleRemoveItem = (item) => {
+    if (!props.clearable) return;
+
+    emits("remove", item);
     const removeItem = collection.value.findIndex((e) => +e.id === +item.id);
     collection.value.splice(removeItem, 1);
 
@@ -85,11 +137,60 @@ const handleRemoveItem = (item) => {
 const handleAddSuggestion = (item) => {
     collection.value.push(item);
     excludedSuggestions.value.push(item);
+
+    handleFocusOnInput();
 };
+
+const positionOverlay = () => {
+    const parentRect =
+        parentElement.value.chipgroupElement.getBoundingClientRect();
+
+    overlayElement.value.style.top = parentRect.top + parentRect.height + "px";
+    overlayElement.value.style.left = parentRect.left + "px";
+    overlayElement.value.style.width = parentRect.width + "px";
+};
+
+const handleOverlayKeydown = (event) => {
+    if (event.code === "ArrowUp") {
+        if (overlayIndex.value > 0) {
+            overlayIndex.value -= 1;
+        } else
+            overlayIndex.value = excludedSuggestionsComputed.value.length - 1;
+    } else if (event.code === "ArrowDown") {
+        if (overlayIndex.value < excludedSuggestionsComputed.value.length - 1)
+            overlayIndex.value += 1;
+        else overlayIndex.value = 0;
+    } else if (event.code === "Backspace") {
+        if (!input.value.length) {
+            const item = collection.value.at(collection.value.length - 1);
+            handleRemoveItem(item);
+        }
+    }
+};
+
+const handleInputFocus = async () => {
+    isInputFocus.value = true;
+
+    await nextTick();
+
+    positionOverlay();
+
+    window.addEventListener("scroll", positionOverlay);
+    window.addEventListener("resize", positionOverlay);
+};
+
 const handleInputBlur = () => {
-    setTimeout(() => {
+    if (!isInsideOverlay.value) {
         isInputFocus.value = false;
-    }, 100);
+        isInsideOverlay.value = false;
+    }
+
+    window.removeEventListener("scroll", positionOverlay);
+    window.removeEventListener("resize", positionOverlay);
+};
+
+const handleFocusOnInput = () => {
+    inputElement.value.focus();
 };
 </script>
 
