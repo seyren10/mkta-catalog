@@ -1,11 +1,18 @@
 <template>
-    <v-chip-group :items="model" @delete="handleRemoveItem">
+    {{ collections }}
+    <v-chip-group :items="collections" @delete="handleRemoveItem">
         <template #append>
             <div class="relative grow">
                 <input
                     type="text"
                     class="w-full outline-none"
                     @keydown.enter="handleAddItem"
+                    @keydown="
+                        (e) => {
+                            if (e.key === 'Backspace' && input === '') {
+                            }
+                        }
+                    "
                     v-model="input"
                     @focus="isInputFocus = true"
                     @blur="handleInputBlur"
@@ -39,10 +46,14 @@ const props = defineProps({
     clearable: Boolean,
     items: Array,
     appendable: Boolean,
+    modelValue: {
+        type: Object,
+        default: [],
+    },
 });
 
-const emits = defineEmits(["remove", "add"]);
-
+// const props.modelValue = defineModel('props.modelValue', { default: [], required : false });
+const collections = ref(props.modelValue);
 const input = ref("");
 const el = ref(null);
 const isInputFocus = ref(false);
@@ -51,10 +62,7 @@ const model = defineModel({ default: [] });
 const collection = ref([]);
 const excludedSuggestions = ref([]);
 
-const inputElement = ref(null);
-const parentElement = ref(null);
-const overlayElement = ref(null);
-const overlayIndex = ref(0);
+const emit = defineEmits(["removeItem", "appendItem"]);
 
 //provide
 provide("clearable", props.clearable);
@@ -83,21 +91,27 @@ const searchSuggestions = computed(() => {
 
 //methods
 const handleAddItem = () => {
-    collection.value.push({ id: Math.random(), value: input.value });
-    input.value = "";
+    if (props.appendable) {
+        collections.value.push({ id: Math.random(), value: input.value });
+        // props.modelValue.value.push({ id: Math.random(), value: input.value });
+        input.value = "";
+    }
 };
 
 const handleRemoveItem = (item) => {
-    const removeItem = collection.value.findIndex((e) => +e.id === +item.id);
-    collection.value.splice(removeItem, 1);
+    emit("removeItem", item);
 
+    const removeItem = props.modelValue.findIndex((e) => +e.id === +item.id);
+    // props.modelValue.splice(removeItem, 1);
+    collections.value.splice(removeItem, 1);
     excludedSuggestions.value = excludedSuggestions.value.filter(
         (e) => +e.id !== +item.id,
     );
 };
 
 const handleAddSuggestion = (item) => {
-    collection.value.push(item);
+    collections.value.push(item);
+    // props.modelValue.push(item);
     excludedSuggestions.value.push(item);
 };
 const handleInputBlur = () => {

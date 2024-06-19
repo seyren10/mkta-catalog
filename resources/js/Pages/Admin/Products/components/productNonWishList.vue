@@ -6,9 +6,12 @@
         </h2>
         <div class="text-gray-700">
             <v-chip-input
+                @removeItem="(data)=>{ console.log(data) }"
+                @appendItem="(data)=>{ console.log(data) }"
                 clearable
-                v-model="NonWishListCustomers"
+                :appendable="false"
                 :items="myCustomers"
+                v-model="NonWishListCustomers"
             />
         </div>
         <pre>{{ myCustomers }}</pre>
