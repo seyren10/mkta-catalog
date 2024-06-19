@@ -1,6 +1,7 @@
 <template>
     <div
         class="relative flex flex-wrap items-center gap-3 rounded-lg border p-3"
+        ref="chipgroupElement"
     >
         <TransitionGroup
             enter-active-class="duration-300"
@@ -46,6 +47,12 @@ defineEmits(["delete"]);
 const append = ref(null);
 const clearable = inject("clearable", false);
 
+const chipgroupElement = ref(null);
+
+//expose
+defineExpose({
+    chipgroupElement,
+});
 //derived
 const isItemObject = computed(() => {
     if (!props.items) return false;
