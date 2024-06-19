@@ -118,7 +118,6 @@ const handleAddItem = () => {
 
 const handleRemoveItem = (item) => {
     if (!props.clearable) return;
-
     emits("remove", item);
     const removeItem = model.value.findIndex((e) => +e.id === +item.id);
     model.value.splice(removeItem, 1);
@@ -186,6 +185,19 @@ const handleInputBlur = () => {
 const handleFocusOnInput = () => {
     inputElement.value.focus();
 };
+//endregion methods
+
+//hooks
+// onMounted(() => {
+//     if (overlayElement.value)
+//         window.addEventListener("scroll", positionOverlay);
+//     window.addEventListener("resize", positionOverlay);
+// });
+
+// onBeforeUnmount(() => {
+//     window.removeEventListener("scroll", positionOverlay);
+//     window.removeEventListener("resize", positionOverlay);
+// });
 </script>
 
 <style lang="scss" scoped></style>

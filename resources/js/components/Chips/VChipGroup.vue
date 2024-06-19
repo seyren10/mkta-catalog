@@ -4,8 +4,8 @@
         ref="chipgroupElement"
     >
         <TransitionGroup
-            enter-active-class="duration-200"
-            leave-active-class="duration-200"
+            enter-active-class="duration-300"
+            leave-active-class="duration-300"
             enter-from-class="opacity-0"
             leave-to-class="opacity-0"
         >
