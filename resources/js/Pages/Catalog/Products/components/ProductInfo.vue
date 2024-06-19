@@ -19,7 +19,7 @@
                 <v-tooltip activator="parent">Add to wishlist</v-tooltip>
             </div>
 
-            <v-dialog v-model="contact" max-width="600" persistent>
+            <v-dialog v-model="contact" max-width="700" persistent>
                 <template #header="props">
                     <div class="flex justify-between p-5">
                         <VIconWrapper prepend-icon="ri-customer-service-2-line"
@@ -43,7 +43,10 @@
                     >
                 </template>
 
-                <ContactSales class="p-5"></ContactSales>
+                <ContactSales
+                    class="p-5"
+                    :items="[product]"
+                ></ContactSales>
             </v-dialog>
         </div>
         <v-tab

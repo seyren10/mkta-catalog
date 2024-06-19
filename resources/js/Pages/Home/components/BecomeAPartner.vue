@@ -12,30 +12,11 @@
                     accusantium.
                 </p>
 
-                <v-text-icon :items="infoList" class="my-5 grid " />
+                <v-text-icon :items="infoList" class="my-5 grid" />
 
-                <div class="mx-auto h-[20rem] overflow-hidden rounded-lg">
-                    <LMap
-                        :useGlobalLeaflet="false"
-                        v-model:zoom="zoom"
-                        :center="location"
-                    >
-                        <LTileLayer
-                            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-                            :min-zoom="8"
-                        ></LTileLayer>
-
-                        <LMarker
-                            :lat-lng="location"
-                            ref="marker"
-                            @ready="ready"
-                        >
-                            <LPopup class="font-sans text-accent">
-                                MK Themed Attractions Phils.
-                            </LPopup>
-                        </LMarker>
-                    </LMap>
-                </div>
+                <MKMap
+                    class="mx-auto h-[20rem] overflow-hidden rounded-lg"
+                ></MKMap>
             </div>
 
             <div class="space-y-3">
@@ -79,16 +60,13 @@
 </template>
 
 <script setup>
-import "leaflet/dist/leaflet.css";
 import { computed, ref } from "vue";
-import { LMap, LTileLayer, LMarker, LPopup } from "@vue-leaflet/vue-leaflet";
+
+import MKMap from "@/components/MKMap.vue";
 
 const email = ref("");
 const region = ref("as");
 const company = ref("");
-const zoom = ref(18);
-const marker = ref(null);
-const location = ref([15.171049271462008, 120.61120805583381]);
 
 const regions = computed(() => {
     return [
@@ -112,12 +90,6 @@ const infoList = computed(() => {
         },
     ];
 });
-
-const ready = () => {
-    setTimeout(() => {
-        marker.value.leafletObject.openPopup();
-    }, 200);
-};
 </script>
 
 <style scoped></style>

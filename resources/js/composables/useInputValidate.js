@@ -3,8 +3,11 @@ import { ref } from "vue";
 const runRequired = (input) => input.trim() !== "";
 
 const runEmail = (input) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(input);
+    return String(input)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        );
 };
 
 export const useInputValidate = (validatorTypes, customErrorMessages) => {
@@ -24,7 +27,7 @@ export const useInputValidate = (validatorTypes, customErrorMessages) => {
                 return true;
             }
             case "email": {
-                if (runEmail(input)) {
+                if (!runEmail(input)) {
                     errorMessage.value =
                         customErrorMessages["email"] ||
                         "Enter a valid email address";
@@ -33,6 +36,26 @@ export const useInputValidate = (validatorTypes, customErrorMessages) => {
                 return true;
             }
         }
+
+        const [prefix, affix] = validator.split(":");
+
+        if (prefix && affix) {
+            if (prefix.toLowerCase() === "max" && input.length > +affix) {
+                errorMessage.value =
+                    customErrorMessages["max"] ||
+                    `must be less than or equal to ${affix}`;
+                return false;
+            } else if (
+                prefix.toLowerCase() === "min" &&
+                input.length < +affix
+            ) {
+                errorMessage.value =
+                    customErrorMessages["max"] ||
+                    `must be greater than or equal to ${affix}`;
+                return false;
+            }
+        }
+        return true;
     };
 
     const validateInput = (input) => {

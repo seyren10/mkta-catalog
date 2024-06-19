@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center">
+    <div :class="`flex items-center ${wrapperClass}`">
         <div class="mr-1">
             <v-icon v-if="prependIcon" :name="prependIcon" scale="1.3"></v-icon>
             <slot name="prepend"></slot>
