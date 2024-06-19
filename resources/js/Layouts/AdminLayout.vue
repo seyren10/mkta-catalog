@@ -133,7 +133,7 @@ const file_management = [
     },
 ];
 //provide/inject
-const user = inject("currentUser");
+const currentUser = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

@@ -6,41 +6,56 @@
         ref="parentElement"
     >
         <template #append>
-            <div class="relative grow">
-                <input
-                    type="text"
-                    class="w-full outline-none"
-                    @keydown.enter="handleAddItem"
-                    @keydown="
-                        (e) => {
-                            if (e.key === 'Backspace' && input === '') {
-                            }
-                        }
-                    "
-                    v-model="input"
-                    @focus="isInputFocus = true"
-                    @blur="handleInputBlur"
-                    ref="el"
-                />
-                <!-- #region overlay -->
-                <div
-                    v-if="isInputFocus"
-                    class="absolute inset-x-0 top-[120%] z-[1000] overflow-hidden rounded-lg bg-white shadow-lg"
-                >
-                    <ul class="grid gap-2">
-                        <li
-                            v-for="item in searchSuggestions"
-                            @click="handleAddSuggestion(item)"
-                            class="cursor-pointer p-2 hover:bg-slate-200"
-                        >
-                            {{ item.value }}
-                        </li>
-                    </ul>
-                </div>
-                <!-- #endregion -->
-            </div>
+            <input
+                type="text"
+                class="grow outline-none"
+                @keydown.enter="handleAddItem"
+                v-model="input"
+                @focus="handleInputFocus"
+                @blur="handleInputBlur"
+                ref="inputElement"
+                @keydown="handleOverlayKeydown"
+                @input="overlayIndex = 0"
+            />
         </template>
     </v-chip-group>
+
+    <!-- #region overlay -->
+    <Teleport to="#overlay" v-if="isInputFocus">
+        <div
+            class="fixed z-[2000] overflow-hidden rounded-lg bg-white shadow-lg"
+            ref="overlayElement"
+            @mouseover="
+                () => {
+                    isInsideOverlay = true;
+                    overlayIndex = null;
+                }
+            "
+            @mouseleave="
+                () => {
+                    isInsideOverlay = false;
+                    overlayIndex = 0;
+                }
+            "
+        >
+            <ul class="grid">
+                <li
+                    v-for="(item, index) in searchSuggestions"
+                    :key="index"
+                    @click="handleAddSuggestion(item)"
+                    class="cursor-pointer p-3 duration-300 hover:bg-slate-200"
+                    :class="{ 'bg-slate-200': overlayIndex === index }"
+                >
+                    {{ item.value }}
+                </li>
+                <li class="p-3" v-if="!searchSuggestions.length">
+                    No Data Available
+                </li>
+            </ul>
+        </div>
+    </Teleport>
+
+    <!-- #endregion -->
 </template>
 
 <script setup>
@@ -51,19 +66,20 @@ const props = defineProps({
     clearable: Boolean,
     items: Array,
     appendable: Boolean,
-
 });
 
-// const props.modelValue = defineModel('props.modelValue', { default: [], required : false });
-const collections = ref(props.modelValue);
+const emits = defineEmits(["remove", "add"]);
+
 const input = ref("");
-const el = ref(null);
 const isInputFocus = ref(false);
 const isInsideOverlay = ref(false);
 const model = defineModel({ default: [] });
 const excludedSuggestions = ref(JSON.parse(JSON.stringify(model.value)));
 
-const emit = defineEmits(["removeItem", "appendItem"]);
+const inputElement = ref(null);
+const parentElement = ref(null);
+const overlayElement = ref(null);
+const overlayIndex = ref(0);
 
 //provide
 provide("clearable", props.clearable);
@@ -85,15 +101,20 @@ const searchSuggestions = computed(() => {
     });
 });
 
-
-
-//methods
+// #region methods
 const handleAddItem = () => {
-    if (props.appendable) {
-        collections.value.push({ id: Math.random(), value: input.value });
-        // props.modelValue.value.push({ id: Math.random(), value: input.value });
-        input.value = "";
+    const item = searchSuggestions.value.at(overlayIndex.value) || {
+        id: Math.random(),
+        value: input.value,
+    };
+    if (!props.appendable && !item) {
+        return;
     }
+
+    handleAddSuggestion(item);
+    emits("add", item);
+
+    input.value = "";
 };
 
 const handleRemoveItem = (item) => {
@@ -102,9 +123,6 @@ const handleRemoveItem = (item) => {
     const removeItem = model.value.findIndex((e) => +e.id === +item.id);
     model.value.splice(removeItem, 1);
 
-    const removeItem = props.modelValue.findIndex((e) => +e.id === +item.id);
-    // props.modelValue.splice(removeItem, 1);
-    collections.value.splice(removeItem, 1);
     excludedSuggestions.value = excludedSuggestions.value.filter(
         (e) => +e.id !== +item.id,
     );
@@ -154,11 +172,33 @@ const handleInputFocus = async () => {
     window.addEventListener("scroll", positionOverlay);
     window.addEventListener("resize", positionOverlay);
 };
+
 const handleInputBlur = () => {
-    setTimeout(() => {
+    if (!isInsideOverlay.value) {
         isInputFocus.value = false;
-    }, 100);
+        isInsideOverlay.value = false;
+    }
+
+    window.removeEventListener("scroll", positionOverlay);
+    window.removeEventListener("resize", positionOverlay);
 };
+
+const handleFocusOnInput = () => {
+    inputElement.value.focus();
+};
+//endregion methods
+
+//hooks
+// onMounted(() => {
+//     if (overlayElement.value)
+//         window.addEventListener("scroll", positionOverlay);
+//     window.addEventListener("resize", positionOverlay);
+// });
+
+// onBeforeUnmount(() => {
+//     window.removeEventListener("scroll", positionOverlay);
+//     window.removeEventListener("resize", positionOverlay);
+// });
 </script>
 
 <style lang="scss" scoped></style>
