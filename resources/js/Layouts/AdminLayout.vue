@@ -68,7 +68,7 @@ const items = [
 ];
 
 //provide/inject
-const user = inject("user");
+const user = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

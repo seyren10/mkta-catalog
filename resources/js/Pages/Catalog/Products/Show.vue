@@ -66,7 +66,10 @@ onUpdated(() => {});
 
 //provides
 provide("productImages", productImages);
-provide("id", props.id);
+provide(
+    "id",
+    computed(() => props.id),
+);
 provide("currentImageIndex", currentImageIndex);
 provide("lightbox", lightbox);
 provide("product", product);

@@ -6,7 +6,7 @@
         <img
             src="/Logo.svg"
             alt=""
-            class="h-full w-full object-cover duration-300 group-hover/toi:scale-105 bg-primary"
+            class="h-full w-full bg-primary object-cover duration-300 group-hover/toi:scale-105"
         />
 
         <slot
@@ -62,6 +62,9 @@ const props = defineProps({
 //methods
 const handleIntersect = (entry) => {
     entry.target.firstChild.setAttribute("src", props.image);
+
+    if (!props.image) {
+    }
 };
 </script>
 

@@ -35,14 +35,19 @@
                 class="order-1 mb-0.5 text-sm duration-300 peer-has-[:focus]:text-accent"
                 >{{ label }}</label
             >
-            <div class="order-3 ml-2 min-h-5" v-if="hint">
-                <div
-                    class="text-[.75rem] text-slate-400"
-                    v-if="isFocused || persistentHint"
-                >
-                    {{ hint }}
+            <slot
+                name="message"
+                class="order-3 ml-2 min-h-5 text-[.75rem] text-slate-400"
+            >
+                <div class="order-3 ml-2 min-h-5" v-if="hint">
+                    <div
+                        class="text-[.75rem] text-slate-400"
+                        v-if="isFocused || persistentHint"
+                    >
+                        {{ hint }}
+                    </div>
                 </div>
-            </div>
+            </slot>
         </div>
 
         <div class="ml-1">

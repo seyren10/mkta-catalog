@@ -26,6 +26,9 @@ import VHorizontalScroller from "./components/VHorizontalScroller.vue";
 import VCheckbox from "./components/VCheckbox.vue";
 import VTab from "./components/VTab.vue";
 import VSheet from "./components/VSheet.vue";
+import VChipInput from "./components/Chips/VChipInput.vue";
+import VChipGroup from "./components/Chips/VChipGroup.vue";
+import VChip from "./components/Chips/VChip.vue";
 
 //custom directives
 import intersect from "@/directives/intersectionObserver.js";
@@ -62,6 +65,9 @@ app.component("v-horizontal-scroller", VHorizontalScroller);
 app.component("v-checkbox", VCheckbox);
 app.component("v-tab", VTab);
 app.component("v-sheet", VSheet);
+app.component("v-chip-input", VChipInput);
+app.component("v-chip-group", VChipGroup);
+app.component("v-chip", VChip);
 
 //directives
 app.directive("intersect", intersect);

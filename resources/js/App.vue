@@ -27,7 +27,7 @@ const { user } = storeToRefs(userStore);
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 
-provide("user", user);
+provide("currentUser", user);
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
 </script>

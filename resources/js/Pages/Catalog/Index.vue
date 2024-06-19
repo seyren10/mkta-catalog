@@ -193,7 +193,6 @@ import { useProductStore } from "../../stores/productStore";
 import { useCategoryStore } from "@/stores/categoryStore";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
-import Product from "../../components/Product.vue";
 
 //stores
 const productStore = useProductStore();

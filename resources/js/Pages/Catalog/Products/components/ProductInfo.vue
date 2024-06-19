@@ -18,12 +18,33 @@
                 </v-button>
                 <v-tooltip activator="parent">Add to wishlist</v-tooltip>
             </div>
-            <v-button
-                prepend-inner-icon="ri-customer-service-2-line"
-                icon-size="1"
-                class="border border-accent text-accent"
-                >Contact for Price</v-button
-            >
+
+            <v-dialog v-model="contact" max-width="600" persistent>
+                <template #header="props">
+                    <div class="flex justify-between p-5">
+                        <VIconWrapper prepend-icon="ri-customer-service-2-line"
+                            ><h2 class="font-medium text-primary">
+                                Contact Sales Support
+                            </h2></VIconWrapper
+                        >
+                        <v-button
+                            v-bind="props"
+                            icon="md-close-round"
+                        ></v-button>
+                    </div>
+                </template>
+                <template #activator="props">
+                    <v-button
+                        v-bind="props"
+                        prepend-inner-icon="ri-customer-service-2-line"
+                        icon-size="1"
+                        class="border border-accent text-accent"
+                        >Contact for Price</v-button
+                    >
+                </template>
+
+                <ContactSales class="p-5"></ContactSales>
+            </v-dialog>
         </div>
         <v-tab
             header-class=" !px-0 bg-white border-b pb-2"
@@ -85,13 +106,18 @@
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import { inject, computed, ref } from "vue";
 
+import ContactSales from "@/components/ContactSales.vue";
 import BreadCrumb from "@/components/BreadCrumb.vue";
+import VIconWrapper from "@/components/base_components/VIconWrapper.vue";
 
+//reactives
 const product = inject("product");
 const category = inject("category");
+const contact = ref(false);
 
+//derived
 const breadCrumbData = computed(() => {
     return [
         { path: "/catalog", name: "catalog" },

@@ -1,6 +1,6 @@
 <template>
     <v-chip-group
-        :items="collection"
+        :items="model"
         @delete="handleRemoveItem"
         @click="handleFocusOnInput"
         ref="parentElement"
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, provide, ref, watch } from "vue";
+import { computed, nextTick, provide, ref } from "vue";
 
 const props = defineProps({
     clearable: Boolean,
@@ -73,8 +73,7 @@ const input = ref("");
 const isInputFocus = ref(false);
 const isInsideOverlay = ref(false);
 const model = defineModel({ default: [] });
-const collection = ref([]);
-const excludedSuggestions = ref([]);
+const excludedSuggestions = ref(JSON.parse(JSON.stringify(model.value)));
 
 const inputElement = ref(null);
 const parentElement = ref(null);
@@ -84,11 +83,6 @@ const overlayIndex = ref(0);
 //provide
 provide("clearable", props.clearable);
 
-//watchers
-watch(collection.value, (newValue) => {
-    // console.log(newValue);
-    // model.value = newValue;
-});
 //derives
 const excludedSuggestionsComputed = computed(() => {
     if (!excludedSuggestions.value.length) return props.items;
@@ -126,8 +120,8 @@ const handleRemoveItem = (item) => {
     if (!props.clearable) return;
 
     emits("remove", item);
-    const removeItem = collection.value.findIndex((e) => +e.id === +item.id);
-    collection.value.splice(removeItem, 1);
+    const removeItem = model.value.findIndex((e) => +e.id === +item.id);
+    model.value.splice(removeItem, 1);
 
     excludedSuggestions.value = excludedSuggestions.value.filter(
         (e) => +e.id !== +item.id,
@@ -135,7 +129,7 @@ const handleRemoveItem = (item) => {
 };
 
 const handleAddSuggestion = (item) => {
-    collection.value.push(item);
+    model.value.push(item);
     excludedSuggestions.value.push(item);
 
     handleFocusOnInput();
@@ -162,7 +156,7 @@ const handleOverlayKeydown = (event) => {
         else overlayIndex.value = 0;
     } else if (event.code === "Backspace") {
         if (!input.value.length) {
-            const item = collection.value.at(collection.value.length - 1);
+            const item = model.value.at(model.value.length - 1);
             handleRemoveItem(item);
         }
     }
