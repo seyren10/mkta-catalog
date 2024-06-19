@@ -1,6 +1,10 @@
 <template>
-    {{ collections }}
-    <v-chip-group :items="collections" @delete="handleRemoveItem">
+    <v-chip-group
+        :items="model"
+        @delete="handleRemoveItem"
+        @click="handleFocusOnInput"
+        ref="parentElement"
+    >
         <template #append>
             <div class="relative grow">
                 <input
@@ -59,19 +63,13 @@ const el = ref(null);
 const isInputFocus = ref(false);
 const isInsideOverlay = ref(false);
 const model = defineModel({ default: [] });
-const collection = ref([]);
-const excludedSuggestions = ref([]);
+const excludedSuggestions = ref(JSON.parse(JSON.stringify(model.value)));
 
 const emit = defineEmits(["removeItem", "appendItem"]);
 
 //provide
 provide("clearable", props.clearable);
 
-//watchers
-watch(collection.value, (newValue) => {
-    // console.log(newValue);
-    // model.value = newValue;
-});
 //derives
 const excludedSuggestionsComputed = computed(() => {
     if (!excludedSuggestions.value.length) return props.items;
@@ -99,7 +97,10 @@ const handleAddItem = () => {
 };
 
 const handleRemoveItem = (item) => {
-    emit("removeItem", item);
+    if (!props.clearable) return;
+    emits("remove", item);
+    const removeItem = model.value.findIndex((e) => +e.id === +item.id);
+    model.value.splice(removeItem, 1);
 
     const removeItem = props.modelValue.findIndex((e) => +e.id === +item.id);
     // props.modelValue.splice(removeItem, 1);
@@ -110,9 +111,48 @@ const handleRemoveItem = (item) => {
 };
 
 const handleAddSuggestion = (item) => {
-    collections.value.push(item);
-    // props.modelValue.push(item);
+    model.value.push(item);
     excludedSuggestions.value.push(item);
+
+    handleFocusOnInput();
+};
+
+const positionOverlay = () => {
+    const parentRect =
+        parentElement.value.chipgroupElement.getBoundingClientRect();
+
+    overlayElement.value.style.top = parentRect.top + parentRect.height + "px";
+    overlayElement.value.style.left = parentRect.left + "px";
+    overlayElement.value.style.width = parentRect.width + "px";
+};
+
+const handleOverlayKeydown = (event) => {
+    if (event.code === "ArrowUp") {
+        if (overlayIndex.value > 0) {
+            overlayIndex.value -= 1;
+        } else
+            overlayIndex.value = excludedSuggestionsComputed.value.length - 1;
+    } else if (event.code === "ArrowDown") {
+        if (overlayIndex.value < excludedSuggestionsComputed.value.length - 1)
+            overlayIndex.value += 1;
+        else overlayIndex.value = 0;
+    } else if (event.code === "Backspace") {
+        if (!input.value.length) {
+            const item = model.value.at(model.value.length - 1);
+            handleRemoveItem(item);
+        }
+    }
+};
+
+const handleInputFocus = async () => {
+    isInputFocus.value = true;
+
+    await nextTick();
+
+    positionOverlay();
+
+    window.addEventListener("scroll", positionOverlay);
+    window.addEventListener("resize", positionOverlay);
 };
 const handleInputBlur = () => {
     setTimeout(() => {

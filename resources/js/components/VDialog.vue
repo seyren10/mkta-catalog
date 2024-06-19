@@ -1,6 +1,9 @@
 <template>
     <div>
-        <slot name="activator"></slot>
+        <slot
+            name="activator"
+            @click="$emit('update:modelValue', !modelValue)"
+        ></slot>
 
         <template v-if="!$slots.activator"> </template>
 
@@ -10,7 +13,10 @@
                 @close="$emit('update:modelValue', false), $emit('close')"
             >
                 <template #header v-if="$slots.header">
-                    <slot name="header"></slot>
+                    <slot
+                        name="header"
+                        @click="$emit('update:modelValue', !modelValue)"
+                    ></slot>
                 </template>
                 <slot></slot
             ></VDialogContent>

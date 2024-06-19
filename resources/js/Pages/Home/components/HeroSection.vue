@@ -90,7 +90,7 @@ const circleImageData = computed(() => {
 });
 
 //provide/inject
-const user = inject("user");
+const user = inject("currentUser");
 </script>
 
 <style scoped></style>

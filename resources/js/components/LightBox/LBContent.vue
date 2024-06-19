@@ -23,7 +23,7 @@
             </div>
         </div>
         <div
-            class="group relative mx-auto w-[80%] overflow-hidden rounded-lg border-2 border-white"
+            class="group relative mx-auto w-[50%] overflow-hidden rounded-lg border-2 border-white"
         >
             <img
                 :src="items[selectedImageIndex]"

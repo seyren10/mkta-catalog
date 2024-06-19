@@ -8,7 +8,7 @@
             ></v-icon>
         </slot>
 
-        <div v-bind="$attrs" class="grow flex items-center">
+        <div v-bind="$attrs" class="flex grow items-center">
             <slot name="prepend-inner">
                 <v-icon
                     :scale="iconSize"

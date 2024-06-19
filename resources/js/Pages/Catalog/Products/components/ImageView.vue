@@ -25,10 +25,11 @@
             <template #default="{ item }">
                 <v-text-on-image
                     :image="item"
-                    no-overlay
                     class="aspect-square cursor-zoom-in"
                     @click="lightbox = true"
-                ></v-text-on-image>
+                    no-overlay
+                >
+                </v-text-on-image>
             </template>
         </v-horizontal-scroller>
     </div>

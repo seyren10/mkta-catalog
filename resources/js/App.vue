@@ -28,6 +28,7 @@ const router = useRouter()
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 
+provide("currentUser", user);
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
 provide("router", router)
