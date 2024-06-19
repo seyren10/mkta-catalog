@@ -69,12 +69,19 @@ const props = defineProps({
 
 const emits = defineEmits(["remove", "add"]);
 
-const collection = ref([]);
 const input = ref("");
 const isInputFocus = ref(false);
+const isInsideOverlay = ref(false);
+const model = defineModel({ default: [] });
+const collection = ref([]);
 const excludedSuggestions = ref([]);
 const isInsideOverlay = ref(false);
 const model = defineModel();
+
+const inputElement = ref(null);
+const parentElement = ref(null);
+const overlayElement = ref(null);
+const overlayIndex = ref(0);
 
 const inputElement = ref(null);
 const parentElement = ref(null);
@@ -86,8 +93,8 @@ provide("clearable", props.clearable);
 
 //watchers
 watch(collection.value, (newValue) => {
-    console.log('yes')
-    model.value = newValue;
+    // console.log(newValue);
+    // model.value = newValue;
 });
 //derives
 const excludedSuggestionsComputed = computed(() => {
