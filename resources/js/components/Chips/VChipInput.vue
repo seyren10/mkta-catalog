@@ -59,14 +59,7 @@
 </template>
 
 <script setup>
-import {
-    computed,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    provide,
-    ref,
-} from "vue";
+import { computed, nextTick, provide, ref, watch } from "vue";
 
 const props = defineProps({
     clearable: Boolean,
@@ -81,6 +74,7 @@ const input = ref("");
 const isInputFocus = ref(false);
 const excludedSuggestions = ref([]);
 const isInsideOverlay = ref(false);
+const model = defineModel();
 
 const inputElement = ref(null);
 const parentElement = ref(null);
@@ -90,6 +84,11 @@ const overlayIndex = ref(0);
 //provide
 provide("clearable", props.clearable);
 
+//watchers
+watch(collection.value, (newValue) => {
+    console.log('yes')
+    model.value = newValue;
+});
 //derives
 const excludedSuggestionsComputed = computed(() => {
     if (!excludedSuggestions.value.length) return props.items;
@@ -125,7 +124,6 @@ const handleAddItem = () => {
 
 const handleRemoveItem = (item) => {
     if (!props.clearable) return;
-    
     emits("remove", item);
     const removeItem = collection.value.findIndex((e) => +e.id === +item.id);
     collection.value.splice(removeItem, 1);
