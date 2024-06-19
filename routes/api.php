@@ -23,8 +23,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('current/{product_access_type}', [FileController::class, 'useExampleService']);
+
 Route::put('nonwishlist/{user}/{action}/{product}', NonWishlistController::class);
 
+
+Route::apiResource('file', FileController::class)->except(['create', 'edit']);
 Route::apiResource('area-code', AreaCodeController::class)->except(['create', 'edit']);
 Route::apiResource('company-code', CompanyCodeController::class)->except(['create', 'edit']);
 Route::apiResource('roles', RolesController::class)->except(['create', 'edit']);

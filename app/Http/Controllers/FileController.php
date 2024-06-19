@@ -5,22 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductAccessTypeResource;
 use App\Models\File;
 use App\Models\ProductAccessType;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FileController extends Controller
 {
 
-    public static function useExampleService(ProductAccessType $product_access_type){
-        
-        return response()->json(["message" => new ProductAccessTypeResource($product_access_type)],200);
+    public static function useExampleService(ProductAccessType $product_access_type)
+    {
+        return response()->json(["message" => new ProductAccessTypeResource($product_access_type)], 200);
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -36,7 +36,39 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            #region File Upload
+            $curFile = $request->file('image');
+            $fileName = $request->file('image')->getClientOriginalName();
+            $ext = $request->file('image')->getClientOriginalExtension();
+            $type = $request->file('image')->getClientMimeType();
+
+            $file_name = $request->file('image')->getClientOriginalName();
+            $generated_new_name = bin2hex($fileName) . '.' . $ext;
+            $res['message'] = 'File upload success';
+
+            $curFile = self::file_create(
+                $fileName,
+                $fileName . "." . $ext,
+                $type,
+            );
+            $generated_new_name = bin2hex($curFile->id) . "." . $ext;
+            #endregion
+            $curFile = File::create(
+                array(
+                    'title' => $request->title,
+                    'filename' => $request->filename,
+                    'type' => $request->type,
+                    'uploader_id' => $request->user_id,
+                )
+            );
+            DB::commit();
+            return $curFile;
+        } catch (\Throwable $th) {
+            DB::rollback();
+        }
     }
 
     /**
@@ -60,7 +92,11 @@ class FileController extends Controller
      */
     public function update(Request $request, File $file)
     {
-        //
+        foreach ($request as $key => $value) {
+            $file[$key] = $value;
+        }
+        $file->save();
+        return $file;
     }
 
     /**
@@ -68,6 +104,10 @@ class FileController extends Controller
      */
     public function destroy(File $file)
     {
-        //
+        if (file_exists(public_path('storage/' . $file->filename))) {
+            unlink(public_path('storage/' . $file->filename));
+        }
+        $file->delete();
+        return true;
     }
 }

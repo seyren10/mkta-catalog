@@ -12,14 +12,19 @@
                         :isActive="tab.value === model"
                     >
                         <button
-                            class="rounded-lg p-2 px-3 text-slate-400 duration-300 hover:bg-slate-300 hover:text-slate-500"
+                            class="flex items-center rounded-lg p-2 px-3 text-slate-400 duration-300 hover:bg-slate-300 hover:text-slate-500"
                             :class="{
                                 'bg-slate-300 font-medium text-slate-500':
                                     tab.value === model,
                             }"
                             @click="model = tab.value"
                         >
-                            {{ tab.title }}
+                            <v-icon
+                                scale="1.3"
+                                :name="tab.icon"
+                                class="me-2"
+                            ></v-icon>
+                            <span>{{ tab.title }}</span>
                         </button>
                     </slot>
                 </li>

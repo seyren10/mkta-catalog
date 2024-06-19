@@ -488,7 +488,7 @@ export const useProductStore = defineStore("products", () => {
     };
     const updateProductItem = async (id) => {
         try {
-            const res = await exec("/api/product/" + id, "put",  form);
+            const res = await exec("/api/product/" + id, "put", form);
         } catch (e) {
             console.log(e);
         } finally {
@@ -536,6 +536,7 @@ export const useProductStore = defineStore("products", () => {
                 ...requestData,
             });
             product_item.value = res.data.data;
+            form.value = product_item.value;
             form.id = product_item.value.id;
             form.parent_code = product_item.value.parent_code;
             form.title = product_item.value.title;
@@ -548,6 +549,19 @@ export const useProductStore = defineStore("products", () => {
             form.dimension_height = product_item.value.dimension_height;
         } catch (e) {
             console.log(e);
+        }
+    };
+
+    const NonWishlistProduct = async (type, product_id, customer_id) => {
+        try {
+            const res = await exec(
+                ["/api/nonwishlist", customer_id, type, product_id].join("/"),
+                "put"
+            );
+        } catch (e) {
+            console.log(e);
+        } finally {
+            resetForm();
         }
     };
 
@@ -571,5 +585,7 @@ export const useProductStore = defineStore("products", () => {
 
         getProductItem,
         getProductItems,
+
+        NonWishlistProduct,
     };
 });

@@ -89,9 +89,13 @@ import {
     BiCircle,
     BiCartX,
     MdAccounttreeSharp,
+    GiPuzzle,
+    FaPuzzlePiece,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    FaPuzzlePiece,
+    GiPuzzle,
     MdAccounttreeSharp,
     BiCartX,
     BiCircle,

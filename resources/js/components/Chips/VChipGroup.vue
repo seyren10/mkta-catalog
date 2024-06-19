@@ -27,7 +27,6 @@
                 <template #prepend-inner v-if="isItemObject && item.icon">
                     <v-icon :name="item.icon"></v-icon>
                 </template>
-
                 {{ isItemObject ? item.value : item }}</v-chip
             >
         </TransitionGroup>
