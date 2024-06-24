@@ -1,9 +1,48 @@
 <template>
     <v-sheet class="overflow-hidden px-0 py-0">
         <slot name="header" :tabs="tabs">
-            <ul
+            <v-horizontal-scroller
+                :items="tabs"
+                no-indicator
+                :activator="tabActivator"
+                scrim
+                :no-navigation="noNavigation"
+            >
+                <template #items="props">
+                    <div class="bg-slate-200">
+                        <ul
+                            :class="`${props.class}  ${headerClass}`"
+                            class="flex items-center gap-3 px-5 py-3"
+                            ref="tabActivator"
+                        >
+                            <li
+                                v-for="tab in props.items"
+                                :key="tab"
+                                class="max-w-[10rem] shrink-0"
+                            >
+                                <slot
+                                    name="header.tab"
+                                    :tab="tab.value"
+                                    @click="model = tab.value"
+                                    :isActive="tab === model.value"
+                                >
+                                    <button
+                                        class="rounded-lg p-2 px-3 text-slate-400 duration-300 hover:bg-slate-300 hover:text-slate-500"
+                                        :class="`${tab.value === model ? activeClass || 'bg-slate-200 font-medium' : ''}`"
+                                        @click="model = tab.value"
+                                    >
+                                        {{ tab.title }}
+                                    </button>
+                                </slot>
+                            </li>
+                        </ul>
+                    </div>
+                </template>
+            </v-horizontal-scroller>
+            <!-- <ul
                 :class="`flex items-center gap-3 bg-slate-200 px-5 py-3 ${headerClass}`"
             >
+                
                 <li v-for="tab in tabs" :key="tab.value">
                     <slot
                         name="header.tab"
@@ -23,7 +62,7 @@
                         </button>
                     </slot>
                 </li>
-            </ul>
+            </ul> -->
         </slot>
 
         <div class="relative flex">
@@ -52,16 +91,28 @@
 </template>
 
 <script setup>
+import { computed, ref } from "vue";
+
 const props = defineProps({
     tabs: Array,
     headerClass: String,
+    noNavigation: Boolean,
+    activeClass: String,
 });
 
 const model = defineModel();
+const tabActivator = ref(null);
 
 if (!model.value) {
     model.value = props.tabs.at(0).value;
 }
+
+const titlesArray = computed(() => {
+    return props.tabs.reduce((a, c) => {
+        a.push(c.title);
+        return a;
+    }, []);
+});
 </script>
 
 <style lang="scss" scoped></style>

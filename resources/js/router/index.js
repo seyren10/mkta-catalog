@@ -115,7 +115,9 @@ router.beforeEach(async (to, from) => {
     const userStore = useUserStore();
     await userStore.getUser();
 
-    if (to.meta.requiresAuth && !userStore.user) {
+    const user = userStore.user;
+
+    if (to.meta.requiresAuth && !user) {
         return { name: "fallback", query: { type: "unAuthorized" } };
     }
 });

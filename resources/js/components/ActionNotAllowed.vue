@@ -44,7 +44,7 @@ const code = computed(() => {
         case "notFound": {
             return {
                 code: "404",
-                message: ` The page you are looking for might be removed or is temporalily
+                message: ` The page you are looking for might be unavailable or is temporalily
                 removed.`,
             };
         }

@@ -43,13 +43,11 @@
                     >
                 </template>
 
-                <ContactSales
-                    class="p-5"
-                    :items="[product]"
-                ></ContactSales>
+                <ContactSales class="p-5" :items="[product]"></ContactSales>
             </v-dialog>
         </div>
         <v-tab
+            no-navigation
             header-class=" !px-0 bg-white border-b pb-2"
             :tabs="[
                 { title: 'Overview', value: 'basic' },

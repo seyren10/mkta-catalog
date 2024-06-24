@@ -11,7 +11,9 @@ export const useUserStore = defineStore("user", () => {
             const res = await exec("/api/user");
 
             user.value = res.data.data;
-        } catch (err) {}
+        } catch (err) {
+            user.value = null;
+        }
     };
 
     return { user, getUser, loading, errors, exec };

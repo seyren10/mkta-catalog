@@ -23,20 +23,28 @@
                 </div>
             </slot>
 
-            <button
-                @click="next"
-                class="absolute inset-y-0 right-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:right-0"
-                :class="{ 'bg-black bg-opacity-15': scrim }"
-            >
-                <v-icon name="md-keyboardarrowright-round" scale="1.5"></v-icon>
-            </button>
-            <button
-                @click="prev"
-                class="absolute inset-y-0 left-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:left-0"
-                :class="{ 'bg-black bg-opacity-15': scrim }"
-            >
-                <v-icon name="md-keyboardarrowleft-round" scale="1.5"></v-icon>
-            </button>
+            <template v-if="!noNavigation">
+                <button
+                    @click="next"
+                    class="absolute inset-y-0 right-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:right-0"
+                    :class="{ 'bg-black bg-opacity-15': scrim }"
+                >
+                    <v-icon
+                        name="md-keyboardarrowright-round"
+                        scale="1.5"
+                    ></v-icon>
+                </button>
+                <button
+                    @click="prev"
+                    class="absolute inset-y-0 left-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:left-0"
+                    :class="{ 'bg-black bg-opacity-15': scrim }"
+                >
+                    <v-icon
+                        name="md-keyboardarrowleft-round"
+                        scale="1.5"
+                    ></v-icon>
+                </button>
+            </template>
 
             <div
                 v-if="!noIndicator"
@@ -87,6 +95,7 @@ const props = defineProps({
     },
     scrim: Boolean,
     noIndicator: Boolean,
+    noNavigation: Boolean,
     activator: Object,
 });
 
@@ -95,6 +104,7 @@ const model = defineModel();
 //reactives
 const isHovering = ref(false);
 const activator = computed(() => props.activator);
+
 const horizontalScroller = useHorizontalScroller(
     props.autoScroll,
     +props.interval,

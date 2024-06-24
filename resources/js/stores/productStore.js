@@ -385,7 +385,7 @@ export const useProductStore = defineStore("products", () => {
         },
         {
             id: 36,
-            image: "/carousel-test/easter3.jpg",
+            image: "/carousel-test/easte3.jpg",
             details: {
                 description: "Pelican diving into the water to catch fish",
                 dimension: "100cm x 50cm x 25cm",

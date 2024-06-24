@@ -4,12 +4,12 @@
             <slot name="header"></slot>
         </v-sheet>
 
-        <div class="flex gap-5">
-            <div class="max-w-[15rem] text-slate-500">
+        <div class="grid grid-cols-[min-content_,_1fr] gap-5">
+            <div class="min-w-[15rem] text-slate-500">
                 <slot name="aside"></slot>
             </div>
 
-            <v-sheet class="grow">
+            <v-sheet class="overflow-hidden">
                 <slot name="related"></slot>
             </v-sheet>
         </div>

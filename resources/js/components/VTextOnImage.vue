@@ -4,11 +4,11 @@
         v-intersect="handleIntersect"
     >
         <img
-            src="/Logo.svg"
+            src="/213123Logo.svg"
+            ref="imageRef"
             alt=""
             class="h-full w-full bg-primary object-cover duration-300 group-hover/toi:scale-105"
         />
-
         <slot
             name="overlay"
             :title="title"
@@ -47,6 +47,8 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+
 const props = defineProps({
     image: String,
     title: String,
@@ -58,11 +60,16 @@ const props = defineProps({
     noOverlay: Boolean,
     appear: Boolean,
 });
+const imageRef = ref(null);
 
+onMounted(() => {
+    imageRef.value.addEventListener("error", (e) => {
+        e.target.setAttribute("src", "/illustrations/no-photo.jpg");
+    });
+});
 //methods
 const handleIntersect = (entry) => {
     entry.target.firstChild.setAttribute("src", props.image);
-
     if (!props.image) {
     }
 };
