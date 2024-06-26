@@ -15,6 +15,7 @@ class UserServices
 {
     
     public function getRestrictedProducts(User $user){
+        
         $accessTypes = ProductAccessType::get();
         #region Restrictions
         $restrictedProducts = array();

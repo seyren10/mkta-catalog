@@ -9,16 +9,16 @@ class ProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $data =  parent::toArray($request);
-        
+        $data = parent::toArray($request);
+
         #region Wishlist Button
         $data['show_wishlist_button'] = false;
         #endregion
-        
+
         #region Product Categories
         $removeProductCategories = true;
-        if( $request->has('includeProductCategories') ){
-            if($request->includeProductCategories === 'true' || $request->includeProductCategories === true){
+        if ($request->has('includeProductCategories')) {
+            if ($request->includeProductCategories === 'true' || $request->includeProductCategories === true) {
                 $removeProductCategories = false;
             }
         }
@@ -26,10 +26,17 @@ class ProductResource extends JsonResource
             unset($data['product_categories']);
         }
         #endregion
+        #region Product Categories
+        if ($request->has('includeProductCategoryKeys')) {
+            if ($request->includeProductCategoryKeys === 'true' || $request->includeProductCategoryKeys === true) {
+                $data['product_category_keys'] = (collect($data['product_categories']))->pluck('id');
+            }
+        }
+        #endregion
         #region Product Components
         $removeProductComponents = true;
-        if( $request->has('includeProductComponents') ){
-            if($request->includeProductComponents === 'true' || $request->includeProductComponents === true){
+        if ($request->has('includeProductComponents')) {
+            if ($request->includeProductComponents === 'true' || $request->includeProductComponents === true) {
                 $removeProductComponents = false;
             }
         }
@@ -39,8 +46,8 @@ class ProductResource extends JsonResource
         #endregion
         #region Non-Wishlist Users
         $removeNonWishlistUsers = true;
-        if( $request->has('includeNonWishlistUser') ){
-            if($request->includeNonWishlistUser === 'true' || $request->includeNonWishlistUser === true){
+        if ($request->has('includeNonWishlistUser')) {
+            if ($request->includeNonWishlistUser === 'true' || $request->includeNonWishlistUser === true) {
                 $removeNonWishlistUsers = false;
             }
         }
@@ -50,19 +57,19 @@ class ProductResource extends JsonResource
         #endregion
         #region Product Images
         $removeProductImages = true;
-        if( $request->has('includeProductImages') ){
-            if($request->includeProductImages === 'true' || $request->includeProductImages === true){
+        if ($request->has('includeProductImages')) {
+            if ($request->includeProductImages === 'true' || $request->includeProductImages === true) {
                 $removeProductImages = false;
             }
         }
         if ($removeProductImages) {
             unset($data['product_images']);
         }
-        #endregion        
+        #endregion
         #region Product Dimensions
         $removeProductDimensions = true;
-        if( $request->has('includeProductDimensions') ){
-            if($request->includeProductDimensions === 'true' || $request->includeProductDimensions === true){
+        if ($request->has('includeProductDimensions')) {
+            if ($request->includeProductDimensions === 'true' || $request->includeProductDimensions === true) {
                 $removeProductDimensions = false;
             }
         }
@@ -74,8 +81,8 @@ class ProductResource extends JsonResource
         #endregion
         #region Product Weight
         $removeProductWeight = true;
-        if( $request->has('includeProductWeight') ){
-            if($request->includeProductWeight === 'true' || $request->includeProductWeight === true){
+        if ($request->has('includeProductWeight')) {
+            if ($request->includeProductWeight === 'true' || $request->includeProductWeight === true) {
                 $removeProductWeight = false;
             }
         }
@@ -86,8 +93,8 @@ class ProductResource extends JsonResource
         #endregion
         #region Product Volume
         $removeProductVolume = true;
-        if( $request->has('includeProductVolume') ){
-            if($request->includeProductVolume === 'true' || $request->includeProductVolume === true){
+        if ($request->has('includeProductVolume')) {
+            if ($request->includeProductVolume === 'true' || $request->includeProductVolume === true) {
                 $removeProductVolume = false;
             }
         }
@@ -97,8 +104,8 @@ class ProductResource extends JsonResource
         #endregion
         #region Product Parent Code
         $removeParentCode = true;
-        if( $request->has('includeParentCode') ){
-            if($request->includeParentCode === 'true' || $request->includeParentCode === true){
+        if ($request->has('includeParentCode')) {
+            if ($request->includeParentCode === 'true' || $request->includeParentCode === true) {
                 $removeParentCode = false;
             }
         }
@@ -106,7 +113,7 @@ class ProductResource extends JsonResource
             unset($data['parent_code']);
         }
         #endregion
-        
+
         return $data;
     }
 }

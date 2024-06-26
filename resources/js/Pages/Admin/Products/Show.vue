@@ -18,71 +18,24 @@
         </p>
     </div>
     <div class="my-3">
-        <v-tab
-            headerClass=" bg-white"
-            v-model="currentTab"
-            :tabs="[
-                {
-                    icon: 'bi-cart4',
-                    title: 'Information',
-                    value: 'ProdInfo',
-                },
-                {
-                    icon: 'md-category',
-                    title: 'Categories',
-                    value: 'Categories',
-                },
-                {
-                    icon: 'fa-puzzle-piece',
-                    title: 'Components',
-                    value: 'ProductComponents',
-                },
-                {
-                    icon: 'fa-images',
-                    title: 'Images',
-                    value: 'ProductImages',
-                },
-                {
-                    icon: 'bi-cart-x',
-                    title: 'Non Wishlist Customers',
-                    value: 'NonWishlistCustomers',
-                },
-                {
-                    icon: 'ai-closed-access',
-                    title: 'Restriction & Exemptions',
-                    value: 'ProductAccess',
-                },
-                
-            ]"
-        >
+        <v-tab headerClass=" bg-white" v-model="currentTab" :tabs="tabs">
+            /*ANCHOR - Product Categories */
             <template #content.Categories>
-                <p>
-                    This section organizes products into specific Categories,
-                    helping customers navigate to find items that match their
-                    needs or interests.
-                </p>
+                <productCategories :id="id" />
             </template>
+            /*ANCHOR - Components */
             <template #content.ProductComponents>
-                <p>
-                    Detailed information is provided about what the product
-                    includes or consists of.
-                </p>
+                <productComponents :id="id" />
             </template>
+            /*ANCHOR - Restriction and Exemptions */
+            <template #content.ProductAccess>
+                <productRestrictionExemption :id="id" />
+            </template>
+            /*ANCHOR - NonWishlist_Customers */
             <template class="p-3" #content.NonWishlistCustomers>
-                <productNonWishList :product_id="id" />
+                <productNonWishList :id="id" />
             </template>
-            <template #content.Restriction>
-                <p>
-                    This part outlines any limitations or conditions that apply
-                    in viewing the Products.
-                </p>
-            </template>
-            <template #content.Exemptions>
-                <p>
-                    This section clarifies what the access type will be exempted
-                    to all kind of restriction.
-                </p>
-            </template>
+            /*ANCHOR - Product Information */
             <template class="p-3" #content.ProdInfo>
                 <div class="p-3">
                     <p>
@@ -90,6 +43,7 @@
                         Volume and Weights
                     </p>
                     <productItemForm
+                        :id="id"
                         :showTitle="false"
                         :readOnlyData="['form.id']"
                     />
@@ -116,8 +70,10 @@
 </template>
 <script setup>
 import productItemForm from "./components/productItemForm.vue";
-
 import productNonWishList from "./components/productNonWishList.vue";
+import productRestrictionExemption from "./components/productRestrictionExemption.vue";
+import productCategories from "./components/productCategories.vue";
+import productComponents from "./components/productComponents.vue";
 
 const router = inject("router");
 const props = defineProps({
@@ -135,5 +91,37 @@ if (!product_item.length) {
     await productStore.getProductItem(props.id);
 }
 
-const currentTab = ref("NonWishlistCustomers");
+const currentTab = ref("ProductComponents");
+const tabs = ref([
+    {
+        icon: "bi-cart4",
+        title: "Information",
+        value: "ProdInfo",
+    },
+    {
+        icon: "md-category",
+        title: "Categories",
+        value: "Categories",
+    },
+    {
+        icon: "fa-puzzle-piece",
+        title: "Components",
+        value: "ProductComponents",
+    },
+    {
+        icon: "fa-images",
+        title: "Images",
+        value: "ProductImages",
+    },
+    {
+        icon: "bi-cart-x",
+        title: "Non Wishlist Customers",
+        value: "NonWishlistCustomers",
+    },
+    {
+        icon: "ai-closed-access",
+        title: "Restriction & Exemptions",
+        value: "ProductAccess",
+    },
+]);
 </script>

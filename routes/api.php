@@ -3,15 +3,20 @@
 use App\Http\Controllers\AreaCodeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyCodeController;
+use App\Http\Controllers\currentController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\NonWishlistController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductAccessController;
 use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\ProductComponentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesController;
-use App\Http\Controllers\SingleActionController\NonWishlistController;
 use App\Http\Controllers\UserController;
+use App\Http\Resources\ProductAccessResource;
 use App\Http\Resources\UserResource;
+use App\Models\ProductAccessType;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,9 +27,19 @@ Route::get('/user', function (Request $request) {
     return new UserResource($request->user());
 })->middleware('auth:sanctum');
 
-Route::get('current/{product_access_type}', [FileController::class, 'useExampleService']);
+Route::get('current', [currentController::class, 'current']);
+Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
 
-Route::put('nonwishlist/{user}/{action}/{product}', NonWishlistController::class);
+
+// Route::put('nonwishlist/{user}/{action}/{product}', NonWishlistController::class);
+
+Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
+// Route::apiResource('product-access', ProductAccessController::class)->only(["show"]);
+
+Route::get('product-access/{product_access}', [ProductAccessController::class, 'show']);
+Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
+Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
+
 
 
 Route::apiResource('file', FileController::class)->except(['create', 'edit']);
@@ -35,12 +50,14 @@ Route::apiResource('permissions', PermissionController::class)->except(['create'
 
 Route::apiResource('categories', CategoryController::class)->except(['create', 'edit']);
 Route::apiResource('product', ProductController::class)->except($except);
+Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
 
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except(['create', 'edit']);
 
-Route::apiResource('product-components', ProductComponentController::class)->only(['update', 'destroy']);
 Route::get('product-components/{product}', [ProductComponentController::class, 'showProductComponents']);
 Route::post('product-components/{product}', [ProductComponentController::class, 'createProductComponents']);
+Route::put('product-components/{product_component}', [ProductComponentController::class, 'update']);
+Route::delete('product-components/{product_component}', [ProductComponentController::class, 'destroy']);
 
 Route::apiResource('users', UserController::class)->except($except);
 Route::put('users/change-password/{user}', [UserController::class, 'changePassword']);

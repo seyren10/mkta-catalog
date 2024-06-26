@@ -11,7 +11,7 @@ class NonWishlistUsers extends Model
 {
     use HasFactory;
     protected $fillable = ["product_id", "user_id"];
-    protected $hidden = ["id", "created_at", "updated_at"];
+    protected $hidden = [ "created_at", "updated_at"];
     protected $with = ['user', 'product'];
     public function user()
     {

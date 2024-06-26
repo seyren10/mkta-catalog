@@ -40,6 +40,8 @@ class ProductAccessTypeController extends Controller
             "ref_type" => strtolower($request->ref_type),
             "ref_table" => strtolower($request->ref_table),
             "ref_column" => strtolower($request->ref_column),
+            "display_column" => strtolower($request->display_column),
+            
             "source_table" => strtolower($request->source_table),
             "source_column" => strtolower($request->source_column),
 
@@ -72,11 +74,15 @@ class ProductAccessTypeController extends Controller
         $product_access_type->title =ucwords($request->title) ?? $product_access_type->title;
         $product_access_type->description = ucfirst($request->description) ??  $product_access_type->description;
 
-        $product_access_type->ref_type = ucfirst($request->ref_type) ??  $product_access_type->ref_type;
-        $product_access_type->ref_table = ucfirst($request->ref_table) ??  $product_access_type->ref_table;
-        $product_access_type->ref_column = ucfirst($request->ref_column) ??  $product_access_type->ref_column;
-        $product_access_type->source_table = ucfirst($request->source_table) ??  $product_access_type->source_table;
-        $product_access_type->source_column = ucfirst($request->source_column) ??  $product_access_type->source_column;
+        $product_access_type->ref_type = ($request->ref_type) ??  $product_access_type->ref_type;
+        $product_access_type->ref_table = ($request->ref_table) ??  $product_access_type->ref_table;
+        $product_access_type->ref_column = ($request->ref_column) ??  $product_access_type->ref_column;
+        $product_access_type->display_column = ($request->display_column) ??  $product_access_type->display_column;
+
+        $product_access_type->source_table = ($request->source_table) ??  $product_access_type->source_table;
+        $product_access_type->source_column = ($request->source_column) ??  $product_access_type->source_column;
+        
+
 
 
 

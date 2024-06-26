@@ -45,6 +45,7 @@ class Product extends Model
             'id', 
             'id', 
             'category_id' 
-        ); 
+        )->withOut(["sub_categories", 'file', 'parent_category']); 
     }
+    
 }

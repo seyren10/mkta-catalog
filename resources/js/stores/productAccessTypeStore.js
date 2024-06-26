@@ -17,6 +17,7 @@ export const useProductAccessTypeStore = defineStore(
             ref_type: "direct",
             ref_table: "",
             ref_column: "",
+            display_column: "",
             source_table: "",
             source_column: "",
         });
@@ -28,6 +29,8 @@ export const useProductAccessTypeStore = defineStore(
             form.ref_type = "direct";
             form.ref_table = "";
             form.ref_column = "";
+            form.display_column = "";
+
             form.source_table = "";
             form.source_column = "";
         };
@@ -55,7 +58,6 @@ export const useProductAccessTypeStore = defineStore(
         });
         const addProductAccessType = async () => {
             try {
-
                 form.type = form.type.trim().toLowerCase();
                 const res = await exec(
                     "/api/product-access-type",
@@ -110,6 +112,8 @@ export const useProductAccessTypeStore = defineStore(
                 form.ref_type = product_access_type.value.ref_type;
                 form.ref_table = product_access_type.value.ref_table;
                 form.ref_column = product_access_type.value.ref_column;
+
+                form.display_column = product_access_type.value.display_column;
                 form.source_table = product_access_type.value.source_table;
                 form.source_column = product_access_type.value.source_column;
                 // };
@@ -117,6 +121,67 @@ export const useProductAccessTypeStore = defineStore(
                 console.log(e);
             }
         };
+        const returnProductAccessType = async (id, requestData = null) => {
+            let content = [];
+            try {
+                let defaultData = {
+                    includeOtherData: true,
+                };
+                const res = await exec("/api/product-access/" + id, "get", {
+                    ...requestData,
+                    ...defaultData,
+                });
+                content = res.data.data;
+            } catch (e) {
+                console.log(e);
+            }
+            return content;
+        };
+        const appendProductAccess = async (
+            action,
+            product,
+            product_access_type,
+            value,
+        ) => {
+            try {
+                const res = await exec(
+                    [
+                        "/api/product-access",
+                        action,
+                        product,
+                        product_access_type,
+                        value,
+                    ].join("/"),
+                    "post",
+                );
+                resetForm();
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        const removeProductAccess = async (
+            action,
+            product,
+            product_access_type,
+            value,
+        ) => {
+            try {
+                const res = await exec(
+                    [
+                        "/api/product-access",
+                        action,
+                        product,
+                        product_access_type,
+                        value,
+                    ].join("/"),
+                    "delete",
+                );
+                resetForm();
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
         const getProductAccessTypes = async () => {
             try {
                 const res = await exec("/api/product-access-type");
@@ -133,6 +198,10 @@ export const useProductAccessTypeStore = defineStore(
             deleteProductAccessType,
             getProductAccessType,
             getProductAccessTypes,
+            returnProductAccessType,
+
+            appendProductAccess,
+            removeProductAccess,
 
             isExist,
             product_access_type,

@@ -109,14 +109,19 @@
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { form } = storeToRefs(productStore);
 
 const emits = defineEmits(["update"]);
-
 const props = defineProps({
+    id : {type: String, default : ""},
     readOnlyData: { type: Object, default: [] },
     showTitle: { type: Boolean, default: true },
 });
+import { useProductStore } from "@/stores/productStore";
+const productStore = useProductStore();
+const { product_item, form } = storeToRefs(productStore);
+if (!product_item.length && props.id != "") {
+    await productStore.getProductItem(props.id);
+}
+
+
 </script>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -55,6 +57,39 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product deleted successfully'], 200);
     }
     #endregion
-    
+
+    #region Custom Function for Product Controller
+    public static function modifyProductCategories(Product $product, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            ProductCategory::where('product_id', $product->id)->delete();
+            if ($request->has('categories')) {
+                foreach ($request->categories as $key => $value) {
+                    ProductCategory::create(
+                        array(
+                            "product_id" => $product->id,
+                            "category_id" => $value,
+                        )
+                    );
+                }
+                DB::commit();
+                return response(array(
+                    "message" => "Categories Updated"
+                ),200);    
+            }
+            return response(array(
+                "message" => "No Categories included"
+            ),200);
+            
+        } catch (\Throwable $th) {
+            return response(array(
+                "message" => $th->getMessage()
+            ),422);
+            DB::rollback();
+        }
+
+    }
+    #endregion
 
 }

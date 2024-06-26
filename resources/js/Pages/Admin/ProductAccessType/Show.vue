@@ -58,7 +58,7 @@
                 <div>
                     <h2 class="text-xl font-bold">Reference Table</h2>
                     <p class="text-gray-600">This is a description</p>
-                    <div class="mt-2 grid grid-cols-2">
+                    <div class="mt-2 grid grid-cols-4">
                         <div class="col-span-4 sm:col-span-2">
                             <v-text-field
                                 label="Table"
@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-span-4 sm:col-span-2">
                             <v-text-field
-                                label="Column"
+                                label="Primary Key / Identifier"
                                 v-model="form.ref_column"
                                 persistent-hint
                                 :hint="
@@ -79,6 +79,7 @@
                                 "
                             />
                         </div>
+                        
                     </div>
                 </div>
                 <div>
@@ -105,6 +106,18 @@
                                 "
                             />
                         </div>
+                        <!-- <div class="col-span-4 sm:col-span-2">
+                            <v-text-field
+                                label="Display Column"
+                                v-model="form.display_column"
+                                persistent-hint
+                                :hint="
+                                    'This should be a column in the ' +
+                                    form.ref_table +
+                                    ' table'
+                                "
+                            />
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-span-2">

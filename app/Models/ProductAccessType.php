@@ -20,6 +20,7 @@ class ProductAccessType extends Model
         "ref_type", 
         "ref_table", 
         "ref_column",
+        "display_column",
 
         "source_table", 
         "source_column",

@@ -522,7 +522,7 @@ export const useProductStore = defineStore("products", () => {
         try {
             let defaultData = {
                 includeProductCategories: true,
-                includeProductCategories: true,
+                includeProductCategoryKeys: true,
                 includeProductComponents: true,
                 includeNonWishlistUser: true,
                 includeProductImages: true,
@@ -551,12 +551,11 @@ export const useProductStore = defineStore("products", () => {
             console.log(e);
         }
     };
-
     const NonWishlistProduct = async (type, product_id, customer_id) => {
         try {
             const res = await exec(
                 ["/api/nonwishlist", customer_id, type, product_id].join("/"),
-                "put"
+                "put",
             );
         } catch (e) {
             console.log(e);
@@ -564,7 +563,18 @@ export const useProductStore = defineStore("products", () => {
             resetForm();
         }
     };
-
+    const updateProductCategories = async (id, categories) => {
+        try {
+            console.log(categories)
+            const res = await exec("/api/product-categories/" + id, "put", {
+                categories: categories,
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+        }
+    };
+    
     return {
         products,
         getProductsWithCategoryId,
@@ -578,6 +588,8 @@ export const useProductStore = defineStore("products", () => {
         exec,
         isValid,
 
+        updateProductCategories,
+
         resetForm,
         addProductItem,
         updateProductItem,
@@ -587,5 +599,6 @@ export const useProductStore = defineStore("products", () => {
         getProductItems,
 
         NonWishlistProduct,
+
     };
 });
