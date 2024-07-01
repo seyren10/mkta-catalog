@@ -13,7 +13,7 @@
                         <div class="col-span-3">
                             <div class="flex-column flex">
                                 {{ data.title }}
-                                {{ data.description }}
+                                {{ data.value }}
                             </div>
                         </div>
                     </li>

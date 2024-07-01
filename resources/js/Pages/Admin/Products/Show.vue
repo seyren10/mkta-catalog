@@ -19,6 +19,10 @@
     </div>
     <div class="my-3">
         <v-tab headerClass=" bg-white" v-model="currentTab" :tabs="tabs">
+            /*ANCHOR - Product Images */
+            <template #content.ProductImages>
+                <productImages :id="id" />
+            </template>
             /*ANCHOR - Product Categories */
             <template #content.Categories>
                 <productCategories :id="id" />
@@ -74,6 +78,7 @@ import productNonWishList from "./components/productNonWishList.vue";
 import productRestrictionExemption from "./components/productRestrictionExemption.vue";
 import productCategories from "./components/productCategories.vue";
 import productComponents from "./components/productComponents.vue";
+import productImages from "./components/productImages.vue";
 
 const router = inject("router");
 const props = defineProps({

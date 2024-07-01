@@ -73,9 +73,6 @@ const props = defineProps({
     id: String,
 });
 /*SECTION - End Props */
-
-const state = ref([]);
-
 /*SECTION - Variables */
 const collections = ref({});
 /*SECTION - End Variables */

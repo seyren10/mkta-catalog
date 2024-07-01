@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-card>
+    <div class="">
+        <v-card class="h-full">
             <template #header>
                 <div class="flex justify-between">
                     <div class="text-lg font-semibold">
@@ -48,6 +48,7 @@
             </div>
             <hr class="mb-2" />
             <component
+                class="w-full"
                 :showPreview="showPreview"
                 :is="componentType"
                 v-model="value"

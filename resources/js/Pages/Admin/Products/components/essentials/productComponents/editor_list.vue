@@ -6,7 +6,7 @@
                     <v-text-field v-model="data.icon" label="Icon" />
                     <v-text-field v-model="data.title" label="Title" />
                     <v-text-field
-                        v-model="data.description"
+                        v-model="data.value"
                         label="Description"
                     />
                 </div>
@@ -28,7 +28,7 @@
                     <v-text-field v-model="newData.icon" label="Icon" />
                     <v-text-field v-model="newData.title" label="Title" />
                     <v-text-field
-                        v-model="newData.description"
+                        v-model="newData.value"
                         label="Description"
                     />
                 </div>
@@ -67,13 +67,13 @@ const props = defineProps({
 const newData = ref({
     icon: "",
     title: "",
-    description: "",
+    value: "",
 });
 const resetNewData = () => {
     newData.value = {
         icon: "",
         title: "",
-        description: "",
+        value: "",
     };
 };
 </script>

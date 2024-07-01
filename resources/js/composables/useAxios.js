@@ -8,6 +8,8 @@ export const useAxios = (method, options) => {
         loading.value = true;
         try {
             let res = null;
+
+
             switch (method) {
                 case "get":
                     res = await axios.get(url, {
@@ -15,7 +17,11 @@ export const useAxios = (method, options) => {
                     });
                     break;
                 case "post":
-                    res = await axios.post(url, requestData);
+                    res = await axios.post(url, requestData,{
+                        headers:{
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
                     break;
                 case "patch":
                     res = await axios.patch(url, requestData);

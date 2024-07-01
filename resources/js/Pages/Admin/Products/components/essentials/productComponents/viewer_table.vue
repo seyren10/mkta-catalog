@@ -2,21 +2,24 @@
     <div class="my-2">
         <div class="border-b-2 text-xl font-semibold">{{ title }}</div>
         <div>
-            <table class="table w-full text-xl">
+            <table>
                 <thead>
-                    <tr class="bg-gray-300">
-                        <th v-for="(col, colIndex) in model.columns">
-                            {{ col }}
-                        </th>
+                    <tr>
+                        <th v-for="col in model.header">{{ col }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(row, rowIndex) in model.rows" :class="rowIndex % 2 == 0 ? 'bg-white' : 'bg-gray-300'">
-                        <td v-for="(cell) in row">
-                            {{ cell }}
+                    <tr v-for="(rowData,rowIndex) in model.body">
+                        <td v-for="item in rowData" :key="item">
+                            {{ item }}
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th v-for="col in model.footer">{{ col }}</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -27,6 +30,10 @@ const props = defineProps({
     title: "Default Title",
 });
 
-const model = defineModel({ columns: [], rows: [] });
+const model = defineModel({
+    header: [],
+    body: {},
+    footer: [],
+});
 
 </script>

@@ -8,11 +8,13 @@
                             ? headers
                             : Object.keys(items[0] || [])"
                         :key="item"
-                        :class="`text-start ${densityValues} `"
+                        :class="`text-start ${densityValues} ` + item.colClass ?? ` `"
+                        :style=" item.colStyle ?? '' "
+
                         v-show="!item.hidden"
                     >
                         <div
-                            :class="`${isSortable(item) ? 'group cursor-pointer hover:underline' : ''}`"
+                            :class="`${isSortable(item) ? 'group cursor-pointer hover:underline w-full' : ''}`"
                             @click="
                                 () => {
                                     if (isSortable(item))

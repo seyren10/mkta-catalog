@@ -28,7 +28,6 @@
             >
         </div>
         <v-text-field prepend-inner-icon="la-search-solid" v-model="search" />
-
         <v-data-table
             class="my-2"
             :noHeader="true"

@@ -20,7 +20,9 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
             <template v-for="(component, index) in components">
+
                 <componentsViewer
+                    :class="( ['table'].includes(component.type) ? 'col-span-2' : '') + '  '"
                     :product_id="id"
                     :data="component"
                     @change="refreshComponent"

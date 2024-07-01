@@ -14,52 +14,7 @@
                             </div>
                         </template>
                         <div class="grid grid-cols-3 gap-2">
-                            <template
-                                v-for="UI_type in [
-                                    {
-                                        type: 'html',
-                                        title: 'HTML Component',
-                                        icon: 'bi-filetype-html',
-                                        default: [],
-                                    },
-                                    {
-                                        type: 'list',
-                                        title: 'List Component',
-                                        icon: 'bi-list-ul',
-                                        default: [],
-                                    },
-                                    {
-                                        type: 'file',
-                                        title: 'File Download Component',
-                                        icon: 'fa-download',
-                                        default: { link: '', text: '' },
-                                    },
-                                    {
-                                        type: 'text',
-                                        title: 'Text Component',
-                                        icon: 'bi-text-paragraph',
-                                        default: '',
-                                    },
-                                    {
-                                        type: 'image',
-                                        title: 'Single Image Component',
-                                        icon: 'bi-card-image',
-                                        default: [],
-                                    },
-                                    {
-                                        type: 'table',
-                                        title: 'Table Component',
-                                        icon: 'bi-table',
-                                        default: { columns: [], rows: [] },
-                                    },
-                                    {
-                                        type: 'album',
-                                        title: 'Album Component',
-                                        icon: 'fa-images',
-                                        default: [],
-                                    },
-                                ]"
-                            >
+                            <template v-for="UI_type in UIs">
                                 <v-button
                                     @click="
                                         (form.type = UI_type.type),
@@ -89,7 +44,9 @@
                                         currentTab = 'Setup';
                                     }
                                 "
-                                v-show="!(form.type === null || form.type === '')"
+                                v-show="
+                                    !(form.type === null || form.type === '')
+                                "
                                 class="ml-auto border bg-green-400 text-white disabled:bg-gray-500"
                                 prepend-inner-icon="bi-chevron-right"
                                 >Next</v-button
@@ -207,10 +164,12 @@
                             <v-button
                                 @click="
                                     () => {
-                                        productComponentStore.addProductComponent(id);
+                                        productComponentStore.addProductComponent(
+                                            id,
+                                        );
                                         productComponentStore.resetForm();
-                                        currentTab = 'Selection'
-                                        emit('submit')
+                                        currentTab = 'Selection';
+                                        emit('submit');
                                     }
                                 "
                                 class="border bg-green-400 text-white"
@@ -240,7 +199,7 @@ const props = defineProps({
     id: String,
 });
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(["submit"]);
 
 import { useProductStore } from "@/stores/productStore";
 const productStore = useProductStore();
@@ -251,6 +210,52 @@ if (!product_item.length) {
 }
 
 const currentTab = ref("Selection");
+const UIs = ref([
+    {
+        type: "html",
+        title: "HTML Component",
+        icon: "bi-filetype-html",
+        default: "",
+    },
+    {
+        type: "list",
+        title: "List Component",
+        icon: "bi-list-ul",
+        default: [{ title: "", value: "" }],
+    },
+    {
+        type: "file",
+        title: "File Download Component",
+        icon: "fa-download",
+        default: { title: "", value: "" },
+    },
+    {
+        type: "text",
+        title: "Text Component",
+        icon: "bi-text-paragraph",
+        default: "",
+    },
+    {
+        type: "image",
+        title: "Single Image Component",
+        icon: "bi-card-image",
+        default: "",
+    },
+    {
+        type: "album",
+        title: "Album Component",
+        icon: "fa-images",
+        default: [],
+    },
+    {
+        type: "table",
+        title: "Table Component",
+        icon: "bi-table",
+        default: {header: [], body: {}, footer: []  },
+    },
+    
+]);
+
 /*SECTION - Product Component */
 import { useProductComponentStore } from "@/stores/productComponentStore";
 const productComponentStore = useProductComponentStore();

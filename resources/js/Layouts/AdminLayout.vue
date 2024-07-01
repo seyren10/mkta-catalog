@@ -42,10 +42,11 @@
                     :items="cutomer_management"
                 />
                 <VRouteNav
-                    v-if="false"
+                    v-if="true"
                     :title="'File Management'"
                     :items="file_management"
                 />
+                
             </div>
         </template>
 
@@ -109,16 +110,6 @@ const product_management = [
         to: "productItemIndex",
         icon: "bi-cart4",
     },
-    // {
-    //     title: "Product Images",
-    //     to: "admin",
-    //     icon: "fa-images",
-    // },
-    // {
-    //     title: "Tags",
-    //     to: "admin",
-    //     icon: "fa-tags",
-    // },
     {
         title: "Product Access types",
         to: "productAccessTypeIndex",
@@ -127,8 +118,8 @@ const product_management = [
 ];
 const file_management = [
     {
-        title: "Files",
-        to: "categories",
+        title: "Files Manager",
+        to: "fileIndex",
         icon: "fa-folder-open",
     },
 ];

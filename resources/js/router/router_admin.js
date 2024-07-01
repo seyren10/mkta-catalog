@@ -168,6 +168,18 @@ const product_management = [
     },
 ];
 
+const file_management = [
+    {
+        path: "files",
+        name: "fileIndex",
+        component: () => import("@/Pages/Admin/Files/Index.vue"),
+        meta: {
+            title: "File Management",
+            description: "List of Files uploaded in the Resources Storage",
+        },
+    }
+];
+
 const admin_routes = [
     {
         path: "/admin",
@@ -180,6 +192,7 @@ const admin_routes = [
             ...user_management,
             ...customer_management,
             ...product_management,
+            ...file_management
         ],
     },
 ];

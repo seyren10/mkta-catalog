@@ -574,7 +574,10 @@ export const useProductStore = defineStore("products", () => {
         } finally {
         }
     };
+
     
+   
+
     return {
         products,
         getProductsWithCategoryId,

@@ -107,9 +107,17 @@ import {
     RiDeleteRow,
     RiDeleteColumn,
     RiInsertColumnRight,
+    LaLinkSolid,
+    FaCloudUploadAlt,
+    BiCheckCircleFill,
+    MdDrivefilerenameoutlineOutlined,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    MdDrivefilerenameoutlineOutlined,
+    BiCheckCircleFill,
+    FaCloudUploadAlt,
+    LaLinkSolid,
     RiInsertColumnRight,
     RiDeleteColumn,
     RiInsertRowBottom ,
