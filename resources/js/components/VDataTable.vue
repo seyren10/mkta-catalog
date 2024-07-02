@@ -8,11 +8,13 @@
                             ? headers
                             : Object.keys(items[0] || [])"
                         :key="item"
-                        :class="`text-start ${densityValues} `"
+                        :class="`text-start ${densityValues} ` + item.colClass ?? ` `"
+                        :style=" item.colStyle ?? '' "
+
                         v-show="!item.hidden"
                     >
                         <div
-                            :class="`${isSortable(item) ? 'group cursor-pointer hover:underline' : ''}`"
+                            :class="`${isSortable(item) ? 'group cursor-pointer hover:underline w-full' : ''}`"
                             @click="
                                 () => {
                                     if (isSortable(item))
@@ -48,20 +50,18 @@
                     :key="item.id ?? item"
                     :class="`${striped ? 'even:bg-slate-50' : ''} ${border ? 'border-b last:border-b-0 ' : ''}`"
                 >
-                    <td
-                        v-for="data in Object.keys(item)"
-                        :class="`${densityValues}`"
-                        v-show="!headers.find((e) => e.key === data)?.hidden"
-                    >
-                        <slot
-                            :name="`item.${data}`"
-                            :item="{ value: item[data], raw: item }"
-                        ></slot>
+                    <template v-for="data in visibleHeaderKeys">
+                        <td :class="`${densityValues}`">
+                            <slot
+                                :name="`item.${data}`"
+                                :item="{ value: item[data], raw: item }"
+                            ></slot>
 
-                        <span v-if="!$slots[`item.${data}`]">
-                            {{ item[data] }}
-                        </span>
-                    </td>
+                            <span v-if="!$slots[`item.${data}`]">
+                                {{ item[data] }}
+                            </span>
+                        </td>
+                    </template>
                 </tr>
 
                 <tr v-if="!paginated.length">
@@ -173,6 +173,26 @@ const currentSortKey = ref(null);
 
 //computed
 
+
+const fullHeaderKeys = computed(() => {
+    let fullKeys = [];
+    if (props.items.length > 0) {
+        fullKeys = Object.keys(props.items[0]);
+    }
+    let propHeaderKeys = [];
+    propHeaderKeys = props.headers.reduce((acc, cur) => {
+        acc.push(cur.key);
+        return acc;
+    }, []);
+
+    return [...fullKeys, ...propHeaderKeys];
+});
+const visibleHeaderKeys = computed(() => {
+    if(!props.headers.length){
+        return Object.keys(props.items[0])
+    }
+    return props.headers.filter(item => !item.hidden).map(item => item.key);
+});
 const headerKeys = computed(() => {
     return props.headers.reduce((acc, cur) => {
         acc.push(cur.key);
@@ -195,6 +215,22 @@ const endIndex = computed(() => {
 });
 
 const transformedItems = computed(() => {
+    if (!headerKeys.value.length) return props.items;
+
+    //include only the keys for items the is included in props.headers
+    return props.items.map((item) => {
+        let itemCollection = {};
+        fullHeaderKeys.value.forEach((key) => {
+            itemCollection[key] = item[key];
+            // if (key in item) {
+            //     itemCollection[key] = item[key];
+            // }
+        });
+
+        return itemCollection;
+    });
+    /* Beyond this Line is the default content */
+
     //when theres no headerkeys , it means that there's no custom header
     if (!headerKeys.value.length) return props.items;
 

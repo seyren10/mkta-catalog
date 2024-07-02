@@ -10,7 +10,7 @@
         <Teleport to="#overlay" v-if="modelValue">
             <VDialogContent
                 v-bind="{ maxWidth, title, persistent }"
-                @close="$emit('update:modelValue', false)"
+                @close="$emit('update:modelValue', false), $emit('close')"
             >
                 <template #header v-if="$slots.header">
                     <slot
@@ -29,7 +29,7 @@ import { onUpdated, onUnmounted } from "vue";
 import VDialogContent from "./derived_components/VDialogContent.vue";
 
 const props = defineProps(["modelValue", "maxWidth", "title", "persistent"]);
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "close"]);
 
 defineOptions({
     inheritAttrs: false,

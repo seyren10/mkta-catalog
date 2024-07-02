@@ -34,14 +34,16 @@
             >
         </div>
 
-        <slot name="action">
             <footer
                 class="flex items-center gap-4"
                 :class="{
                     'justify-end': actionAlign === 'end',
                 }"
-            ></footer>
+            >
+            <slot name="action">
         </slot>
+
+        </footer>
     </div>
 </template>
 

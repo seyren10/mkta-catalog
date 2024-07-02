@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => 'daily',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,7 +53,7 @@ return [
     'channels' => [
 
         'stack' => [
-            'driver' => 'stack',
+            'driver' =>[ 'stack', 'daily'],
             'channels' => explode(',', env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
         ],

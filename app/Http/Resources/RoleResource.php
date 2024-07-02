@@ -22,6 +22,13 @@ class RoleResource extends JsonResource
             unset($data['permissions']);
         }
         #endregion
+        #region Permission Keys
+        if( $request->has('includePermissionKeys') ){
+            if($request->includePermissionKeys == 'true' || $request->includePermissionKeys == true){
+                $data['permissions_keys'] = (collect($data['permissions']))->pluck('key');
+            }
+        }
+        #endregion
         return $data;
     }
 }

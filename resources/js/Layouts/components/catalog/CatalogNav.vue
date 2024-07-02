@@ -197,8 +197,6 @@ const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
 
-//injects
-const user = inject("currentUser");
 
 //non-reactives
 const headerData = [
@@ -206,6 +204,12 @@ const headerData = [
     { title: "Report a problem", icon: "ri-bug-2-line" },
     { title: "Asia", icon: "pr-globe" },
 ];
+
+//reactives
+const parent = ref(null);
+
+//injects
+const user = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

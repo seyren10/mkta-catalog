@@ -105,6 +105,6 @@ const scrollToAnchor = () => {
         }, 1000);
     });
 };
-</script>
+</script> 
 
 <style lang="scss" scoped></style>

@@ -1,76 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
 
-import CatalogLayout from "@/Layouts/CatalogLayout.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
-import AdminLayout from "@/Layouts/AdminLayout.vue";
-
 import ActionNotAllowed from "@/components/ActionNotAllowed.vue";
 
+import home_routes from "./router_home.js"
+import admin_routes from "./router_admin.js"
+import catalog_routes from "./router_catalog.js"
+
+
 const routes = [
-    {
-        path: "/",
-        name: "index",
-        component: MainLayout,
-        beforeEnter(to, from, next) {
-            if (to.hash) {
-                next(); // No need to redirect
-            } else {
-                // Redirect to the same route with the hash fragment added
-                next({ path: "/", hash: "#home" });
-            }
-        },
-    },
-    {
-        path: "/admin",
-        name: "admin",
-        component: AdminLayout,
-        redirect: { name: "dashboard" },
-        meta: {
-            requiresAuth: true,
-            // allowedRoles:
-        },
-        children: [
-            {
-                path: "dashboard",
-                name: "dashboard",
-                component: () => import("@/Pages/Admin/Dashboard/Index.vue"),
-            },
-            {
-                path: "products",
-                name: "products",
-                component: () => import("@/Pages/Admin/Products/Index.vue"),
-            },
-        ],
-    },
-    {
-        path: "/catalog",
-        name: "catalog",
-        component: CatalogLayout,
-        redirect: { name: "catalogHome" },
-        meta: {
-            requiresAuth: true,
-        },
-        children: [
-            {
-                path: "",
-                name: "catalogHome",
-                component: () => import("@/Pages/Catalog/Index.vue"),
-            },
-            {
-                path: "categories/:id",
-                name: "categories",
-                props: true,
-                component: () => import("@/Pages/Catalog/Categories/Index.vue"),
-            },
-            {
-                path: "product/:id",
-                name: "product",
-                props: true,
-                component: () => import("@/Pages/Catalog/Products/Show.vue"),
-            },
-        ],
-    },
     {
         path: "/fallback",
         name: "fallback",
@@ -93,8 +32,12 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    routes,
-
+    routes : [
+        ...routes,
+        ...home_routes,
+        ...catalog_routes,
+        ...admin_routes,
+    ],
     scrollBehavior(to, from, savedPosition) {
         if (to.hash) {
             return {
@@ -113,11 +56,9 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     const userStore = useUserStore();
-    await userStore.getUser();
+    await userStore.getCurrentUser();
 
-    const user = userStore.user;
-
-    if (to.meta.requiresAuth && !user) {
+    if (to.meta.requiresAuth && !userStore.currentUser) {
         return { name: "fallback", query: { type: "unAuthorized" } };
     }
 });

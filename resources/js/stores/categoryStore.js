@@ -1,7 +1,10 @@
+import { computed, reactive, ref, shallowRef } from "vue";
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { useAxios } from "@/composables/useAxios";
 
 export const useCategoryStore = defineStore("categories", () => {
+    const { loading, errors, exec } = useAxios();
+    /*
     const categories = reactive([
         {
             id: 1,
@@ -208,10 +211,92 @@ export const useCategoryStore = defineStore("categories", () => {
             ],
         },
     ]);
-
-    //methods
-    const getCategoryWithId = (id) => {
-        return categories.find((e) => e.id === +id);
+     */
+    const categories = ref([]);
+    const category = ref([]);
+    const form = reactive({
+        img: "",
+        title: "",
+        description: "",
+        parent_id: 0,
+        file_id: 0,
+    });
+    const resetForm = () => {
+        form.title = "";
+        form.description = "";
+        form.parent_id = 0;
+        form.file_id = 0;
     };
-    return { categories, getCategoryWithId };
+    const addCategory = async () => {
+        try {
+            const res = await exec("/api/categories", "post", form);
+            if (form.parent_id != 0) {
+                getCategory(form.parent_id);
+            } else {
+                getCategories();
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const updateCategory = async (id) => {
+        try {
+            const res = await exec("/api/categories/" + id, "put", form);
+            getCategory(id);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const deleteCategory = async (id) => {
+        try {
+            const res = await exec("/api/categories/" + id, "delete");
+            await getCategories();
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const getCategory = async (id, requestData = null) => {
+        try {
+            let defaultData = {
+                includeSubCategories: true,
+                includeFile: true,
+                includeParentCategory: true
+            };
+            const res = await exec("/api/categories/" + id, "get", {
+                ...requestData,
+                ...defaultData,
+            });
+            category.value = res.data.data;
+            form.title = category.value.title;
+            form.description = category.value.description;
+            form.parent_id = category.value.parent_id
+            form.file_id = category.value.file_id ?? category.img;
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const getCategories = async (requestData = null) => {
+        try {
+            const res = await exec("/api/categories", "get", requestData);
+            categories.value = res.data.data;
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    return {
+        form,
+        category,
+        categories,
+        loading,
+        errors,
+        exec,
+
+        resetForm,
+        addCategory,
+        updateCategory,
+        deleteCategory,
+        getCategory,
+        getCategories,
+    };
 });

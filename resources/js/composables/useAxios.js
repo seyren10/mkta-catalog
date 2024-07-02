@@ -4,48 +4,37 @@ export const useAxios = (method, options) => {
     const loading = ref(false);
     const errors = ref(null);
 
-    const exec = async (
-        url,
-        method = "get",
-        form = null,
-        requestData = null,
-    ) => {
+    const exec = async (url, method = "get", requestData = null) => {
         loading.value = true;
         try {
+            let res = null;
+
+
             switch (method) {
-                case "get": {
-                    const res = await axios.get(url, {
+                case "get":
+                    res = await axios.get(url, {
                         params: requestData,
                     });
-
-                    errors.value = null;
-                    return res;
-                }
-                case "post": {
-                    const res = await axios.post(url, form);
-
-                    errors.value = null;
-                    return res;
-                }
-                case "patch": {
-                    const res = await axios.patch(url, form);
-
-                    errors.value = null;
-                    return res;
-                }
-                case "put": {
-                    const res = await axios.put(url, form);
-
-                    errors.value = null;
-                    return res;
-                }
-                case "delete": {
-                    const res = await axios.delete(url);
-
-                    errors.value = null;
-                    return res;
-                }
+                    break;
+                case "post":
+                    res = await axios.post(url, requestData,{
+                        headers:{
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    break;
+                case "patch":
+                    res = await axios.patch(url, requestData);
+                    break;
+                case "put":
+                    res = await axios.put(url, requestData);
+                    break;
+                case "delete":
+                    res = await axios.delete(url);
+                    break;
             }
+            errors.value = null;
+            return res;
         } catch (err) {
             errors.value = err.response.data.message;
         } finally {

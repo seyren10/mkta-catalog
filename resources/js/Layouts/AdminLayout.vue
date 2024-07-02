@@ -2,7 +2,7 @@
     <ZTELayout>
         <template #toolbar>
             <div class="grow">
-                <span>Heyuwokei? Yuwokei? Yuwokiai?</span>
+                <span></span>
             </div>
         </template>
         <template #sidebar>
@@ -14,61 +14,117 @@
                     >
                 </div>
                 <hr class="my-2" />
-
-                <div
-                    class="mb-4 flex min-h-20 items-center gap-3 rounded-lg bg-stone-200 p-2"
-                >
+                <div class="mb-4 flex gap-3 rounded-lg bg-stone-200 p-2">
                     <div class="max-w-[4rem] rounded-full bg-white">
                         <img src="/mk-images/hero-images/7.png" alt="" />
                     </div>
                     <div>
-                        <div class="font-bold">{{ user.name }}</div>
+                        <div class="font-bold">{{ currentUser.name }}</div>
                         <span class="text-[.8rem] text-slate-400">{{
-                            user.email
+                            currentUser.role_data.title
                         }}</span>
                     </div>
                 </div>
 
-                <VRouteNav :items="items"></VRouteNav>
+                <VRouteNav
+                    :title="'User Management'"
+                    :items="user_management"
+                />
+
+                <VRouteNav
+                    v-if="true"
+                    :title="'Product Management'"
+                    :items="product_management"
+                />
+                <VRouteNav
+                    v-if="true"
+                    :title="'Customer Management'"
+                    :items="cutomer_management"
+                />
+                <VRouteNav
+                    v-if="true"
+                    :title="'File Management'"
+                    :items="file_management"
+                />
+                
             </div>
         </template>
 
         <div class="bg-white p-3">
+            <VHotLinks class="mb-2" />
             <router-view></router-view>
         </div>
     </ZTELayout>
 </template>
 
 <script setup>
+import { ref, watch, inject, computed } from "vue";
 import ZTELayout from "./components/ZTELayout.vue";
 import VRouteNav from "../components/VRouteNav.vue";
-import { inject } from "vue";
+
+import VHotLinks from "./components/AdminLayout/global/VHotLinks.vue";
 
 //reactives
-const items = [
+const user_management = [
     {
-        title: "Dashboard",
-        to: "dashboard",
-        icon: "la-heart",
+        title: "Users",
+        to: "users",
+        icon: "fa-users",
     },
     {
-        title: "Product Management",
-        to: "products",
-        icon: "pr-globe",
+        title: "Permissions",
+        to: "permissions",
+        icon: "gi-checked-shield",
+    },
+    {
+        title: "Roles",
+        to: "rolesIndex",
+        icon: "fa-user-cog",
+    },
+];
+const cutomer_management = [
+    {
+        title: "Areas",
+        to: "areasIndex",
+        icon: "la-map-marked-alt-solid",
+    },
+    {
+        title: "Companies",
+        to: "companiesIndex",
+        icon: "px-buildings",
     },
     {
         title: "Customers",
-        icon: "pr-send",
-        children: [
-            { title: "Transactions", to: "dashboard" },
-            { title: "Purchase History", to: "products" },
-            { title: "Mama mo pink", to: "dashboard" },
-        ],
+        to: "customerIndex",
+        icon: "la-users-solid",
     },
 ];
-
+const product_management = [
+    {
+        title: "Categories",
+        to: "categoryIndex",
+        icon: "md-category",
+    },
+    {
+        title: "Product Item",
+        to: "productItemIndex",
+        icon: "bi-cart4",
+    },
+    {
+        title: "Product Access types",
+        to: "productAccessTypeIndex",
+        icon: "ai-closed-access",
+    },
+];
+const file_management = [
+    {
+        title: "Files Manager",
+        to: "fileIndex",
+        icon: "fa-folder-open",
+    },
+];
 //provide/inject
-const user = inject("currentUser");
+const currentUser = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

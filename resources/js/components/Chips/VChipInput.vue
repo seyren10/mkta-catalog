@@ -68,7 +68,7 @@ const props = defineProps({
     appendable: Boolean,
 });
 
-const emits = defineEmits(["remove", "add"]);
+const emits = defineEmits(["remove", "add", "addItem"]);
 
 const input = ref("");
 const isInputFocus = ref(false);
@@ -111,8 +111,8 @@ const handleAddItem = () => {
         return;
     }
 
-    handleAddSuggestion(item);
     emits("add", item);
+    handleAddSuggestion(item);
 
     input.value = "";
 };
@@ -129,6 +129,7 @@ const handleRemoveItem = (item) => {
 };
 
 const handleAddSuggestion = (item) => {
+    emits("addItem", item);
     model.value.push(item);
     excludedSuggestions.value.push(item);
 

@@ -16,7 +16,7 @@ class User extends Authenticatable
                 'email', 
                 'password',
                 'is_active',
-                'role_id '
+                'role_id'
             ];
     protected $hidden = [ 
                 'created_at',
@@ -93,7 +93,7 @@ class User extends Authenticatable
             RolePermission::class, 
             'role_id', 
             'id', 
-            'id', 
+            'role_id', 
             'permission_id' 
         ); 
     }

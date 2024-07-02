@@ -28,7 +28,6 @@ class ProductAccessTypeResource extends JsonResource
         }
         if($removeOtherData){
             foreach ([
-                    "type",
                     "ref_type", 
                     "ref_table", 
                     "ref_column", 
