@@ -1,6 +1,7 @@
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
     LaHeart,
+    LaHeartSolid,
     LaSearchSolid,
     LaCogSolid,
     LaBarsSolid,
@@ -59,10 +60,13 @@ import {
     RiZoomOutLine,
     BiMouse,
     MdFullscreenRound,
+    BiCheckCircle,
+    PrTrash,
 } from "oh-vue-icons/icons";
 
 addIcons(
     LaHeart,
+    LaHeartSolid,
     LaSearchSolid,
     LaCogSolid,
     LaBarsSolid,
@@ -121,6 +125,8 @@ addIcons(
     RiZoomOutLine,
     BiMouse,
     MdFullscreenRound,
+    BiCheckCircle,
+    PrTrash,
 );
 
 export default OhVueIcon;

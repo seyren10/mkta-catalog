@@ -61,11 +61,38 @@
                         {{ item.details.dimension }}
                     </p>
 
-                    <v-button
-                        icon="la-heart"
-                        iconSize="1"
-                        class="text-accent"
-                    ></v-button>
+                    <v-toast
+                        :type="isIncludedOnWishlist() ? 'success' : 'danger'"
+                    >
+                        <template #activator="props">
+                            <v-button
+                                v-bind="props"
+                                :icon="
+                                    isIncludedOnWishlist()
+                                        ? 'la-heart-solid'
+                                        : 'la-heart'
+                                "
+                                iconSize="1"
+                                :class="
+                                    isIncludedOnWishlist()
+                                        ? 'text-red-500'
+                                        : 'text-accent'
+                                "
+                                @click="
+                                    isIncludedOnWishlist()
+                                        ? handleRemoveFromWishlist()
+                                        : handleAddToWishlist()
+                                "
+                            ></v-button>
+                        </template>
+
+                        <template v-if="isIncludedOnWishlist()">
+                            Item added to wishlist.
+                        </template>
+                        <template v-else>
+                            Item removed from wishlist.
+                        </template>
+                    </v-toast>
                 </div>
             </div>
         </slot>
@@ -73,6 +100,9 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
+import { inject } from "vue";
+
 defineOptions({
     inheritAttrs: false,
 });
@@ -83,6 +113,20 @@ const props = defineProps({
         default: {},
     },
 });
+
+const wishlistUIStore = inject("wishlistUIStore");
+
+const isIncludedOnWishlist = () => {
+    return wishlistUIStore.isIncludedOnWishlist(props.item);
+};
+
+const handleAddToWishlist = () => {
+    wishlistUIStore.addToWishlist(props.item);
+};
+
+const handleRemoveFromWishlist = () => {
+    wishlistUIStore.removeFromWishlist(props.item);
+};
 </script>
 
 <style lang="scss" scoped></style>

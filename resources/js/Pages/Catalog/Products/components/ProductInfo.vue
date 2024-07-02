@@ -14,13 +14,40 @@
 
         <div class="flex items-center gap-5">
             <div>
-                <v-button icon="la-heart" class="bg-accent text-white">
-                </v-button>
-                <v-tooltip activator="parent">Add to wishlist</v-tooltip>
+                <v-toast :type="!isIncludedInWishlist() ? 'danger' : 'success'">
+                    <template #activator="props">
+                        <v-button
+                            v-bind="props"
+                            :icon="
+                                isIncludedInWishlist()
+                                    ? 'la-heart-solid'
+                                    : 'la-heart'
+                            "
+                            :class="isIncludedInWishlist() ? 'text-red-500' :  'text-accent'"
+                            @click="
+                                isIncludedInWishlist()
+                                    ? removeFromWishlist()
+                                    : addToWishlist()
+                            "
+                        >
+                        </v-button>
+                    </template>
+
+                    {{
+                        !isIncludedInWishlist()
+                            ? "Item removed from wishlist."
+                            : "Item added to wishlist."
+                    }}
+                </v-toast>
+                <v-tooltip activator="parent">{{
+                    isIncludedInWishlist()
+                        ? "Remove from Wishlist"
+                        : "Add to wishlist"
+                }}</v-tooltip>
             </div>
 
             <v-dialog v-model="contact" max-width="700" persistent>
-                <template #header="props">
+                <template #header>
                     <div class="flex justify-between p-5">
                         <VIconWrapper prepend-icon="ri-customer-service-2-line"
                             ><h2 class="font-medium text-primary">
@@ -28,7 +55,7 @@
                             </h2></VIconWrapper
                         >
                         <v-button
-                            v-bind="props"
+                            @click="contact = false"
                             icon="md-close-round"
                         ></v-button>
                     </div>
@@ -43,7 +70,7 @@
                     >
                 </template>
 
-                <ContactSales class="p-5" :items="[product]"></ContactSales>
+                <ContactSales class="p-5" :item="product"></ContactSales>
             </v-dialog>
         </div>
         <v-tab
@@ -81,10 +108,18 @@
             </template>
             <template #content.download>
                 <div class="mt-3 space-y-5">
-                    <div class="rounded-lg bg-slate-100 p-3 text-[.8rem]">
+                    <div
+                        class="flex gap-2 rounded-lg bg-slate-100 p-3 text-[.8rem]"
+                    >
+                        <v-icon
+                            name="pr-exclamation-circle"
+                            scale="1.2"
+                            class="fill-slate-400"
+                        ></v-icon>
                         <p class="text-slate-400">
-                            <span class="flex items-center font-bold"
-                                ><v-icon name="bi-exclamation"></v-icon>
+                            <span
+                                class="flex items-center font-medium text-primary"
+                            >
                                 Important Note:</span
                             >
                             By downloading the zip file containing images from
@@ -108,6 +143,7 @@
 
 <script setup>
 import { inject, computed, ref } from "vue";
+import { useWishlistUIStore } from "../../../../stores/ui/wishlistUIStore";
 
 import ContactSales from "@/components/ContactSales.vue";
 import BreadCrumb from "@/components/BreadCrumb.vue";
@@ -117,6 +153,13 @@ import VIconWrapper from "@/components/base_components/VIconWrapper.vue";
 const product = inject("product");
 const category = inject("category");
 const contact = ref(false);
+const wishlistUIStore = useWishlistUIStore();
+
+const isIncludedInWishlist = () =>
+    wishlistUIStore.isIncludedOnWishlist(product.value);
+
+const addToWishlist = () => wishlistUIStore.addToWishlist(product.value);
+const removeFromWishlist = () => wishlistUIStore.removeFromWishlist(product.value);
 
 //derived
 const breadCrumbData = computed(() => {

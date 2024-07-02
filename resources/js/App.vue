@@ -19,6 +19,7 @@ import { provide } from "vue";
 import { RouterView } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
 import { useCategoryStore } from "@/stores/categoryStore";
+import { useWishlistUIStore } from "./stores/ui/wishlistUIStore";
 import { useProductStore } from "./stores/productStore";
 
 const userStore = useUserStore();
@@ -26,8 +27,10 @@ const { user } = storeToRefs(userStore);
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
+const wishlistUIStore = useWishlistUIStore();
 
 provide("currentUser", user);
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
+provide("wishlistUIStore", wishlistUIStore);
 </script>

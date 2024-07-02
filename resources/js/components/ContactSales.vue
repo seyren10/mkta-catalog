@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-5 text-sm md:grid-cols-2 p-5">
+    <div class="grid gap-5 p-5 text-sm md:grid-cols-2">
         <p class="md:col-span-2">
             Please contact us via email, and we will respond at our earliest
             convenience. You may use the form provided below or send a direct
@@ -10,13 +10,9 @@
         </p>
         <section class="space-y-3">
             <div class="p-1">
-                <p class="mb-3">Item(s):</p>
+                <p class="mb-3">Item:</p>
                 <ul class="grid gap-3">
-                    <li
-                        v-for="(item, index) in items"
-                        :key="index"
-                        class="rounded-lg bg-slate-200 p-3"
-                    >
+                    <li :key="item.id" class="rounded-lg bg-slate-200 p-3">
                         <div>{{ item.details.description }}</div>
                         <span class="text-slate-400">{{
                             item.details.dimension
@@ -35,7 +31,7 @@
         </section>
     </div>
 
-    <section class="primary-gradient text-[.8rem] md:col-span-2 p-3">
+    <section class="primary-gradient p-3 text-[.8rem] md:col-span-2">
         <v-text-icon
             :items="infoList"
             class="grid text-slate-400 *:items-start"
@@ -50,7 +46,7 @@ import MKMap from "@/components/MKMap.vue";
 import { computed } from "vue";
 
 defineProps({
-    items: Array,
+    item: Object,
 });
 
 const infoList = computed(() => {

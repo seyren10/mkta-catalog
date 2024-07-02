@@ -60,11 +60,30 @@
                             </div>
                         </v-button>
                     </div>
-                    <div class="cursor-pointer">
-                        <v-tooltip activator="parent">Wishlist</v-tooltip>
-                        <v-icon name="la-heart" scale="1.5" class="fill-accent">
-                        </v-icon>
-                    </div>
+
+                    <Wishlist max-width="800">
+                       
+                    </Wishlist>
+                    <!-- <v-dialog v-model="wishlistDialog">
+                        <template #activator="props">
+                            <div class="cursor-pointer" v-bind="props">
+                                <v-badge v-if="wishlistCount">{{
+                                    wishlistCount
+                                }}</v-badge>
+                                <v-tooltip activator="parent"
+                                    >Wishlist</v-tooltip
+                                >
+                                <v-icon
+                                    name="la-heart"
+                                    scale="1.5"
+                                    class="fill-accent"
+                                >
+                                </v-icon>
+                            </div>
+                        </template>
+
+                        <div class="p-3">Hello po</div>
+                    </v-dialog> -->
                 </div>
                 <!-- #endregion searchbar -->
 
@@ -167,13 +186,15 @@
 <script setup>
 import { inject, ref } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
-import FeatureCategory from "./FeatureCategory.vue";
 import { storeToRefs } from "pinia";
 
-//stores
+import FeatureCategory from "./FeatureCategory.vue";
+import Wishlist from "./Wishlist.vue";
+import ContactSales from "../../../components/ContactSales.vue";
+
+//reactives
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
-//reactives
 const menu = ref(false);
 
 //injects
