@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-8 space-y-5" v-if="category">
+    <div class="container my-8 space-y-5" v-if="!loading">
         <header
             class="grid items-center gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min-content_auto]"
         >
@@ -7,11 +7,11 @@
                 <BreadCrumb></BreadCrumb>
             </div>
             <div
-                class="aspect-video overflow-hidden rounded-lg bg-red-500 md:order-2"
+                class="aspect-video overflow-hidden rounded-lg bg-slate-200 md:order-2"
             >
-                <img
-                    :src="category.img"
-                    alt=""
+                <v-text-on-image
+                    no-overlay
+                    :image="`/api/s3-resources/${category.img}`"
                     class="h-full w-full object-cover"
                 />
             </div>
@@ -19,12 +19,10 @@
                 <h1
                     class="my-5 text-head font-light uppercase tracking-wide text-primary"
                 >
-                    {{ category?.name }}
+                    {{ category?.title }} 
                 </h1>
                 <p class="max-w-[50ch] text-slate-500 md:order-1">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Vel eligendi ducimus reprehenderit voluptatum reiciendis
-                    impedit quia eaque, deleniti magni velit.
+                    {{ category?.description }}
                 </p>
             </div>
         </header>
@@ -65,6 +63,7 @@
                 </template>
                 <template #default>
                     <Product
+                        no-overlay
                         class="overflow-hidden rounded-lg bg-slate-100"
                         v-for="product in products"
                         :item="product"
@@ -74,46 +73,57 @@
             </ProductListing>
         </main>
     </div>
-    <InpageNotFound v-else></InpageNotFound>
+    <div v-else class="absolute inset-0 grid place-content-center">
+        <VLoader scale="2"></VLoader>
+    </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { useCategoryStore } from "@/stores/categoryStore";
-import { useProductStore } from "@/stores/productStore";
+import { computed, inject, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { onBeforeRouteUpdate } from "vue-router";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import InpageNotFound from "../../../components/InpageNotFound.vue";
 import ProductListing from "./components/ProductListing.vue";
 import Filter from "./components/Filter.vue";
 import Product from "@/components/Product.vue";
+import VLoader from "../../../components/base_components/VLoader.vue";
 
 const props = defineProps({
     id: String,
 });
 
 //stores
-const categoryStore = useCategoryStore();
-const { getCategoryWithId } = categoryStore;
+const categoryStore = inject("categoryStore");
+const category = ref(null);
+const productStore = inject("productStore");
+const { product_items: products } = storeToRefs(productStore);
+const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
+const loading = ref(false);
 
-const productStore = useProductStore();
-const { getProductsWithCategoryId } = productStore;
+category.value = categoryStore.getCategoryWithId(+props.id);
 
-const products = computed(() => getProductsWithCategoryId(+props.id));
+await getProductsWithCategoryId(+props.id, {
+    includeProductImages: true,
+});
 
-const category = computed(() => {
-    return getCategoryWithId(+props.id);
+onBeforeRouteUpdate(async (to, from) => {
+    loading.value = true;
+    if (from.params.id !== to.params.id) {
+        await getProductsWithCategoryId(+to.params.id, {
+            includeProductImages: true,
+        });
+    }
+    category.value = categoryStore.getCategoryWithId(+to.params.id);
+
+    loading.value = false;
 });
 
 //reactives
 const sortBy = ref(0);
 
 //non-reactives
-const tabData = [
-    { title: "Tab 1", value: "tab1" },
-    { title: "Tab 2", value: "tab2" },
-    { title: "Tab 3", value: "tab3" },
-];
 </script>
 
 <style lang="scss" scoped></style>

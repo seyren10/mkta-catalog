@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Models\ProductCategory;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Product;
-use App\Models\ProductCategory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -18,6 +19,15 @@ class ProductController extends Controller
     public function index()
     {
         return ProductResource::collection(Product::get());
+    }
+    public function getProductsWithCategoryId(Category $category)
+    {
+
+        return  ProductResource::collection(Product::whereHas('product_categories', function ($query) use ($category) {
+            if ($category->id) {
+                $query->where('product_categories.category_id', $category->id);
+            }
+        })->paginate(20));
     }
     public function store(ProductRequest $request)
     {
@@ -36,7 +46,6 @@ class ProductController extends Controller
             )
         );
         return response()->json(['message' => 'Product created successfully', 'product' => $product], 200);
-
     }
     public function show(Product $product)
     {
@@ -49,7 +58,6 @@ class ProductController extends Controller
         }
         $product->save();
         return response()->json(['message' => 'Product updated successfully'], 200);
-
     }
     public function destroy(Product $product)
     {
@@ -76,19 +84,17 @@ class ProductController extends Controller
                 DB::commit();
                 return response(array(
                     "message" => "Categories Updated"
-                ),200);    
+                ), 200);
             }
             return response(array(
                 "message" => "No Categories included"
-            ),200);
-            
+            ), 200);
         } catch (\Throwable $th) {
             return response(array(
                 "message" => $th->getMessage()
-            ),422);
+            ), 422);
             DB::rollback();
         }
-
     }
     #endregion
 

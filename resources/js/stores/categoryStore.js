@@ -260,7 +260,7 @@ export const useCategoryStore = defineStore("categories", () => {
             let defaultData = {
                 includeSubCategories: true,
                 includeFile: true,
-                includeParentCategory: true
+                includeParentCategory: true,
             };
             const res = await exec("/api/categories/" + id, "get", {
                 ...requestData,
@@ -269,7 +269,7 @@ export const useCategoryStore = defineStore("categories", () => {
             category.value = res.data.data;
             form.title = category.value.title;
             form.description = category.value.description;
-            form.parent_id = category.value.parent_id
+            form.parent_id = category.value.parent_id;
             form.file_id = category.value.file_id ?? category.img;
         } catch (e) {
             console.log(e);
@@ -282,6 +282,11 @@ export const useCategoryStore = defineStore("categories", () => {
         } catch (e) {
             console.log(e);
         }
+    };
+
+    const getCategoryWithId = (categoryId) => {
+        if (categories.value.length)
+            return categories.value.find((e) => e.id === categoryId);
     };
 
     return {
@@ -298,5 +303,6 @@ export const useCategoryStore = defineStore("categories", () => {
         deleteCategory,
         getCategory,
         getCategories,
+        getCategoryWithId,
     };
 });

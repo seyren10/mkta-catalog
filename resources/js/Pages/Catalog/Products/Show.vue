@@ -39,7 +39,7 @@ const props = defineProps({
 
 //stores
 const productStore = useProductStore();
-const { getProductWithId } = productStore;
+const getProductWithId = productStore.getProductsWithCategoryId;
 
 //injects
 const categoryStore = inject("categoryStore");

@@ -3,12 +3,12 @@
         <v-text-on-image
             v-bind="$attrs"
             :class="`aspect-square cursor-pointer rounded-none`"
-            :image="item.image"
+            :image="s3(item?.product_images?.at(0)?.file.filename)"
             @click="$router.push({ name: 'product', params: { id: item.id } })"
         >
             <template #overlay="overlayProps">
                 <slot name="overlay" :item="item">
-                    <div
+                    <!-- <div
                         v-bind="overlayProps"
                         class="absolute bottom-1 left-1 max-w-[96%] rounded-lg bg-black bg-opacity-50 p-3 text-white"
                     >
@@ -20,7 +20,7 @@
                             <span class="capitalize">{{ key }}</span> :
                             <span class="text-slate-300"> {{ detail }}</span>
                         </p>
-                    </div>
+                    </div> -->
 
                     <!-- #region new -->
                     <div
@@ -53,12 +53,12 @@
                     >
                     </slot>
                     <h3 class="text-[.8rem] font-bold [text-overflow:ellipsis]">
-                        {{ item.details.description }}
+                        {{ item.title }}
                     </h3>
                 </div>
                 <div class="flex items-center justify-between">
                     <p class="mt-1 text-[.8rem] text-gray-400">
-                        {{ item.details.dimension }}
+                        {{ item.id }}
                     </p>
 
                     <v-toast
@@ -127,6 +127,7 @@ const handleAddToWishlist = () => {
 const handleRemoveFromWishlist = () => {
     wishlistUIStore.removeFromWishlist(props.item);
 };
+const s3 = inject("s3");
 </script>
 
 <style lang="scss" scoped></style>

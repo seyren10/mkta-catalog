@@ -23,7 +23,11 @@
                                     ? 'la-heart-solid'
                                     : 'la-heart'
                             "
-                            :class="isIncludedInWishlist() ? 'text-red-500' :  'text-accent'"
+                            :class="
+                                isIncludedInWishlist()
+                                    ? 'text-red-500'
+                                    : 'text-accent'
+                            "
                             @click="
                                 isIncludedInWishlist()
                                     ? removeFromWishlist()
@@ -152,6 +156,7 @@ import VIconWrapper from "@/components/base_components/VIconWrapper.vue";
 //reactives
 const product = inject("product");
 const category = inject("category");
+
 const contact = ref(false);
 const wishlistUIStore = useWishlistUIStore();
 
@@ -159,7 +164,8 @@ const isIncludedInWishlist = () =>
     wishlistUIStore.isIncludedOnWishlist(product.value);
 
 const addToWishlist = () => wishlistUIStore.addToWishlist(product.value);
-const removeFromWishlist = () => wishlistUIStore.removeFromWishlist(product.value);
+const removeFromWishlist = () =>
+    wishlistUIStore.removeFromWishlist(product.value);
 
 //derived
 const breadCrumbData = computed(() => {

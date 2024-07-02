@@ -61,29 +61,7 @@
                         </v-button>
                     </div>
 
-                    <Wishlist max-width="800">
-                       
-                    </Wishlist>
-                    <!-- <v-dialog v-model="wishlistDialog">
-                        <template #activator="props">
-                            <div class="cursor-pointer" v-bind="props">
-                                <v-badge v-if="wishlistCount">{{
-                                    wishlistCount
-                                }}</v-badge>
-                                <v-tooltip activator="parent"
-                                    >Wishlist</v-tooltip
-                                >
-                                <v-icon
-                                    name="la-heart"
-                                    scale="1.5"
-                                    class="fill-accent"
-                                >
-                                </v-icon>
-                            </div>
-                        </template>
-
-                        <div class="p-3">Hello po</div>
-                    </v-dialog> -->
+                    <Wishlist max-width="800"> </Wishlist>
                 </div>
                 <!-- #endregion searchbar -->
 
@@ -144,7 +122,7 @@
                                     >
                                         <v-text-on-image
                                             :image="category.img"
-                                            :title="category.name"
+                                            :title="category.title"
                                             appear
                                             class="aspect-[2/1]"
                                         >
@@ -161,14 +139,14 @@
                                         class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap gap-3 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
                                     >
                                         <li
-                                            v-for="child in category.subCategories"
+                                            v-for="child in category.sub_categories"
                                             class="group flex items-center overflow-hidden duration-200 hover:text-accent"
                                         >
                                             <v-icon
                                                 class="w-0 duration-200 group-hover:w-5"
                                                 name="md-keyboardarrowright-round"
                                             ></v-icon>
-                                            <span>{{ child }}</span>
+                                            <span>{{ child.title }}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -190,13 +168,11 @@ import { storeToRefs } from "pinia";
 
 import FeatureCategory from "./FeatureCategory.vue";
 import Wishlist from "./Wishlist.vue";
-import ContactSales from "../../../components/ContactSales.vue";
 
 //reactives
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
-
 
 //non-reactives
 const headerData = [
@@ -206,7 +182,6 @@ const headerData = [
 ];
 
 //reactives
-const parent = ref(null);
 
 //injects
 const user = inject("currentUser");

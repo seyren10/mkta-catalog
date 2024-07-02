@@ -103,7 +103,7 @@ import {
     BiChevronLeft,
     HiPlusSm,
     BiPlus,
-    RiInsertRowBottom ,
+    RiInsertRowBottom,
     RiDeleteRow,
     RiDeleteColumn,
     RiInsertColumnRight,
@@ -111,7 +111,6 @@ import {
     FaCloudUploadAlt,
     BiCheckCircleFill,
     MdDrivefilerenameoutlineOutlined,
-    BiCheckCircle,
     PrTrash,
 } from "oh-vue-icons/icons";
 
@@ -122,7 +121,7 @@ addIcons(
     LaLinkSolid,
     RiInsertColumnRight,
     RiDeleteColumn,
-    RiInsertRowBottom ,
+    RiInsertRowBottom,
     RiDeleteRow,
     BiPlus,
     HiPlusSm,
@@ -226,7 +225,6 @@ addIcons(
     RiZoomOutLine,
     BiMouse,
     MdFullscreenRound,
-    BiCheckCircle,
     PrTrash,
 );
 

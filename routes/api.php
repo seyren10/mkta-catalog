@@ -31,8 +31,8 @@ Route::get('/user', function (Request $request) {
     return new UserResource($request->user());
 })->middleware('auth:sanctum');
 
-Route::get('s3-resources/{filename}',[FileController::class, 'show']);
-Route::get('s3-resources-download/{filename}',[FileController::class, 'download']);
+Route::get('s3-resources/{filename}', [FileController::class, 'show']);
+Route::get('s3-resources-download/{filename}', [FileController::class, 'download']);
 // Route::post('s3-resources-upload',[FileController::class, 'store']);
 Route::apiResource('portal-files', FileController::class)->only(['store', 'index', 'update', 'destroy']);
 
@@ -58,6 +58,7 @@ Route::apiResource('permissions', PermissionController::class)->except(['create'
 
 Route::apiResource('categories', CategoryController::class)->except(['create', 'edit']);
 Route::apiResource('product', ProductController::class)->except($except);
+Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
 Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
 
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except(['create', 'edit']);

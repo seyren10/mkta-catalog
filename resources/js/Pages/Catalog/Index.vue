@@ -134,65 +134,15 @@
                 </template>
             </v-horizontal-scroller>
         </section>
-        <!-- #endregion subcategories -->
-
-        <!-- <v-card density="comfortable">
-            <template #header>
-                <header
-                    class="grid min-h-[10rem] rounded-lg bg-[url('/mk-images/inlitefi.jpg')] bg-cover bg-center bg-no-repeat text-white"
-                >
-                    <div class="self-end p-4">
-                        <h2 class="text-[1.3rem] font-medium tracking-wide">
-                            A Heading with background Image
-                        </h2>
-                        <p class="font-light text-slate-200">
-                            If you can read this, you are gay.
-                        </p>
-                    </div>
-                </header>
-            </template>
-            <div>
-                We are the champion. Lorem, ipsum dolor sit amet consectetur
-                adipisicing elit. Doloribus earum laudantium soluta eveniet, id
-                dolorum praesentium quia, facilis sit, ab et beatae optio est
-                officiis exercitationem ut tenetur? Nam, ea.
-            </div>
-            <template #action>
-                <v-button
-                    class="text-accent"
-                    outlined
-                    prepend-inner-icon="pr-send"
-                    icon-size="1"
-                    >See More</v-button
-                >
-            </template>
-        </v-card>
-        <v-text-field v-model="search"> </v-text-field>
-        <v-data-table
-            :items="items"
-            :search="search"
-            class="my-3"
-            striped
-            density="comfortable"
-        ></v-data-table>
-        <v-text-on-image
-            image="/carousel-test/eeq.jpg"
-            title="This is it"
-            subtitle="shop now and get debunked."
-        >
-            <template #overlay-title="{ title }">
-                <h1 class="text-red-500">{{ title }}</h1>
-            </template>
-        </v-text-on-image> -->
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { useProductStore } from "../../stores/productStore";
-import { useCategoryStore } from "@/stores/categoryStore";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
+import { storeToRefs } from "pinia";
 
 //stores
 const productStore = useProductStore();
@@ -200,17 +150,11 @@ const { getProductsWithCategoryId, getNewProducts } = productStore;
 const christmasProducts = getProductsWithCategoryId(1);
 const animalProducts = getProductsWithCategoryId(5);
 const newProducts = getNewProducts(10);
-
-const categoryStore = useCategoryStore();
-const categories = categoryStore.categories;
+const { categories } = storeToRefs(inject("categoryStore"));
 
 //reactives
-const items = ref(null);
 
 //async
-await fetch("https://jsonplaceholder.typicode.com/todos")
-    .then((res) => res.json())
-    .then((json) => (items.value = json));
 </script>
 
 <style lang="scss" scoped></style>

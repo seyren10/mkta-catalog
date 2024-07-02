@@ -37,15 +37,17 @@ class Product extends Model
     {
         return $this->hasMany(ProductComponent::class, 'product_id', 'id')->orderBy('index', 'ASC');
     }
-    public function product_categories(){ 
-        return $this->hasManyThrough( 
-            Category::class, 
-            ProductCategory::class, 
-            'product_id', 
-            'id', 
-            'id', 
-            'category_id' 
-        )->withOut(["sub_categories", 'file', 'parent_category']); 
+
+
+    public function product_categories()
+    {
+        return $this->hasManyThrough(
+            Category::class,
+            ProductCategory::class,
+            'product_id',
+            'id',
+            'id',
+            'category_id'
+        )->withOut(["sub_categories", 'file', 'parent_category']);
     }
-    
 }

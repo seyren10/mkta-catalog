@@ -14,7 +14,7 @@
                 "
                 class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white"
             >
-                {{ feature.name }}
+                {{ feature.title }}
             </div>
 
             <div
@@ -30,7 +30,8 @@
         <div class="bg-primary p-5 text-xs text-slate-300">
             <ul class="grid grid-cols-2 gap-3">
                 <li
-                    v-for="sub in selectedFeature?.subCategories"
+                    v-if="selectedFeature?.sub_categories.length"
+                    v-for="sub in selectedFeature?.sub_categories"
                     class="group flex items-center hover:text-accent"
                 >
                     <v-icon
@@ -38,9 +39,10 @@
                         class="w-0 duration-300 group-hover:w-5"
                     ></v-icon>
                     <a href="#">
-                        {{ sub }}
+                        {{ sub.title }}
                     </a>
                 </li>
+                <li v-else>No sub categories</li>
             </ul>
         </div>
     </v-menu>

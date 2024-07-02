@@ -5,7 +5,23 @@
         </header>
 
         <main class="text-slate-600">
-            <router-view></router-view>
+            <RouterView v-slot="{ Component }">
+                <template v-if="Component">
+                    <Suspense timeout="0">
+                        <component :is="Component" />
+
+                        <template v-slot:fallback>
+                            <Teleport to="#app">
+                                <div
+                                    class="absolute inset-0 grid place-content-center"
+                                >
+                                    <VLoader scale="2"></VLoader>
+                                </div>
+                            </Teleport>
+                        </template>
+                    </Suspense>
+                </template>
+            </RouterView>
         </main>
 
         <v-button
@@ -20,7 +36,12 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
+import { inject } from "vue";
+import { RouterView } from "vue-router";
+
 import CatalogNav from "./components/catalog/CatalogNav.vue";
+import VLoader from "../components/base_components/VLoader.vue";
 
 //methods
 const handleHide = (el, hidden) => {
@@ -30,6 +51,15 @@ const handleHide = (el, hidden) => {
 const handleScrollToTop = () => {
     window.scrollTo({ top: 0 });
 };
+
+const categoryStore = inject("categoryStore");
+const { categories } = storeToRefs(categoryStore);
+if (!categories.value.length)
+    await categoryStore.getCategories({
+        includeSubCategories: true,
+        includeParentCategory: true,
+        includeFile: true,
+    });
 
 //hooks
 </script>
