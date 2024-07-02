@@ -27,10 +27,12 @@
                                     :isActive="tab === model.value"
                                 >
                                     <button
-                                        class="rounded-lg p-2 px-3 text-slate-400 duration-300 hover:bg-slate-300 hover:text-slate-500"
+                                        
+                                        class="flex items-center gap-2 rounded-lg p-2 px-3 text-slate-400 duration-300 hover:bg-slate-300 hover:text-slate-500"
                                         :class="`${tab.value === model ? activeClass || 'bg-slate-200 font-medium' : ''}`"
                                         @click="model = tab.value"
                                     >
+                                    <v-icon v-if="Object.keys(tab).includes('icon')" :name="tab.icon" :scale="Object.keys(tab).includes('iconScale') ? tab.iconScale : 1 "></v-icon>
                                         {{ tab.title }}
                                     </button>
                                 </slot>

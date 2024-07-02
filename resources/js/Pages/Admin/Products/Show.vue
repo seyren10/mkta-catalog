@@ -18,7 +18,7 @@
         </p>
     </div>
     <div class="my-3">
-        <v-tab headerClass=" bg-white" v-model="currentTab" :tabs="tabs">
+        <v-tab headerClass=" bg-white" no-navigation v-model="currentTab" :tabs="tabs">
             /*ANCHOR - Product Images */
             <template #content.ProductImages>
                 <productImages :id="id" />
@@ -100,31 +100,37 @@ const currentTab = ref("ProductComponents");
 const tabs = ref([
     {
         icon: "bi-cart4",
+        iconScale: "1.5",
         title: "Information",
         value: "ProdInfo",
     },
     {
         icon: "md-category",
+        iconScale: "1.5",
         title: "Categories",
         value: "Categories",
     },
     {
         icon: "fa-puzzle-piece",
+        iconScale: "1.5",
         title: "Components",
         value: "ProductComponents",
     },
     {
         icon: "fa-images",
+        iconScale: "1.5",
         title: "Images",
         value: "ProductImages",
     },
     {
         icon: "bi-cart-x",
         title: "Non Wishlist Customers",
+        iconScale: "1.5",
         value: "NonWishlistCustomers",
     },
     {
         icon: "ai-closed-access",
+        iconScale: "1.5",
         title: "Restriction & Exemptions",
         value: "ProductAccess",
     },

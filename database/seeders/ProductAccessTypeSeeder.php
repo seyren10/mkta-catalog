@@ -81,6 +81,7 @@ class ProductAccessTypeData
             "ref_column" => $this->ref_column,
             "source_table" => $this->source_table,
             "source_column" => $this->source_column,
+            "display_column" => $this->source_column,
             'created_at' => now(),
             'updated_at' => now()
         ];
