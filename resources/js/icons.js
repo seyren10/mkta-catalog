@@ -110,6 +110,7 @@ import {
     LaLinkSolid,
     FaCloudUploadAlt,
     BiCheckCircleFill,
+    BiCheckCircle,
     MdDrivefilerenameoutlineOutlined,
     PrTrash,
 } from "oh-vue-icons/icons";
@@ -117,6 +118,7 @@ import {
 addIcons(
     MdDrivefilerenameoutlineOutlined,
     BiCheckCircleFill,
+    BiCheckCircle,
     FaCloudUploadAlt,
     LaLinkSolid,
     RiInsertColumnRight,

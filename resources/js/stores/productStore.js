@@ -1,8 +1,10 @@
 import { computed, reactive, ref, shallowRef } from "vue";
 import { defineStore } from "pinia";
 import { useAxios } from "@/composables/useAxios";
+import { useRouter } from "vue-router";
 
 export const useProductStore = defineStore("products", () => {
+    const router = useRouter();
     //states
     // const products = reactive([
     //     {
@@ -536,9 +538,7 @@ export const useProductStore = defineStore("products", () => {
                 },
             );
             product_items.value = res.data.data;
-        } catch (e) {
-            console.log(e);
-        }
+        } catch (e) {}
     };
     const getProductItem = async (id, requestData = null) => {
         try {
@@ -557,6 +557,7 @@ export const useProductStore = defineStore("products", () => {
                 ...defaultData,
                 ...requestData,
             });
+            
             product_item.value = res.data.data;
             form.value = product_item.value;
             form.id = product_item.value.id;

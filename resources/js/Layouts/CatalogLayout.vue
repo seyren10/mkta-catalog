@@ -37,8 +37,8 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { inject } from "vue";
-import { RouterView } from "vue-router";
+import { inject, onErrorCaptured } from "vue";
+import { RouterView, useRouter } from "vue-router";
 
 import CatalogNav from "./components/catalog/CatalogNav.vue";
 import VLoader from "../components/base_components/VLoader.vue";
@@ -60,8 +60,6 @@ if (!categories.value.length)
         includeParentCategory: true,
         includeFile: true,
     });
-
-//hooks
 </script>
 
 <style lang="scss" scoped></style>

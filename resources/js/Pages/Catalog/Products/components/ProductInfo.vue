@@ -5,10 +5,10 @@
             <h1
                 class="text-head font-medium capitalize leading-tight text-primary"
             >
-                {{ product.details.description }}
+                {{ product.title }}
             </h1>
             <p class="font-light text-slate-500">
-                {{ product.details.dimension }}
+                {{ product.id }}
             </p>
         </div>
 
@@ -88,15 +88,31 @@
         >
             <template #content.basic>
                 <div class="py-3">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                    Ipsam odit quaerat explicabo accusantium omnis quo tenetur
-                    veritatis debitis odio fuga neque praesentium, amet a
-                    voluptatem culpa totam laboriosam cum ex.
+                    {{ product.description }}
                 </div>
             </template>
             <template #content.tech>
                 <div class="p-3">
-                    <ul class="grid gap-3">
+                    <div class="mb-4 flex w-fit gap-2">
+                        <v-button
+                            class="text-xs"
+                            @click="conversion = 'metric'"
+                            :class="{
+                                'bg-accent text-white': conversion === 'metric',
+                            }"
+                            >Metric</v-button
+                        >
+                        <v-button
+                            class="text-xs"
+                            :class="{
+                                'bg-accent text-white': conversion !== 'metric',
+                            }"
+                            @click="conversion = 'imperial'"
+                            >Imperial</v-button
+                        >
+                    </div>
+
+                    <ul class="grid grid-cols-2 gap-3">
                         <li
                             v-for="(detail, key) in product.details"
                             :key="key"
@@ -105,7 +121,7 @@
                             <span class="min-w-[5rem] capitalize text-slate-400"
                                 >{{ key }}:</span
                             >
-                            <span> {{ detail }}</span>
+                            <span v-html="detail"> </span>
                         </li>
                     </ul>
                 </div>
@@ -154,7 +170,24 @@ import BreadCrumb from "@/components/BreadCrumb.vue";
 import VIconWrapper from "@/components/base_components/VIconWrapper.vue";
 
 //reactives
-const product = inject("product");
+const injectedProduct = inject("product");
+const conversion = ref("metric");
+const IMPERIAL_lENGTH = 2.54;
+const IMPERIAL_POUND = 2.205;
+const product = computed(() => {
+    return {
+        ...injectedProduct.value,
+        details: {
+            code: injectedProduct.value.id,
+            height: `${conversion.value === "metric" ? injectedProduct.value.dimension_height : (+injectedProduct.value.dimension_height / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
+            length: `${conversion.value === "metric" ? injectedProduct.value.dimension_length : (+injectedProduct.value.dimension_length / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
+            width: `${conversion.value === "metric" ? injectedProduct.value.dimension_width : (+injectedProduct.value.dimension_width / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
+            volume: `${injectedProduct.value.volume} <span class='text-slate-400'> m<sup>3</sup></span>`,
+            "weight(gross)": `${conversion.value === "metric" ? injectedProduct.value.weight_gross : (+injectedProduct.value.weight_gross / IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
+            "weight(net)": `${conversion.value === "metric" ? injectedProduct.value.weight_net : (+injectedProduct.value.weight_net / IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
+        },
+    };
+});
 const category = inject("category");
 
 const contact = ref(false);
@@ -170,13 +203,13 @@ const removeFromWishlist = () =>
 //derived
 const breadCrumbData = computed(() => {
     return [
-        { path: "/catalog", name: "catalog" },
+        { name: "catalog", text: "Catalog" },
         {
-            path: `/catalog/categories/${product.value?.category_id}`,
-            name: category.name,
+            path: `/catalog/categories/${product.value.product_categories?.at(0).id}`,
+            text: category.title,
         },
         {
-            name: product.value?.details.dimension,
+            name: product.value?.id,
         },
     ];
 });

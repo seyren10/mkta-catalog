@@ -1,10 +1,18 @@
 <template>
-    <div class="container my-8 space-y-5" v-if="!loading">
+    <div
+        class="container my-8 space-y-5"
+        v-if="!loading && Object.values(category).length"
+    >
         <header
             class="grid items-center gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min-content_auto]"
         >
             <div class="md:col-span-2">
-                <BreadCrumb></BreadCrumb>
+                <BreadCrumb
+                    :items="[
+                        { name: 'catalog', text: 'Catalog' },
+                        { name: 'categories', text: 'Categories' },
+                    ]"
+                ></BreadCrumb>
             </div>
             <div
                 class="aspect-video overflow-hidden rounded-lg bg-slate-200 md:order-2"
@@ -19,7 +27,7 @@
                 <h1
                     class="my-5 text-head font-light uppercase tracking-wide text-primary"
                 >
-                    {{ category?.title }} 
+                    {{ category?.title }}
                 </h1>
                 <p class="max-w-[50ch] text-slate-500 md:order-1">
                     {{ category?.description }}
@@ -79,12 +87,11 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watch } from "vue";
+import { inject, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { onBeforeRouteUpdate } from "vue-router";
+import { onBeforeRouteUpdate, useRouter } from "vue-router";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
-import InpageNotFound from "../../../components/InpageNotFound.vue";
 import ProductListing from "./components/ProductListing.vue";
 import Filter from "./components/Filter.vue";
 import Product from "@/components/Product.vue";
@@ -99,31 +106,39 @@ const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
 const { product_items: products } = storeToRefs(productStore);
+
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
-
-category.value = categoryStore.getCategoryWithId(+props.id);
-
-await getProductsWithCategoryId(+props.id, {
-    includeProductImages: true,
-});
-
-onBeforeRouteUpdate(async (to, from) => {
-    loading.value = true;
-    if (from.params.id !== to.params.id) {
-        await getProductsWithCategoryId(+to.params.id, {
-            includeProductImages: true,
-        });
-    }
-    category.value = categoryStore.getCategoryWithId(+to.params.id);
-
-    loading.value = false;
-});
-
-//reactives
+const router = useRouter();
 const sortBy = ref(0);
 
-//non-reactives
+await fetchProducts(+props.id);
+
+//methods
+
+async function fetchProducts(categoryId) {
+    loading.value = true;
+
+    category.value = categoryStore.getCategoryWithId(+categoryId);
+    await getProductsWithCategoryId(+categoryId, {
+        includeProductImages: true,
+    });
+
+    loading.value = false;
+
+    //incase user manualy set the category URL of category ID to something else
+    //that doesnt exist in the database
+    if (!category.value) {
+        router.push({ name: "fallback" });
+    }
+}
+
+//reactives
+
+//hooks
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) await fetchProducts(to.params.id);
+});
 </script>
 
 <style lang="scss" scoped></style>

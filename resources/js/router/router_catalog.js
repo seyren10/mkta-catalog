@@ -20,7 +20,7 @@ const catalog_routes =[
                 path: "categories/:id",
                 name: "categories",
                 props: true,
-                component: () => import("@/Pages/Catalog/Categories/Index.vue"),
+                component: () => import("@/Pages/Catalog/Categories/Categories.vue"),
             },
             {
                 path: "product/:id",

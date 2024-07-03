@@ -7,11 +7,11 @@
         >
             <router-link
                 :key="link.path"
-                :to="link.path"
+                :to="link"
                 v-if="index !== links.length - 1"
                 class="underline-offset-4 hover:underline"
             >
-                {{ link.name }}</router-link
+                {{ link.text }}</router-link
             >
             <span v-else class="text-slate-500">{{ link.name }}</span>
         </li>

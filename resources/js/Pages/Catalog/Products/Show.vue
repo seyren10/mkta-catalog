@@ -32,6 +32,7 @@ import ImageView from "./components/ImageView.vue";
 import ProductInfo from "./components/ProductInfo.vue";
 import RecentViewed from "./components/RecentViewed.vue";
 import RelatedProducts from "./components/RelatedProducts.vue";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
     id: String,
@@ -39,7 +40,9 @@ const props = defineProps({
 
 //stores
 const productStore = useProductStore();
-const getProductWithId = productStore.getProductsWithCategoryId;
+const { product_item: product } = storeToRefs(productStore);
+
+await productStore.getProductItem(props.id);
 
 //injects
 const categoryStore = inject("categoryStore");
@@ -47,18 +50,18 @@ const categoryStore = inject("categoryStore");
 //reactives
 const currentImageIndex = ref(0);
 const lightbox = ref(false);
+const s3 = inject("s3");
 
 //computed
-const product = computed(() => {
-    return getProductWithId(props.id);
-});
-
-const category = categoryStore.getCategoryWithId(product.value?.category_id);
+const category = categoryStore.getCategoryWithId(
+    product.value.product_categories?.at(0).id,
+);
 
 const productImages = computed(() => {
-    if (product.value?.album) {
-        return [product.value?.image, ...product.value?.album];
-    } else return [product.value?.image];
+    return product.value.product_images?.reduce((acc, cur) => {
+        acc.push(s3(cur.file.filename));
+        return acc;
+    }, []);
 });
 
 //hooks
