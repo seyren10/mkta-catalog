@@ -4,10 +4,10 @@
         v-intersect="handleIntersect"
     >
         <img
-            src="/213123Logo.svg"
+            src="/Logo.svg"
             ref="imageRef"
             alt=""
-            class="h-full w-full bg-primary object-cover duration-300 group-hover/toi:scale-105"
+            class="h-full w-full bg-white object-cover duration-300 group-hover/toi:scale-105"
         />
         <slot
             name="overlay"

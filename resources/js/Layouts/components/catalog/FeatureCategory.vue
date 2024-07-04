@@ -5,17 +5,12 @@
             v-for="feature in categories"
             :key="feature.id"
         >
-            <div
-                @click="
-                    $router.push({
-                        name: 'categories',
-                        params: { id: feature.id },
-                    })
-                "
+            <router-link
+                :to="{ name: 'categories', params: { id: feature.id } }"
                 class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white"
             >
                 {{ feature.title }}
-            </div>
+            </router-link>
 
             <div
                 class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white"
