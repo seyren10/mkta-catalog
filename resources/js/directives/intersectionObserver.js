@@ -13,7 +13,8 @@ export default {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     callback ? callback(entry) : binding.value(entry); // Call the bound method
-                    el._observer.unobserve(el);
+
+                    if (!options?.continuous) el._observer.unobserve(el);
                 }
             });
         };

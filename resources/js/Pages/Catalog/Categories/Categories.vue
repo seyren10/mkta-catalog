@@ -53,7 +53,8 @@
                 <template #top>
                     <div class="flex items-center justify-between">
                         <div class="text-[.8rem] text-slate-500">
-                            Showing 1 of 20 items
+                            Showing {{ productsCount }} of
+                            {{ totalProductsCount }} items
                         </div>
                         <div class="flex items-center gap-3">
                             <span>Sort By:</span>
@@ -77,6 +78,22 @@
                         :item="product"
                         :key="product.id"
                     ></Product>
+                    <div
+                        v-intersect="{
+                            callback: handleIntersect,
+                            options: {
+                                rootMargin: '0px',
+                                threshold: 1.0,
+                                continuous: true,
+                            },
+                        }"
+                        class="col-[1/-1] flex justify-center gap-2 rounded-lg bg-slate-100"
+                    >
+                        <div class="p-2" v-if="infiniteScrollingLoading">
+                            <VLoader></VLoader>
+                            <span> Loading more products </span>
+                        </div>
+                    </div>
                 </template>
             </ProductListing>
         </main>
@@ -87,7 +104,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
 
@@ -105,17 +122,23 @@ const props = defineProps({
 const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
-const { product_items: products } = storeToRefs(productStore);
+const { product_items: products, pageInfo } = storeToRefs(productStore);
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
+const getProductsWithCategoryIdInfinite =
+    productStore.getProductItemsWithCategoryIdInfiniteScrolling;
 const loading = ref(false);
+const infiniteScrollingLoading = ref(false);
 const router = useRouter();
 const sortBy = ref(0);
+const currentPage = ref(1);
 
 await fetchProducts(+props.id);
 
-//methods
+const productsCount = computed(() => products.value.length);
+const totalProductsCount = computed(() => pageInfo.value.total);
 
+//methods
 async function fetchProducts(categoryId) {
     loading.value = true;
 
@@ -132,12 +155,28 @@ async function fetchProducts(categoryId) {
         router.push({ name: "fallback" });
     }
 }
+async function handleIntersect(entry) {
+    if (currentPage.value >= pageInfo.value.last_page) return;
+
+    currentPage.value++;
+    infiniteScrollingLoading.value = true;
+
+    const items = await getProductsWithCategoryIdInfinite(+props.id, {
+        includeProductImages: true,
+        page: currentPage.value,
+    });
+    products.value = products.value.concat(items);
+    infiniteScrollingLoading.value = false;
+}
 
 //reactives
 
 //hooks
 onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) await fetchProducts(to.params.id);
+    if (to.params.id !== from.params.id) {
+        await fetchProducts(to.params.id);
+        currentPage.value = 1;
+    }
 });
 </script>
 

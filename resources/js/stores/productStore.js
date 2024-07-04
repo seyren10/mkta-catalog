@@ -426,6 +426,8 @@ export const useProductStore = defineStore("products", () => {
     // ]);
 
     const products = reactive([]);
+    const pageInfo = ref({});
+
     //actions
     const getProductsWithCategoryId = (categoryId) => {
         return products.filter((e) => e.category_id === categoryId);
@@ -521,6 +523,7 @@ export const useProductStore = defineStore("products", () => {
             console.log(e);
         }
     };
+
     const getProductItemsWithCategoryId = async (
         categoryId,
         requestData = null,
@@ -538,6 +541,26 @@ export const useProductStore = defineStore("products", () => {
                 },
             );
             product_items.value = res.data.data;
+            pageInfo.value = res.data.meta;
+        } catch (e) {}
+    };
+    const getProductItemsWithCategoryIdInfiniteScrolling = async (
+        categoryId,
+        requestData = null,
+    ) => {
+        try {
+            let defaultData = {
+                includeParentCode: true,
+            };
+            const res = await exec(
+                `/api/product/category/${categoryId}`,
+                "get",
+                {
+                    ...defaultData,
+                    ...requestData,
+                },
+            );
+            return res.data.data;
         } catch (e) {}
     };
     const getProductItem = async (id, requestData = null) => {
@@ -557,7 +580,7 @@ export const useProductStore = defineStore("products", () => {
                 ...defaultData,
                 ...requestData,
             });
-            
+
             product_item.value = res.data.data;
             form.value = product_item.value;
             form.id = product_item.value.id;
@@ -603,6 +626,7 @@ export const useProductStore = defineStore("products", () => {
         getProductsWithCategoryId,
         getNewProducts,
         getProductItemsWithCategoryId,
+        getProductItemsWithCategoryIdInfiniteScrolling,
 
         //////////////////
         form,
@@ -612,6 +636,7 @@ export const useProductStore = defineStore("products", () => {
         errors,
         exec,
         isValid,
+        pageInfo,
 
         updateProductCategories,
 
