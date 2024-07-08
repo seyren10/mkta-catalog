@@ -43,9 +43,9 @@ class NonWishlistController extends Controller
         return response()->json(["message" => "Added"], 200);
 
     }
-    public function destroy(NonWishlistUsers $nonwishlist)
+    public function destroy(NonWishlistUsers $non_wishlist)
     {
-        $nonwishlist->delete();
+        $non_wishlist->delete();
         return response()->json(["message" => "Deleted"], 200);
     }
 }

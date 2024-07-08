@@ -41,11 +41,6 @@ Route::apiResource('portal-files', FileController::class)->only(['store', 'index
 Route::get('current/{category}', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
 
-
-// Route::put('nonwishlist/{user}/{action}/{product}', NonWishlistController::class);
-
-Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
-// Route::apiResource('product-access', ProductAccessController::class)->only(["show"]);
 Route::get('product-access/{product_access}', [ProductAccessController::class, 'show']);
 Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
 Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
@@ -86,7 +81,9 @@ Route::apiResource('customers', UserController::class)->except($except)->names('
 Route::post('customers/reset-password/{user}', [UserController::class, 'resetPassword']);
 Route::post('customers/{user}/{action}/area-code/{areacode}', [UserController::class, 'modifyUserAreaCodes']);
 Route::post('customers/{user}/{action}/company-code/{company_code}', [UserController::class, 'modifyUserCompanyCode']);
-Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store','destroy']);
+Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store']);
 Route::get('customer-wishlist/{user}', [UserWishlistController::class, 'getWishlist']);
+Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
+
 
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);

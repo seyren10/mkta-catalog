@@ -6,9 +6,6 @@ export const useCustomerStore = defineStore("customer", () => {
     const currentCustomer = ref(null);
     const customer = ref([]);
 
-    const customer_wishlist = ref([]);
-    const customer_nonwishlist = ref([]);
-
     const customers = ref([]);
     const form = reactive({
         name: "",
@@ -85,7 +82,7 @@ export const useCustomerStore = defineStore("customer", () => {
             console.log(e);
         }
     };
-    const modifyCustomerCompanies = async (type, company)=>{
+    const modifyCustomerCompanies = async (type, company) => {
         try {
             const res = await exec(
                 "/api/customers/" +
@@ -100,8 +97,8 @@ export const useCustomerStore = defineStore("customer", () => {
         } catch (e) {
             console.log(e);
         }
-    }
-    const modifyCustomerAreas = async (type, area)=>{
+    };
+    const modifyCustomerAreas = async (type, area) => {
         try {
             const res = await exec(
                 "/api/customers/" +
@@ -116,7 +113,7 @@ export const useCustomerStore = defineStore("customer", () => {
         } catch (e) {
             console.log(e);
         }
-    }
+    };
     const getCustomer = async (id, requestData = null) => {
         try {
             let defaultData = {
@@ -124,7 +121,7 @@ export const useCustomerStore = defineStore("customer", () => {
                 includeCompaniesData: true,
                 includeNonWishlistProducts: true,
                 includeNonWishlistProductsKeys: true,
-                includeWishListProducts: true
+                includeWishListProducts: true,
             };
             const res = await exec("/api/customers/" + id, "get", {
                 ...requestData,
@@ -148,12 +145,30 @@ export const useCustomerStore = defineStore("customer", () => {
         }
     };
 
-
-
+    const customer_modifyNonWishlistProduct = async (
+        action,
+        product_id,
+        customer_id,
+    ) => {
+        try {
+            const res = await exec(
+                ["/api/customer-wishlist"].join("/"),
+                "post",
+                {
+                    action : action,
+                    product_id: product_id,
+                    user_id: customer_id,
+                },
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    
     return {
         resetForm,
         resetPassword,
-        
+
         modifyCustomerPermissions,
         modifyCustomerAreas,
         modifyCustomerCompanies,
@@ -162,6 +177,9 @@ export const useCustomerStore = defineStore("customer", () => {
         updateCustomer,
         getCustomer,
         getCustomers,
+
+
+        customer_modifyNonWishlistProduct,
 
         isExist,
         currentCustomer,

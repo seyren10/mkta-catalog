@@ -14,11 +14,13 @@
                     "
                 >
                     <ul>
-                        <li class="p-2 flex justify-between">
+                        <li class="flex justify-between p-2">
                             <v-button
-                                
                                 @click="setThumbnail(image.id)"
-                                :class="'!rounded-full bg-indigo-500 !p-1 text-white ' + ((image.is_thumbnail == 1 ? ' hidden ' : ' '))"
+                                :class="
+                                    '!rounded-full bg-indigo-500 !p-1 text-white ' +
+                                    (image.is_thumbnail == 1 ? ' hidden ' : ' ')
+                                "
                             >
                                 <v-icon
                                     scale="1.5"
@@ -27,8 +29,8 @@
                             </v-button>
                             <v-button
                                 @click="deleteProductImage(image.id)"
-                                class="!rounded-full bg-red-500 !p-1 text-white "
-                            > 
+                                class="!rounded-full bg-red-500 !p-1 text-white"
+                            >
                                 <v-icon
                                     scale="1.5"
                                     name="fa-trash-alt"
@@ -37,35 +39,40 @@
                         </li>
                         <li class="flex justify-items-center">
                             <v-text-on-image
-                                class="border-none p-2 w-full"
+                                class="w-full border-none p-2"
                                 title="Thumbnail"
                                 :noOverlay="true"
-                                :image="
-                                    [
-                                        '/api/s3-resources',
-                                        image.file.filename,
-                                    ].join('/')
-                                "
+                                :image="s3(image.file.filename)"
                             />
                         </li>
                         <li class="flex justify-between p-2">
                             <v-button
-                            @click="arrangeProductImage(image.id, -1)"
-                            :class="'!rounded-full border !p-1 ' + ( index == 0 ? ' hidden ' : '') ">
+                                @click="arrangeProductImage(image.id, -1)"
+                                :class="
+                                    '!rounded-full border !p-1 ' +
+                                    (index == 0 ? ' hidden ' : '')
+                                "
+                            >
                                 <v-icon
                                     scale="1.5"
                                     name="bi-chevron-left"
                                 ></v-icon>
                             </v-button>
-                            <v-button class="!rounded-full border !p-1">
+                            <v-button class="!rounded-full border !p-1" @click="setThumbnail(image.id)">
                                 <v-icon
                                     scale="1.5"
                                     name="fa-folder-open"
                                 ></v-icon>
                             </v-button>
                             <v-button
-                            @click="arrangeProductImage(image.id, 1)"
-                            :class="'!rounded-full border !p-1 ' + ( index == productImage.length - 1 ? ' hidden ' : '') ">
+                                @click="arrangeProductImage(image.id, 1)"
+                                :class="
+                                    '!rounded-full border !p-1 ' +
+                                    (index == productImage.length - 1
+                                        ? ' hidden '
+                                        : '')
+                                "
+                            >
                                 <v-icon
                                     scale="1.5"
                                     name="bi-chevron-right"
@@ -110,6 +117,7 @@ import { onBeforeMount, ref, watch, inject } from "vue";
 import { storeToRefs } from "pinia";
 
 //SECTION - Components
+const s3 = inject("s3");
 
 import fileIndex from "../../Files/Index.vue";
 

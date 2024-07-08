@@ -37,10 +37,8 @@
                 <CustomerNonWishlistProducts :id="id" />
             </template>
             <template class="p-3" #content.WishlistProducts>
-                <CustomerNonWishlistProducts :id="id" />
+                <CustomerWishlistProducts :id="id" />
             </template>
-
-            
         </v-tab>
     </div>
 </template>
@@ -49,6 +47,7 @@ import CustomerInformation from "./components/CustomerInformation.vue";
 import CustomerAreas from "./components/CustomerAreas.vue";
 import CustomerCompanies from "./components/CustomerCompanies.vue";
 import CustomerNonWishlistProducts from "./components/CustomerNonWishlistProducts.vue";
+import CustomerWishlistProducts from "./components/CustomerWishlistProducts.vue";
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";

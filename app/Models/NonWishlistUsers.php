@@ -20,6 +20,8 @@ class NonWishlistUsers extends Model
     }
     public function product()
     {
-        return $this->hasOne(Product::class, 'id', 'product_id')->select('id','title', 'description')->withOut(['non_wishlist_users', 'product_images', 'product_components', 'product_categories']);
+        return $this->hasOne(Product::class, 'id', 'product_id')
+        ->select('id','title', 'description')
+        ->withOut(['non_wishlist_users', 'product_images', 'product_components', 'product_categories']);
     }
 }

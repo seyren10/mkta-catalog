@@ -5,18 +5,10 @@
             their Wishlist.
         </h2>
         <div class="text-gray-700">
-            
             <v-button
-            class="border ml-auto my-2"
+                class="my-2 ml-auto border"
                 prepend-inner-icon="md-refresh-sharp"
-                @click="
-                    () => {
-                        nonWishlistStore.getNonWishlist(
-                            'product',
-                            product_item.id,
-                        );
-                    }
-                "
+                @click="refresh()"
                 >Refresh</v-button
             >
             <h2 class="text-xl font-semibold">Restricted Customer(s)</h2>
@@ -27,20 +19,14 @@
                         await nonWishlistStore.deleteNonWishlist(
                             NonWishListCustomers_data[item.id].id,
                         );
-                        nonWishlistStore.getNonWishlist(
-                            'product',
-                            product_item.id,
-                        );
+                        refresh();
                     }
                 "
                 @addItem="
                     async (item) => {
                         form.user_id = item.id;
                         await nonWishlistStore.addNonWishlist();
-                        nonWishlistStore.getNonWishlist(
-                            'product',
-                            product_item.id,
-                        );
+                        refresh();
                     }
                 "
                 :appendable="false"
@@ -53,7 +39,6 @@
 <script setup>
 import { onBeforeMount, ref, watch, inject, computed } from "vue";
 import { storeToRefs } from "pinia";
-
 
 const props = defineProps({
     id: String,
@@ -74,6 +59,7 @@ if (!product_item.length && props.id != "") {
     await productStore.getProductItem(props.id);
 }
 /*SECTION - End Product Data */
+
 /*SECTION - Non Wishlist */
 import { useNonWishlistStore } from "@/stores/nonWishlistStore";
 const nonWishlistStore = useNonWishlistStore();
@@ -107,4 +93,8 @@ const NonWishListCustomers_data = computed(() => {
     }, {});
     return def;
 });
+
+const refresh = () => {
+    nonWishlistStore.getNonWishlist("product", props.id);
+};
 </script>

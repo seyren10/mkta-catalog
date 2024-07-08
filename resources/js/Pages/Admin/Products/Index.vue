@@ -57,7 +57,7 @@
                                 class="h-[150px] max-h-[150px] max-w-[150px] w-[150px] border"
                                 title="Thumbnail"
                                 :noOverlay="true"
-                                :image="'/fuck'"
+                                :image="s3(item.raw?.product_thumbnail?.file?.filename)"
                             />
                             <div>
                                 <span class="text-center">{{ item.raw.id }}</span>
@@ -116,6 +116,7 @@
 import productItemForm from "./components/productItemForm.vue";
 
 const router = inject("router");
+const s3 = inject("s3");
 
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";

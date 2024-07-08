@@ -23,7 +23,7 @@ class Product extends Model
     public $incrementing = false;
     protected $keyType = "string";
     protected $hidden = ["laravel_through_key", 'updated_at'];
-    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories'];
+    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail'];
 
     public function non_wishlist_users()
     {
@@ -32,12 +32,12 @@ class Product extends Model
 
     public function product_thumbnail()
     {
-        return $this->hasOne(ProductImage::class, 'product_id', 'id')->orderBy('is_thumbnail', 'ASC');
+        return $this->hasOne(ProductImage::class, 'product_id', 'id')->orderBy('is_thumbnail', 'ASC')->orderBy('index', 'ASC');
     }
 
     public function product_images()
     {
-        return $this->hasMany(ProductImage::class, 'product_id', 'id')->orderBy('is_thumbnail', 'ASC');
+        return $this->hasMany(ProductImage::class, 'product_id', 'id')->orderBy('is_thumbnail', 'ASC')->orderBy('index', 'ASC');
     }
     public function product_components()
     {

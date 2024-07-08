@@ -52,7 +52,7 @@ class User extends Authenticatable
             'id', 
             'id', 
             'product_id' 
-            )->withoutEagerLoads();
+            )->withoutEagerLoads()->with(['product_thumbnail']);;
     }
     public function user_areas(){ 
         return $this->hasManyThrough( 
