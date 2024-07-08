@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImagesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserWishlistController;
 use App\Http\Resources\ProductAccessResource;
 use App\Http\Resources\UserResource;
 use App\Models\ProductAccessType;
@@ -31,12 +32,13 @@ Route::get('/user', function (Request $request) {
     return new UserResource($request->user());
 })->middleware('auth:sanctum');
 
-Route::get('s3-resources/{filename}', [FileController::class, 'show']);
-Route::get('s3-resources-download/{filename}', [FileController::class, 'download']);
+Route::get('s3-resources/{filename}',[FileController::class, 'show']);
+Route::get('thumbnail/{code}',[FileController::class, 'show']);
+Route::get('s3-resources-download/{filename}',[FileController::class, 'download']);
 // Route::post('s3-resources-upload',[FileController::class, 'store']);
 Route::apiResource('portal-files', FileController::class)->only(['store', 'index', 'update', 'destroy']);
 
-Route::get('current', [currentController::class, 'current']);
+Route::get('current/{category}', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
 
 
@@ -84,5 +86,7 @@ Route::apiResource('customers', UserController::class)->except($except)->names('
 Route::post('customers/reset-password/{user}', [UserController::class, 'resetPassword']);
 Route::post('customers/{user}/{action}/area-code/{areacode}', [UserController::class, 'modifyUserAreaCodes']);
 Route::post('customers/{user}/{action}/company-code/{company_code}', [UserController::class, 'modifyUserCompanyCode']);
+Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store','destroy']);
+Route::get('customer-wishlist/{user}', [UserWishlistController::class, 'getWishlist']);
 
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);

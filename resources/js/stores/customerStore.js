@@ -5,6 +5,10 @@ import { useAxios } from "@/composables/useAxios";
 export const useCustomerStore = defineStore("customer", () => {
     const currentCustomer = ref(null);
     const customer = ref([]);
+
+    const customer_wishlist = ref([]);
+    const customer_nonwishlist = ref([]);
+
     const customers = ref([]);
     const form = reactive({
         name: "",
@@ -120,6 +124,7 @@ export const useCustomerStore = defineStore("customer", () => {
                 includeCompaniesData: true,
                 includeNonWishlistProducts: true,
                 includeNonWishlistProductsKeys: true,
+                includeWishListProducts: true
             };
             const res = await exec("/api/customers/" + id, "get", {
                 ...requestData,
@@ -142,6 +147,9 @@ export const useCustomerStore = defineStore("customer", () => {
             console.log(e);
         }
     };
+
+
+
     return {
         resetForm,
         resetPassword,

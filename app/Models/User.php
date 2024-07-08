@@ -31,7 +31,8 @@ class User extends Authenticatable
                 'role_permissions',
                 'user_areas',
                 'user_companies',
-                'non_wishlist_products'
+                'non_wishlist_products',
+                'wishlist_products'
             ];
     /*
             remove eager loaded relation invoked by $with using ->withoutEagerLoads() or ->without(['relations'])
@@ -96,6 +97,16 @@ class User extends Authenticatable
             'role_id', 
             'permission_id' 
         ); 
+    }
+    public function wishlist_products(){
+        return $this->hasManyThrough( 
+            Product::class, 
+            UserWishlist::class, 
+            'user_id', 
+            'id', 
+            'id', 
+            'product_id' 
+            )->withoutEagerLoads()->with(['product_thumbnail']);
     }
 
 }

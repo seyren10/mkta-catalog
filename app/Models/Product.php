@@ -29,6 +29,12 @@ class Product extends Model
     {
         return $this->hasMany(NonWishlistUsers::class, 'product_id', 'id');
     }
+
+    public function product_thumbnail()
+    {
+        return $this->hasOne(ProductImage::class, 'product_id', 'id')->orderBy('is_thumbnail', 'ASC');
+    }
+
     public function product_images()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id')->orderBy('is_thumbnail', 'ASC');

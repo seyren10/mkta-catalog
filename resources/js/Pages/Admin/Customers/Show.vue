@@ -17,50 +17,38 @@
             {{ $route.meta.description }}
         </p>
     </div>
-    <v-card class="border-0">
-        <template #header>
-            <div class="flex">
-                <v-button
-                    :prepend-inner-icon="tab.icon"
-                    @click="selectedTab = tab.key"
-                    v-for="tab in [
-                        {
-                            icon: 'fa-user-alt',
-                            title: 'Account Information',
-                            key: 'AccountInformation',
-                        },
-                        {
-                            icon: 'la-map-marked-alt-solid',
-                            title: 'Areas',
-                            key: 'Areas',
-                        },
-                        {
-                            icon: 'px-buildings',
-                            title: 'Companies',
-                            key: 'Companies',
-                        },
-                        {
-                            icon: 'bi-cart-x',
-                            title: 'Unwishlist Products',
-                            key: 'UnwishlistProducts',
-                        },
-                    ]"
-                    :class="
-                        '  ' +
-                        (selectedTab == tab.key ? 'bg-accent text-white' : '')
-                    "
-                >
-                    {{ tab.title }}
-                </v-button>
-            </div>
-        </template>
-        <CustomerInformation v-show="selectedTab === 'AccountInformation'" :id="id" />
-        <CustomerAreas v-show="selectedTab === 'Areas'" :id="id" />
-    </v-card>
+    <div class="border-0">
+        <v-tab
+            headerClass=" bg-white"
+            no-navigation
+            v-model="selectedTab"
+            :tabs="tabs"
+        >
+            <template class="p-3" #content.AccountInformation>
+                <CustomerInformation :id="id" />
+            </template>
+            <template class="p-3" #content.Areas>
+                <CustomerAreas :id="id" />
+            </template>
+            <template class="p-3" #content.Companies>
+                <CustomerCompanies :id="id" />
+            </template>
+            <template class="p-3" #content.UnwishlistProducts>
+                <CustomerNonWishlistProducts :id="id" />
+            </template>
+            <template class="p-3" #content.WishlistProducts>
+                <CustomerNonWishlistProducts :id="id" />
+            </template>
+
+            
+        </v-tab>
+    </div>
 </template>
 <script setup>
 import CustomerInformation from "./components/CustomerInformation.vue";
 import CustomerAreas from "./components/CustomerAreas.vue";
+import CustomerCompanies from "./components/CustomerCompanies.vue";
+import CustomerNonWishlistProducts from "./components/CustomerNonWishlistProducts.vue";
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
@@ -84,6 +72,38 @@ if (!customer.length) {
 }
 
 const selectedTab = ref("AccountInformation");
+const tabs = ref([
+    {
+        icon: "fa-user-alt",
+        iconScale: "1.5",
+        title: "Account Information",
+        value: "AccountInformation",
+    },
+    {
+        icon: "la-map-marked-alt-solid",
+        iconScale: "1.5",
+        title: "Areas",
+        value: "Areas",
+    },
+    {
+        icon: "px-buildings",
+        iconScale: "1.5",
+        title: "Companies",
+        value: "Companies",
+    },
+    {
+        icon: "bi-cart4",
+        iconScale: "1.5",
+        title: "Wishlist",
+        value: "WishlistProducts",
+    },
+    {
+        icon: "bi-cart-x",
+        iconScale: "1.5",
+        title: "Unwishlist Products",
+        value: "UnwishlistProducts",
+    },
+]);
 </script>
 
 <style lang="scss" scoped></style>
