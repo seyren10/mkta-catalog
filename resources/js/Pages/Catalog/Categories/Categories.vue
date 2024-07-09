@@ -37,10 +37,10 @@
         <nav>
             <ul class="flex flex-wrap gap-3">
                 <li
-                    v-for="item in category.subCategories"
+                    v-for="item in category.sub_categories"
                     class="min-w-fit rounded-lg bg-slate-300 px-3 py-1 text-[.75rem] text-slate-500"
                 >
-                    {{ item }}
+                    {{ item.title }}
                 </li>
             </ul>
         </nav>
@@ -78,6 +78,34 @@
                         :key="product.id"
                     ></Product>
                 </template>
+
+                <template #footer>
+                    <div
+                        class="flex flex-wrap justify-center gap-2 rounded-lg bg-white p-2"
+                    >
+                        <v-button
+                            outlined
+                            v-for="(page, index) in paginationLinks"
+                            :class="{
+                                'bg-accent text-white': page.active,
+                            }"
+                            :disabled="page.url === null"
+                            @click="handlePageChange(page)"
+                        >
+                            <v-icon
+                                v-if="index === 0"
+                                name="md-keyboardarrowleft-round"
+                            ></v-icon>
+                            <v-icon
+                                v-else-if="index === paginationLinks.length - 1"
+                                name="md-keyboardarrowright-round"
+                            ></v-icon>
+                            <span v-else>
+                                {{ page.label }}
+                            </span>
+                        </v-button>
+                    </div>
+                </template>
             </ProductListing>
         </main>
     </div>
@@ -90,6 +118,7 @@
 import { inject, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import { useQuery } from "../../../composables/useQuery";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
@@ -105,12 +134,20 @@ const props = defineProps({
 const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
-const { product_items: products } = storeToRefs(productStore);
+const { product_items: products, paginationLinks } = storeToRefs(productStore);
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
 const router = useRouter();
 const sortBy = ref(0);
+
+// const route = useRoute();
+// const page = computed(() => +route.query.page);
+// watch(page, async (newValue) => {
+//     await fetchProducts(+props.id);
+// });
+
+const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 
 await fetchProducts(+props.id);
 
@@ -122,6 +159,7 @@ async function fetchProducts(categoryId) {
     category.value = categoryStore.getCategoryWithId(+categoryId);
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
+        page: page.value,
     });
 
     loading.value = false;
@@ -139,6 +177,14 @@ async function fetchProducts(categoryId) {
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) await fetchProducts(to.params.id);
 });
+
+const handlePageChange = (page) => {
+    if (page.url === null) return;
+
+    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
+
+    setPage(+pageNumber);
+};
 </script>
 
 <style lang="scss" scoped></style>

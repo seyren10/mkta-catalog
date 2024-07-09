@@ -7,9 +7,9 @@
         </template>
         <component
             :is="tag"
-            v-bind="$attrs"
             :class="`group relative isolate flex items-center justify-center overflow-hidden rounded-lg ${densityValue} disabled:cursor-not-allowed ${outlined ? 'border' : ''}`"
             :disabled="loading"
+            v-bind="$attrs"
         >
             <template v-if="!loading">
                 <!-- HOVERING EFFECT -->

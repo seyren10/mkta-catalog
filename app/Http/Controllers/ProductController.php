@@ -27,7 +27,7 @@ class ProductController extends Controller
             if ($category->id) {
                 $query->where('product_categories.category_id', $category->id);
             }
-        })->paginate(50));
+        })->paginate(32)->withQueryString());
     }
     public function store(ProductRequest $request)
     {

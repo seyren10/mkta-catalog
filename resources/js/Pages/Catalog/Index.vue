@@ -45,11 +45,7 @@
 
         <!-- #region featured-products -->
         <section class="space-y-10">
-            <FeaturedProducts
-                :items="christmasProducts"
-                titleIcon="ri-fire-line"
-                title="Top selling"
-            >
+            <FeaturedProducts titleIcon="ri-fire-line" title="Top selling">
                 <template #content.icon="{ item }">
                     <div
                         :class="item.class"
@@ -61,7 +57,6 @@
             </FeaturedProducts>
 
             <FeaturedProducts
-                :items="newProducts"
                 titleIcon="md-newreleases-outlined"
                 title="New Arrivals"
             >
@@ -75,11 +70,7 @@
                 </template>
             </FeaturedProducts>
 
-            <FeaturedProducts
-                :items="animalProducts"
-                titleIcon="bi-snow"
-                title="Seasonal"
-            >
+            <FeaturedProducts titleIcon="bi-snow" title="Seasonal">
                 <template #content.icon="{ item }">
                     <div :class="item.class"></div>
                 </template>
@@ -146,10 +137,6 @@ import { storeToRefs } from "pinia";
 
 //stores
 const productStore = useProductStore();
-const { getProductsWithCategoryId, getNewProducts } = productStore;
-const christmasProducts = getProductsWithCategoryId(1);
-const animalProducts = getProductsWithCategoryId(5);
-const newProducts = getNewProducts(10);
 const { categories } = storeToRefs(inject("categoryStore"));
 
 //reactives

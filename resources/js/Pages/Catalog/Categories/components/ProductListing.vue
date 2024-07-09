@@ -14,11 +14,14 @@
             class="grid auto-rows-min grid-cols-2 gap-5 rounded-lg bg-white p-5 md:grid-cols-3 lg:grid-cols-4"
         >
             <slot>
-                <div class="col-[1/-1] flex items-center gap-3 justify-center">
+                <div class="col-[1/-1] flex items-center justify-center gap-3">
                     <v-icon name="md-category-outlined"></v-icon>
                     <span> No items to show </span>
                 </div>
             </slot>
+        </div>
+        <div class="md:col-[2]">
+            <slot name="footer"></slot>
         </div>
     </section>
 </template>
