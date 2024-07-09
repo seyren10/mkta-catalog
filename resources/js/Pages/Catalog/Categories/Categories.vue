@@ -50,7 +50,8 @@
                 <template #top>
                     <div class="flex items-center justify-between">
                         <div class="text-[.8rem] text-slate-500">
-                            Showing 1 of 20 items
+                            <strong>{{ totalPages }}</strong> item(s) found for
+                            "{{ category.title }}"
                         </div>
                         <div class="flex items-center gap-3">
                             <span>Sort By:</span>
@@ -131,7 +132,11 @@ const props = defineProps({
 const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
-const { product_items: products, paginationLinks } = storeToRefs(productStore);
+const {
+    product_items: products,
+    paginationLinks,
+    totalPages,
+} = storeToRefs(productStore);
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
@@ -145,7 +150,7 @@ const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 async function fetchProducts(categoryId) {
     loading.value = true;
 
-    category.value = categoryStore.getCategoryWithId(+props.id);
+    category.value = categoryStore.getCategoryWithId(+categoryId);
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
         page: page.value,

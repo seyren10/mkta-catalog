@@ -1,5 +1,5 @@
 <template>
-    <template v-if="product">
+    <template v-if="Object.keys(product).length">
         <ProductView>
             <template #header>
                 <ImageView></ImageView>
