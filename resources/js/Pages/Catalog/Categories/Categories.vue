@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="container my-8 space-y-5"
-        v-if="!loading && Object.values(category).length"
-    >
+    <div class="container my-8 space-y-5" v-if="!loading">
         <header
             class="grid items-center gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min-content_auto]"
         >
@@ -115,7 +112,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { useQuery } from "../../../composables/useQuery";
@@ -141,42 +138,21 @@ const loading = ref(false);
 const router = useRouter();
 const sortBy = ref(0);
 
-// const route = useRoute();
-// const page = computed(() => +route.query.page);
-// watch(page, async (newValue) => {
-//     await fetchProducts(+props.id);
-// });
-
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
-
-await fetchProducts(+props.id);
 
 //methods
 
 async function fetchProducts(categoryId) {
     loading.value = true;
 
-    category.value = categoryStore.getCategoryWithId(+categoryId);
+    category.value = categoryStore.getCategoryWithId(+props.id);
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
         page: page.value,
     });
 
     loading.value = false;
-
-    //incase user manualy set the category URL of category ID to something else
-    //that doesnt exist in the database
-    if (!category.value) {
-        router.push({ name: "fallback" });
-    }
 }
-
-//reactives
-
-//hooks
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) await fetchProducts(to.params.id);
-});
 
 const handlePageChange = (page) => {
     if (page.url === null) return;
@@ -185,6 +161,23 @@ const handlePageChange = (page) => {
 
     setPage(+pageNumber);
 };
+
+//hooks
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) await fetchProducts(to.params.id);
+});
+
+//incase user manualy set the category URL of category ID to something else
+//that doesnt exist in the database
+onBeforeMount(async () => {
+    category.value = categoryStore.getCategoryWithId(+props.id);
+
+    if (!category.value) {
+        router.push({ name: "fallback" });
+    }
+
+    await fetchProducts(+props.id);
+});
 </script>
 
 <style lang="scss" scoped></style>
