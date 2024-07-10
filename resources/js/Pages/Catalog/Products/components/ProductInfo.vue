@@ -1,6 +1,12 @@
 <template>
     <div class="mx-auto max-w-[60ch] space-y-10">
-        <BreadCrumb :items="breadCrumbData"></BreadCrumb>
+        <BreadCrumb :items="breadCrumbData" v-if="category"></BreadCrumb>
+        <div
+            v-else
+            class="w-fit rounded-xl bg-red-200 px-2 py-1 text-xs text-red-500"
+        >
+            No Category for this Product
+        </div>
         <div class="mb-3">
             <h1
                 class="text-head font-medium capitalize leading-tight text-primary"

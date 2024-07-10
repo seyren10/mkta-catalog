@@ -11,18 +11,31 @@
             <slot name="top"></slot>
         </div>
         <div
-            class="grid auto-rows-min grid-cols-2 gap-5 rounded-lg bg-white p-5 md:grid-cols-3 lg:grid-cols-4"
+            class="relative grid h-full auto-rows-min grid-cols-2 gap-5 rounded-lg bg-white p-5 md:grid-cols-3 lg:grid-cols-4"
         >
-            <slot>
+            <slot v-if="!loading">
                 <div class="col-[1/-1] flex items-center justify-center gap-3">
                     <v-icon name="md-category-outlined"></v-icon>
                     <span> No items to show </span>
                 </div>
             </slot>
+            
+            <div class="absolute inset-0 grid place-content-center" v-else>
+                <VLoader scale="2"></VLoader>
+            </div>
+        </div>
+        <div class="md:col-[2]">
+            <slot name="footer"></slot>
         </div>
     </section>
 </template>
 
-<script setup></script>
+<script setup>
+import VLoader from "../../../../components/base_components/VLoader.vue";
+
+defineProps({
+    loading: Boolean,
+});
+</script>
 
 <style lang="scss" scoped></style>

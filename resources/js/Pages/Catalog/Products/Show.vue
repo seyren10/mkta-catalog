@@ -1,38 +1,29 @@
 <template>
-    <template v-if="product">
-        <ProductView>
-            <template #header>
-                <ImageView></ImageView>
-                <ProductInfo></ProductInfo>
-            </template>
-            <template #aside> <RecentViewed></RecentViewed> </template>
-            <template #related>
-                <RelatedProducts></RelatedProducts>
-            </template>
-        </ProductView>
+    <ProductView>
+        <template #header>
+            <ImageView></ImageView>
+            <ProductInfo></ProductInfo>
+        </template>
+        <template #aside> <RecentViewed></RecentViewed> </template>
+        <template #related>
+            <RelatedProducts></RelatedProducts>
+        </template>
+    </ProductView>
 
-        <LightBox
-            v-model="lightbox"
-            :items="productImages"
-            :key="id"
-        ></LightBox>
-    </template>
-    <InpageNotFound v-else></InpageNotFound>
+    <LightBox v-model="lightbox" :items="productImages" :key="id"></LightBox>
 </template>
 
 <script setup>
-import { computed, inject, onUpdated, provide, ref } from "vue";
+import { computed, inject, provide, ref } from "vue";
 import { useProductStore } from "../../../stores/productStore";
+import { storeToRefs } from "pinia";
 
-import InpageNotFound from "@/components/InpageNotFound.vue";
 import LightBox from "@/components/LightBox/LightBox.vue";
-
 import ProductView from "./components/ProductView.vue";
 import ImageView from "./components/ImageView.vue";
 import ProductInfo from "./components/ProductInfo.vue";
 import RecentViewed from "./components/RecentViewed.vue";
 import RelatedProducts from "./components/RelatedProducts.vue";
-import { storeToRefs } from "pinia";
 
 const props = defineProps({
     id: String,
@@ -41,8 +32,6 @@ const props = defineProps({
 //stores
 const productStore = useProductStore();
 const { product_item: product } = storeToRefs(productStore);
-
-await productStore.getProductItem(props.id);
 
 //injects
 const categoryStore = inject("categoryStore");
@@ -54,7 +43,7 @@ const s3 = inject("s3");
 
 //computed
 const category = categoryStore.getCategoryWithId(
-    product.value.product_categories?.at(0).id,
+    product.value.product_categories?.at(0)?.id,
 );
 
 const productImages = computed(() => {
@@ -63,9 +52,6 @@ const productImages = computed(() => {
         return acc;
     }, []);
 });
-
-//hooks
-onUpdated(() => {});
 
 //provides
 provide("productImages", productImages);

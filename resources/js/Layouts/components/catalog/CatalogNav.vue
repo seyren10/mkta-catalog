@@ -49,9 +49,14 @@
                                 class="w-full resize-none px-4 text-primary outline-none"
                                 rows="1"
                                 placeholder="Search for products"
+                                v-model="search"
+                                @keydown.enter.prevent="handleSearch"
                             />
                         </div>
-                        <v-button class="!rounded-none bg-accent text-white">
+                        <v-button
+                            class="!rounded-none bg-accent text-white"
+                            @click="handleSearch"
+                        >
                             <div class="px-2">
                                 <v-icon
                                     name="la-search-solid"
@@ -165,14 +170,18 @@
 import { inject, ref } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { storeToRefs } from "pinia";
+import { useRouter, useRoute } from "vue-router";
 
 import FeatureCategory from "./FeatureCategory.vue";
 import Wishlist from "./Wishlist.vue";
 
 //reactives
+const route = useRoute();
+const router = useRouter();
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
+const search = ref(route.query.q || "");
 
 //non-reactives
 const headerData = [
@@ -181,7 +190,9 @@ const headerData = [
     { title: "Asia", icon: "pr-globe" },
 ];
 
-//reactives
+const handleSearch = () => {
+    router.push({ name: "products", query: { q: search.value } });
+};
 
 //injects
 const user = inject("currentUser");

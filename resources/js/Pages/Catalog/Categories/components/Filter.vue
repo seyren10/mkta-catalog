@@ -49,7 +49,7 @@
                 </template>
             </ul>
         </div>
-        <v-accordion bg="bg-slate-200" expanded>
+        <v-accordion bg="bg-slate-200" open>
             <template #title>
                 <div class="flex items-center gap-2">
                     <v-icon name="md-colorlens-outlined"></v-icon>
