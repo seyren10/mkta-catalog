@@ -5,7 +5,7 @@
         </header>
 
         <main class="text-slate-600">
-            <RouterView v-slot="{ Component }">
+            <RouterView v-slot="{ Component }" :key="$route.path">
                 <template v-if="Component">
                     <Suspense timeout="0">
                         <component :is="Component" />
@@ -36,14 +36,23 @@
 </template>
 
 <script setup>
+import { RouterView } from "vue-router";
+import { useCategoryStore } from "../stores/categoryStore";
 import { storeToRefs } from "pinia";
-import { inject, onErrorCaptured } from "vue";
-import { RouterView, useRouter } from "vue-router";
 
 import CatalogNav from "./components/catalog/CatalogNav.vue";
 import VLoader from "../components/base_components/VLoader.vue";
 
-//methods
+const categoryStore = useCategoryStore();
+const { categories } = storeToRefs(categoryStore);
+
+if (!categories.value.length)
+    await categoryStore.getCategories({
+        includeSubCategories: true,
+        includeParentCategory: true,
+        includeFile: true,
+    });
+
 const handleHide = (el, hidden) => {
     el.classList.toggle("bottom-[1%]", !hidden);
 };
@@ -51,15 +60,6 @@ const handleHide = (el, hidden) => {
 const handleScrollToTop = () => {
     window.scrollTo({ top: 0 });
 };
-
-const categoryStore = inject("categoryStore");
-const { categories } = storeToRefs(categoryStore);
-if (!categories.value.length)
-    await categoryStore.getCategories({
-        includeSubCategories: true,
-        includeParentCategory: true,
-        includeFile: true,
-    });
 </script>
 
 <style lang="scss" scoped></style>

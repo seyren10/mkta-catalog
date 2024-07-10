@@ -130,13 +130,11 @@
 
 <script setup>
 import { inject, ref } from "vue";
-import { useProductStore } from "../../stores/productStore";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
 import { storeToRefs } from "pinia";
 
 //stores
-const productStore = useProductStore();
 const { categories } = storeToRefs(inject("categoryStore"));
 
 //reactives

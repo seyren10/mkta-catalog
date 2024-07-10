@@ -23,7 +23,7 @@ export const useProductStore = defineStore("products", () => {
         dimension_height: 0.0,
     });
 
-    const product_item = ref([]);
+    const product_item = ref(null);
 
     const pagination = ref(null);
 

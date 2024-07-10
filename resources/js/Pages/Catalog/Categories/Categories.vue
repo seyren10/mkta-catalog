@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-8 space-y-5" v-if="!loading">
+    <div class="container my-8 space-y-5">
         <header
             class="grid items-center gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min-content_auto]"
         >
@@ -43,7 +43,7 @@
         </nav>
 
         <main>
-            <ProductListing>
+            <ProductListing :loading="loading">
                 <template #aside>
                     <Filter></Filter>
                 </template>
@@ -107,22 +107,17 @@
             </ProductListing>
         </main>
     </div>
-    <div v-else class="absolute inset-0 grid place-content-center">
-        <VLoader scale="2"></VLoader>
-    </div>
 </template>
 
 <script setup>
-import { inject, onBeforeMount, ref } from "vue";
+import { inject, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { useQuery } from "../../../composables/useQuery";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
 import Filter from "./components/Filter.vue";
 import Product from "@/components/Product.vue";
-import VLoader from "../../../components/base_components/VLoader.vue";
 
 const props = defineProps({
     id: String,
@@ -132,6 +127,7 @@ const props = defineProps({
 const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
+
 const {
     product_items: products,
     paginationLinks,
@@ -140,14 +136,11 @@ const {
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
-const router = useRouter();
 const sortBy = ref(0);
 
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 
-//methods
-
-async function fetchProducts(categoryId) {
+const fetchProducts = async (categoryId) => {
     loading.value = true;
 
     category.value = categoryStore.getCategoryWithId(+categoryId);
@@ -157,7 +150,7 @@ async function fetchProducts(categoryId) {
     });
 
     loading.value = false;
-}
+};
 
 const handlePageChange = (page) => {
     if (page.url === null) return;
@@ -167,22 +160,7 @@ const handlePageChange = (page) => {
     setPage(+pageNumber);
 };
 
-//hooks
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) await fetchProducts(to.params.id);
-});
-
-//incase user manualy set the category URL of category ID to something else
-//that doesnt exist in the database
-onBeforeMount(async () => {
-    category.value = categoryStore.getCategoryWithId(+props.id);
-
-    if (!category.value) {
-        router.push({ name: "fallback" });
-    }
-
-    await fetchProducts(+props.id);
-});
+await fetchProducts(+props.id);
 </script>
 
 <style lang="scss" scoped></style>
