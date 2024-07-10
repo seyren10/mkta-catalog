@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="container my-8 space-y-5"
-        v-if="!loading && Object.values(category).length"
-    >
+    <div class="container my-8 space-y-5">
         <header
             class="grid items-center gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min-content_auto]"
         >
@@ -37,24 +34,24 @@
         <nav>
             <ul class="flex flex-wrap gap-3">
                 <li
-                    v-for="item in category.subCategories"
+                    v-for="item in category.sub_categories"
                     class="min-w-fit rounded-lg bg-slate-300 px-3 py-1 text-[.75rem] text-slate-500"
                 >
-                    {{ item }}
+                    {{ item.title }}
                 </li>
             </ul>
         </nav>
 
         <main>
-            <ProductListing>
+            <ProductListing :loading="loading">
                 <template #aside>
                     <Filter></Filter>
                 </template>
                 <template #top>
                     <div class="flex items-center justify-between">
                         <div class="text-[.8rem] text-slate-500">
-                            Showing {{ productsCount }} of
-                            {{ totalProductsCount }} items
+                            <strong>{{ totalPages }}</strong> item(s) found for
+                            "{{ category.title }}"
                         </div>
                         <div class="flex items-center gap-3">
                             <span>Sort By:</span>
@@ -78,41 +75,49 @@
                         :item="product"
                         :key="product.id"
                     ></Product>
+                </template>
+
+                <template #footer>
                     <div
-                        v-intersect="{
-                            callback: handleIntersect,
-                            options: {
-                                rootMargin: '0px',
-                                threshold: 1.0,
-                                continuous: true,
-                            },
-                        }"
-                        class="col-[1/-1] flex justify-center gap-2 rounded-lg bg-slate-100"
+                        class="flex flex-wrap justify-center gap-2 rounded-lg bg-white p-2"
                     >
-                        <div class="p-2" v-if="infiniteScrollingLoading">
-                            <VLoader></VLoader>
-                            <span> Loading more products </span>
-                        </div>
+                        <v-button
+                            outlined
+                            v-for="(page, index) in paginationLinks"
+                            :class="{
+                                'bg-accent text-white': page.active,
+                            }"
+                            :disabled="page.url === null"
+                            @click="handlePageChange(page)"
+                        >
+                            <v-icon
+                                v-if="index === 0"
+                                name="md-keyboardarrowleft-round"
+                            ></v-icon>
+                            <v-icon
+                                v-else-if="index === paginationLinks.length - 1"
+                                name="md-keyboardarrowright-round"
+                            ></v-icon>
+                            <span v-else>
+                                {{ page.label }}
+                            </span>
+                        </v-button>
                     </div>
                 </template>
             </ProductListing>
         </main>
-    </div>
-    <div v-else class="absolute inset-0 grid place-content-center">
-        <VLoader scale="2"></VLoader>
     </div>
 </template>
 
 <script setup>
 import { computed, inject, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import { useQuery } from "../../../composables/useQuery";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
 import Filter from "./components/Filter.vue";
 import Product from "@/components/Product.vue";
-import VLoader from "../../../components/base_components/VLoader.vue";
 
 const props = defineProps({
     id: String,
@@ -122,62 +127,43 @@ const props = defineProps({
 const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
-const { product_items: products, pageInfo } = storeToRefs(productStore);
+
+const {
+    product_items: products,
+    paginationLinks,
+    totalPages,
+} = storeToRefs(productStore);
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const getProductsWithCategoryIdInfinite =
     productStore.getProductItemsWithCategoryIdInfiniteScrolling;
 const loading = ref(false);
-const infiniteScrollingLoading = ref(false);
-const router = useRouter();
 const sortBy = ref(0);
 const currentPage = ref(1);
 
-await fetchProducts(+props.id);
+const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 
-const productsCount = computed(() => products.value.length);
-const totalProductsCount = computed(() => pageInfo.value.total);
-
-//methods
-async function fetchProducts(categoryId) {
+const fetchProducts = async (categoryId) => {
     loading.value = true;
 
     category.value = categoryStore.getCategoryWithId(+categoryId);
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
+        page: page.value,
     });
 
     loading.value = false;
+};
 
-    //incase user manualy set the category URL of category ID to something else
-    //that doesnt exist in the database
-    if (!category.value) {
-        router.push({ name: "fallback" });
-    }
-}
-async function handleIntersect(entry) {
-    if (currentPage.value >= pageInfo.value.last_page) return;
+const handlePageChange = (page) => {
+    if (page.url === null) return;
 
-    currentPage.value++;
-    infiniteScrollingLoading.value = true;
+    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
 
-    const items = await getProductsWithCategoryIdInfinite(+props.id, {
-        includeProductImages: true,
-        page: currentPage.value,
-    });
-    products.value = products.value.concat(items);
-    infiniteScrollingLoading.value = false;
-}
+    setPage(+pageNumber);
+};
 
-//reactives
-
-//hooks
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        await fetchProducts(to.params.id);
-        currentPage.value = 1;
-    }
-});
+await fetchProducts(+props.id);
 </script>
 
 <style lang="scss" scoped></style>

@@ -19,6 +19,7 @@
             :items="productImages"
             item-size="100%"
             no-indicator
+            scrim
             v-model="currentImageIndex"
             :key="id"
         >

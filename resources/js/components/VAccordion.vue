@@ -1,29 +1,26 @@
 <template>
     <div class="group cursor-pointer overflow-hidden rounded-lg">
         <div
-            @click="expanded.value = !expanded.value"
+            @click="expanded = !expanded"
             :class="`relative isolate flex items-center justify-between bg-stone-200 ${densityValue}`"
         >
             <!-- backdrop -->
             <div
                 class="absolute inset-0 -z-10 duration-500"
-                :class="{ 'backdrop-brightness-75': expanded.value }"
+                :class="{ 'backdrop-brightness-75': expanded }"
             ></div>
             <slot name="title" :expanded="expanded"></slot>
             <p v-if="!$slots.title">
                 {{ title }}
             </p>
-            <v-icon
-                :name="icon"
-                :flip="expanded.value ? 'vertical' : null"
-            ></v-icon>
+            <v-icon :name="icon" :flip="expanded ? 'vertical' : null"></v-icon>
         </div>
 
         <div
             class="grid overflow-hidden transition-[grid-template-rows] duration-300"
             :class="{
-                'grid-rows-[0fr]': !expanded.value,
-                'grid-rows-[1fr]': expanded.value,
+                'grid-rows-[0fr]': !expanded,
+                'grid-rows-[1fr]': expanded,
             }"
         >
             <div class="overflow-hidden bg-white">
@@ -56,12 +53,12 @@ const props = defineProps({
         default: "md-arrowdropdown-round",
     },
     bg: String,
-    expanded: Boolean,
+    open: Boolean,
 });
 
 const densityValue = useDensityValues(props.density);
 //reactives
-const expanded = ref({ value: false });
+const expanded = ref(props.open);
 
 //derived props
 </script>

@@ -1,30 +1,22 @@
 <template>
-    <template v-if="product">
-        <ProductView>
-            <template #header>
-                <ImageView></ImageView>
-                <ProductInfo></ProductInfo>
-            </template>
-            <template #aside> <RecentViewed></RecentViewed> </template>
-            <template #related>
-                <RelatedProducts></RelatedProducts>
-            </template>
-        </ProductView>
+    <ProductView>
+        <template #header>
+            <ImageView></ImageView>
+            <ProductInfo></ProductInfo>
+        </template>
+        <template #aside> <RecentViewed></RecentViewed> </template>
+        <template #related>
+            <RelatedProducts></RelatedProducts>
+        </template>
+    </ProductView>
 
-        <LightBox
-            v-model="lightbox"
-            :items="productImages"
-            :key="id"
-        ></LightBox>
-    </template>
-    <InpageNotFound v-else></InpageNotFound>
+    <LightBox v-model="lightbox" :items="productImages" :key="id"></LightBox>
 </template>
 
 <script setup>
-import { computed, inject, onUpdated, provide, ref } from "vue";
+import { computed, inject, provide, ref } from "vue";
 import { useProductStore } from "../../../stores/productStore";
 
-import InpageNotFound from "@/components/InpageNotFound.vue";
 import LightBox from "@/components/LightBox/LightBox.vue";
 
 import ProductView from "./components/ProductView.vue";
@@ -41,8 +33,6 @@ const props = defineProps({
 //stores
 const productStore = useProductStore();
 const { product_item: product } = storeToRefs(productStore);
-
-await productStore.getProductItem(props.id);
 
 //injects
 const categoryStore = inject("categoryStore");
@@ -63,9 +53,6 @@ const productImages = computed(() => {
         return acc;
     }, []);
 });
-
-//hooks
-onUpdated(() => {});
 
 //provides
 provide("productImages", productImages);

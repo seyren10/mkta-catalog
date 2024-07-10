@@ -18,10 +18,11 @@
             <h1
                 class="font-serif text-[max(15vw_+_1rem_,_8rem)] text-slate-400"
             >
-                {{ code.code }}
+                404
             </h1>
             <p>
-                {{ code.message }}
+                The page you are looking for might be unavailable or is
+                temporalily removed.
             </p>
             <v-button
                 class="mx-auto mt-5 bg-accent"
@@ -33,29 +34,6 @@
     </div>
 </template>
 
-<script setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-
-const route = useRoute();
-
-const code = computed(() => {
-    switch (route.query.type) {
-        case "notFound": {
-            return {
-                code: "404",
-                message: ` The page you are looking for might be unavailable or is temporalily
-                removed.`,
-            };
-        }
-        case "unAuthorized": {
-            return {
-                code: "401",
-                message: ` You have attempted to access a page for which you are not authorized.`,
-            };
-        }
-    }
-});
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>
