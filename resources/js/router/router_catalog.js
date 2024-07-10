@@ -60,6 +60,12 @@ const catalog_routes = [
                 },
             },
             {
+                path: "products",
+                name: "products",
+                component: () =>
+                    import("@/Pages/Catalog/Products/Products.vue"),
+            },
+            {
                 path: "product/:id",
                 name: "product",
                 props: true,

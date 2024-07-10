@@ -5,7 +5,7 @@ export const useQuery = (queryName, cb, excludeOtherQuery = false) => {
     const route = useRoute();
     const router = useRouter();
 
-    const query = computed(() => +route.query[queryName]);
+    const query = computed(() => route.query[queryName]);
 
     const setQuery = (value) => {
         if (excludeOtherQuery) {

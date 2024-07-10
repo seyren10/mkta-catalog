@@ -70,20 +70,6 @@ export const useProductStore = defineStore("products", () => {
             resetForm();
         }
     };
-    const getProductItems = async (requestData = null) => {
-        try {
-            let defaultData = {
-                includeParentCode: true,
-            };
-            const res = await exec("/api/product", "get", {
-                ...defaultData,
-                ...requestData,
-            });
-            product_items.value = res.data.data;
-        } catch (e) {
-            console.log(e);
-        }
-    };
 
     const getProductItemsWithCategoryId = async (
         categoryId,
@@ -105,6 +91,22 @@ export const useProductStore = defineStore("products", () => {
             pagination.value = res.data.meta;
         } catch (e) {}
     };
+    const getProductItems = async (requestData = null) => {
+        try {
+            let defaultData = {
+                includeParentCode: true,
+            };
+            const res = await exec("/api/product", "get", {
+                ...defaultData,
+                ...requestData,
+            });
+            product_items.value = res.data.data;
+            pagination.value = res.data.meta;
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     const getProductItem = async (id, requestData = null) => {
         try {
             let defaultData = {

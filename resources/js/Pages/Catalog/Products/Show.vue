@@ -16,15 +16,14 @@
 <script setup>
 import { computed, inject, provide, ref } from "vue";
 import { useProductStore } from "../../../stores/productStore";
+import { storeToRefs } from "pinia";
 
 import LightBox from "@/components/LightBox/LightBox.vue";
-
 import ProductView from "./components/ProductView.vue";
 import ImageView from "./components/ImageView.vue";
 import ProductInfo from "./components/ProductInfo.vue";
 import RecentViewed from "./components/RecentViewed.vue";
 import RelatedProducts from "./components/RelatedProducts.vue";
-import { storeToRefs } from "pinia";
 
 const props = defineProps({
     id: String,
@@ -44,7 +43,7 @@ const s3 = inject("s3");
 
 //computed
 const category = categoryStore.getCategoryWithId(
-    product.value.product_categories?.at(0).id,
+    product.value.product_categories?.at(0)?.id,
 );
 
 const productImages = computed(() => {

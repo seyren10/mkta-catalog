@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 
@@ -16,9 +17,19 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ProductResource::collection(Product::get());
+        $query = $request->q;
+
+        if ($query) {
+            $searchedProducts = Product::whereAny([
+                'id', 'title', 'description'
+            ], 'LIKE', '%' . $query . '%')->paginate(30);
+
+            return ProductResource::collection($searchedProducts);
+        }
+
+        return ProductResource::collection(Product::paginate(30));
     }
     public function getProductsWithCategoryId(Category $category)
     {
@@ -29,6 +40,7 @@ class ProductController extends Controller
             }
         })->paginate(32)->withQueryString());
     }
+
     public function store(ProductRequest $request)
     {
         $product = Product::create(

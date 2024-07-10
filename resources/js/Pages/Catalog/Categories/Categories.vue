@@ -78,31 +78,10 @@
                 </template>
 
                 <template #footer>
-                    <div
-                        class="flex flex-wrap justify-center gap-2 rounded-lg bg-white p-2"
-                    >
-                        <v-button
-                            outlined
-                            v-for="(page, index) in paginationLinks"
-                            :class="{
-                                'bg-accent text-white': page.active,
-                            }"
-                            :disabled="page.url === null"
-                            @click="handlePageChange(page)"
-                        >
-                            <v-icon
-                                v-if="index === 0"
-                                name="md-keyboardarrowleft-round"
-                            ></v-icon>
-                            <v-icon
-                                v-else-if="index === paginationLinks.length - 1"
-                                name="md-keyboardarrowright-round"
-                            ></v-icon>
-                            <span v-else>
-                                {{ page.label }}
-                            </span>
-                        </v-button>
-                    </div>
+                    <PaginationLinks
+                        :items="paginationLinks"
+                        @page-change="handlePageChange"
+                    ></PaginationLinks>
                 </template>
             </ProductListing>
         </main>
@@ -118,6 +97,7 @@ import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
 import Filter from "./components/Filter.vue";
 import Product from "@/components/Product.vue";
+import PaginationLinks from "../../../components/PaginationLinks.vue";
 
 const props = defineProps({
     id: String,
@@ -135,11 +115,8 @@ const {
 } = storeToRefs(productStore);
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
-const getProductsWithCategoryIdInfinite =
-    productStore.getProductItemsWithCategoryIdInfiniteScrolling;
 const loading = ref(false);
 const sortBy = ref(0);
-const currentPage = ref(1);
 
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 
