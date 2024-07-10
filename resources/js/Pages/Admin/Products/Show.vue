@@ -18,7 +18,12 @@
         </p>
     </div>
     <div class="my-3">
-        <v-tab headerClass=" bg-white" no-navigation v-model="currentTab" :tabs="tabs">
+        <v-tab
+            headerClass=" bg-white"
+            no-navigation
+            v-model="currentTab"
+            :tabs="tabs"
+        >
             /*ANCHOR - Product Images */
             <template #content.ProductImages>
                 <productImages :id="id" />
@@ -69,6 +74,13 @@
                     </div>
                 </div>
             </template>
+            /*ANCHOR - Related Products */
+            <template class="p-3" #content.RelatedProduct>
+                <relatedProduct :id="id" />
+            </template>
+            <template class="p-3" #content.RecommendedProduct>
+                <recommendedProduct :id="id" />
+            </template>
         </v-tab>
     </div>
 </template>
@@ -80,6 +92,8 @@ import productCategories from "./components/productCategories.vue";
 import productComponents from "./components/productComponents.vue";
 import productImages from "./components/productImages.vue";
 
+import relatedProduct from "./components/relatedProduct.vue";
+import recommendedProduct from "./components/recommendedProduct.vue";
 const router = inject("router");
 const props = defineProps({
     id: String,
@@ -96,7 +110,7 @@ if (!product_item.length) {
     await productStore.getProductItem(props.id);
 }
 
-const currentTab = ref("ProductComponents");
+const currentTab = ref("RelatedProduct");
 const tabs = ref([
     {
         icon: "bi-cart4",
@@ -133,6 +147,24 @@ const tabs = ref([
         iconScale: "1.5",
         title: "Restriction & Exemptions",
         value: "ProductAccess",
+    },
+    {
+        icon: "ri-node-tree",
+        iconScale: "1.5",
+        title: "Related Products",
+        value: "RelatedProduct",
+    },
+    {
+        icon: "la-object-group-solid",
+        iconScale: "1.5",
+        title: "Recommended Products",
+        value: "RecommendedProduct",
+    },
+    {
+        icon: "hi-solid-filter",
+        iconScale: "1.5",
+        title: "Filters",
+        value: "ProductFilters",
     },
 ]);
 </script>

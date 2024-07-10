@@ -15,8 +15,8 @@ class NonWishlistUsers extends Model
     protected $with = ['user', 'product'];
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'user_id')->select('id', 'name', 'email')->withOut(['role_data','permissions','role_permissions','user_areas','user_companies','non_wishlist_products',
-        ]);
+        return $this->hasOne(User::class, 'id', 'user_id')->select('id', 'name', 'email')->withOutEagerLoads()
+        ;
     }
     public function product()
     {

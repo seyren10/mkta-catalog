@@ -44,13 +44,20 @@
                 </v-button>
             </div>
         </template>
-        <CategoryInformation v-show="selectedTab === 'CategoryInformation'" :id="id" />
+        <CategoryInformation
+            v-show="selectedTab === 'CategoryInformation'"
+            :id="id"
+        />
         <CategoryTree v-show="selectedTab === 'CategoryTree'" :id="id" />
     </v-card>
+
 </template>
 <script setup>
+
 import CategoryInformation from "./components/CategoryInformation.vue";
 import CategoryTree from "./components/CategoryTree.vue";
+
+import fileIndex from "../Files/Index.vue"
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
@@ -68,6 +75,7 @@ if (!category.length) {
     await categoryStore.getCategory(props.id);
 }
 const selectedTab = ref("CategoryInformation");
+
 </script>
 
 <style lang="scss" scoped></style>

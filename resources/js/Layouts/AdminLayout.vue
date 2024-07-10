@@ -51,7 +51,7 @@
         </template>
 
         <div class="bg-white p-3">
-            <VHotLinks class="mb-2" />
+            <!-- <VHotLinks class="mb-2" /> -->
             <router-view></router-view>
         </div>
     </ZTELayout>
@@ -114,6 +114,11 @@ const product_management = [
         title: "Product Access types",
         to: "productAccessTypeIndex",
         icon: "ai-closed-access",
+    },
+    {
+        title: "Filters",
+        to: "productAccessTypeIndex",
+        icon: "hi-solid-filter",
     },
 ];
 const file_management = [

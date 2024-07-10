@@ -12,6 +12,8 @@ use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\ProductComponentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImagesController;
+use App\Http\Controllers\RecommendedProductController;
+use App\Http\Controllers\RelatedProductController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserWishlistController;
@@ -35,16 +37,10 @@ Route::get('/user', function (Request $request) {
 Route::get('s3-resources/{filename}',[FileController::class, 'show']);
 Route::get('thumbnail/{code}',[FileController::class, 'show']);
 Route::get('s3-resources-download/{filename}',[FileController::class, 'download']);
-// Route::post('s3-resources-upload',[FileController::class, 'store']);
 Route::apiResource('portal-files', FileController::class)->only(['store', 'index', 'update', 'destroy']);
 
 Route::get('current/{category}', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
-
-Route::get('product-access/{product_access}', [ProductAccessController::class, 'show']);
-Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
-Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
-
 
 
 
@@ -52,13 +48,21 @@ Route::apiResource('area-code', AreaCodeController::class)->except(['create', 'e
 Route::apiResource('company-code', CompanyCodeController::class)->except(['create', 'edit']);
 Route::apiResource('roles', RolesController::class)->except(['create', 'edit']);
 Route::apiResource('permissions', PermissionController::class)->except(['create', 'edit']);
-
 Route::apiResource('categories', CategoryController::class)->except(['create', 'edit']);
-Route::apiResource('product', ProductController::class)->except($except);
-Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
-Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
+Route::put('categories/image/{category}', [CategoryController::class, 'updateCoverPhoto']);
+
+
 
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except(['create', 'edit']);
+Route::get('product-access/{product_access}', [ProductAccessController::class, 'show']);
+Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
+Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
+
+#region Product Routes
+Route::apiResource('product', ProductController::class)->except($except);
+
+Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
+Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
 
 Route::get('product-images', [ProductImagesController::class, 'index']);
 Route::get('product-images/{product}', [ProductImagesController::class, 'show']);
@@ -71,6 +75,20 @@ Route::get('product-components/{product}', [ProductComponentController::class, '
 Route::post('product-components/{product}', [ProductComponentController::class, 'createProductComponents']);
 Route::put('product-components/{product_component}', [ProductComponentController::class, 'update']);
 Route::delete('product-components/{product_component}', [ProductComponentController::class, 'destroy']);
+
+#region Related Product
+Route::apiResource('products/related', RelatedProductController::class)->only(['destroy']);
+Route::post('products/related/{product}/{relatedProduct}', [RelatedProductController::class, 'store']);
+Route::get('products/related/{product}', [RelatedProductController::class, 'show']);
+#endregion 
+#region Recommended Product
+Route::apiResource('products/recommended', RecommendedProductController::class)->only(['destroy']);
+Route::post('products/recommended/{product}/{recommendedProduct}', [RecommendedProductController::class, 'store']);
+Route::get('products/recommended/{product}', [RecommendedProductController::class, 'show']);
+#endregion 
+
+#endregion
+
 
 Route::apiResource('users', UserController::class)->except($except);
 Route::put('users/change-password/{user}', [UserController::class, 'changePassword']);

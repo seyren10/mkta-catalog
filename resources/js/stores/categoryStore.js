@@ -247,6 +247,17 @@ export const useCategoryStore = defineStore("categories", () => {
             console.log(e);
         }
     };
+    const updateCategoryImage = async (id, file_id) => {
+        try {
+            const res = await exec("/api/categories/image/" + id, "put", {
+                file_id: file_id,
+            });
+            getCategory(id);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     const deleteCategory = async (id) => {
         try {
             const res = await exec("/api/categories/" + id, "delete");
@@ -304,5 +315,6 @@ export const useCategoryStore = defineStore("categories", () => {
         getCategory,
         getCategories,
         getCategoryWithId,
+        updateCategoryImage
     };
 });

@@ -14,7 +14,6 @@ class ProductResource extends JsonResource
         #region Wishlist Button
         $data['show_wishlist_button'] = false;
         #endregion
-
         #region Product Categories
         $removeProductCategories = true;
         if ($request->has('includeProductCategories')) {
@@ -111,6 +110,28 @@ class ProductResource extends JsonResource
         }
         if ($removeParentCode) {
             unset($data['parent_code']);
+        }
+        #endregion
+        #region Related Products
+        $removeRelatedProduct = true;
+        if ($request->has('includeRelatedProducts')) {
+            if ($request->includeRelatedProducts === 'true' || $request->includeRelatedProducts === true) {
+                $removeRelatedProduct = false;
+            }
+        }
+        if ($removeRelatedProduct) {
+            unset($data['related_product']);
+        }
+        #endregion
+        #region Recommended Products
+        $removeRecommendedProduct = true;
+        if ($request->has('includeRecommendedProduct')) {
+            if ($request->includeRecommendedProduct === 'true' || $request->includeRecommendedProduct === true) {
+                $removeRecommendedProduct = false;
+            }
+        }
+        if ($removeRecommendedProduct) {
+            unset($data['recommended_product']);
         }
         #endregion
 

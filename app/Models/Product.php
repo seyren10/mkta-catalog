@@ -23,11 +23,20 @@ class Product extends Model
     public $incrementing = false;
     protected $keyType = "string";
     protected $hidden = ["laravel_through_key", 'updated_at'];
-    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail'];
+    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail', 'related_product', 'recommended_product'];
 
     public function non_wishlist_users()
     {
-        return $this->hasMany(NonWishlistUsers::class, 'product_id', 'id');
+        return $this->hasMany(NonWishlistUsers::class, 'product_id', 'id')->without(['product']);
+    }
+
+    public function related_product()
+    {
+        return $this->hasMany(RelatedProduct::class, 'product_id', 'id');
+    }
+    public function recommended_product()
+    {
+        return $this->hasMany(RecommendedProduct::class, 'product_id', 'id');
     }
 
     public function product_thumbnail()
