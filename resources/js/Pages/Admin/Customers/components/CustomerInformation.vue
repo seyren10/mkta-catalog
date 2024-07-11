@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <div class="grid grid-cols-12">
+        <div class="grid grid-cols-12 gap-2">
             <div class="col-span-12">
                 <v-text-field
                     label="Name"

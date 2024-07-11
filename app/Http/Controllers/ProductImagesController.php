@@ -46,6 +46,7 @@ class ProductImagesController extends Controller
     {
         // ProductImage::where('product_id', $product_image->product_id)->update([0, 'is_thumbnail']);
         ProductImage::where('product_id', $product_image->product_id)->update(['is_thumbnail' => 0]);
+        $product_image->index = 0;
         $product_image->is_thumbnail = 1;
         $product_image->save();
         return response()->json(['message' => 'Product Thumbnail successfully updated'], 200);

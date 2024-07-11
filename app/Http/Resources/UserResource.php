@@ -16,6 +16,15 @@ class UserResource extends JsonResource
     {
         $data = parent::toArray($request);
         $data['is_active'] = $data['is_active'] == 1;
+        #region wishlist-products
+        $curWishlistProducts = collect($data['wishlist_products']);
+        unset($data['wishlist_products']);
+        if ($request->has('includeWishListProducts')) {
+            if ($request->includeWishListProducts === 'true' || $request->includeWishListProducts === true) {
+                $data['wishlist_products'] = $curWishlistProducts;
+            }
+        }
+        #endregion
         #region non-wishlist-products
         $curNonWishlistProducts = collect($data['non_wishlist_products']);
         unset($data['non_wishlist_products']);
@@ -26,7 +35,7 @@ class UserResource extends JsonResource
         }
         if ($request->has('includeNonWishlistProductsKeys')) {
             if ($request->includeNonWishlistProductsKeys === 'true' || $request->includeNonWishlistProductsKeys === true) {
-                $data['non_wishlist_products_keys'] = $curNonWishlistProducts->pluck('product_id');
+                $data['non_wishlist_products_keys'] = $curNonWishlistProducts->pluck('id');
             }
         }
         #endregion

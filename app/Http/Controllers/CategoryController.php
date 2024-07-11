@@ -65,6 +65,11 @@ class CategoryController extends Controller
         $category->save();
         return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
     }
+    public function updateCoverPhoto(Request $request, Category $category){
+        $category->file_id = $request->file_id;
+        $category->save();
+        return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
+    }
 
     /**
      * Remove the specified resource from storage.

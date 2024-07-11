@@ -113,9 +113,15 @@ import {
     BiCheckCircle,
     MdDrivefilerenameoutlineOutlined,
     PrTrash,
+    LaObjectGroupSolid,
+    RiNodeTree,
+    HiSolidFilter,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    HiSolidFilter,
+    RiNodeTree,
+    LaObjectGroupSolid,
     MdDrivefilerenameoutlineOutlined,
     BiCheckCircleFill,
     BiCheckCircle,

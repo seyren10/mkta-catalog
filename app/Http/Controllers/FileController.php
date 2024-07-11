@@ -95,6 +95,7 @@ class FileController extends Controller
     {
         if (Storage::disk('s3')->exists($filename)) {
             // Get the file's URL from S3
+
             return Storage::disk('s3')->get($filename);
 
             // Redirect the user to the S3 URL for downloading
@@ -129,16 +130,23 @@ class FileController extends Controller
      */
     public function destroy(File $portal_file)
     {
-        Log::info("File Deletion", array(
-            "File" => $portal_file->filename,
-            "isExist" => Storage::disk('s3')->exists($portal_file->filename)
-        ));
+        $res = array();
+        $res["message"] = "File successfully deleted";
+        $res["File"] = $portal_file->filename;
+        $res["isExist"] = Storage::disk('s3')->exists($portal_file->filename);
+
         if (Storage::disk('s3')->exists($portal_file->filename)) {
-            Storage::disk('s3')->delete($portal_file->filename);
+            try {
+                Storage::disk('s3')->delete("\\" . $portal_file->filename);
+            } catch (\Throwable $th) {
+                $res["error"] = $th;
+                $res['file'] = "\\" . $portal_file->filename;
+            }
+
         }
         $portal_file->delete();
         return response(array(
-            "message" => "File successfully deleted",
+            $res,
         ), 200);
     }
 }

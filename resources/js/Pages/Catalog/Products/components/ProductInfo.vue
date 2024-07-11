@@ -89,7 +89,7 @@
             <ul class="flex flex-wrap gap-3">
                 <li
                     v-for="variant in variants"
-                    class="overflow-hidden rounded-lg border p-2 hover:bg-slate-200"
+                    class="overflow-hidden rounded-lg border hover:border-accent"
                 >
                     <router-link
                         :to="{ name: 'product', params: { id: variant.id } }"
@@ -100,10 +100,12 @@
                                 s3(variant.product_images?.at(0).file.filename)
                             "
                             no-overlay
-                            class="max-w-10"
+                            class="max-w-12"
                         ></v-text-on-image>
-                        <span class="text-xs">{{ variant.title }}</span>
                     </router-link>
+                    <v-tooltip activator="parent"
+                        >{{ variant.title }}
+                    </v-tooltip>
                 </li>
             </ul>
         </div>
