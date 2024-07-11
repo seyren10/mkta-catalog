@@ -29,6 +29,8 @@ class ProductController extends Controller
             return ProductResource::collection($searchedProducts);
         }
 
+
+
         return ProductResource::collection(Product::paginate(30));
     }
     public function getProductsWithCategoryId(Category $category)

@@ -41,6 +41,8 @@ const currentImageIndex = ref(0);
 const lightbox = ref(false);
 const s3 = inject("s3");
 
+await init();
+
 //computed
 const category = categoryStore.getCategoryWithId(
     product.value.product_categories?.at(0)?.id,
@@ -63,6 +65,13 @@ provide("currentImageIndex", currentImageIndex);
 provide("lightbox", lightbox);
 provide("product", product);
 provide("category", category);
+
+//init
+
+async function init() {
+    await productStore.getProductItem(props.id);
+}
+console.log('init again')
 </script>
 
 <style lang="scss" scoped></style>
