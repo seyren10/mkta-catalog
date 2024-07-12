@@ -70,7 +70,6 @@ export const useProductStore = defineStore("products", () => {
             resetForm();
         }
     };
-
     const getProductItemsWithCategoryId = async (
         categoryId,
         requestData = null,
@@ -106,7 +105,6 @@ export const useProductStore = defineStore("products", () => {
             console.log(e);
         }
     };
-
     const getProductItem = async (id, requestData = null) => {
         try {
             let defaultData = {
@@ -119,6 +117,7 @@ export const useProductStore = defineStore("products", () => {
                 includeProductWeight: true,
                 includeProductVolume: true,
                 includeParentCode: true,
+                includeProductFilter: true
             };
             const res = await exec("/api/product/" + id, "get", {
                 ...defaultData,
@@ -164,7 +163,6 @@ export const useProductStore = defineStore("products", () => {
         } finally {
         }
     };
-
     const resetForm = () => {
         form.parent_code = "";
         form.title = "";
@@ -177,9 +175,48 @@ export const useProductStore = defineStore("products", () => {
         form.dimension_height = 0.0;
     };
 
+    const getProductFilter = async(product_id)=>{
+        try {
+            const res = await exec(
+                ["/api/product-filter", product_id].join("/"),
+                "get",
+            );
+            product_item.value.product_filter = res.data.data;
+            return res.data.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const addProductFilter = async( product_id, filter_id, option_id )=>{
+        try {
+            const res = await exec(
+                ["/api/product-filter", product_id, filter_id, option_id].join("/"),
+                "post",
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const removeProductFilter = async( product_id, filter_id, option_id )=>{
+        try {
+            const res = await exec(
+                ["/api/product-filter", product_id, filter_id, option_id].join("/"),
+                "delete",
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
     return {
         getProductItemsWithCategoryId,
 
+
+
+        getProductFilter,
+        addProductFilter,
+        removeProductFilter,
         //pagination
         pagination,
         paginationLinks,

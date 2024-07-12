@@ -134,6 +134,18 @@ class ProductResource extends JsonResource
             unset($data['recommended_product']);
         }
         #endregion
+        #region Product Filter
+        $removeProductFilter = true;
+        if ($request->has('includeProductFilter')) {
+            if ($request->includeProductFilter === 'true' || $request->includeProductFilter === true) {
+                $removeProductFilter = false;
+                $data['product_filter'] = collect($data['product_filter'])->pluck('filter_key');
+            }
+        }
+        if ($removeProductFilter) {
+            unset($data['product_filter']);
+        }
+        #endregion
 
         return $data;
     }

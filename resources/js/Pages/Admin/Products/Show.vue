@@ -81,6 +81,10 @@
             <template class="p-3" #content.RecommendedProduct>
                 <recommendedProduct :id="id" />
             </template>
+            <template class="p-3" #content.ProductFilters>
+                <productFilter :id="id"/>
+            </template>
+            
         </v-tab>
     </div>
 </template>
@@ -91,6 +95,8 @@ import productRestrictionExemption from "./components/productRestrictionExemptio
 import productCategories from "./components/productCategories.vue";
 import productComponents from "./components/productComponents.vue";
 import productImages from "./components/productImages.vue";
+import productFilter from "./components/productFilter.vue";
+
 
 import relatedProduct from "./components/relatedProduct.vue";
 import recommendedProduct from "./components/recommendedProduct.vue";
@@ -110,7 +116,7 @@ if (!product_item.length) {
     await productStore.getProductItem(props.id);
 }
 
-const currentTab = ref("RelatedProduct");
+const currentTab = ref("ProductFilters");
 const tabs = ref([
     {
         icon: "bi-cart4",

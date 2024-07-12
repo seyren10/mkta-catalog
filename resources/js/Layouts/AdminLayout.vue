@@ -117,7 +117,7 @@ const product_management = [
     },
     {
         title: "Filters",
-        to: "productAccessTypeIndex",
+        to: "productFilterIndex",
         icon: "hi-solid-filter",
     },
 ];
