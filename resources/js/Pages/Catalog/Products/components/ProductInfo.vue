@@ -83,6 +83,32 @@
                 <ContactSales class="p-5" :item="product"></ContactSales>
             </v-dialog>
         </div>
+
+        <div v-if="variants.length">
+            <h3 class="mb-3 text-slate-500">Variants:</h3>
+            <ul class="flex flex-wrap gap-3">
+                <li
+                    v-for="variant in variants"
+                    class="overflow-hidden rounded-lg border hover:border-accent"
+                >
+                    <router-link
+                        :to="{ name: 'product', params: { id: variant.id } }"
+                        class="flex items-center gap-3"
+                    >
+                        <v-text-on-image
+                            :image="
+                                s3(variant.product_images?.at(0).file.filename)
+                            "
+                            no-overlay
+                            class="max-w-12"
+                        ></v-text-on-image>
+                    </router-link>
+                    <v-tooltip activator="parent"
+                        >{{ variant.title }}
+                    </v-tooltip>
+                </li>
+            </ul>
+        </div>
         <v-tab
             no-navigation
             header-class=" !px-0 bg-white border-b pb-2"
@@ -177,9 +203,34 @@ import VIconWrapper from "@/components/base_components/VIconWrapper.vue";
 
 //reactives
 const injectedProduct = inject("product");
+const category = inject("category");
+const s3 = inject("s3");
+
 const conversion = ref("metric");
+const contact = ref(false);
+const wishlistUIStore = useWishlistUIStore();
 const IMPERIAL_lENGTH = 2.54;
 const IMPERIAL_POUND = 2.205;
+
+const isIncludedInWishlist = () =>
+    wishlistUIStore.isIncludedOnWishlist(product.value);
+
+const addToWishlist = () => wishlistUIStore.addToWishlist(product.value);
+const removeFromWishlist = () =>
+    wishlistUIStore.removeFromWishlist(product.value);
+
+const breadCrumbData = computed(() => {
+    return [
+        { name: "catalog", text: "Catalog" },
+        {
+            path: `/catalog/categories/${product.value.product_categories?.at(0).id}`,
+            text: category.title,
+        },
+        {
+            name: product.value?.id,
+        },
+    ];
+});
 const product = computed(() => {
     return {
         ...injectedProduct.value,
@@ -194,30 +245,9 @@ const product = computed(() => {
         },
     };
 });
-const category = inject("category");
 
-const contact = ref(false);
-const wishlistUIStore = useWishlistUIStore();
-
-const isIncludedInWishlist = () =>
-    wishlistUIStore.isIncludedOnWishlist(product.value);
-
-const addToWishlist = () => wishlistUIStore.addToWishlist(product.value);
-const removeFromWishlist = () =>
-    wishlistUIStore.removeFromWishlist(product.value);
-
-//derived
-const breadCrumbData = computed(() => {
-    return [
-        { name: "catalog", text: "Catalog" },
-        {
-            path: `/catalog/categories/${product.value.product_categories?.at(0).id}`,
-            text: category.title,
-        },
-        {
-            name: product.value?.id,
-        },
-    ];
+const variants = computed(() => {
+    return product.value.variants;
 });
 </script>
 

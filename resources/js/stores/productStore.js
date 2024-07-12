@@ -117,7 +117,8 @@ export const useProductStore = defineStore("products", () => {
                 includeProductWeight: true,
                 includeProductVolume: true,
                 includeParentCode: true,
-                includeProductFilter: true
+                includeProductFilter: true,
+                includeVariants: true,
             };
             const res = await exec("/api/product/" + id, "get", {
                 ...defaultData,

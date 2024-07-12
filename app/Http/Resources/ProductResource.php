@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -110,6 +111,10 @@ class ProductResource extends JsonResource
         }
         if ($removeParentCode) {
             unset($data['parent_code']);
+        }
+
+        if ($request->has('includeVariants')) {
+            $data['variants'] = Product::variants($this);
         }
         #endregion
         #region Related Products

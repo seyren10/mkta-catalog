@@ -67,4 +67,11 @@ class Product extends Model
             'category_id'
         )->withOut(["sub_categories", 'file', 'parent_category']);
     }
+
+    public static function variants($product)
+    {
+        return static::whereNot(function ($query) use ($product) {
+            $query->where('id', $product->id);
+        })->where('parent_code', $product->parent_code)->get();
+    }
 }
