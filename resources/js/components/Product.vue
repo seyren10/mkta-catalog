@@ -62,47 +62,46 @@
                         {{ item.id }}
                     </p>
 
-                    <v-toast
-                        :type="isIncludedOnWishlist() ? 'success' : 'danger'"
+                    <v-button
+                        :loading="loading"
+                        v-bind="props"
+                        :icon="
+                            isIncludedOnWishlist()
+                                ? 'la-heart-solid'
+                                : 'la-heart'
+                        "
+                        iconSize="1"
+                        :class="
+                            isIncludedOnWishlist()
+                                ? 'text-red-500'
+                                : 'text-accent'
+                        "
+                        @click="
+                            isIncludedOnWishlist()
+                                ? handleRemoveFromWishlist()
+                                : handleAddToWishlist()
+                        "
                     >
-                        <template #activator="props">
-                            <v-button
-                                v-bind="props"
-                                :icon="
-                                    isIncludedOnWishlist()
-                                        ? 'la-heart-solid'
-                                        : 'la-heart'
-                                "
-                                iconSize="1"
-                                :class="
-                                    isIncludedOnWishlist()
-                                        ? 'text-red-500'
-                                        : 'text-accent'
-                                "
-                                @click="
-                                    isIncludedOnWishlist()
-                                        ? handleRemoveFromWishlist()
-                                        : handleAddToWishlist()
-                                "
-                            ></v-button>
-                        </template>
-
-                        <template v-if="isIncludedOnWishlist()">
-                            Item added to wishlist.
-                        </template>
-                        <template v-else>
-                            Item removed from wishlist.
-                        </template>
-                    </v-toast>
+                    </v-button>
                 </div>
             </div>
         </slot>
+
+        <v-toast
+            :type="isIncludedOnWishlist() ? 'success' : 'danger'"
+            v-model="toast"
+        >
+            <template v-if="isIncludedOnWishlist()">
+                Item added to wishlist.
+            </template>
+            <template v-else> Item removed from wishlist. </template>
+        </v-toast>
     </div>
 </template>
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { inject } from "vue";
+import { inject, ref } from "vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -115,18 +114,35 @@ const props = defineProps({
     },
 });
 
-const wishlistUIStore = inject("wishlistUIStore");
+const toast = ref(false);
+
+const wishlistStore = inject("wishlistStore");
+const { loading, wishlists } = storeToRefs(wishlistStore);
 
 const isIncludedOnWishlist = () => {
-    return wishlistUIStore.isIncludedOnWishlist(props.item);
+    return wishlistStore.isIncludedOnWishlist(props.item);
 };
 
-const handleAddToWishlist = () => {
-    wishlistUIStore.addToWishlist(props.item);
+const handleAddToWishlist = async () => {
+    await wishlistStore.addToWishlist(props.item);
+    await wishlistStore.getWishlists();
+
+    //show add toast
+    toast.value = true;
 };
 
-const handleRemoveFromWishlist = () => {
-    wishlistUIStore.removeFromWishlist(props.item);
+const handleRemoveFromWishlist = async () => {
+    /* find the corresponding wishlist base on product id
+    since wishlist id is needed to delete */
+    const wishlist = wishlists.value.find(
+        (e) => e.product.id === props.item.id,
+    );
+
+    if (wishlist) await wishlistStore.deleteWishlist(wishlist.id);
+    await wishlistStore.getWishlists();
+
+    //show delete toast
+    toast.value = true;
 };
 const s3 = inject("s3");
 </script>

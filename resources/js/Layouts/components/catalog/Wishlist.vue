@@ -28,27 +28,13 @@
                         :key="item.id"
                         class="flex gap-3 border-b p-3"
                     >
-                        <div class="max-w-[5rem]">
-                            <v-text-on-image
-                                :image="item.image"
-                                no-overlay
-                                class="aspect-square rounded-lg object-cover"
-                            />
-                        </div>
-                        <div>
-                            <div>{{ item.details.description }}</div>
-                            <span class="text-slate-400">{{
-                                item.details.dimension
-                            }}</span>
-                        </div>
-                        <div>
-                            <v-button
-                                icon="pr-trash"
-                                class="text-red-500"
-                                @click.stop="handleRemoveWishlist(item)"
-                            ></v-button>
-                        </div>
+                        <WishlistItem
+                            :item="item"
+                            @delete="handleDeleteWishlist"
+                        ></WishlistItem>
                     </li>
+                    <li></li>
+
                     <div
                         v-if="!wishlists.length"
                         class="text-center text-[1rem] tracking-wide text-slate-500"
@@ -67,6 +53,14 @@
                         </div>
                     </div>
                 </ul>
+
+                <v-button
+                    v-if="wishlists.length"
+                    class="ml-auto bg-red-500 text-xs text-white"
+                    @click="handleDeleteAllWishlist"
+                    :loading="loading"
+                    >clear all</v-button
+                >
             </div>
             <div class="space-y-5 rounded-lg bg-slate-100 p-5">
                 <p>
@@ -109,11 +103,14 @@
 import { ref, inject, computed } from "vue";
 import { storeToRefs } from "pinia";
 
+import WishlistItem from "./WishlistItem.vue";
+
 const wishlistDialog = ref(false);
 
 //injects
-const wishlistUIStore = inject("wishlistUIStore");
-const { wishlistCount, wishlists } = storeToRefs(wishlistUIStore);
+const wishlistStore = inject("wishlistStore");
+
+const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
 
 const infoList = computed(() => {
     return [
@@ -126,9 +123,15 @@ const infoList = computed(() => {
     ];
 });
 
-const handleRemoveWishlist = (item) => {
-    wishlistUIStore.removeFromWishlist(item);
+const handleDeleteWishlist = async (item) => {
+    await wishlistStore.deleteWishlist(item);
+    await wishlistStore.getWishlists();
+};
+
+const handleDeleteAllWishlist = async () => {
+    await wishlistStore.deleteAllWishlist();
+    await wishlistStore.getWishlists();
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="css"></style>

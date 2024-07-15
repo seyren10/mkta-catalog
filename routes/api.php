@@ -27,16 +27,18 @@ use Illuminate\Support\Facades\Storage;
 
 
 
-$except = ['create', 'edit', 'destroy'];
 
 Route::get('/user', function (Request $request) {
     $request->merge(['includeRoleData' => true]);
     return new UserResource($request->user());
 })->middleware('auth:sanctum');
 
-Route::get('s3-resources/{filename}',[FileController::class, 'show']);
-Route::get('thumbnail/{code}',[FileController::class, 'show']);
-Route::get('s3-resources-download/{filename}',[FileController::class, 'download']);
+// Route::middleware('auth:sanctum')->group(function () {
+$except = ['create', 'edit', 'destroy'];
+
+Route::get('s3-resources/{filename}', [FileController::class, 'show']);
+Route::get('thumbnail/{code}', [FileController::class, 'show']);
+Route::get('s3-resources-download/{filename}', [FileController::class, 'download']);
 Route::apiResource('portal-files', FileController::class)->only(['store', 'index', 'update', 'destroy']);
 
 Route::get('current/{category}', [currentController::class, 'current']);
@@ -99,9 +101,11 @@ Route::apiResource('customers', UserController::class)->except($except)->names('
 Route::post('customers/reset-password/{user}', [UserController::class, 'resetPassword']);
 Route::post('customers/{user}/{action}/area-code/{areacode}', [UserController::class, 'modifyUserAreaCodes']);
 Route::post('customers/{user}/{action}/company-code/{company_code}', [UserController::class, 'modifyUserCompanyCode']);
-Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store']);
-Route::get('customer-wishlist/{user}', [UserWishlistController::class, 'getWishlist']);
+
+Route::delete('customer-wishlist/delete-all-user-wishlists', [UserWishlistController::class, 'destroyUserWishlistAll']);
+Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store', 'index', 'destroy']);
 Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
 
 
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);
+// });

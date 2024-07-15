@@ -126,7 +126,7 @@
                                         }"
                                     >
                                         <v-text-on-image
-                                            :image="category.img"
+                                            :image="s3(category.img)"
                                             :title="category.title"
                                             appear
                                             class="aspect-[2/1]"
@@ -182,6 +182,7 @@ const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
 const search = ref(route.query.q || "");
+const s3 = inject("s3");
 
 //non-reactives
 const headerData = [

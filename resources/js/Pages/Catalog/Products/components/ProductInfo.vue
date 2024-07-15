@@ -20,35 +20,22 @@
 
         <div class="flex items-center gap-5">
             <div>
-                <v-toast :type="!isIncludedInWishlist() ? 'danger' : 'success'">
-                    <template #activator="props">
-                        <v-button
-                            v-bind="props"
-                            :icon="
-                                isIncludedInWishlist()
-                                    ? 'la-heart-solid'
-                                    : 'la-heart'
-                            "
-                            :class="
-                                isIncludedInWishlist()
-                                    ? 'text-red-500'
-                                    : 'text-accent'
-                            "
-                            @click="
-                                isIncludedInWishlist()
-                                    ? removeFromWishlist()
-                                    : addToWishlist()
-                            "
-                        >
-                        </v-button>
-                    </template>
+                <v-button
+                    :loading="loading"
+                    :icon="
+                        isIncludedInWishlist() ? 'la-heart-solid' : 'la-heart'
+                    "
+                    :class="
+                        isIncludedInWishlist() ? 'text-red-500' : 'text-accent'
+                    "
+                    @click="
+                        isIncludedInWishlist()
+                            ? removeFromWishlist()
+                            : addToWishlist()
+                    "
+                >
+                </v-button>
 
-                    {{
-                        !isIncludedInWishlist()
-                            ? "Item removed from wishlist."
-                            : "Item added to wishlist."
-                    }}
-                </v-toast>
                 <v-tooltip activator="parent">{{
                     isIncludedInWishlist()
                         ? "Remove from Wishlist"
@@ -190,12 +177,24 @@
                 </div>
             </template>
         </v-tab>
+
+        <v-toast
+            :type="!isIncludedInWishlist() ? 'danger' : 'success'"
+            v-model="toast"
+        >
+            {{
+                !isIncludedInWishlist()
+                    ? "Item removed from wishlist."
+                    : "Item added to wishlist."
+            }}
+        </v-toast>
     </div>
 </template>
 
 <script setup>
 import { inject, computed, ref } from "vue";
-import { useWishlistUIStore } from "../../../../stores/ui/wishlistUIStore";
+import { useWishlistStore } from "../../../../stores/wishlistStore";
+import { storeToRefs } from "pinia";
 
 import ContactSales from "@/components/ContactSales.vue";
 import BreadCrumb from "@/components/BreadCrumb.vue";
@@ -208,16 +207,32 @@ const s3 = inject("s3");
 
 const conversion = ref("metric");
 const contact = ref(false);
-const wishlistUIStore = useWishlistUIStore();
+const wishlistStore = useWishlistStore();
+const { loading, wishlists } = storeToRefs(wishlistStore);
 const IMPERIAL_lENGTH = 2.54;
 const IMPERIAL_POUND = 2.205;
 
-const isIncludedInWishlist = () =>
-    wishlistUIStore.isIncludedOnWishlist(product.value);
+const toast = ref(false);
 
-const addToWishlist = () => wishlistUIStore.addToWishlist(product.value);
-const removeFromWishlist = () =>
-    wishlistUIStore.removeFromWishlist(product.value);
+const isIncludedInWishlist = () =>
+    wishlistStore.isIncludedOnWishlist(product.value);
+
+const addToWishlist = async () => {
+    await wishlistStore.addToWishlist(product.value);
+    await wishlistStore.getWishlists();
+    toast.value = true;
+};
+const removeFromWishlist = async () => {
+    /* find the corresponding wishlist base on product id
+    since wishlist id is needed to delete */
+    const wishlist = wishlists.value.find(
+        (e) => e.product.id === product.value.id,
+    );
+
+    if (wishlist) await wishlistStore.deleteWishlist(wishlist.id);
+    await wishlistStore.getWishlists();
+    toast.value = true;
+};
 
 const breadCrumbData = computed(() => {
     return [

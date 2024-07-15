@@ -20,7 +20,7 @@ import { storeToRefs } from "pinia";
 import { provide } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useCategoryStore } from "@/stores/categoryStore";
-import { useWishlistUIStore } from "./stores/ui/wishlistUIStore";
+import { useWishlistStore } from "./stores/wishlistStore";
 import { useProductStore } from "./stores/productStore";
 import { RouterView, useRouter } from "vue-router";
 
@@ -32,13 +32,13 @@ const router = useRouter();
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
-const wishlistUIStore = useWishlistUIStore();
+const wishlistStore = useWishlistStore();
 
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
 provide("router", router);
 provide("currentUser", currentUser);
-provide("wishlistUIStore", wishlistUIStore);
+provide("wishlistStore", wishlistStore);
 provide("s3", (img) => {
     return `https://mkta-portal.s3.us-east-2.amazonaws.com/${img}`;
 });

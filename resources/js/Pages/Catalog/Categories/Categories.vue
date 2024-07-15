@@ -1,9 +1,9 @@
 <template>
     <div class="container my-8 space-y-5">
         <header
-            class="grid items-center gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min-content_auto]"
+            class="grid gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
         >
-            <div class="md:col-span-2">
+            <div class="row-start-1 md:col-[1/-1]">
                 <BreadCrumb
                     :items="[
                         { name: 'catalog', text: 'Catalog' },
@@ -12,7 +12,7 @@
                 ></BreadCrumb>
             </div>
             <div
-                class="aspect-video overflow-hidden rounded-lg bg-slate-200 md:order-2"
+                class="aspect-video overflow-hidden rounded-lg bg-slate-200 md:col-start-2 md:row-start-1 md:row-end-3"
             >
                 <v-text-on-image
                     no-overlay
@@ -26,7 +26,7 @@
                 >
                     {{ category?.title }}
                 </h1>
-                <p class="max-w-[50ch] text-slate-500 md:order-1">
+                <p class="max-w-[50ch] text-slate-500">
                     {{ category?.description }}
                 </p>
             </div>

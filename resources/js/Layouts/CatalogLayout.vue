@@ -39,12 +39,17 @@
 import { RouterView } from "vue-router";
 import { useCategoryStore } from "../stores/categoryStore";
 import { storeToRefs } from "pinia";
+import { inject } from "vue";
 
 import CatalogNav from "./components/catalog/CatalogNav.vue";
 import VLoader from "../components/base_components/VLoader.vue";
 
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
+const wishlistStore = inject("wishlistStore");
+const { wishlists } = storeToRefs(wishlistStore);
+
+if (!wishlists.value.length) await wishlistStore.getWishlists();
 
 if (!categories.value.length)
     await categoryStore.getCategories({

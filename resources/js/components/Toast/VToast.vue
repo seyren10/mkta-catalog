@@ -1,6 +1,6 @@
 <template>
     <div>
-        <slot name="activator" @click="model = !model"> </slot>
+        <slot name="activator" @click="model = true"> </slot>
 
         <Teleport to="#overlay">
             <Transition
