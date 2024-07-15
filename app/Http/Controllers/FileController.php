@@ -25,7 +25,7 @@ class FileController extends Controller
      */
     public function index()
     {
-        return new FileResource(File::get());
+        return new FileResource(File::orderBy('created_at', "DESC")->get());
     }
 
     /**

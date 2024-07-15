@@ -5,12 +5,15 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyCodeController;
 use App\Http\Controllers\currentController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FilterChoiceController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\NonWishlistController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAccessController;
 use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\ProductComponentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductFilterController;
 use App\Http\Controllers\ProductImagesController;
 use App\Http\Controllers\RecommendedProductController;
 use App\Http\Controllers\RelatedProductController;
@@ -20,6 +23,7 @@ use App\Http\Controllers\UserWishlistController;
 use App\Http\Resources\ProductAccessResource;
 use App\Http\Resources\UserResource;
 use App\Models\ProductAccessType;
+use App\Models\ProductFilter;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +31,9 @@ use Illuminate\Support\Facades\Storage;
 
 
 
+
+
+$except = ['create', 'edit', 'destroy'];
 
 Route::get('/user', function (Request $request) {
     $request->merge(['includeRoleData' => true]);
@@ -43,6 +50,12 @@ Route::apiResource('portal-files', FileController::class)->only(['store', 'index
 
 Route::get('current/{category}', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
+
+
+Route::apiResource('filters', FilterController::class)->except(['create', 'edit']);
+Route::post('filters/choice/{filter}', [FilterChoiceController::class, 'store']);
+Route::put('filters/choice/{filter_choice}', [FilterChoiceController::class, 'update']);
+Route::delete('filters/choice/{filter_choice}', [FilterChoiceController::class, 'destroy']);
 
 
 
@@ -88,6 +101,12 @@ Route::apiResource('products/recommended', RecommendedProductController::class)-
 Route::post('products/recommended/{product}/{recommendedProduct}', [RecommendedProductController::class, 'store']);
 Route::get('products/recommended/{product}', [RecommendedProductController::class, 'show']);
 #endregion 
+#region Product Filter
+Route::get('product-filter/{product}', [ProductFilterController::class, 'show']);
+Route::post('product-filter/{product}/{filter}/{filter_choice}', [ProductFilterController::class, 'store']);
+Route::delete('product-filter/{product}/{filter}/{filter_choice}', [ProductFilterController::class, 'destroy']);
+
+#endregion
 
 #endregion
 

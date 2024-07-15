@@ -281,7 +281,7 @@
 import fileInsert from "./fileInsert.vue";
 
 //SECTION - required
-import { ref, computed } from "vue";
+import { ref, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
 //SECTION - Props
@@ -397,9 +397,10 @@ const insertClose = () => {
     refresh();
 };
 
+const s3 = inject('s3')
 const copyLink = (data) => {
     const el = document.createElement("textarea"); // Create a <textarea> element
-    el.value = ["/api/s3-resources", data.filename].join("/"); // Set its value to the text that needs to be copied
+    el.value = s3(data.filename) // Set its value to the text that needs to be copied
     el.setAttribute("readonly", ""); // Make it readonly to be tamper-proof
     el.style.position = "absolute";
     el.style.left = "-9999px"; // Move outside the screen to make it invisible

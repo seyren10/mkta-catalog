@@ -38,6 +38,7 @@ const props = defineProps({
     ...useDensity(),
     rules: {
         type: [Function, Array],
+        default: []
     },
     errorMessages: {
         type: Object,

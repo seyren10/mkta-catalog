@@ -166,6 +166,29 @@ const product_management = [
 
         },
     },
+
+
+
+    {
+        path: "product-filter",
+        name: "productFilterIndex",
+        component: () => import("@/Pages/Admin/Filter/Index.vue"),
+        meta: {
+            title: "Product Filters",
+            description: "List of Filter for the Products",
+        },
+    },
+    {
+        path: "product-filter/:id",
+        name: "productFilterShow",
+        props: true,
+        component: () => import("@/Pages/Admin/Filter/Show.vue"),
+        meta: {
+            title: "Product Filter",
+            description: "List of Filter for the Products",
+            redirectTo : 'productFilterIndex'
+        },
+    },
 ];
 
 const file_management = [
