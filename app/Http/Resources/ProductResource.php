@@ -12,9 +12,10 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
-        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array())->toArray();
+        
         #region Wishlist Button
-        $data['show_wishlist_button'] = array_key_exists($data['id'], $nonwishlistproduct);
+        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array())->toArray();
+        $data['show_wishlist_button'] = !in_array($data['id'], $nonwishlistproduct);
         $data['show_wishlist_button_data'] = $nonwishlistproduct;
         #endregion
         #region Product Categories
@@ -153,7 +154,6 @@ class ProductResource extends JsonResource
             unset($data['product_filter']);
         }
         #endregion
-
         return $data;
     }
 }

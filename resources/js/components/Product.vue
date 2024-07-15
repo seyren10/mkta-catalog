@@ -61,8 +61,8 @@
                     <p class="mt-1 text-[.8rem] text-gray-400">
                         {{ item.id }}
                     </p>
-
                     <v-button
+                        v-show="item.show_wishlist_button"
                         :loading="loading"
                         v-bind="props"
                         :icon="

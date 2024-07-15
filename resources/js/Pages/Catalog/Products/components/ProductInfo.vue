@@ -17,7 +17,6 @@
                 {{ product.id }}
             </p>
         </div>
-
         <div class="flex items-center gap-5">
             <div v-show="product.show_wishlist_button">
                 <v-toast :type="!isIncludedInWishlist() ? 'danger' : 'success'">

@@ -15,6 +15,7 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
+        
         $data['is_active'] = $data['is_active'] == 1;
         #region wishlist-products
         $curWishlistProducts = collect($data['wishlist_products']);
