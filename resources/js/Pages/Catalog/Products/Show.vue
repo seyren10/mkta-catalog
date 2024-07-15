@@ -4,6 +4,7 @@
             <ImageView></ImageView>
             <ProductInfo></ProductInfo>
         </template>
+        
         <template #aside> <RecentViewed></RecentViewed> </template>
         <template #related>
             <RelatedProducts></RelatedProducts>

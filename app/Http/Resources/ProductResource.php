@@ -5,15 +5,17 @@ namespace App\Http\Resources;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class ProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
-
+        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array())->toArray();
         #region Wishlist Button
-        $data['show_wishlist_button'] = false;
+        $data['show_wishlist_button'] = array_key_exists($data['id'], $nonwishlistproduct);
+        $data['show_wishlist_button_data'] = $nonwishlistproduct;
         #endregion
         #region Product Categories
         $removeProductCategories = true;

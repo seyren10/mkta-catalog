@@ -44,6 +44,11 @@ class UserWishlistController extends Controller
             'data' => $products
         ]);
     }
+    public function getWishlist(User $user){
+        $product_list = UserWishlist::where('user_id', $user->id)->get()->pluck('product_id');
+        
+        return ProductResource::collection(Product::whereIn('id', $product_list)->get());
+    }
 
     public function store(Request $request)
     {

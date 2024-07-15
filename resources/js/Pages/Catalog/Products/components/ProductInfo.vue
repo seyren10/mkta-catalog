@@ -19,30 +19,43 @@
         </div>
 
         <div class="flex items-center gap-5">
-            <div>
-                <v-button
-                    :loading="loading"
-                    :icon="
-                        isIncludedInWishlist() ? 'la-heart-solid' : 'la-heart'
-                    "
-                    :class="
-                        isIncludedInWishlist() ? 'text-red-500' : 'text-accent'
-                    "
-                    @click="
-                        isIncludedInWishlist()
-                            ? removeFromWishlist()
-                            : addToWishlist()
-                    "
-                >
-                </v-button>
+            <div v-show="product.show_wishlist_button">
+                <v-toast :type="!isIncludedInWishlist() ? 'danger' : 'success'">
+                    <template #activator="props">
+                        <v-button
+                            
+                            v-bind="props"
+                            :icon="
+                                isIncludedInWishlist()
+                                    ? 'la-heart-solid'
+                                    : 'la-heart'
+                            "
+                            :class="
+                                isIncludedInWishlist()
+                                    ? 'text-red-500'
+                                    : 'text-accent'
+                            "
+                            @click="
+                                isIncludedInWishlist()
+                                    ? removeFromWishlist()
+                                    : addToWishlist()
+                            "
+                        >
+                        </v-button>
+                    </template>
 
+                    {{
+                        !isIncludedInWishlist()
+                            ? "Item removed from wishlist."
+                            : "Item added to wishlist."
+                    }}
+                </v-toast>
                 <v-tooltip activator="parent">{{
                     isIncludedInWishlist()
                         ? "Remove from Wishlist"
                         : "Add to wishlist"
                 }}</v-tooltip>
             </div>
-
             <v-dialog v-model="contact" max-width="700" persistent>
                 <template #header>
                     <div class="flex justify-between p-5">

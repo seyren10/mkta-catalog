@@ -20,27 +20,25 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = $request->q;
-
+        $restricted_products = $request->session()->get('restricted_products', array());
         if ($query) {
             $searchedProducts = Product::whereAny([
                 'id', 'title', 'description'
-            ], 'LIKE', '%' . $query . '%')->paginate(30);
+            ], 'LIKE', '%' . $query . '%')->whereNotIn('id',$restricted_products)->paginate(30);
 
             return ProductResource::collection($searchedProducts);
         }
-
-
-
-        return ProductResource::collection(Product::paginate(30));
+        return ProductResource::collection(Product::whereNotIn('id',$restricted_products)->paginate(30));
     }
-    public function getProductsWithCategoryId(Category $category)
+    public function getProductsWithCategoryId(Request $request, Category $category)
     {
+        $restricted_products = $request->session()->get('restricted_products', array());
 
         return  ProductResource::collection(Product::whereHas('product_categories', function ($query) use ($category) {
             if ($category->id) {
                 $query->where('product_categories.category_id', $category->id);
             }
-        })->paginate(32)->withQueryString());
+        })->whereNotIn('id',$restricted_products)->paginate(32)->withQueryString());
     }
 
     public function store(ProductRequest $request)

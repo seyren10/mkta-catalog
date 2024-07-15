@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\RecommendedProduct;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RecommendedProductController extends Controller
 {
     public function store(Product $product, Product $recommendedProduct)
     {
+
         RecommendedProduct::create(
             array(
                 'product_id' => $product->id,
@@ -19,9 +19,10 @@ class RecommendedProductController extends Controller
         );
         return response()->noContent();
     }
-    public function show(Product $product)
+    public function show(Product $product, Request $request)
     {
-        return RecommendedProduct::where('product_id', $product->id)->get();
+        $restricted_products = $request->session()->get('restricted_products', array());
+        return RecommendedProduct::whereNotIn('id',$restricted_products)->where('product_id', $product->id)->get();
     }
     public function destroy(RecommendedProduct $recommended)
     {

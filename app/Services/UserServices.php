@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\NonWishlistUsers;
 use App\Models\Product;
 use App\Models\ProductAccessType;
 use App\Models\ProductExemption;
@@ -15,7 +16,6 @@ class UserServices
 {
     
     public function getRestrictedProducts(User $user){
-        
         $accessTypes = ProductAccessType::get();
         #region Restrictions
         $restrictedProducts = array();
@@ -51,5 +51,8 @@ class UserServices
             return !in_array($value, $mergeExempted);
         });
         return array_values($result);
+    }
+    public function getNonWishlistProducts(User $user){
+        return collect(NonWishlistUsers::where('user_id', $user->id)->get())->pluck('product_id');
     }
 }

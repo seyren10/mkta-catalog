@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+
+    protected $UserServices;
+
+    public function __construct(UserServices $UserServices)
+    {
+        $this->UserServices = $UserServices;
+    }
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -18,11 +28,12 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
+            Log::info($request->session()->get('restricted_products'));
             return response()->noContent();
         }
 
         throw ValidationException::withMessages([
-            'email' => 'Invalid Email or Password.'
+            'email' => 'Invalid Email or Password.',
         ]);
     }
 
@@ -34,7 +45,15 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return response()->json([
-            'message' => 'logout'
+            'message' => 'logout',
         ]);
+    }
+
+    public function getUserData(Request $request)
+    {
+        $request->merge(['includeRoleData' => true]);
+        $request->session()->put('restricted_products', $this->UserServices->getRestrictedProducts(Auth()->user()));
+        $request->session()->put('nonwishlist_products', $this->UserServices->getNonWishlistProducts(Auth()->user()));
+        return new UserResource($request->user());
     }
 }

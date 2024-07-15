@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AreaCodeController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyCodeController;
 use App\Http\Controllers\currentController;
@@ -20,14 +21,8 @@ use App\Http\Controllers\RelatedProductController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserWishlistController;
-use App\Http\Resources\ProductAccessResource;
-use App\Http\Resources\UserResource;
-use App\Models\ProductAccessType;
-use App\Models\ProductFilter;
 use App\Services\UserServices;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 
 
@@ -35,10 +30,7 @@ use Illuminate\Support\Facades\Storage;
 
 $except = ['create', 'edit', 'destroy'];
 
-Route::get('/user', function (Request $request) {
-    $request->merge(['includeRoleData' => true]);
-    return new UserResource($request->user());
-})->middleware('auth:sanctum');
+Route::get('/user', [AuthController::class, 'getUserData'] )->middleware('auth:sanctum');
 
 // Route::middleware('auth:sanctum')->group(function () {
 $except = ['create', 'edit', 'destroy'];
