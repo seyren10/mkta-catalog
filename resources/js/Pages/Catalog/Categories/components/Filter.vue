@@ -42,7 +42,7 @@
                                 :key="value"
                                 class="rounded-lg bg-slate-200 px-2 text-slate-500"
                             >
-                                {{ value.value }}
+                                {{ value }}
                             </div>
                         </div>
                     </li>
@@ -69,7 +69,7 @@
                         :value="choice"
                         :checked="
                             selectedFilters[filter.title]?.find(
-                                (e) => e.id === choice.id,
+                                (e) => e === choice.value,
                             )
                         "
                         @check="(e) => handleCheck(e, filter)"
@@ -97,25 +97,35 @@ const route = useRoute();
 
 const handleCheck = (choice, filter) => {
     const filterKey = filter.title;
-
     /* create an array base on filterKey */
-    if (!selectedFilters.value[filterKey])
+    if (!selectedFilters.value[filterKey]){
         selectedFilters.value[filterKey] = [];
-
-    /* add the choice value on the selected filter key or remove when existing */
-    if (!selectedFilters.value[filterKey].find((c) => c.id === choice.id)) {
-        //add
-        selectedFilters.value[filterKey].push(choice);
     }
-    //remove
-    else
-        selectedFilters.value[filterKey] = selectedFilters.value[
-            filterKey
-        ].filter((c) => c.id !== choice.id);
+    /* add the choice value on the selected filter key or remove when existing */
+    if( !selectedFilters.value[filterKey].includes(choice.value) ){
+        selectedFilters.value[filterKey].push(choice.value);
+    }else{
+        selectedFilters.value[filterKey] = selectedFilters.value[filterKey].filter((c) => c !== choice.value);
+    }
+    // if (!selectedFilters.value[filterKey].find((c) => c.id === choice.id)) {
+    //     //add
+    //     let content = {
+    //         id : choice.id,
+    //         value: choice.value
+    //     }
+    //     selectedFilters.value[filterKey].push(choice.value);
+    // }else {
+    //     //remove
+    //     selectedFilters.value[filterKey] = selectedFilters.value[
+    //         filterKey
+    //     ].filter((c) => c.id !== choice.id);
+    // }
 
     //add the query parameter
     addToQuery(filterKey);
 };
+
+const emit = defineEmits(["dataReceived"]);
 
 const addToQuery = (filterKey) => {
     const choicesId = selectedFilters.value[filterKey].reduce((acc, cur) => {
@@ -123,12 +133,15 @@ const addToQuery = (filterKey) => {
 
         return acc;
     }, []);
+    let filter = [];
     router.push({
         query: {
             ...route.query,
-            [filterKey]: JSON.stringify(selectedFilters.value[filterKey]),
+            [filterKey]: JSON.stringify(selectedFilters.value[filterKey].join(',')),
         },
     });
+
+    emit('dataReceived', selectedFilters.value);
 };
 
 const hasSelectedFilter = computed(() => {

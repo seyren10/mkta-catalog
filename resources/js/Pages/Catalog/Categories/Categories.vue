@@ -45,7 +45,7 @@
         <main>
             <ProductListing :loading="loading">
                 <template #aside>
-                    <Filter></Filter>
+                    <Filter @dataReceived="filtered"></Filter>
                 </template>
                 <template #top>
                     <div class="flex items-center justify-between">
@@ -122,7 +122,7 @@ const sortBy = ref(0);
 
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 
-const fetchProducts = async (categoryId) => {
+const fetchProducts = async (categoryId, filters = null) => {
     loading.value = true;
 
     category.value = categoryStore.getCategoryWithId(+categoryId);
@@ -131,6 +131,7 @@ const fetchProducts = async (categoryId) => {
         includeProductFilter: true,
         color: route.query,
         page: page.value,
+        filters : filters
     });
 
     loading.value = false;
@@ -145,6 +146,10 @@ const handlePageChange = (page) => {
 };
 
 await fetchProducts(+props.id);
+
+const filtered = async(data)=>{
+    await fetchProducts(+props.id,data);
+}
 </script>
 
 <style lang="scss" scoped></style>
