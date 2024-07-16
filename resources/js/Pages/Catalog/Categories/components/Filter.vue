@@ -42,147 +42,132 @@
                                 :key="value"
                                 class="rounded-lg bg-slate-200 px-2 text-slate-500"
                             >
-                                {{ value }}
+                                {{ value.value }}
                             </div>
                         </div>
                     </li>
                 </template>
             </ul>
         </div>
-        <v-accordion bg="bg-slate-200" open>
+
+        <v-accordion
+            bg="bg-slate-200"
+            v-for="filter in filters"
+            :key="filter.id"
+        >
             <template #title>
                 <div class="flex items-center gap-2">
                     <v-icon name="md-colorlens-outlined"></v-icon>
-                    <span>Colors</span>
+                    <span class="capitalize">{{ filter.title }}</span>
                 </div>
             </template>
 
             <div class="space-y-3">
-                <v-checkbox
-                    v-model="selectedColors"
-                    value="red"
-                    label="Red"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedColors"
-                    value="blue"
-                    label="Blue"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedColors"
-                    value="pink"
-                    label="Pink"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedColors"
-                    value="green"
-                    label="Green"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedColors"
-                    value="yellow"
-                    label="Yellow"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedColors"
-                    value="aquamarine"
-                    label="Aquamarine"
-                ></v-checkbox>
-            </div>
-        </v-accordion>
-
-        <v-accordion bg="bg-slate-200">
-            <template #title>
-                <div class="flex items-center gap-2">
-                    <v-icon name="la-cog-solid"></v-icon>
-                    <span>Product Types</span>
+                <div v-for="choice in filter.choices" :key="choice.id">
+                    <FilterCheckbox
+                        :label="choice.value"
+                        :value="choice"
+                        :checked="
+                            selectedFilters[filter.title]?.find(
+                                (e) => e.id === choice.id,
+                            )
+                        "
+                        @check="(e) => handleCheck(e, filter)"
+                    />
                 </div>
-            </template>
-
-            <div class="space-y-3">
-                <v-checkbox
-                    v-model="selectedTypes"
-                    value="inlitefi"
-                    label="InliteFi"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedTypes"
-                    value="fiberglass"
-                    label="Fiberglass"
-                ></v-checkbox>
-            </div>
-        </v-accordion>
-
-        <v-accordion bg="bg-slate-200">
-            <template #title>
-                <div class="flex items-center gap-2">
-                    <v-icon name="md-spacebar-round"></v-icon>
-                    <span>Spatial</span>
-                </div>
-            </template>
-
-            <div class="space-y-3">
-                <v-checkbox
-                    v-model="selectedSpatial"
-                    value="indoor"
-                    label="Indoor"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="selectedSpatial"
-                    value="outdoor"
-                    label="Outdoor"
-                ></v-checkbox>
             </div>
         </v-accordion>
     </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, inject, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
+import FilterCheckbox from "./FilterCheckbox.vue";
 
 //reactives
-const selectedColors = ref([]);
-const selectedTypes = ref([]);
-const selectedSpatial = ref([]);
 
-//computed
-const hasSelectedFilter = computed(() => {
-    return (
-        [
-            ...selectedColors.value,
-            ...selectedTypes.value,
-            ...selectedSpatial.value,
-        ].length > 0
-    );
-});
+const filterStore = inject("filterStore");
+const { filters } = storeToRefs(filterStore);
+const selectedFilters = ref({});
+const router = useRouter();
+const route = useRoute();
 
-const selectedFilters = computed(() => {
-    return {
-        colors: selectedColors.value,
-        types: selectedTypes.value,
-        spatial: selectedSpatial.value,
-    };
-});
+const handleCheck = (choice, filter) => {
+    const filterKey = filter.title;
 
-//methods
-const handleClearFilter = (filterType) => {
-    switch (filterType) {
-        case "colors":
-            selectedColors.value = [];
-            break;
-        case "types":
-            selectedTypes.value = [];
-            break;
-        case "spatial":
-            selectedSpatial.value = [];
-            break;
+    /* create an array base on filterKey */
+    if (!selectedFilters.value[filterKey])
+        selectedFilters.value[filterKey] = [];
+
+    /* add the choice value on the selected filter key or remove when existing */
+    if (!selectedFilters.value[filterKey].find((c) => c.id === choice.id)) {
+        //add
+        selectedFilters.value[filterKey].push(choice);
     }
+    //remove
+    else
+        selectedFilters.value[filterKey] = selectedFilters.value[
+            filterKey
+        ].filter((c) => c.id !== choice.id);
+
+    //add the query parameter
+    addToQuery(filterKey);
 };
 
+const addToQuery = (filterKey) => {
+    const choicesId = selectedFilters.value[filterKey].reduce((acc, cur) => {
+        acc.push(cur.id);
+
+        return acc;
+    }, []);
+    router.push({
+        query: {
+            ...route.query,
+            [filterKey]: JSON.stringify(selectedFilters.value[filterKey]),
+        },
+    });
+};
+
+const hasSelectedFilter = computed(() => {
+    return Object.keys(selectedFilters.value).length;
+});
+
 const handleClearAllFilters = () => {
-    selectedColors.value = [];
-    selectedTypes.value = [];
-    selectedSpatial.value = [];
+    selectedFilters.value = {};
+
+    //clear the query
+    router.push({
+        query: {},
+    });
+};
+
+const handleClearFilter = (key) => {
+    selectedFilters.value = Object.keys(selectedFilters.value).reduce(
+        (acc, filterKey) => {
+            if (filterKey !== key) {
+                acc[filterKey] = selectedFilters.value[filterKey];
+            }
+
+            return acc;
+        },
+        {},
+    );
+    // //clear the query base on key
+    const query = Object.keys(route.query).reduce((acc, routeKey) => {
+        if (routeKey !== key) {
+            acc[routeKey] = route.query[routeKey];
+        }
+
+        return acc;
+    }, {});
+
+    // console.log(query);
+    router.push({
+        query,
+    });
 };
 </script>
 

@@ -1,8 +1,8 @@
 <template>
-    <div class="group cursor-pointer overflow-hidden rounded-lg">
+    <div class="group overflow-hidden rounded-lg">
         <div
             @click="expanded = !expanded"
-            :class="`relative isolate flex items-center justify-between bg-stone-200 ${densityValue}`"
+            :class="`cursor-pointer  relative isolate flex items-center justify-between bg-stone-200 ${densityValue}`"
         >
             <!-- backdrop -->
             <div

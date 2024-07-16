@@ -92,6 +92,7 @@
 import { computed, inject, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
+import { useRoute } from "vue-router";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
@@ -107,6 +108,7 @@ const props = defineProps({
 const categoryStore = inject("categoryStore");
 const category = ref(null);
 const productStore = inject("productStore");
+const route = useRoute();
 
 const {
     product_items: products,
@@ -126,6 +128,8 @@ const fetchProducts = async (categoryId) => {
     category.value = categoryStore.getCategoryWithId(+categoryId);
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
+        includeProductFilter: true,
+        color: route.query,
         page: page.value,
     });
 

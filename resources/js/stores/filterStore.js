@@ -15,11 +15,7 @@ export const useFilterStore = defineStore("filterStore", () => {
     const getFilter = async (id, requestData = null) => {
         let data = [];
         try {
-            const res = await exec(
-                ["/api/filters", id].join("/"),
-                "get",
-                requestData,
-            );
+            const res = await exec(`/api/filters/${id}`, "get", requestData);
             filter.value = res.data.data;
             data = res.data.data;
         } catch (e) {
@@ -31,7 +27,7 @@ export const useFilterStore = defineStore("filterStore", () => {
     const getFilters = async () => {
         let data = [];
         try {
-            const res = await exec(["/api/filters"].join("/"));
+            const res = await exec("/api/filters");
             filters.value = res.data.data;
             data = res.data.data;
         } catch (e) {
@@ -47,7 +43,7 @@ export const useFilterStore = defineStore("filterStore", () => {
             console.log(e);
         }
     };
-    const updateFilter = async (id, form={}) => {
+    const updateFilter = async (id, form = {}) => {
         try {
             const res = await exec(["/api/filters", id].join("/"), "put", form);
         } catch (e) {

@@ -48,6 +48,8 @@ const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const wishlistStore = inject("wishlistStore");
 const { wishlists } = storeToRefs(wishlistStore);
+const filterStore = inject("filterStore");
+const { filters } = storeToRefs(filterStore);
 
 if (!wishlists.value.length) await wishlistStore.getWishlists();
 
@@ -57,6 +59,8 @@ if (!categories.value.length)
         includeParentCategory: true,
         includeFile: true,
     });
+
+if (!filters.value.length) await filterStore.getFilters();
 
 const handleHide = (el, hidden) => {
     el.classList.toggle("bottom-[1%]", !hidden);

@@ -21,6 +21,7 @@ import { provide } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useWishlistStore } from "./stores/wishlistStore";
+import { useFilterStore } from "@/stores/filterStore";
 import { useProductStore } from "./stores/productStore";
 import { RouterView, useRouter } from "vue-router";
 
@@ -33,12 +34,14 @@ const router = useRouter();
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 const wishlistStore = useWishlistStore();
+const filterStore = useFilterStore();
 
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
 provide("router", router);
 provide("currentUser", currentUser);
 provide("wishlistStore", wishlistStore);
+provide("filterStore", filterStore);
 provide("s3", (img) => {
     return `https://mkta-portal.s3.us-east-2.amazonaws.com/${img}`;
 });
