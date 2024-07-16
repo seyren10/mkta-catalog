@@ -1,6 +1,18 @@
 <template>
     <div class="grid gap-2">
         <div>
+            <v-text-field
+                :prepend-inner-icon="icon"
+                label="Icon"
+                v-model="icon"
+                readonly
+            >
+                <template #append-inner>
+                    <v-button @click="showIconDialog = true">
+                        <v-icon name="hi-solid-dots-horizontal"></v-icon>
+                    </v-button>
+                </template>
+            </v-text-field>
             <v-text-field label="Title" v-model="title" />
             <v-text-field label="Description" v-model="description" />
         </div>
@@ -39,14 +51,24 @@
                 <v-icon class="me-2" name="md-save-round"></v-icon> Save Filter
             </v-button>
         </div>
+        <v-dialog
+            v-model="showIconDialog"
+            persistent
+            title="Icon Selector"
+            @close="closeIconDialog"
+        >
+            <IconViewer @submit="iconSelected" :showHeader="false" :isSelection="true" />
+        </v-dialog>
     </div>
 </template>
 <script setup>
 import { onBeforeMount, inject, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-const router = inject("router");
 
+const router = inject("router");
 const emit = defineEmits(["submit", "cancel", "close"]);
+
+import IconViewer from "./../Icons/Index.vue";
 
 //!SECTION -> Stores
 import { useFilterStore } from "@/stores/filterStore";
@@ -62,7 +84,9 @@ const appendChoices = () => {
 const removeChoices = (index) => {
     choices.value.splice(index, 1);
 };
+
 //!SECTION -> Filter
+const icon = ref("hi-solid-filter");
 const title = ref("");
 const description = ref("");
 
@@ -72,6 +96,7 @@ const cancelFilter = () => {
 };
 const saveFilter = async () => {
     filterStore.addFilter({
+        icon : icon.value,
         title: title.value,
         description: description.value,
         choices: choices.value,
@@ -79,4 +104,15 @@ const saveFilter = async () => {
     emit("submit");
     emit("close");
 };
+
+//!SECTION - Icon Dialog
+const showIconDialog = ref(false);
+const closeIconDialog = () => {
+    showIconDialog.value = false;
+};
+const iconSelected = (selected_icon) => {
+    icon.value = selected_icon;
+    closeIconDialog();
+};
+
 </script>

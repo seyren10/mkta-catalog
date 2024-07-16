@@ -1,5 +1,5 @@
 <template>
-    <div class="pt-2 grid gap-2">
+    <div class="grid gap-2 pt-2">
         <div>
             <v-heading type="h2">
                 <v-icon
@@ -28,10 +28,10 @@
             >
         </div>
         <v-text-field
-                prepend-inner-icon="la-search-solid"
-                v-model="search"
-                clearable
-            ></v-text-field>
+            prepend-inner-icon="la-search-solid"
+            v-model="search"
+            clearable
+        ></v-text-field>
         <v-data-table
             :search="search"
             :items="filters"
@@ -63,16 +63,26 @@
             ]"
         >
             <template #item.title="{ item }">
-                <h2 class="text-xl font-bold">{{ item.value }}</h2>
-                <p class="text-gray-600">
-                    {{ item.raw.description }}
-                </p>
+                <div class="grid grid-cols-5">
+                    <div class="flex flex-col">
+                        <v-icon
+                            scale="3"
+                            class=" self-center"
+                            :name="item.raw.icon"
+                        ></v-icon>
+                    </div>
+                    <div class="col-span-4">
+                        <h2 class="text-xl font-bold">{{ item.value }}</h2>
+                        <p class="text-gray-600">
+                            {{ item.raw.description }}
+                        </p>
+                    </div>
+                </div>
             </template>
-
             <template #item.count="{ item }">
                 {{ item.raw.choices.length }}
             </template>
-            <template #item.actions="{item}">
+            <template #item.actions="{ item }">
                 <div class="flex justify-end">
                     <div class="max-w-[150px]">
                         <v-button
@@ -110,12 +120,11 @@
         >
             <div class="min-w-[800px] p-5">
                 <FilterInsert
-                @submit="closeInsertFilter"
-                @cancel="closeInsertFilter"
+                    @submit="closeInsertFilter"
+                    @cancel="closeInsertFilter"
                 />
             </div>
         </v-dialog>
-        
     </div>
 </template>
 <script setup>
@@ -124,7 +133,6 @@ import FilterInsert from "./Insert.vue";
 import { onBeforeMount, inject, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 const router = inject("router");
-
 
 const search = ref("");
 
@@ -139,15 +147,15 @@ if (!filters.length) {
 }
 
 const showInsertFilter = ref(false);
-const closeInsertFilter = ()=>{
-    showInsertFilter.value = false
+const closeInsertFilter = () => {
+    showInsertFilter.value = false;
     refresh();
-}
+};
 
-const deleteFilter = async(filter_id) =>{
-    await filterStore.deleteFilter(filter_id)
+const deleteFilter = async (filter_id) => {
+    await filterStore.deleteFilter(filter_id);
     refresh();
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

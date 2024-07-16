@@ -116,9 +116,13 @@ import {
     LaObjectGroupSolid,
     RiNodeTree,
     HiSolidFilter,
+    FaShapes,
+    HiSolidDotsHorizontal,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    HiSolidDotsHorizontal,
+    FaShapes,
     HiSolidFilter,
     RiNodeTree,
     LaObjectGroupSolid,
@@ -235,5 +239,6 @@ addIcons(
     MdFullscreenRound,
     PrTrash,
 );
+
 
 export default OhVueIcon;
