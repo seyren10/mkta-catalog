@@ -200,6 +200,15 @@ const file_management = [
             title: "File Management",
             description: "List of Files uploaded in the Resources Storage",
         },
+    },
+    {
+        path: "icons",
+        name: "iconIndex",
+        component: () => import("@/Pages/Admin/Icons/Index.vue"),
+        meta: {
+            title: "Icon Management",
+            description: "List of icons that can be used in the system",
+        },
     }
 ];
 

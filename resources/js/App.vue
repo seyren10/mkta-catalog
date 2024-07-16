@@ -42,4 +42,25 @@ provide("wishlistStore", wishlistStore);
 provide("s3", (img) => {
     return `https://mkta-portal.s3.us-east-2.amazonaws.com/${img}`;
 });
+provide("copyText", (text) => {
+    const el = document.createElement("textarea"); // Create a <textarea> element
+    el.value = text; // Set its value to the text that needs to be copied
+    el.setAttribute("readonly", ""); // Make it readonly to be tamper-proof
+    el.style.position = "absolute";
+    el.style.left = "-9999px"; // Move outside the screen to make it invisible
+    document.body.appendChild(el); // Append the <textarea> element to the HTML document
+    const selected =
+        document.getSelection().rangeCount > 0
+            ? document.getSelection().getRangeAt(0)
+            : false; // Save the current selection
+    el.select(); // Select the content of the <textarea> element
+    document.execCommand("copy"); // Copy the selected text to the clipboard
+    document.body.removeChild(el); // Remove the <textarea> element from the HTML document
+
+    if (selected) {
+        // Restore the original selection
+        document.getSelection().removeAllRanges();
+        document.getSelection().addRange(selected);
+    }
+});
 </script>

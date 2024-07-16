@@ -66,7 +66,7 @@
                 </div>
             </template>
             <template #item.details="{ item }">
-                <div class="border p-2 rounded-lg">
+                <div class="rounded-lg border p-2">
                     <p class="text-xl">{{ item.raw.title }}</p>
                     <span class="text-gray-400">{{ item.raw.type }}</span>
                     <div class="my-2 flex justify-between">
@@ -120,60 +120,8 @@
                         >
                     </div>
                 </div>
-            </template>
-            <!-- <template #item.actions="{ item }">
-                <div class="grid grid-cols-1 gap-y-2 border-y-2 my-2">
-                    <v-button
-                        @click="copyLink(item.raw)"
-                        prepend-inner-icon="la-link-solid"
-                        class="w-full border bg-gray-600 font-semibold text-white"
-                        >Copy Link</v-button
-                    >
-                    <v-button
-                        v-show="
-                            new String(item.raw['type'])
-                                .toLowerCase()
-                                .includes('image')
-                        "
-                        @click="previewOpen(item.raw)"
-                        prepend-inner-icon="fa-folder-open"
-                        class="w-full border bg-green-600 font-semibold text-white"
-                        >Preview</v-button
-                    >
-                    <v-button
-                        v-show="
-                            new String(item.raw['type'])
-                                .toLowerCase()
-                                .includes('image')
-                        "
-                        @click="renameOpen(item.raw.id, item.raw.title)"
-                        prepend-inner-icon="md-drivefilerenameoutline-outlined"
-                        class="w-full border bg-orange-600 font-semibold text-white"
-                        >Rename</v-button
-                    >
-                    <v-button
-                        :href="
-                            [
-                                '/api/s3-resources-download',
-                                item.raw.filename,
-                            ].join('/')
-                        "
-                        target="_blank"
-                        tag="a"
-                        prepend-inner-icon="fa-download"
-                        class="w-full rounded-md border bg-indigo-600 p-2 font-semibold text-white"
-                        >Download</v-button
-                    >
-                    <v-button
-                        @click="deleteOpen(item.raw)"
-                        v-show="true"
-                        prepend-inner-icon="fa-trash-alt"
-                        class="w-full border bg-red-600 font-semibold text-white"
-                        >Delete</v-button
-                    >
-                </div>
-            </template> -->
-        </v-data-table>
+            </template></v-data-table
+        >
         <div class="my-2 flex justify-between" v-show="isSelection">
             <v-button
                 @click="cancel"
@@ -397,28 +345,11 @@ const insertClose = () => {
     refresh();
 };
 
-const s3 = inject('s3')
+const s3 = inject("s3");
+const copyText = inject("copyText");
+
 const copyLink = (data) => {
-    const el = document.createElement("textarea"); // Create a <textarea> element
-    el.value = s3(data.filename) // Set its value to the text that needs to be copied
-    el.setAttribute("readonly", ""); // Make it readonly to be tamper-proof
-    el.style.position = "absolute";
-    el.style.left = "-9999px"; // Move outside the screen to make it invisible
-    document.body.appendChild(el); // Append the <textarea> element to the HTML document
-
-    const selected =
-        document.getSelection().rangeCount > 0
-            ? document.getSelection().getRangeAt(0)
-            : false; // Save the current selection
-    el.select(); // Select the content of the <textarea> element
-    document.execCommand("copy"); // Copy the selected text to the clipboard
-    document.body.removeChild(el); // Remove the <textarea> element from the HTML document
-
-    if (selected) {
-        // Restore the original selection
-        document.getSelection().removeAllRanges();
-        document.getSelection().addRange(selected);
-    }
+    copyText(s3(data.filename));
 };
 
 const previewOpen = (data) => {

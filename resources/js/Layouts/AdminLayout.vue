@@ -41,12 +41,16 @@
                     :title="'Customer Management'"
                     :items="cutomer_management"
                 />
+                <!-- <VRouteNav
+                    v-if="true"
+                    :title="'Content Management'"
+                    :items="cms_management"
+                /> -->
                 <VRouteNav
                     v-if="true"
-                    :title="'File Management'"
+                    :title="'Others'"
                     :items="file_management"
                 />
-                
             </div>
         </template>
 
@@ -126,6 +130,19 @@ const file_management = [
         title: "Files Manager",
         to: "fileIndex",
         icon: "fa-folder-open",
+    },
+    {
+        title: "Icon Manager",
+        to: "iconIndex",
+        icon: "fa-shapes",
+    },
+];
+
+const cms_management = [
+    {
+        title: "Homepage Products",
+        to: "fileIndex",
+        icon: "oi-star",
     },
 ];
 //provide/inject

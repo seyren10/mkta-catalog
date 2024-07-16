@@ -18,6 +18,7 @@ class FilterController extends Controller
     {
         $curFilter = Filter::create(
             array(
+                "icon" => $request->icon,
                 "title"=> $request->title,
                 "description"=> $request->description,
             )
@@ -44,6 +45,7 @@ class FilterController extends Controller
     public function update(Request $request, Filter $filter)
     {
         $filter->title = $request->title;
+        $filter->icon = $request->icon;
         $filter->description = $request->description;
         if($request->has('choices')){
             foreach ($request->choices as $key => $value) {

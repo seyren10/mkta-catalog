@@ -29,6 +29,13 @@
         </div>
         <div class="grid gap-2">
             <div>
+                <v-text-field readonly :prepend-inner-icon="filter.icon" label="Icon" v-model="filter.icon" >
+                    <template #append-inner>
+                    <v-button @click="showIconDialog = true">
+                        <v-icon name="hi-solid-dots-horizontal"></v-icon>
+                    </v-button>
+                </template>
+                </v-text-field>
                 <v-text-field label="Title" v-model="filter.title" />
                 <v-text-field
                     label="Description"
@@ -76,9 +83,21 @@
                 </v-button>
             </div>
         </div>
+        <v-dialog
+            v-model="showIconDialog"
+            persistent
+            title="Icon Selector"
+            @close="closeIconDialog"
+        >
+            <IconViewer @submit="iconSelected" :showHeader="false" :isSelection="true" />
+        </v-dialog>
     </v-card>
 </template>
 <script setup>
+import IconViewer from "./../Icons/Index.vue";
+
+
+
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
@@ -119,6 +138,16 @@ const updateFilter = async() =>{
     await filterStore.updateFilter(props.id, filter.value);
     refresh();
 }
+
+//!SECTION - Icon Dialog
+const showIconDialog = ref(false);
+const closeIconDialog = () => {
+    showIconDialog.value = false;
+};
+const iconSelected = (selected_icon) => {
+    filter.value.icon = selected_icon;
+    closeIconDialog();
+};
 </script>
 
 <style lang="scss" scoped></style>
