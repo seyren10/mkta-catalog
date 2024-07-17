@@ -19,36 +19,22 @@
         </div>
         <div class="flex items-center gap-5">
             <div v-show="product.show_wishlist_button">
-                <v-toast :type="!isIncludedInWishlist() ? 'danger' : 'success'">
-                    <template #activator="props">
-                        <v-button
-                            
-                            v-bind="props"
-                            :icon="
-                                isIncludedInWishlist()
-                                    ? 'la-heart-solid'
-                                    : 'la-heart'
-                            "
-                            :class="
-                                isIncludedInWishlist()
-                                    ? 'text-red-500'
-                                    : 'text-accent'
-                            "
-                            @click="
-                                isIncludedInWishlist()
-                                    ? removeFromWishlist()
-                                    : addToWishlist()
-                            "
-                        >
-                        </v-button>
-                    </template>
+                <v-button
+                    :loading="loading"
+                    :icon="
+                        isIncludedInWishlist() ? 'la-heart-solid' : 'la-heart'
+                    "
+                    :class="
+                        isIncludedInWishlist() ? 'text-red-500' : 'text-accent'
+                    "
+                    @click.stop="
+                        isIncludedInWishlist()
+                            ? removeFromWishlist()
+                            : addToWishlist()
+                    "
+                >
+                </v-button>
 
-                    {{
-                        !isIncludedInWishlist()
-                            ? "Item removed from wishlist."
-                            : "Item added to wishlist."
-                    }}
-                </v-toast>
                 <v-tooltip activator="parent">{{
                     isIncludedInWishlist()
                         ? "Remove from Wishlist"
@@ -232,8 +218,10 @@ const isIncludedInWishlist = () =>
 const addToWishlist = async () => {
     await wishlistStore.addToWishlist(product.value);
     await wishlistStore.getWishlists();
+
     toast.value = true;
 };
+
 const removeFromWishlist = async () => {
     /* find the corresponding wishlist base on product id
     since wishlist id is needed to delete */

@@ -39,29 +39,32 @@ class ProductController extends Controller
 
     public function getProductsWithCategoryId(Request $request, Category $category)
     {
-        $restricted_products = $request->session()->get('restricted_products', array());
-        $product = Product::whereHas('product_categories', function ($query) use ($category) {
+        $query = Product::whereHas('product_categories', function ($query) use ($category) {
             if ($category->id) {
                 $query->where('product_categories.category_id', $category->id);
             }
-        })->whereNotIn('id', $restricted_products);
+        });
 
         if ($request->has('filters')) {
-            $filtered_products = array();
-            $filters = collect(Filter::get());
-            foreach ($request->filters as $key => $value) {
-                $currentFilter = $filters->firstWhere('title', $key);
-                if ($currentFilter !== null) {
-                    $currentFilter_id = $currentFilter["id"];
-                    $options = explode(",", $value);
-                    $result = collect(ProductFilter::whereNotIn('product_id', $restricted_products)->where('filter_id', $currentFilter_id)->whereIn('filter_choice_id', $options)->get())->pluck('product_id');
-                    $filtered_products = array_merge($filtered_products, $result->toArray());
+            $query->whereHas('productFilters', function ($query) use ($request) {
+                $filterTitles = Filter::all()->pluck('title')->toArray();
+
+
+                $choiceIds = collect();
+                foreach ($request->filters as $key => $value) {
+                    if (in_array($key, $filterTitles)) {
+                        $choiceIds->push(...explode(',', $value));
+                    }
                 }
-            }
-            Log::info($filtered_products);
-            return ProductResource::collection($product->whereIn('id', $filtered_products)->paginate(32)->withQueryString());
+                Log::info($choiceIds);
+                $query->whereIn('filter_choice_id', $choiceIds);
+            });
         }
-        return ProductResource::collection($product->paginate(32)->withQueryString());
+
+        $restricted_products = $request->session()->get('restricted_products', array());
+        $query->whereNotIn('id', $restricted_products);
+
+        return ProductResource::collection($query->paginate(32)->withQueryString());
     }
 
     public function store(ProductRequest $request)
