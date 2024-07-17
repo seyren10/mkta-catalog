@@ -123,10 +123,12 @@ const addToQuery = (filterKey) => {
 
         return acc;
     }, []);
+
+    
     router.push({
         query: {
             ...route.query,
-            [filterKey]: JSON.stringify(selectedFilters.value[filterKey]),
+            [filterKey]: choicesId.join(','),
         },
     });
 };
@@ -155,6 +157,7 @@ const handleClearFilter = (key) => {
         },
         {},
     );
+    
     // //clear the query base on key
     const query = Object.keys(route.query).reduce((acc, routeKey) => {
         if (routeKey !== key) {

@@ -129,8 +129,8 @@ const fetchProducts = async (categoryId) => {
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
         includeProductFilter: true,
-        color: route.query,
         page: page.value,
+        filters: route.query,
     });
 
     loading.value = false;

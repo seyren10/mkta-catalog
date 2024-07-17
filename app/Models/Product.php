@@ -53,8 +53,7 @@ class Product extends Model
     public function product_filter()
     {
         return $this->hasMany(ProductFilter::class, 'product_id', 'id')
-                    ->select(['*',DB::raw('CONCAT(filter_id,"-",filter_choice_id) AS filter_key')])
-                    ;
+            ->select(['*', DB::raw('CONCAT(filter_id,"-",filter_choice_id) AS filter_key')]);
     }
     public function product_categories()
     {
@@ -66,6 +65,16 @@ class Product extends Model
             'id',
             'category_id'
         )->withOut(["sub_categories", 'file', 'parent_category']);
+    }
+
+    public function productFilters()
+    {
+        return $this->hasMany(ProductFilter::class);
+    }
+    
+    public function filterChoices()
+    {
+        return $this->belongsToMany(FilterChoice::class, 'product_filters', 'product_id', 'filter_choice_id');
     }
 
     public static function variants($product)

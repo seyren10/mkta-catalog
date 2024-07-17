@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Filter;
 
 class ProductController extends Controller
 {
@@ -19,17 +20,21 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->q;
         $restricted_products = $request->session()->get('restricted_products', array());
+
+        /* Searching products */
+        $query = $request->q;
         if ($query) {
             $searchedProducts = Product::whereAny([
                 'id', 'title', 'description'
-            ], 'LIKE', '%' . $query . '%')->whereNotIn('id',$restricted_products)->paginate(30);
+            ], 'LIKE', '%' . $query . '%')->whereNotIn('id', $restricted_products)->paginate(30);
 
             return ProductResource::collection($searchedProducts);
         }
-        return ProductResource::collection(Product::whereNotIn('id',$restricted_products)->paginate(30));
+
+        return ProductResource::collection(Product::whereNotIn('id', $restricted_products)->paginate(30));
     }
+
     public function getProductsWithCategoryId(Request $request, Category $category)
     {
         $restricted_products = $request->session()->get('restricted_products', array());
@@ -38,7 +43,21 @@ class ProductController extends Controller
             if ($category->id) {
                 $query->where('product_categories.category_id', $category->id);
             }
-        })->whereNotIn('id',$restricted_products)->paginate(32)->withQueryString());
+        })
+            // ->whereHas('filterChoices', function ($query) use ($request) {
+            // $query->where('filter_choices.id', 1);
+            // $filterTitles = Filter::all()->pluck('title');
+
+            // $filterTitles->each(function ($title) use ($request, $query) {
+
+            //     if ($request->has($title)) {
+            //         $filterChoicesIds = explode(',', $request[$title]);
+            //         $query->whereIn('filter_choices.id', $filterChoicesIds);
+            //     }
+            // });
+            // })
+            ->whereNotIn('id', $restricted_products)
+            ->paginate(32)->withQueryString());
     }
 
     public function store(ProductRequest $request)
