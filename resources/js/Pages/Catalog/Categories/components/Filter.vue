@@ -95,6 +95,8 @@ const selectedFilters = ref({});
 const router = useRouter();
 const route = useRoute();
 
+const emit = defineEmits(['dataReceived'])
+
 const handleCheck = (choice, filter) => {
     const filterKey = filter.title;
 
@@ -131,6 +133,7 @@ const addToQuery = (filterKey) => {
             [filterKey]: choicesId.join(','),
         },
     });
+    emit('dataReceived');
 };
 
 const hasSelectedFilter = computed(() => {

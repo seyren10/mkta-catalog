@@ -45,7 +45,7 @@
         <main>
             <ProductListing :loading="loading">
                 <template #aside>
-                    <Filter></Filter>
+                    <Filter @data-received="fetchProducts(id)"></Filter>
                 </template>
                 <template #top>
                     <div class="flex items-center justify-between">
@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
 import { useRoute } from "vue-router";
@@ -145,6 +145,11 @@ const handlePageChange = (page) => {
 };
 
 await fetchProducts(+props.id);
+
+watch(route.query, async(newVal)=>{
+    console.log(newVal);
+    await fetchProducts(+props.id);
+});
 </script>
 
 <style lang="scss" scoped></style>
