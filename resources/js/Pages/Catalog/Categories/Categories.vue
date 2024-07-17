@@ -45,7 +45,7 @@
         <main>
             <ProductListing :loading="loading">
                 <template #aside>
-                    <Filter @data-received="fetchProducts(id)"></Filter>
+                    <Filter @change="fetchProducts(id)"></Filter>
                 </template>
                 <template #top>
                     <div class="flex items-center justify-between">
@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watch } from "vue";
+import { inject, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
 import { useRoute } from "vue-router";
@@ -126,11 +126,22 @@ const fetchProducts = async (categoryId) => {
     loading.value = true;
 
     category.value = categoryStore.getCategoryWithId(+categoryId);
+
+    const queriesExceptPage = Object.keys(route.query).reduce((acc, query) => {
+        /* add queries that is not 'page' key and its value is not empty */
+        if (query !== "page" && route.query[query].trim() !== "") {
+            acc[query] = route.query[query];
+        }
+
+        return acc;
+    }, {});
+
+
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
         includeProductFilter: true,
         page: page.value,
-        filters: route.query,
+        filters: queriesExceptPage,
     });
 
     loading.value = false;
@@ -145,11 +156,6 @@ const handlePageChange = (page) => {
 };
 
 await fetchProducts(+props.id);
-
-watch(route.query, async(newVal)=>{
-    console.log(newVal);
-    await fetchProducts(+props.id);
-});
 </script>
 
 <style lang="scss" scoped></style>

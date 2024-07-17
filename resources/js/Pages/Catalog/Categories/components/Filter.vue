@@ -82,7 +82,7 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { computed, inject, ref } from "vue";
+import { computed, inject, onUpdated, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import FilterCheckbox from "./FilterCheckbox.vue";
@@ -95,12 +95,12 @@ const selectedFilters = ref({});
 const router = useRouter();
 const route = useRoute();
 
-const emit = defineEmits(['dataReceived'])
+const emit = defineEmits(["change"]);
 
 const handleCheck = (choice, filter) => {
     const filterKey = filter.title;
 
-    /* create an array base on filterKey */
+    /* create an array base on filterKey  */
     if (!selectedFilters.value[filterKey])
         selectedFilters.value[filterKey] = [];
 
@@ -110,46 +110,60 @@ const handleCheck = (choice, filter) => {
         selectedFilters.value[filterKey].push(choice);
     }
     //remove
-    else
+    else {
         selectedFilters.value[filterKey] = selectedFilters.value[
             filterKey
         ].filter((c) => c.id !== choice.id);
 
+        /* remove the key on route query when key is empty */
+    }
+
     //add the query parameter
+
     addToQuery(filterKey);
 };
 
-const addToQuery = (filterKey) => {
-    const choicesId = selectedFilters.value[filterKey].reduce((acc, cur) => {
+const addToQuery = async (filterKey) => {
+    const choiceIds = selectedFilters.value[filterKey].reduce((acc, cur) => {
         acc.push(cur.id);
 
         return acc;
     }, []);
 
-    
-    router.push({
+    await router.push({
         query: {
             ...route.query,
-            [filterKey]: choicesId.join(','),
+            [filterKey]: choiceIds.join(","),
         },
     });
-    emit('dataReceived');
+
+    emit("change");
 };
 
 const hasSelectedFilter = computed(() => {
-    return Object.keys(selectedFilters.value).length;
+    /* when filters are present on the URL but has no values in it 
+        it will still show as if it has a filter applied. to prevent this,
+        lets make sure that there is no empty values on a key
+    */
+    const noEmptyKey = Object.keys(selectedFilters.value).some((key) => {
+        return selectedFilters.value[key].length;
+    });
+
+    return Object.keys(selectedFilters.value).length && noEmptyKey;
 });
 
-const handleClearAllFilters = () => {
+const handleClearAllFilters = async () => {
     selectedFilters.value = {};
 
     //clear the query
-    router.push({
+    await router.push({
         query: {},
     });
+
+    emit("change");
 };
 
-const handleClearFilter = (key) => {
+const handleClearFilter = async (key) => {
     selectedFilters.value = Object.keys(selectedFilters.value).reduce(
         (acc, filterKey) => {
             if (filterKey !== key) {
@@ -160,7 +174,7 @@ const handleClearFilter = (key) => {
         },
         {},
     );
-    
+
     // //clear the query base on key
     const query = Object.keys(route.query).reduce((acc, routeKey) => {
         if (routeKey !== key) {
@@ -171,10 +185,46 @@ const handleClearFilter = (key) => {
     }, {});
 
     // console.log(query);
-    router.push({
+    await router.push({
         query,
     });
+
+    emit("change");
 };
+
+/* init:
+    loop through the keys on route query parameters
+    and see if there's any filters to apply,
+    if there's any, apply if to selected filters
+*/
+
+init();
+
+function init() {
+    for (const key in route.query) {
+        if (route.query[key].trim() !== "" && !selectedFilters.value[key]) {
+            selectedFilters.value[key] = [];
+        }
+
+        const filter = filters.value.find((e) => e.title === key);
+
+        if (filter) {
+            const keyValues = route.query[key].split(",");
+
+            /* when looping through each id,
+         when found in filter choices, add it in selected filters */
+            keyValues.forEach((id) => {
+                const choice = filter.choices.find((c) => {
+                    return c.id === +id;
+                });
+
+                if (choice) {
+                    selectedFilters.value[key].push(choice);
+                }
+            });
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -58,6 +58,7 @@ class ProductController extends Controller
                     $filtered_products = array_merge($filtered_products, $result->toArray());
                 }
             }
+            Log::info($filtered_products);
             return ProductResource::collection($product->whereIn('id', $filtered_products)->paginate(32)->withQueryString());
         }
         return ProductResource::collection($product->paginate(32)->withQueryString());
