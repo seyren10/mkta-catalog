@@ -29,12 +29,12 @@ class ProductController extends Controller
         if ($query) {
             $searchedProducts = Product::whereAny([
                 'id', 'title', 'description',
-            ], 'LIKE', '%' . $query . '%')->whereNotIn('id', $restricted_products)->paginate(30);
+            ], 'LIKE', '%' . $query . '%')->whereNotIn('id', $restricted_products)->paginate(30)->withQueryString();
 
             return ProductResource::collection($searchedProducts);
         }
 
-        return ProductResource::collection(Product::whereNotIn('id', $restricted_products)->paginate(30));
+        return ProductResource::collection(Product::whereNotIn('id', $restricted_products)->paginate(30)->withQueryString());
     }
 
     public function getProductsWithCategoryId(Request $request, Category $category)

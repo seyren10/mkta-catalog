@@ -27,57 +27,58 @@
                 >New Product Item</v-button
             >
         </div>
-        <v-text-field prepend-inner-icon="la-search-solid" v-model="search" />
-        <v-data-table
-            class="my-2"
-            :noHeader="true"
-            :headers="[
-                {
-                    value: 'Product Items',
-                    key: 'content',
-                    hidden: false,
-                    sortable: false,
-                },
-                {
-                    value: 'Product Items',
-                    key: 'actions',
-                    hidden: false,
-                    sortable: false,
-                },
-            ]"
-            :striped="true"
-            :items="product_items"
-            :search="search"
-        >
-            <template #item.content="{ item }">
-                <div class="grid w-full grid-cols-10 gap-x-2">
-                    <div class="col-span-10 md:col-span-2">
-                        <div class="grid justify-items-center ">
-                            <v-text-on-image
-                                class="h-[150px] max-h-[150px] max-w-[150px] w-[150px] border"
-                                title="Thumbnail"
-                                :noOverlay="true"
-                                :image="s3(item.raw?.product_thumbnail?.file?.filename)"
-                            />
-                            <div>
-                                <span class="text-center">{{ item.raw.id }}</span>
-                            </div>
-                        </div>
+        <div class="my-2">
+            <v-text-field
+                @keyup.enter="refresh"
+                prepend-inner-icon="la-search-solid"
+                v-model="search"
+            />
+        </div>
+        <div class="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            <div v-for="item in product_items" class="rounded-lg border" :key="item.id">
+                <v-text-on-image
+                    :noOverlay="true"
+                    :class="`aspect-square cursor-pointer rounded-none`"
+                    :image="s3(item.product_thumbnail?.file?.filename)"
+                >
+                </v-text-on-image>
+                <div class="p-2">
+                    <div class="line-clamp-2">
+                        <slot
+                            name="content.icon"
+                            :item="{ ...item, class: 'float-left mr-2' }"
+                        >
+                        </slot>
+                        <h3
+                            class="text-[.8rem] font-bold [text-overflow:ellipsis]"
+                        >
+                            {{ item.title }}
+                        </h3>
                     </div>
-                    <div class="col-span-4 md:col-span-6">
-                        <p class="text-xl">{{ item.raw.title }}</p>
-                        <span class="text-gray-400">{{
-                            item.raw.description
-                        }}</span>
+                    <div class="flex items-center justify-between">
+                        <p class="mt-1 text-[.8rem] text-gray-400">
+                            {{ item.id }}
+                        </p>
                     </div>
-                    <div class="col-span-10">
-                        <div class=" flex justify-end">
-                            <v-button class="bg-accent text-white" @click="()=>{ router.push({name: 'productItemShow', params: {id : item.raw.id}}) }" prepend-inner-icon="fa-folder-open">View Product Item</v-button>
-                        </div>
-                    </div>
+                    <v-button
+                        class="w-full bg-accent text-white"
+                        @click="
+                            () => {
+                                router.push({
+                                    name: 'productItemShow',
+                                    params: { id: item.id },
+                                });
+                            }
+                        "
+                        prepend-inner-icon="fa-folder-open"
+                        >View Product Item</v-button
+                    >
                 </div>
-            </template>
-        </v-data-table>
+            </div>
+            
+        </div>
+        
+        <pagination  @page-change="handlePageChange" :items="paginationLinks" />
         <v-dialog
             v-model="showInsert"
             persistent
@@ -113,10 +114,13 @@
 </template>
 
 <script setup>
+import pagination from "@/components/PaginationLinks.vue"
 import productItemForm from "./components/productItemForm.vue";
 
 const router = inject("router");
 const s3 = inject("s3");
+import { useQuery } from "../../../composables/useQuery";
+
 
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
@@ -124,14 +128,34 @@ import { storeToRefs } from "pinia";
 
 import { useProductStore } from "@/stores/productStore";
 const productStore = useProductStore();
-const { product_items, isValid } = storeToRefs(productStore);
+const { product_items, isValid, paginationLinks } = storeToRefs(productStore);
 
 const showInsert = ref(false);
-const search = ref("");
 
-if (!product_items.length) {
-    await productStore.getProductItems();
+
+
+
+
+
+const [page, setPage] = useQuery("page", () => refresh());
+const [searchQuery, setSearchQuery] = useQuery("search", () => refresh());
+const search = ref(searchQuery.value);
+const refresh = async()=>{
+    setSearchQuery(search.value)
+    await productStore.getProductItems({ q: searchQuery.value, page: page.value,});
 }
+if (!product_items.length) {
+    refresh();
+}
+
+
+const handlePageChange = (page) => {
+    if (page.url === null) return;
+    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
+    
+    setPage(+pageNumber);
+};
+
 </script>
 
 <style lang="scss" scoped></style>
