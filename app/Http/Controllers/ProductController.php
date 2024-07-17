@@ -39,6 +39,7 @@ class ProductController extends Controller
     {
         $restricted_products = $request->session()->get('restricted_products', array());
 
+        
         return  ProductResource::collection(Product::whereHas('product_categories', function ($query) use ($category) {
             if ($category->id) {
                 $query->where('product_categories.category_id', $category->id);
