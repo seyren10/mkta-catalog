@@ -118,6 +118,7 @@ import {
     HiSolidFilter,
     FaShapes,
     HiSolidDotsHorizontal,
+    CoUser,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -238,7 +239,7 @@ addIcons(
     BiMouse,
     MdFullscreenRound,
     PrTrash,
+    CoUser,
 );
-
 
 export default OhVueIcon;

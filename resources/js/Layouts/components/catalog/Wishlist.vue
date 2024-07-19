@@ -62,7 +62,11 @@
                     >clear all</v-button
                 >
             </div>
-            <div class="space-y-5 rounded-lg bg-slate-100 p-5">
+            <form
+                class="space-y-5 rounded-lg bg-slate-100 p-5"
+                ref="formRef"
+                @submit.prevent="submitEmail"
+            >
                 <p>
                     Please contact us via email, and we will respond at our
                     earliest convenience. You may use the form provided below or
@@ -72,19 +76,34 @@
                     >
                 </p>
 
+                <v-text-field
+                    label="email"
+                    prepend-inner-icon="io-mail-outline"
+                    v-model="emailJSForm.user_email"
+                    hint="The above form will be used to send system-generated emails."
+                    persistent-hint
+                ></v-text-field>
+                <v-text-field
+                    label="Name"
+                    prepend-inner-icon="co-user"
+                    v-model="emailJSForm.user_name"
+                ></v-text-field>
                 <v-textarea
+                    v-model="emailJSForm.message"
                     label="Message"
                     prepend-inner-icon="fa-regular-comment-alt"
                     rows="5"
                 ></v-textarea>
 
                 <v-button
+                    type="submit"
                     class="bg-accent text-white"
                     prepend-inner-icon="pr-send"
                     icon-size="1"
+                    :loading="emailJSLoading"
                     >Send</v-button
                 >
-            </div>
+            </form>
             <section
                 class="primary-gradient rounded-lg p-3 text-[.8rem] md:col-span-2"
             >
@@ -96,21 +115,34 @@
                 />
             </section>
         </div>
+
+        <v-toast :type="toastMessage.type" v-model="showToast">
+            {{ toastMessage.message }}
+        </v-toast>
     </v-dialog>
 </template>
 
 <script setup>
 import { ref, inject, computed } from "vue";
 import { storeToRefs } from "pinia";
+import { useEmailJSStore } from "../../../stores/emailJSStore";
 
 import WishlistItem from "./WishlistItem.vue";
 
 const wishlistDialog = ref(false);
 
-//injects
-const wishlistStore = inject("wishlistStore");
+const emailJSStore = useEmailJSStore();
+const formRef = ref(null);
+const {
+    form: emailJSForm,
+    submitEmail,
+    loading: emailJSLoading,
+    toastMessage,
+} = useEmailJS(emailJSStore, showEmailResult);
 
+const wishlistStore = inject("wishlistStore");
 const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
+const showToast = ref(false);
 
 const infoList = computed(() => {
     return [
@@ -132,6 +164,55 @@ const handleDeleteAllWishlist = async () => {
     await wishlistStore.deleteAllWishlist();
     await wishlistStore.getWishlists();
 };
+
+async function showEmailResult() {
+    showToast.value = true;
+    await wishlistStore.deleteAllWishlist();
+    await wishlistStore.getWishlists();
+    
+    emailJSStore.resetForm();
+    wishlistDialog.value = false;
+}
+
+/* INIT */
+
+function useEmailJS(store, callback) {
+    const user = inject("currentUser");
+    const { form, loading, errors } = storeToRefs(store);
+
+    form.value.user_name = user.value.name;
+    form.value.user_email = user.value.email;
+    form.value.order_id = Math.floor(Math.random() * 10000);
+
+    const wishlistForm = computed(() => {
+        return wishlists.value.map((wishlist) => {
+            return {
+                title: wishlist.product.title,
+                id: wishlist.product.id,
+            };
+        });
+    });
+
+    form.value.wishlists = wishlistForm;
+
+    const toastMessage = computed(() => {
+        if (!errors.value) {
+            return { type: "success", message: "Email sent." };
+        } else {
+            return {
+                type: "danger",
+                message: "Something went wrong. please try again later",
+            };
+        }
+    });
+
+    const submitEmail = async () => {
+        await store.sendEmail();
+        callback();
+    };
+
+    return { form, submitEmail, loading, errors, toastMessage };
+}
 </script>
 
 <style lang="css"></style>

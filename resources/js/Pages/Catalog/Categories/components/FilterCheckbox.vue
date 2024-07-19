@@ -1,8 +1,8 @@
 <template>
-    <div class="flex w-min items-center cursor-pointer gap-2 text-slate-500" @click="$emit('check', value)">
+    <div class="flex w-min cursor-pointer items-center text-slate-500">
         <div
+            @click="handleClick"
             :class="`grid aspect-square h-4  place-content-center rounded-md duration-300 ${checked ? 'bg-accent text-white' : 'bg-slate-200'}`"
-            
         >
             <v-icon v-if="checked" name="bi-check" scale="1"></v-icon>
         </div>
@@ -10,9 +10,11 @@
             type="checkbox"
             :id="id"
             class="hidden h-0 w-0"
-            @change="$emit('check', value)"
+            @change="handleClick"
         />
-        <label :for="id" v-bind="$attrs" class="w-fit cursor-pointer">{{ label }}</label>
+        <label :for="id" v-bind="$attrs" class="w-fit cursor-pointer pl-2">{{
+            label
+        }}</label>
     </div>
 </template>
 
@@ -34,6 +36,11 @@ const emits = defineEmits(["check"]);
 
 //reactives
 const id = ref(Math.random());
+
+const handleClick = (e) => {
+    e.stopPropagation();
+    emits("check", props.value);
+};
 </script>
 
 <style lang="scss" scoped></style>
