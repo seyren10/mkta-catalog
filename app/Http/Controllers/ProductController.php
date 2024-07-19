@@ -48,15 +48,12 @@ class ProductController extends Controller
         if ($request->has('filters')) {
             $query->whereHas('productFilters', function ($query) use ($request) {
                 $filterTitles = Filter::all()->pluck('title')->toArray();
-
-
                 $choiceIds = collect();
                 foreach ($request->filters as $key => $value) {
                     if (in_array($key, $filterTitles)) {
                         $choiceIds->push(...explode(',', $value));
                     }
                 }
-                Log::info($choiceIds);
                 $query->whereIn('filter_choice_id', $choiceIds);
             });
         }
