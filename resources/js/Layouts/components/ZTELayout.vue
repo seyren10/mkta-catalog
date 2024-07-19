@@ -14,16 +14,16 @@
         </div>
 
         <!-- Tool Bar -->
+
         <v-toolbar class="border-b border-slate-300">
             <template #title>
                 <v-button
                     @click="toggleSideBar = !toggleSideBar"
                     icon="hi-menu-alt-4"
                     class="mr-3"
-                    >tugel</v-button
+                    >qwe</v-button
                 >
             </template>
-            <slot name="toolbar">toolbar</slot>
         </v-toolbar>
 
         <!-- maincontent -->
