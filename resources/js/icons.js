@@ -118,9 +118,21 @@ import {
     HiSolidFilter,
     FaShapes,
     HiSolidDotsHorizontal,
+    FaCogs,
+    BiGrid,
+    RiCheckboxBlankLine,
+    PrImage,
+    PrImages,
+    PrFile,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    PrFile,
+    PrImages,
+    PrImage,
+    BiGrid,
+    RiCheckboxBlankLine,
+    FaCogs,
     HiSolidDotsHorizontal,
     FaShapes,
     HiSolidFilter,
@@ -239,6 +251,5 @@ addIcons(
     MdFullscreenRound,
     PrTrash,
 );
-
 
 export default OhVueIcon;

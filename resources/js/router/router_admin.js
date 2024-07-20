@@ -120,7 +120,7 @@ const product_management = [
         meta: {
             title: "Categories",
             description: "List of categories for the Products",
-            redirectTo : 'categoryIndex'
+            redirectTo: "categoryIndex",
         },
     },
 
@@ -141,7 +141,7 @@ const product_management = [
         meta: {
             title: "Product Item",
             description: "List of Products",
-            redirectTo : 'productItemIndex'
+            redirectTo: "productItemIndex",
         },
     },
 
@@ -162,12 +162,9 @@ const product_management = [
         meta: {
             title: "Product Access Types",
             description: "List of Access types of the Products",
-            redirectTo : 'productAccessTypeIndex'
-
+            redirectTo: "productAccessTypeIndex",
         },
     },
-
-
 
     {
         path: "product-filter",
@@ -186,7 +183,7 @@ const product_management = [
         meta: {
             title: "Product Filter",
             description: "List of Filter for the Products",
-            redirectTo : 'productFilterIndex'
+            redirectTo: "productFilterIndex",
         },
     },
 ];
@@ -209,7 +206,15 @@ const file_management = [
             title: "Icon Management",
             description: "List of icons that can be used in the system",
         },
-    }
+    },
+];
+
+const contentManagement = [
+    {
+        path: "catalog",
+        name: "cmsCatalog",
+        component: () => import("@/Pages/Admin/CMS/Catalog/CMSCatalog.vue"),
+    },
 ];
 
 const admin_routes = [
@@ -224,7 +229,8 @@ const admin_routes = [
             ...user_management,
             ...customer_management,
             ...product_management,
-            ...file_management
+            ...file_management,
+            ...contentManagement,
         ],
     },
 ];

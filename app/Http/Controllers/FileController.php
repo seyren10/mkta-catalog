@@ -8,6 +8,7 @@ use App\Models\File;
 use App\Models\ProductAccessType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
@@ -25,7 +26,16 @@ class FileController extends Controller
      */
     public function index()
     {
-        return new FileResource(File::orderBy('created_at', "DESC")->get());
+        /* add reset params to get the latest File data */
+        if (request()->has('reset')) {
+            Cache::store('file')->forget('portal-files');
+        }
+
+        $files = Cache::store('file')->remember('portal-files', now()->addHour(), function () {
+            return File::orderBy('created_at', "DESC")->get();
+        });
+        
+        return FileResource::collection($files);
     }
 
     /**
@@ -142,7 +152,6 @@ class FileController extends Controller
                 $res["error"] = $th;
                 $res['file'] = "\\" . $portal_file->filename;
             }
-
         }
         $portal_file->delete();
         return response(array(

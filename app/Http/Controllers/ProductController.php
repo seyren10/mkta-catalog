@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -35,6 +36,25 @@ class ProductController extends Controller
         }
 
         return ProductResource::collection(Product::whereNotIn('id', $restricted_products)->paginate(30)->withQueryString());
+    }
+
+    /* 
+        Display a listing of resource and add it to the cache
+        this is to make the retrieval faster on subsequent request
+    */
+    public function indexCached()
+    {
+        $time = now()->addHour(); //validity of the cache 
+
+        if (request()->has('refresh')) {
+            Cache::store('file')->forget('products');
+        }
+
+        $products = Cache::store('file')->remember('products', $time, function () {
+            return Product::all(['id', 'title']);
+        });
+
+        return ProductResource::collection($products);
     }
 
     public function getProductsWithCategoryId(Request $request, Category $category)

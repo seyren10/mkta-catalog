@@ -5,10 +5,9 @@
         </template>
 
         <header class="flex items-center justify-between p-2">
-            <slot name="title"></slot>
-            <v-heading type="h3" v-if="!$slots.title" class="font-normal">{{
-                title
-            }}</v-heading>
+            <slot name="title">
+                <v-heading type="h3" class="font-normal">{{ title }}</v-heading>
+            </slot>
 
             <slot />
         </header>

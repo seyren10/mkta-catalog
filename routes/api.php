@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 $except = ['create', 'edit', 'destroy'];
 
-Route::get('/user', [AuthController::class, 'getUserData'] )->middleware('auth:sanctum');
+Route::get('/user', [AuthController::class, 'getUserData'])->middleware('auth:sanctum');
 
 // Route::middleware('auth:sanctum')->group(function () {
 $except = ['create', 'edit', 'destroy'];
@@ -66,6 +66,7 @@ Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [
 Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
 
 #region Product Routes
+Route::get('product/cached', [ProductController::class, 'indexCached']);
 Route::apiResource('product', ProductController::class)->except($except);
 
 Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
@@ -88,6 +89,7 @@ Route::apiResource('products/related', RelatedProductController::class)->only(['
 Route::post('products/related/{product}/{relatedProduct}', [RelatedProductController::class, 'store']);
 Route::get('products/related/{product}', [RelatedProductController::class, 'show']);
 #endregion 
+
 #region Recommended Product
 Route::apiResource('products/recommended', RecommendedProductController::class)->only(['destroy']);
 Route::post('products/recommended/{product}/{recommendedProduct}', [RecommendedProductController::class, 'store']);

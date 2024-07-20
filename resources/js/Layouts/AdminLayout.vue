@@ -27,6 +27,11 @@
                 </div>
 
                 <VRouteNav
+                    title="Content Management"
+                    :items="contentManagement"
+                />
+
+                <VRouteNav
                     :title="'User Management'"
                     :items="user_management"
                 />
@@ -56,7 +61,23 @@
 
         <div class="bg-white p-3">
             <!-- <VHotLinks class="mb-2" /> -->
-            <router-view></router-view>
+            <RouterView v-slot="{ Component }">
+                <template v-if="Component">
+                    <Suspense timeout="0">
+                        <component :is="Component" />
+
+                        <template v-slot:fallback>
+                            <Teleport to="#app">
+                                <div
+                                    class="absolute inset-0 grid place-content-center"
+                                >
+                                    <VLoader scale="2"></VLoader>
+                                </div>
+                            </Teleport>
+                        </template>
+                    </Suspense>
+                </template>
+            </RouterView>
         </div>
     </ZTELayout>
 </template>
@@ -65,6 +86,7 @@
 import { ref, watch, inject, computed } from "vue";
 import ZTELayout from "./components/ZTELayout.vue";
 import VRouteNav from "../components/VRouteNav.vue";
+import VLoader from "../components/base_components/VLoader.vue";
 
 import VHotLinks from "./components/AdminLayout/global/VHotLinks.vue";
 
@@ -138,11 +160,11 @@ const file_management = [
     },
 ];
 
-const cms_management = [
+const contentManagement = [
     {
-        title: "Homepage Products",
-        to: "fileIndex",
-        icon: "oi-star",
+        title: "Catalog Home",
+        to: "cmsCatalog",
+        icon: "fa-cogs",
     },
 ];
 //provide/inject

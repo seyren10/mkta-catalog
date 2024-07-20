@@ -1,10 +1,10 @@
 <template>
     <div>
-        <span class="my-6 text-[.8rem]">{{ title }}</span>
-        <ul class="flex max-h-[80vh] flex-col flex-wrap gap-1 overflow-auto">
+        <span class="my-6 text-[.8rem] text-slate-400">{{ title }}</span>
+        <ul class="grid max-h-[80vh] flex-wrap overflow-auto">
             <li
                 v-for="item in items"
-                class="grow overflow-hidden rounded-lg duration-500 hover:bg-stone-200"
+                class="overflow-hidden rounded-lg duration-500 hover:bg-stone-200"
             >
                 <div v-if="item.children && item.children.length" class="p-2">
                     <div class="flex items-center gap-2">
@@ -31,11 +31,17 @@
                 <router-link
                     v-else
                     active-class="bg-accent text-white"
-                    class="flex items-center gap-2 p-2"
+                    class="flex items-center gap-3 p-2"
                     :to="{ name: item.to }"
                 >
-                    <v-icon :name="item.icon" scale="1.3"></v-icon>
-                    <span>{{ item.title }}</span>
+                    <template #default="{ isActive }">
+                        <v-icon
+                            :name="item.icon"
+                            scale=".8"
+                            :color="isActive ? '#fff' : '#64748b'"
+                        ></v-icon>
+                        <span>{{ item.title }}</span>
+                    </template>
                 </router-link>
             </li>
         </ul>
