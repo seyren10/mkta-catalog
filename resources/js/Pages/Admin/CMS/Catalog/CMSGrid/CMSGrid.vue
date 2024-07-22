@@ -16,6 +16,7 @@
 
         <component
             v-for="child in children"
+            :key="child.props.id"
             :is="{ ...child.component }"
             v-bind="child.props"
         ></component>
@@ -29,7 +30,7 @@
 </template>
 
 <script setup>
-import { isRef, ref, unref } from "vue";
+import { ref } from "vue";
 import { useCMSStore } from "../../../../../stores/ui/CMSStore";
 
 import CMSButton from "../CMSButton/CMSButton.vue";
@@ -51,7 +52,8 @@ function handleAddChildren(node) {
         props: {
             id: uniqueId.value,
             parentId: props.id,
-            ...node.props,
+            children: [],
+            type: node.type,
         },
     };
 

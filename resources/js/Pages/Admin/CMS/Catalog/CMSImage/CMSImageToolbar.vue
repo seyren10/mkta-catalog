@@ -32,7 +32,7 @@
             </p>
         </div>
 
-        <div>
+        <div class="flex items-center gap-2">
             <v-button
                 icon="md-refresh-sharp"
                 icon-size="1"

@@ -15,6 +15,7 @@
                 <v-text-icon :items="infoList" class="my-5 grid" />
 
                 <MKMap
+                    v-once
                     class="mx-auto h-[20rem] overflow-hidden rounded-lg"
                 ></MKMap>
             </div>

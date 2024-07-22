@@ -43,6 +43,8 @@
                 </slot>
             </div>
         </slot>
+
+        <slot :data="{ title, subtitle }"></slot>
     </div>
 </template>
 

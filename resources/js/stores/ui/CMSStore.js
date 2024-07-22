@@ -21,19 +21,13 @@ export const useCMSStore = defineStore("CMSStore", () => {
                 title: "grid",
                 icon: "ri-checkbox-blank-line",
                 component: CMSGrid,
-                props: {
-                    type: "grid",
-                    children: [],
-                },
+                type: "grid",
             },
             {
                 title: "auto-fit grid",
                 icon: "bi-grid",
                 component: CMSGrid,
-                props: {
-                    type: "grid-auto-fit",
-                    children: [],
-                },
+                type: "grid-auto-fit",
             },
         ],
         elements: [
@@ -41,9 +35,7 @@ export const useCMSStore = defineStore("CMSStore", () => {
                 title: "image",
                 icon: "pr-image",
                 component: CMSImage,
-                props: {
-                    type: "image",
-                },
+                type: "image",
             },
             { title: "image carousel", icon: "pr-images", type: "carousel" },
         ],

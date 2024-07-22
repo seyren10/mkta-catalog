@@ -27,7 +27,7 @@
             ></v-textarea>
         </section>
         <section class="hidden md:block">
-            <MKMap class="mx-auto h-[20rem] overflow-hidden rounded-lg"></MKMap>
+            <MKMap v-once class="mx-auto h-[20rem] overflow-hidden rounded-lg"></MKMap>
         </section>
     </div>
 
