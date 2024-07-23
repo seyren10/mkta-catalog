@@ -3,7 +3,7 @@
     <div class="grid grid-cols-3 gap-0">
         <div class="col-span-3 md:col-span-1">
             <v-text-on-image
-                class="bg-gray-400 p-2 border"
+                class="border bg-gray-400 p-2"
                 title="Thumbnail"
                 subtitle="subtitle"
                 align="center"
@@ -11,27 +11,59 @@
                 :appear="false"
                 :image="s3(category.img)"
             />
-            <v-button @click="insertCategoryImage.show = true" class="w-full bg-accent my-2 text-white"><v-icon name="bi-card-image" class="me-2"></v-icon> Select Cover Photo </v-button>
+            <v-button
+                @click="insertCategoryImage.show = true"
+                class="my-2 w-full bg-accent text-white"
+                ><v-icon name="bi-card-image" class="me-2"></v-icon> Select
+                Cover Photo
+            </v-button>
         </div>
         <div class="col-span-3 px-2 md:col-span-2">
-            <v-text-field
-                prepend-inner-icon="px-subtitles"
-                label="Title"
-                v-model="form.title"
-            />
-            <v-text-field
-                prepend-inner-icon="bi-text-paragraph"
-                label="Description"
-                v-model="form.description"
-            />
-            <div class="col-span-12 md:col-span-6">
+            <div class="grid grid-cols-1 gap-y-2">
+                <v-text-field
+                    prepend-inner-icon="px-subtitles"
+                    label="Title"
+                    v-model="form.title"
+                />
+                <v-text-field
+                    prepend-inner-icon="bi-text-paragraph"
+                    label="Description"
+                    v-model="form.description"
+                />
+                <v-textarea
+                    :rows="10"
+                    label="Cover"
+                    @keyup="fix_content()"
+                    v-model="form.cover_html"
+                >
+                    <!-- <template #prepend-inner>
+                        <v-icon name="bi-filetype-html"></v-icon>
+                    </template> -->
+                </v-textarea>
                 <v-button
                     @click="categoryStore.updateCategory(id)"
                     prepend-inner-icon="md-save-round"
                     class="ml-auto bg-accent text-white"
                     >Update Category</v-button
                 >
+                <ul>
+                    <li>
+                        Note: Cover HTML container class is
+                        <code
+                            class="rounded-sm bg-red-300 p-1 font-bold text-black"
+                            >grid gap-5 overflow-hidden rounded-b-lg bg-white
+                            p-10 md:grid-cols-2 md:grid-rows-[min] mb-5</code
+                        >
+                    </li>
+                </ul>
             </div>
+        </div>
+        <div class="col-span-3 px-2">
+            Cover HTML preview
+            <header
+                class="mb-5 grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
+                v-html="tempContent"
+            ></header>
         </div>
         <v-dialog
             v-model="insertCategoryImage.show"
@@ -66,9 +98,9 @@ const props = defineProps({
 import { useCategoryStore } from "@/stores/categoryStore";
 const categoryStore = useCategoryStore();
 const { category, form, loading, errors } = storeToRefs(categoryStore);
-const refresh = async()=>{
+const refresh = async () => {
     await categoryStore.getCategory(props.id);
-}
+};
 if (!category.length) {
     refresh();
 }
@@ -80,11 +112,35 @@ const insertCategoryImage = ref({ show: false, file_id: -1 });
 const close_insertCategoryImage_data = () => {
     insertCategoryImage.value.show = false;
 };
-const submit_insertCategorymage_data = async(data) => {
-    let curData = data[0]
+const submit_insertCategorymage_data = async (data) => {
+    let curData = data[0];
     await categoryStore.updateCategoryImage(props.id, curData.id);
     close_insertCategoryImage_data();
 };
+
+const tempContent = ref(false);
+const fix_content = () => {
+    tempContent.value = form.value.cover_html;
+
+    [
+        {
+            keyword: "{{category_title}}",
+            value: category.value.title,
+        },
+        {
+            keyword: "{{category_description}}",
+            value: category.value.description,
+        },
+        {
+            keyword: "{{category_image}}",
+            value: s3(category.value.img),
+        },
+    ].forEach((element) => {
+        let regex = new RegExp(element.keyword, "g");
+        tempContent.value = tempContent.value.replace(regex, element.value);
+    });
+};
+fix_content();
 </script>
 
 <style lang="scss" scoped></style>

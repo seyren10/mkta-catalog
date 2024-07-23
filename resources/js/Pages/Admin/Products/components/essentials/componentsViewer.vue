@@ -5,7 +5,7 @@
                 <div class="flex justify-between">
                     <div class="text-lg font-semibold">
                         <v-icon name="la-cog-solid"></v-icon>
-                        Component Properties
+                        Component Properties : {{ data.type }}
                     </div>
                     <v-button
                         class="!rounded-full bg-red-500 !p-1 text-white"

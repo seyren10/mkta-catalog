@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\AreaCode;
 use App\Models\CompanyCode;
+use App\Models\File;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -14,8 +15,11 @@ use App\Models\UserCompany;
 use App\Models\UserPermission;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -211,6 +215,40 @@ class UserController extends Controller
             default:
                 return response()->json(["message" => "Method not found"], 404);
                 break;
+        }
+    }
+    public static function uploadProfilePicture(User $user, Request $request){
+        try {
+            DB::beginTransaction();
+
+            #region File Upload
+            $curFile = $request->file('eFile');
+            $fileName = $curFile->getClientOriginalName();
+            $ext = $curFile->getClientOriginalExtension();
+            $type = $curFile->getClientMimeType();
+
+            $generated_new_name = bin2hex(now() . $fileName) . "." . $ext;
+            $data = Storage::disk('s3')->put("profile-pictures", $request->file('eFile'));
+
+            #endregion
+            $curFile = File::create(
+                array(
+                    'title' => $fileName,
+                    'filename' => $data,
+                    'type' => $type,
+                )
+            );
+            DB::commit();
+
+            return response(array(
+                "s3" => $data,
+                "data" => $curFile,
+                "message" => "File uploaded successfully.",
+            ), 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return $th;
+            DB::rollback();
         }
     }
 }

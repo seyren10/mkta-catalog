@@ -220,12 +220,15 @@ export const useCategoryStore = defineStore("categories", () => {
         description: "",
         parent_id: 0,
         file_id: 0,
+        cover_html: ""
     });
     const resetForm = () => {
         form.title = "";
         form.description = "";
         form.parent_id = 0;
         form.file_id = 0;
+        form.cover_html = 0;
+
     };
     const addCategory = async () => {
         try {
@@ -282,6 +285,8 @@ export const useCategoryStore = defineStore("categories", () => {
             form.description = category.value.description;
             form.parent_id = category.value.parent_id;
             form.file_id = category.value.file_id ?? category.img;
+            form.cover_html = category.value.cover_html;
+
         } catch (e) {
             console.log(e);
         }

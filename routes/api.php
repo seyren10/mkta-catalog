@@ -109,6 +109,7 @@ Route::apiResource('users', UserController::class)->except($except);
 Route::put('users/change-password/{user}', [UserController::class, 'changePassword']);
 Route::post('users/reset-password/{user}', [UserController::class, 'resetPassword']);
 Route::post('users/{user}/{action}/permissions/{permission}', [UserController::class, 'modifyUserPermissions']);
+Route::post('user/{user}/profile-picture', [UserController::class, 'uploadProfilePicture']);
 
 Route::apiResource('customers', UserController::class)->except($except)->names('customers')->parameters(['customers' => 'user']);
 Route::post('customers/reset-password/{user}', [UserController::class, 'resetPassword']);

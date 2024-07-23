@@ -17,6 +17,7 @@
             {{ $route.meta.description }}
         </p>
     </div>
+
     <v-card class="border-0">
         <template #header>
             <div class="flex">
@@ -50,14 +51,13 @@
         />
         <CategoryTree v-show="selectedTab === 'CategoryTree'" :id="id" />
     </v-card>
-
+    
 </template>
 <script setup>
-
 import CategoryInformation from "./components/CategoryInformation.vue";
 import CategoryTree from "./components/CategoryTree.vue";
 
-import fileIndex from "../Files/Index.vue"
+import fileIndex from "../Files/Index.vue";
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
@@ -65,6 +65,7 @@ import { storeToRefs } from "pinia";
 const props = defineProps({
     id: String,
 });
+const s3 = inject("s3");
 
 const router = inject("router");
 
@@ -75,7 +76,6 @@ if (!category.length) {
     await categoryStore.getCategory(props.id);
 }
 const selectedTab = ref("CategoryInformation");
-
 </script>
 
 <style lang="scss" scoped></style>

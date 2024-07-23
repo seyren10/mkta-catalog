@@ -62,6 +62,8 @@ class CategoryController extends Controller
     {
         $category->title =ucwords($request->title) ?? $category->title;
         $category->description = ucfirst($request->description) ??  $category->description;
+        $category->cover_html = ($request->cover_html) ??  $category->cover_html;
+
         $category->save();
         return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
     }

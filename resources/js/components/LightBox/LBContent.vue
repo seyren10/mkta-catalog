@@ -9,6 +9,8 @@
                     use your
                     <strong>&nbsp; mouse wheel &nbsp;</strong> to zoom-in and
                     out
+                    <li>
+        </li>
                 </span>
             </p>
             <div class="ml-auto flex gap-4">

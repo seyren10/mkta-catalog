@@ -9,8 +9,8 @@
                 <slot name="aside"></slot>
             </div>
 
-            <v-sheet class="overflow-hidden">
-                <slot name="related"></slot>
+            <v-sheet class="overflow-hidden bg-transparent">
+                <slot name="component"></slot>
             </v-sheet>
         </div>
     </section>

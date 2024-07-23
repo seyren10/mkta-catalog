@@ -8,6 +8,7 @@
         >
             <img :src="item" alt="" class="h-full w-full object-cover" />
         </li>
+        
     </ul>
 </template>
 

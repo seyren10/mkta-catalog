@@ -4,13 +4,11 @@
             <ImageView></ImageView>
             <ProductInfo></ProductInfo>
         </template>
-        
         <template #aside> <RecentViewed></RecentViewed> </template>
-        <template #related>
-            <RelatedProducts></RelatedProducts>
+        <template #component v-if="product.product_components.length > 0">
+            <ProductComponents />
         </template>
     </ProductView>
-
     <LightBox v-model="lightbox" :items="productImages" :key="id"></LightBox>
 </template>
 
@@ -24,6 +22,8 @@ import ProductView from "./components/ProductView.vue";
 import ImageView from "./components/ImageView.vue";
 import ProductInfo from "./components/ProductInfo.vue";
 import RecentViewed from "./components/RecentViewed.vue";
+import ProductComponents from "./components/ProductComponents.vue";
+
 import RelatedProducts from "./components/RelatedProducts.vue";
 
 const props = defineProps({
@@ -72,7 +72,29 @@ provide("category", category);
 async function init() {
     await productStore.getProductItem(props.id);
 }
-console.log('init again')
+console.log("init again");
+
+const addItem_in_LocalStorage = () => {
+    let recentItems = localStorage.getItem("recent");
+    if (recentItems !== null) {
+        recentItems = JSON.parse(recentItems);
+    } else {
+        recentItems = [];
+    }
+    let exists = recentItems.some((obj) => obj.id === product.value.id);
+    if (!exists) {
+        let tempData = {
+            id: product.value.id,
+            title: product.value.title,
+            description: product.value.description,
+            thumbnail: product.value.product_thumbnail?.file.filename,
+        };
+        recentItems.push(tempData);
+        recentItems = recentItems.slice(0, 10).reverse();
+    }
+    localStorage.setItem("recent", JSON.stringify(recentItems));
+};
+addItem_in_LocalStorage();
 </script>
 
 <style lang="scss" scoped></style>

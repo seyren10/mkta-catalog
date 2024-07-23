@@ -1,7 +1,7 @@
 <template>
-    <div class="container my-8 space-y-5">
+    <div class="container my-8">
         <header
-            class="grid gap-5 overflow-hidden rounded-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
+            class="grid overflow-hidden rounded-t-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
         >
             <div class="row-start-1 md:col-[1/-1]">
                 <BreadCrumb
@@ -11,26 +11,11 @@
                     ]"
                 ></BreadCrumb>
             </div>
-            <div
-                class="aspect-video overflow-hidden rounded-lg bg-slate-200 md:col-start-2 md:row-start-1 md:row-end-3"
-            >
-                <v-text-on-image
-                    no-overlay
-                    :image="`/api/s3-resources/${category.img}`"
-                    class="h-full w-full object-cover"
-                />
-            </div>
-            <div>
-                <h1
-                    class="my-5 text-head font-light uppercase tracking-wide text-primary"
-                >
-                    {{ category?.title }}
-                </h1>
-                <p class="max-w-[50ch] text-slate-500">
-                    {{ category?.description }}
-                </p>
-            </div>
         </header>
+        <header
+            class="grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min] mb-5"
+            v-html="fix_content(category.cover_html)"
+        ></header>
         <nav>
             <ul class="flex flex-wrap gap-3">
                 <li
@@ -41,7 +26,6 @@
                 </li>
             </ul>
         </nav>
-
         <main>
             <ProductListing :loading="loading">
                 <template #aside>
@@ -104,6 +88,8 @@ const props = defineProps({
     id: String,
 });
 
+const s3 = inject("s3");
+
 //stores
 const categoryStore = inject("categoryStore");
 const category = ref(null);
@@ -136,7 +122,6 @@ const fetchProducts = async (categoryId) => {
         return acc;
     }, {});
 
-
     await getProductsWithCategoryId(+categoryId, {
         includeProductImages: true,
         includeProductFilter: true,
@@ -156,6 +141,29 @@ const handlePageChange = (page) => {
 };
 
 await fetchProducts(+props.id);
+
+const fix_content = (content_html) => {
+    let tempContent = content_html;
+
+    [
+        {
+            keyword: "{{category_title}}",
+            value: category.value.title,
+        },
+        {
+            keyword: "{{category_description}}",
+            value: category.value.description,
+        },
+        {
+            keyword: "{{category_image}}",
+            value: s3(category.value.img),
+        },
+    ].forEach((element) => {
+        let regex = new RegExp(element.keyword, "g");
+        tempContent = tempContent.replace(regex, element.value);
+    });
+    return tempContent;
+};
 </script>
 
 <style lang="scss" scoped></style>

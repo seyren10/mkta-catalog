@@ -251,7 +251,7 @@ const UIs = ref([
         type: "table",
         title: "Table Component",
         icon: "bi-table",
-        default: {header: [], body: {}, footer: []  },
+        default: {header: [], body: [], footer: []  },
     },
     
 ]);

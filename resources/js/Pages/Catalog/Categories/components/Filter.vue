@@ -57,7 +57,7 @@
         >
             <template #title>
                 <div class="flex items-center gap-2">
-                    <v-icon name="md-colorlens-outlined"></v-icon>
+                    <v-icon :name="filter.icon"></v-icon>
                     <span class="capitalize">{{ filter.title }}</span>
                 </div>
             </template>

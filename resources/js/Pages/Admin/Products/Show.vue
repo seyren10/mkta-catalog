@@ -116,7 +116,7 @@ if (!product_item.length) {
     await productStore.getProductItem(props.id);
 }
 
-const currentTab = ref("ProductFilters");
+const currentTab = ref("ProductComponents");
 const tabs = ref([
     {
         icon: "bi-cart4",
