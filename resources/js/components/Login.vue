@@ -72,6 +72,7 @@
                             >Login</v-button
                         >
                     </form>
+
                     <p class="text-center text-sm text-slate-600">
                         Dont have an account?
                         <a

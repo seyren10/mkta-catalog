@@ -17,7 +17,10 @@
                     {{ link.title }}
                 </a>
             </li>
-            <li v-if="user">
+            <li
+                v-if="user"
+                class="primary-gradient bg-clip-text font-bold text-transparent"
+            >
                 <router-link :to="{ name: 'catalog' }">Catalog</router-link>
             </li>
         </ul>
@@ -33,14 +36,18 @@
                 ><span class="text-accent"> {{ user.name }}!</span>
             </div>
             <span class="text-slate-300">|</span>
-            <div class="flex gap-3" v-if="user">
-                <v-icon name="la-search-solid" scale="1.3"></v-icon>
-                <v-icon
-                    name="la-heart"
-                    scale="1.3"
-                    class="fill-accent"
-                ></v-icon>
-                <v-icon name="la-cog-solid" scale="1.3"></v-icon>
+            <div class="flex items-center gap-3" v-if="user">
+                <NavAppSearch></NavAppSearch>
+                <v-button
+                    icon="la-heart"
+                    class="text-accent"
+                    @click="$router.push({ name: 'catalog' })"
+                ></v-button>
+                <v-button
+                    icon="pr-sign-out"
+                    @click="logout"
+                    :loading="loading"
+                ></v-button>
             </div>
             <div v-else>
                 <a href="#become-a-partner">
@@ -52,6 +59,8 @@
                 ></a>
             </div>
         </div>
+
+        <!-- navigation toggler -->
         <div class="md:hidden">
             <v-icon
                 class="cursor-pointer"
@@ -90,10 +99,18 @@
                         <span>Welcome Back, </span
                         ><span class="text-accent"> {{ user.name }}!</span>
                     </div>
-                    <div class="flex justify-evenly gap-3">
-                        <v-icon name="la-search-solid" scale="1.3"></v-icon>
-                        <v-icon name="la-heart" scale="1.3"></v-icon>
-                        <v-icon name="la-cog-solid" scale="1.3"></v-icon>
+                    <div class="flex justify-evenly gap-3" v-if="user">
+                        <NavAppSearch></NavAppSearch>
+                        <v-button
+                            icon="la-heart"
+                            class="text-accent"
+                            @click="$router.push({ name: 'catalog' })"
+                        ></v-button>
+                        <v-button
+                            icon="pr-sign-out"
+                            @click="logout"
+                            :loading="loading"
+                        ></v-button>
                     </div>
                     <ul
                         class="grid justify-center gap-6 text-center font-medium"
@@ -125,14 +142,21 @@
 <script setup>
 import { ref, watch, inject, computed } from "vue";
 import { useMedia } from "@/composables/useMedia";
+import { useAuthStore } from "../stores/authStore";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
 import Login from "./Login.vue";
+import NavAppSearch from "./NavAppSearch.vue";
 
 //reactives
 const { isMatched } = useMedia("(min-width: 768px )");
 const expanded = ref(false);
 const active = ref(true);
 const dialog = ref(false);
+const authStore = useAuthStore();
+const { loading } = storeToRefs(authStore);
+const router = useRouter();
 //stores
 
 //derived props
@@ -156,6 +180,11 @@ watch(isMatched, (newValue) => {
 
 //injects
 const user = inject("currentUser");
+
+async function logout() {
+    await authStore.logout();
+    router.push({ name: "login" });
+}
 </script>
 
 <style scoped></style>

@@ -22,6 +22,14 @@ export const useAuthStore = defineStore("auth", () => {
             if (!errors.value) router.push({ name: "catalog" });
         } catch (e) {}
     };
+    const logout = async () => {
+        try {
+            await exec("/logout", "delete");
 
-    return { login, loading, errors, form, exec };
+            //when user is authenticated redirect them to the catalog route
+            if (!errors.value) await router.push({ name: "home" });
+        } catch (e) {}
+    };
+
+    return { login, loading, errors, form, exec, logout };
 });

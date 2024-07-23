@@ -6,6 +6,7 @@
 
         <template v-slot:default="slotProps">
             <input
+                ref="textfield"
                 type="text"
                 class="w-full outline-none"
                 v-bind="{ ...slotProps, ...$attrs }"
@@ -23,6 +24,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useInput, useDensity, useDensityValues } from "@/composables/useInput";
 import { useInputValidate } from "../composables/useInputValidate";
 
@@ -32,13 +34,19 @@ defineOptions({
     inheritAttrs: false,
 });
 
+const textfield = ref(null);
+
+defineExpose({
+    textfield,
+});
+
 const model = defineModel({ default: "" });
 const props = defineProps({
     ...useInput(),
     ...useDensity(),
     rules: {
         type: [Function, Array],
-        default: []
+        default: [],
     },
     errorMessages: {
         type: Object,

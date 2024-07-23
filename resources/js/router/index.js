@@ -7,6 +7,11 @@ import catalog_routes from "./router_catalog.js";
 
 const routes = [
     {
+        path: "/login",
+        name: "login",
+        component: () => import("@/Pages/Auth/Login.vue"),
+    },
+    {
         path: "/:pathMatch(.*)*",
         name: "notFound",
         component: () => import("@/components/ActionNotAllowed.vue"),
@@ -15,7 +20,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    routes: [...routes, ...home_routes, ...catalog_routes, ...admin_routes],
+    routes: [...home_routes, ...catalog_routes, ...admin_routes, ...routes],
     scrollBehavior(to, from, savedPosition) {
         if (to.hash) {
             return {
@@ -38,14 +43,17 @@ router.beforeEach(async (to, from) => {
 
     if (to.meta.requiresAuth && !userStore.currentUser) {
         return {
-            name: "notFound",
-            params: {
-                pathMatch: to.path.substring(1).split("/"),
-            },
-            // preserve existing query and hash if any
-            query: to.query,
-            hash: to.hash,
+            name: "login",
         };
+        // return {
+        //     name: "notFound",
+        //     params: {
+        //         pathMatch: to.path.substring(1).split("/"),
+        //     },
+        //     // preserve existing query and hash if any
+        //     query: to.query,
+        //     hash: to.hash,
+        // };
     }
 });
 
