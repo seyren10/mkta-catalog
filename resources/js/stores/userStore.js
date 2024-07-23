@@ -53,27 +53,36 @@ export const useUserStore = defineStore("user", () => {
             console.log(e);
         }
     };
-    const resetPassword = async (id) =>{
+    const resetPassword = async (id) => {
         try {
-            const res = await exec("/api/users/reset-password/" + id, "post", form);
-            form.password = res.data.password
+            const res = await exec(
+                "/api/users/reset-password/" + id,
+                "post",
+                form,
+            );
+            form.password = res.data.password;
         } catch (e) {
             console.log(e);
         }
-    }
-    const changePassword = async (id) =>{
+    };
+    const changePassword = async (id) => {
         try {
-            const res = await exec("/api/users/change-password/" + id, "put", form);
-            form.password = res.data.password
+            const res = await exec(
+                "/api/users/change-password/" + id,
+                "put",
+                form,
+            );
+            form.password = res.data.password;
         } catch (e) {
             console.log(e);
         }
-    }
+    };
     const getCurrentUser = async () => {
         try {
             const res = await exec("/api/user");
             currentUser.value = res.data.data;
         } catch (err) {
+            currentUser.value = null;
             console.log(err);
         }
     };

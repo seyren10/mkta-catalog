@@ -16,18 +16,18 @@
             </div>
             <!-- #endregion toolbar-header -->
 
-            <!-- #region user-avatar -->
-            <div class="ml-auto flex w-fit items-center gap-2 py-2 md:hidden">
-                <span class="cursor-pointer text-slate-200 underline">{{
-                    user.name
-                }}</span>
+            <!-- #region mobile-user-avatar -->
+            <div
+                class="ml-auto flex w-fit cursor-pointer items-center gap-2 py-2 md:hidden"
+            >
+                <span class="text-slate-200 underline">{{ user.name }}</span>
                 <img
                     src="/mk-images/hero-images/3.png"
                     alt="profile"
                     class="max-w-5 rounded-full bg-white ring ring-slate-700"
                 />
             </div>
-            <!-- #endregion user-avatar -->
+            <!-- #endregion mobile-user-avatar -->
 
             <div class="mt-3 flex items-center justify-between gap-5">
                 <!-- #region mk-logo -->
@@ -70,18 +70,18 @@
                 </div>
                 <!-- #endregion searchbar -->
 
-                <!-- #region mobile-user-avatar -->
-                <div class="hidden items-center gap-2 md:flex">
-                    <span class="cursor-pointer underline">{{
-                        user.name
-                    }}</span>
-                    <img
-                        src="/mk-images/hero-images/4.png"
-                        alt="profile"
-                        class="max-w-10 rounded-full bg-white ring ring-slate-700"
-                    />
+                <!-- #region user-avatar -->
+                <div class="hidden cursor-pointer items-center gap-2 md:flex">
+                    <span class="underline">{{ user.name }}</span>
+                    <router-link :to="{ name: 'profile' }">
+                        <img
+                            src="/mk-images/hero-images/4.png"
+                            alt="profile"
+                            class="max-w-10 rounded-full bg-white ring ring-slate-700"
+                        />
+                    </router-link>
                 </div>
-                <!-- #endregion mobile-user-avatar -->
+                <!-- #endregion user-avatar -->
             </div>
         </div>
 

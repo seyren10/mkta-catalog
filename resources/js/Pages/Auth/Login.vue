@@ -87,7 +87,7 @@
             </div>
 
             <!-- user is already logged in -->
-            <div class="space-y-5 p-6">
+            <div class="space-y-5 p-6" v-else>
                 <p>you are already logged in.</p>
                 <v-button
                     type="button"
