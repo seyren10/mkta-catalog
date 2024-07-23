@@ -5,7 +5,7 @@
             <div class="grid">
                 <video
                     controls
-                    src="/videos/werewolf fin2 1.mp4"
+                    src="/videos/finale werewolf.mp4"
                     class="h-full rounded-lg"
                     poster="/Logo.svg"
                 ></video>
@@ -21,7 +21,7 @@
                         stage.
                     </p>
                     <span class="block text-right font-bold italic"
-                        >~Someone's name here</span
+                        >MK Themed Attractions Phils.</span
                     >
 
                     <v-icon

@@ -33,7 +33,7 @@
                     <div class="md:order-2">
                         <img
                             loading="lazy"
-                            src="/mk-images/VISSION.jpg"
+                            src="/mk-images/mission.jpg"
                             class="aspect-[1/.5] object-cover"
                             alt=""
                         />
@@ -49,7 +49,7 @@
                 >
                     <img
                         loading="lazy"
-                        src="/illustrations/vision.jpg"
+                        src="/mk-images/VISSION.jpg"
                         class="aspect-[1/.5] object-cover object-top"
                         alt=""
                     />

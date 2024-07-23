@@ -2,8 +2,9 @@
     <div>
         <LMap :useGlobalLeaflet="false" v-model:zoom="zoom" :center="location">
             <LTileLayer
-                url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 :min-zoom="8"
+                name="OpenStreetMap"
             ></LTileLayer>
 
             <LMarker :lat-lng="location" ref="marker" @ready="ready">
@@ -29,6 +30,8 @@ const ready = () => {
         marker.value.leafletObject.openPopup();
     }, 200);
 };
+
+//https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
 </script>
 
 <style lang="scss" scoped></style>
