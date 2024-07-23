@@ -5,7 +5,7 @@
             <div class="grid">
                 <video
                     controls
-                    src="/videos/finale werewolf.mp4"
+                    src="https://mkta-portal.s3.us-east-2.amazonaws.com/finale+werewolf.mp4"
                     class="h-full rounded-lg"
                     poster="/Logo.svg"
                 ></video>

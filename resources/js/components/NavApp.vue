@@ -17,6 +17,9 @@
                     {{ link.title }}
                 </a>
             </li>
+            <li v-if="user">
+                <router-link :to="{ name: 'catalog' }">Catalog</router-link>
+            </li>
         </ul>
         <div class="hidden items-center gap-7 md:flex">
             <v-button v-if="!user" class="font-bold" @click="dialog = true"
@@ -30,7 +33,7 @@
                 ><span class="text-accent"> {{ user.name }}!</span>
             </div>
             <span class="text-slate-300">|</span>
-            <div class="flex gap-3">
+            <div class="flex gap-3" v-if="user">
                 <v-icon name="la-search-solid" scale="1.3"></v-icon>
                 <v-icon
                     name="la-heart"
@@ -38,6 +41,15 @@
                     class="fill-accent"
                 ></v-icon>
                 <v-icon name="la-cog-solid" scale="1.3"></v-icon>
+            </div>
+            <div v-else>
+                <a href="#become-a-partner">
+                    <v-icon
+                        name="ri-customer-service-2-line"
+                        scale="1.3"
+                        class="text-slate-500"
+                    ></v-icon
+                ></a>
             </div>
         </div>
         <div class="md:hidden">
@@ -65,7 +77,12 @@
                     <div>
                         <img src="/Logo.svg" alt="" />
                     </div>
-                    <v-button v-if="!user" class="bg-accent w-full text-white" @click="dialog = true">Login</v-button>
+                    <v-button
+                        v-if="!user"
+                        class="w-full bg-accent text-white"
+                        @click="dialog = true"
+                        >Login</v-button
+                    >
                     <div
                         v-else
                         class="text-center font-medium underline underline-offset-1"

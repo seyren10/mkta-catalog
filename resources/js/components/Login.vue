@@ -10,9 +10,9 @@
             </template>
 
             <div class="grid items-center p-5 md:grid-cols-2 md:p-0">
-                <div class="hidden md:block">
+                <div class="hidden max-w-[30rem] md:block">
                     <img
-                        src="/mk-images/3.png"
+                        src="/mk-images/login.jpg"
                         alt=""
                         class="w-full object-fill"
                     />
@@ -34,24 +34,34 @@
                             invalid
                         ></v-text-field>
                         <v-text-field
-                            type="password"
+                            :type="showPassword ? 'text' : 'password'"
                             v-model="form.password"
                             label="Password"
                             prepend-inner-icon="ri-key-2-line"
-                        ></v-text-field>
+                        >
+                            <template #append-inner>
+                                <v-button
+                                    v-if="!showPassword"
+                                    type="button"
+                                    icon="pr-eye-slash"
+                                    @click="showPassword = true"
+                                ></v-button>
+                                <v-button
+                                    @click="showPassword = false"
+                                    v-else
+                                    type="button"
+                                    icon="pr-eye"
+                                ></v-button>
+                            </template>
+                        </v-text-field>
                         <div
                             class="mt-5 flex items-center justify-between pl-1"
                         >
                             <div class="flex">
-                                <input
-                                    type="checkbox"
+                                <v-checkbox
                                     v-model="form.remember"
-                                    id="remember"
-                                    class="mr-2 accent-accent"
-                                />
-                                <label for="remember" class="text-sm"
-                                    >Remember me</label
-                                >
+                                    label="Remember me"
+                                ></v-checkbox>
                             </div>
                             <a class="text-sm text-primary">Forgot password?</a>
                         </div>
@@ -81,9 +91,11 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
+import { ref } from "vue";
 
 //reactives
 const dialog = defineModel(false);
+const showPassword = ref(false);
 
 //stores
 const authStore = useAuthStore();

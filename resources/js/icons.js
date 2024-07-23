@@ -124,9 +124,13 @@ import {
     PrImage,
     PrImages,
     PrFile,
+    PrEye,
+    PrEyeSlash,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    PrEye,
+    PrEyeSlash,
     PrFile,
     PrImages,
     PrImage,

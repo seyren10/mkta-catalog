@@ -28,7 +28,6 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            Log::info($request->session()->get('restricted_products'));
             return response()->noContent();
         }
 
