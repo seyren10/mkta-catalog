@@ -39,21 +39,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     const userStore = useUserStore();
-    await userStore.getCurrentUser();
+
+    if (to.meta.fullUserData) {
+        await userStore.getCurrentUserFullData();
+    } else await userStore.getCurrentUser();
 
     if (to.meta.requiresAuth && !userStore.currentUser) {
         return {
             name: "login",
         };
-        // return {
-        //     name: "notFound",
-        //     params: {
-        //         pathMatch: to.path.substring(1).split("/"),
-        //     },
-        //     // preserve existing query and hash if any
-        //     query: to.query,
-        //     hash: to.hash,
-        // };
     }
 });
 
