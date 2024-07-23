@@ -86,6 +86,18 @@ export const useUserStore = defineStore("user", () => {
             console.log(err);
         }
     };
+    const getCurrentUserFullData = async () => {
+        try {
+            const res = await exec("/api/user", "get", {
+                includeAreasData: true,
+                includeCompaniesData: true,
+            });
+            currentUser.value = res.data.data;
+        } catch (err) {
+            currentUser.value = null;
+            console.log(err);
+        }
+    };
     const modifyUserPermissions = async (type, permission) => {
         try {
             const res = await exec(
@@ -135,6 +147,7 @@ export const useUserStore = defineStore("user", () => {
         modifyUserPermissions,
         updateUser,
         getCurrentUser,
+        getCurrentUserFullData,
         getUser,
         getUsers,
 

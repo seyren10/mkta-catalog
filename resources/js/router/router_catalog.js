@@ -98,6 +98,9 @@ const catalog_routes = [
                 path: "profile",
                 name: "profile",
                 component: () => import("@/Pages/Catalog/Profile/Profile.vue"),
+                meta: {
+                    fullUserData: true,
+                },
             },
         ],
     },

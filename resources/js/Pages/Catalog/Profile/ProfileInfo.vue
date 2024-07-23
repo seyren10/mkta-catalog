@@ -1,5 +1,7 @@
 <template>
-    <div class="grid grid-rows-[auto,auto,1fr] place-content-start justify-center gap-6">
+    <div
+        class="grid grid-rows-[auto,auto,1fr] place-content-start justify-center gap-6"
+    >
         <div class="mx-auto max-w-[10rem] overflow-hidden rounded-full">
             <v-text-on-image
                 image="/mk-images/pumpkin-removebg-preview.png"
@@ -22,6 +24,16 @@
                     :class="`${userStatusColor} rounded-lg px-2 py-1 text-xs`"
                     >{{ userStatus }}</span
                 >
+            </li>
+        </ul>
+        <ul>
+            <li class="flex items-center gap-3">
+                <span class="text-slate-400">areas:</span>
+                <span> {{ userAreas }}</span>
+            </li>
+            <li class="flex items-center gap-3">
+                <span class="text-slate-400">companies:</span>
+                <span> {{ userCompanies }}</span>
             </li>
         </ul>
 
@@ -57,6 +69,24 @@ const userStatusColor = computed(() => {
     if (userStatus.value === "Active") {
         return "bg-green-200 text-green-500";
     } else return "bg-red-200 text-red-500";
+});
+
+const userAreas = computed(() => {
+    return user.value.user_areas
+        .reduce((acc, area) => {
+            acc.push(area.title);
+            return acc;
+        }, [])
+        .join(",");
+});
+
+const userCompanies = computed(() => {
+    return user.value.user_companies
+        .reduce((acc, comp) => {
+            acc.push(comp.title);
+            return acc;
+        }, [])
+        .join(",");
 });
 
 async function handleLogout() {
