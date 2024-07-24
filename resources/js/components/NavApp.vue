@@ -37,17 +37,28 @@
             </div>
             <span class="text-slate-300">|</span>
             <div class="flex items-center gap-3" v-if="user">
-                <NavAppSearch></NavAppSearch>
-                <v-button
-                    icon="la-heart"
-                    class="text-accent"
-                    @click="$router.push({ name: 'catalog' })"
-                ></v-button>
-                <v-button
-                    icon="pr-sign-out"
-                    @click="logout"
-                    :loading="loading"
-                ></v-button>
+                <div>
+                    <NavAppSearch> </NavAppSearch>
+                    <v-tooltip activator="parent">Search</v-tooltip>
+                </div>
+                <div>
+                    <v-button
+                        icon="la-heart"
+                        class="text-accent"
+                        @click="$router.push({ name: 'catalog' })"
+                    ></v-button>
+                    <v-tooltip activator="parent">Catalog</v-tooltip>
+                </div>
+
+                <div>
+                    <v-tooltip activator="parent">Logout</v-tooltip>
+
+                    <v-button
+                        icon="pr-sign-out"
+                        @click="logout"
+                        :loading="loading"
+                    ></v-button>
+                </div>
             </div>
             <div v-else>
                 <a href="#become-a-partner">
