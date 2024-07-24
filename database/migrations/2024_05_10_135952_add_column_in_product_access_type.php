@@ -24,9 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('product_access_types', function (Blueprint $table) {
-            $table->removeColumn('ref_type');
-            $table->removeColumn('ref_table');
-            $table->removeColumn('ref_column');
+            $table->dropColumn('ref_type');
+            $table->dropColumn('ref_table');
+            $table->dropColumn('ref_column');
         });
     }
 };

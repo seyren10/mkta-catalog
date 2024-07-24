@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('product_access_types', function (Blueprint $table) {
-            $table->removeColumn('source_table');
-            $table->removeColumn('source_column');
+            $table->dropColumn('source_table');
+            $table->dropColumn('source_column');
         });
     }
 };

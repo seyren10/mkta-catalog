@@ -25,7 +25,7 @@ return new class extends Migration
     {
         Schema::table('categories', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\File::class);
-            $table->removeColumn('parent_id');
+            $table->dropColumn('parent_id');
         });
     }
 };
