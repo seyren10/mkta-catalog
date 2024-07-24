@@ -31,27 +31,7 @@
                         prepend-inner-icon="co-mail-ru"
                         invalid
                     ></v-text-field>
-                    <v-text-field
-                        :type="showPassword ? 'text' : 'password'"
-                        v-model="form.password"
-                        label="Password"
-                        prepend-inner-icon="ri-key-2-line"
-                    >
-                        <template #append-inner>
-                            <v-button
-                                v-if="!showPassword"
-                                type="button"
-                                icon="pr-eye-slash"
-                                @click="showPassword = true"
-                            ></v-button>
-                            <v-button
-                                @click="showPassword = false"
-                                v-else
-                                type="button"
-                                icon="pr-eye"
-                            ></v-button>
-                        </template>
-                    </v-text-field>
+                    <VPasswordField v-model="form.password"></VPasswordField>
                     <div class="mt-5 flex items-center justify-between pl-1">
                         <div class="flex">
                             <v-checkbox
@@ -91,7 +71,6 @@
                 <p>you are already logged in.</p>
                 <v-button
                     type="button"
-                    
                     class="w-full bg-accent text-white"
                     @click="$router.push('/')"
                     >Home</v-button
@@ -107,10 +86,11 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "vue-router";
 import { inject, ref } from "vue";
 
+import VPasswordField from "@/components/VPasswordField.vue";
+
 //reactives
 const emit = defineEmits(["submit"]);
 const router = useRouter();
-const showPassword = ref(false);
 const user = inject("currentUser");
 
 //stores

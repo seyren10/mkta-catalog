@@ -128,9 +128,13 @@ import {
     PrEyeSlash,
     PrSignOut,
     LaMehBlank,
+    BiShield,
+    BiShieldCheck,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    BiShieldCheck,
+    BiShield,
     LaMehBlank,
     PrSignOut,
     PrEye,

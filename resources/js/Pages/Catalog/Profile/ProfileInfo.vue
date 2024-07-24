@@ -73,7 +73,7 @@ const userStatusColor = computed(() => {
 
 const userAreas = computed(() => {
     return user.value.user_areas
-        .reduce((acc, area) => {
+        ?.reduce((acc, area) => {
             acc.push(area.title);
             return acc;
         }, [])
@@ -82,7 +82,7 @@ const userAreas = computed(() => {
 
 const userCompanies = computed(() => {
     return user.value.user_companies
-        .reduce((acc, comp) => {
+        ?.reduce((acc, comp) => {
             acc.push(comp.title);
             return acc;
         }, [])
@@ -91,7 +91,6 @@ const userCompanies = computed(() => {
 
 async function handleLogout() {
     await authStore.logout();
-    await router.push({ name: "login" });
 }
 </script>
 

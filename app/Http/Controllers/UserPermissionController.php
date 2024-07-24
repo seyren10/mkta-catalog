@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserPermission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserPermissionController extends Controller
 {
@@ -12,7 +13,6 @@ class UserPermissionController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**

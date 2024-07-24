@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-5 p-5 text-sm md:grid-cols-2">
+    <div class="grid gap-5 p-5 text-sm md:grid-cols-2" v-bind="$attrs">
         <p class="md:col-span-2">
             Please contact us via email, and we will respond at our earliest
             convenience. You may use the form provided below or send a direct
@@ -13,10 +13,8 @@
                 <p class="mb-3">Item:</p>
                 <ul class="grid gap-3">
                     <li :key="item.id" class="rounded-lg bg-slate-200 p-3">
-                        <div>{{ item.details.description }}</div>
-                        <span class="text-slate-400">{{
-                            item.details.dimension
-                        }}</span>
+                        <div>{{ item.title }}</div>
+                        <span class="text-slate-400">{{ item.id }}</span>
                     </li>
                 </ul>
             </div>
@@ -27,7 +25,10 @@
             ></v-textarea>
         </section>
         <section class="hidden md:block">
-            <MKMap v-once class="mx-auto h-[20rem] overflow-hidden rounded-lg"></MKMap>
+            <MKMap
+                v-once
+                class="mx-auto h-[20rem] overflow-hidden rounded-lg"
+            ></MKMap>
         </section>
     </div>
 

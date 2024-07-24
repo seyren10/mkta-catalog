@@ -183,7 +183,6 @@ const user = inject("currentUser");
 
 async function logout() {
     await authStore.logout();
-    router.push({ name: "login" });
 }
 </script>
 

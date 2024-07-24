@@ -1,7 +1,7 @@
 <template>
     <div class="container my-8">
         <header
-            class="grid overflow-hidden rounded-t-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
+            class="grid overflow-hidden rounded-t-lg bg-white p-10 pb-0 md:grid-cols-2 md:grid-rows-[min]"
         >
             <div class="row-start-1 md:col-[1/-1]">
                 <BreadCrumb
@@ -13,10 +13,10 @@
             </div>
         </header>
         <header
-            class="grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min] mb-5"
+            class="mb-5 grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
             v-html="fix_content(category.cover_html)"
         ></header>
-        <nav>
+        <nav class="mt-8">
             <ul class="flex flex-wrap gap-3">
                 <li
                     v-for="item in category.sub_categories"
@@ -26,7 +26,7 @@
                 </li>
             </ul>
         </nav>
-        <main>
+        <main class="mt-8">
             <ProductListing :loading="loading">
                 <template #aside>
                     <Filter @change="fetchProducts(id)"></Filter>
