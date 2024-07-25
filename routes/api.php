@@ -9,6 +9,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\FilterChoiceController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\NonWishlistController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAccessController;
 use App\Http\Controllers\ProductAccessTypeController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserWishlistController;
 use App\Services\UserServices;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -68,6 +70,9 @@ Route::delete('product-access/{action_type}/{product}/{product_access}/{value}',
 #region Product Routes
 Route::get('product/cached', [ProductController::class, 'indexCached']);
 Route::apiResource('product', ProductController::class)->except($except);
+Route::get('product-images/zip/{product}', [ProductController::class, "zipProductImages"]);
+
+
 
 Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
 Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
@@ -113,6 +118,8 @@ Route::post('users/{user}/{action}/permissions/{permission}', [UserController::c
 Route::post('user/{user}/profile-picture', [UserController::class, 'uploadProfilePicture']);
 
 Route::apiResource('customers', UserController::class)->except($except)->names('customers')->parameters(['customers' => 'user']);
+Route::get('notifications/{user}', [NotificationController::class, 'index']);
+
 Route::post('customers/reset-password/{user}', [UserController::class, 'resetPassword']);
 Route::post('customers/{user}/{action}/area-code/{areacode}', [UserController::class, 'modifyUserAreaCodes']);
 Route::post('customers/{user}/{action}/company-code/{company_code}', [UserController::class, 'modifyUserCompanyCode']);

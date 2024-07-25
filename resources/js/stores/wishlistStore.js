@@ -11,15 +11,18 @@ export const useWishlistStore = defineStore("wishlists", () => {
     });
 
     const getWishlists = async () => {
+        let data = [];
         try {
             loading.value = true;
             const res = await exec("/api/customer-wishlist");
 
             wishlists.value = res.data.data;
+            data = wishlists.value
         } catch (e) {
             errors.value = e;
         } finally {
             loading.value = false;
+            return data;
         }
     };
 

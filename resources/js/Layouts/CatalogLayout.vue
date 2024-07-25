@@ -1,6 +1,6 @@
 <template>
     <div class="bg-slate-100 text-sm text-slate-100">
-        <header class="sticky top-0 z-[2000]">
+        <header class="sticky top-0 z-[2000]" v-if="user !== null">
             <CatalogNav></CatalogNav>
         </header>
 
@@ -69,6 +69,9 @@ const handleHide = (el, hidden) => {
 const handleScrollToTop = () => {
     window.scrollTo({ top: 0 });
 };
+
+
+const user = inject('currentUser')
 </script>
 
 <style lang="scss" scoped></style>

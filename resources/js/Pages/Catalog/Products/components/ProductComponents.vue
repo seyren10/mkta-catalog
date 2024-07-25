@@ -9,7 +9,7 @@
                     ),
                 )"
             :key="component_data.id"
-            :class="'rounded-lg bg-white p-2' + ( component_data.type == 'table' ? ' col-span-2 ' : '' ) "
+            :class="'rounded-lg bg-transparent p-2' + ( component_data.type == 'table' ? ' col-span-2 ' : '' ) "
         >
             <h2
                 class="w-full border-b-2 py-2 text-[1.5rem] font-bold tracking-wide"

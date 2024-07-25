@@ -221,7 +221,7 @@ const UIs = ref([
         type: "list",
         title: "List Component",
         icon: "bi-list-ul",
-        default: [{ title: "", value: "" }],
+        default: [{ icon: "", title: "", value: "" }],
     },
     {
         type: "file",

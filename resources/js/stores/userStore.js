@@ -86,7 +86,7 @@ export const useUserStore = defineStore("user", () => {
             currentUser.value = res.data.data;
         } catch (err) {
             currentUser.value = null;
-            console.log(err);
+            // console.log(err);
         }
     };
     const getCurrentUserFullData = async () => {
