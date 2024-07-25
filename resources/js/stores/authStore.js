@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useAxios } from "@/composables/useAxios";
 import { useRouter } from "vue-router";
@@ -7,7 +7,7 @@ export const useAuthStore = defineStore("auth", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
 
-    const form = reactive({
+    const form = ref({
         email: null,
         password: null,
         remember: false,
@@ -16,9 +16,10 @@ export const useAuthStore = defineStore("auth", () => {
     const login = async () => {
         try {
             await exec("/sanctum/csrf-cookie", "get");
-            await exec("/login", "post", form);
+            await exec("/login", "post", form.value);
 
-            //when user is authenticated redirect them to the catalog route
+            /* when user is authenticated redirect
+             them to the catalog route */
             if (!errors.value) router.push({ name: "catalog" });
         } catch (e) {}
     };
@@ -26,8 +27,7 @@ export const useAuthStore = defineStore("auth", () => {
         try {
             await exec("/logout", "delete");
 
-            //when user is authenticated redirect them to the catalog route
-            if (!errors.value) await router.push({ name: "home" });
+            if (!errors.value) await router.push({ name: "login" });
         } catch (e) {}
     };
 

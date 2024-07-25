@@ -86,7 +86,7 @@
                 >
             </div>
             <section
-                class="primary-gradient rounded-lg p-3 text-[.8rem] md:col-span-2"
+                class="primary-gradient grid rounded-lg p-3 text-[.8rem] md:col-span-2 md:grid-cols-[1fr,18rem]"
             >
                 <v-text-icon
                     :items="infoList"
@@ -94,6 +94,8 @@
                     value-class="text-white"
                     icon-size="1"
                 />
+
+                <MKMap class="rounded-lg overflow-hidden"> </MKMap>
             </section>
         </div>
     </v-dialog>
@@ -104,6 +106,7 @@ import { ref, inject, computed } from "vue";
 import { storeToRefs } from "pinia";
 
 import WishlistItem from "./WishlistItem.vue";
+import MKMap from "@/components/MKMap.vue";
 
 const wishlistDialog = ref(false);
 

@@ -6,9 +6,9 @@ export const useAxios = (method, options) => {
 
     const exec = async (url, method = "get", requestData = null) => {
         loading.value = true;
+
         try {
             let res = null;
-
 
             switch (method) {
                 case "get":
@@ -17,10 +17,10 @@ export const useAxios = (method, options) => {
                     });
                     break;
                 case "post":
-                    res = await axios.post(url, requestData,{
-                        headers:{
-                            'Content-Type': 'multipart/form-data'
-                        }
+                    res = await axios.post(url, requestData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
                     });
                     break;
                 case "patch":

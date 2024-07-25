@@ -18,6 +18,7 @@ class AuthController extends Controller
     {
         $this->UserServices = $UserServices;
     }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -25,7 +26,10 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
+
+        $remember = $request->remember === 'true' ?  true : false;
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
             return response()->noContent();

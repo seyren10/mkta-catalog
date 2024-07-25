@@ -1,13 +1,17 @@
 <template>
-    <h3 class="p-3 text-[1rem] font-medium text-primary">Recently Viewed</h3>
-    <ul class="grid gap-2 divide-slate-300">
-        <li class="flex cursor-pointer gap-3 rounded-lg bg-transparent justify-end">
-            <v-button class="bg-white " @click="clearRecent">
+    <div
+        class="flex items-center justify-between p-3 text-[1rem] font-medium text-primary"
+    >
+        <h3>Recently Viewed</h3>
+        <div v-if="recentItems.length">
+            <v-tooltip activator="parent">clear recently view items</v-tooltip>
+            <v-button class="bg-white" @click="clearRecent">
                 <v-icon name="fa-trash-alt"></v-icon>
             </v-button>
-        </li>
+        </div>
+    </div>
+    <ul class="grid gap-2 divide-slate-300">
         <li
-            
             class="flex cursor-pointer gap-3 rounded-lg bg-slate-200 p-2 hover:bg-white"
             v-for="(item, index) in recentItems"
         >
@@ -49,10 +53,10 @@ const loadRecent = () => {
     }
     recentItems.value = recent.reverse();
 };
-const clearRecent = ()=>{
-    localStorage.removeItem("recent")
+const clearRecent = () => {
+    localStorage.removeItem("recent");
     loadRecent();
-}
+};
 loadRecent();
 </script>
 

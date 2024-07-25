@@ -76,6 +76,7 @@
                 <div class="hidden cursor-pointer items-center gap-2 md:flex">
                     <span class="underline">{{ user?.name }}</span>
                     <router-link :to="{ name: 'profile' }">
+                        <v-tooltip activator="parent">Profile</v-tooltip>
                         <img
                             src="/mk-images/hero-images/4.png"
                             alt="profile"
@@ -135,7 +136,7 @@
                                         >
                                             <template #overlay="data">
                                                 <div
-                                                    class="absolute left-0 top-0 bg-accent px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
+                                                    class="absolute left-0 top-0 bg-black bg-opacity-25 px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
                                                 >
                                                     {{ data.title }}
                                                 </div>

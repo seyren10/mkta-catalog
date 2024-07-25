@@ -16,7 +16,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
-        'role_id'
+        'role_id',
+        'first_time_login'
     ];
     protected $hidden = [
         'created_at',
@@ -42,6 +43,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'first_time_login' => 'boolean'
         ];
     }
     public function non_wishlist_products()

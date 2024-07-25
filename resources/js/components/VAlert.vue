@@ -1,6 +1,6 @@
 <template>
     <VIconWrapper
-        class="flex gap-2 rounded-lg px-2 py-3"
+        class="flex gap-2 rounded-lg p-3"
         :class="alertType.class"
         :prepend-inner-icon="alertType.icon"
     >
@@ -33,25 +33,25 @@ const alertType = computed(() => {
     switch (props.type) {
         case "info": {
             return {
-                class: "bg-blue-200 text-blue-400",
+                class: "bg-blue-200 bg-opacity-75 text-blue-500",
                 icon: "pr-info-circle",
             };
         }
         case "success": {
             return {
-                class: "bg-green-200 text-green-400",
+                class: "bg-green-200 bg-opacity-75 text-green-500",
                 icon: "pr-check-circle",
             };
         }
         case "error": {
             return {
-                class: "bg-red-200 text-red-400",
+                class: "bg-red-200 bg-opacity-75 text-red-500",
                 icon: "pr-times-circle",
             };
         }
         case "warning": {
             return {
-                class: "bg-orange-200 text-orange-400",
+                class: "bg-orange-200 bg-opacity-75 text-orange-500",
                 icon: "pr-exclamation-circle",
             };
         }

@@ -125,18 +125,47 @@
                 </template>
             </v-horizontal-scroller>
         </section>
+        <!-- #endregion subcategories -->
+
+        <v-dialog
+            v-model="firstTimeLogin"
+            max-width="500"
+            persistent
+            v-if="user.first_time_login"
+        >
+            <template #header="data">
+                <div class="flex items-center justify-between p-4 pb-0">
+                    <h3 class="font-medium">First time login</h3>
+                    <v-button
+                        icon="la-times-solid"
+                        icon-size=".9"
+                        v-bind="data"
+                    ></v-button>
+                </div>
+            </template>
+            <div class="p-4 text-sm">
+                Hi {{ user.name }}, since this is your first time logging in, we
+                recommend that you set your password immediately.
+                <em class="text-xs text-slate-400">
+                    ( or set it later by clicking on your profile )
+                </em>
+                <FirstTimeLoginForm class="mt-4 p-3"></FirstTimeLoginForm>
+            </div>
+        </v-dialog>
     </div>
 </template>
 
 <script setup>
 import { inject, ref } from "vue";
+import { storeToRefs } from "pinia";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
-import { storeToRefs } from "pinia";
+import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
 
 //stores
 const { categories } = storeToRefs(inject("categoryStore"));
-
+const user = inject("currentUser");
+const firstTimeLogin = ref(true);
 //reactives
 
 //async

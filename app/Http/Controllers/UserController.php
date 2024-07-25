@@ -14,7 +14,9 @@ use App\Models\UserArea;
 use App\Models\UserCompany;
 use App\Models\UserPermission;
 use App\Services\UserServices;
+use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -73,7 +75,8 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User created successfully',
             'user' => $user,
-            'password' => $password], 200);
+            'password' => $password
+        ], 200);
     }
 
     /**
@@ -110,6 +113,23 @@ class UserController extends Controller
     {
         //
     }
+
+    public function changePasswordFirstTime(Request $request)
+    {
+        if (!$request->user()->first_time_login) throw new Error('Password is already set');
+
+        $validated = $request->validate([
+            'password' => ['required', 'confirmed', 'min:8']
+        ]);
+
+        $request->user()->update([
+            ...$validated,
+            'first_time_login' => false,
+        ]);
+
+
+        return response()->noContent();
+    }
     #endregion
     public static function updateRole(User $user, Role $role)
     {
@@ -127,6 +147,7 @@ class UserController extends Controller
     {
         $password = Str::random(10);
         $user->password = Hash::make($password);
+        $user->first_time_login = true;
         $user->save();
         return response()->json(["message" => "Password has been reset", 'password' => $password], 200);
     }
@@ -217,7 +238,8 @@ class UserController extends Controller
                 break;
         }
     }
-    public static function uploadProfilePicture(User $user, Request $request){
+    public static function uploadProfilePicture(User $user, Request $request)
+    {
         try {
             DB::beginTransaction();
 

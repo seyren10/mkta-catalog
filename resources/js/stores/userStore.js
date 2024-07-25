@@ -65,6 +65,9 @@ export const useUserStore = defineStore("user", () => {
             console.log(e);
         }
     };
+    const changePasswordFirstTime = async (form) => {
+        await exec("/api/users/change-password-first-time", "post", form);
+    };
     const changePassword = async (id) => {
         try {
             const res = await exec(
@@ -143,6 +146,7 @@ export const useUserStore = defineStore("user", () => {
         resetForm,
         resetPassword,
         changePassword,
+        changePasswordFirstTime,
         addUser,
         modifyUserPermissions,
         updateUser,

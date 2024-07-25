@@ -4,6 +4,7 @@ import { useUserStore } from "@/stores/userStore";
 import home_routes from "./router_home.js";
 import admin_routes from "./router_admin.js";
 import catalog_routes from "./router_catalog.js";
+import { storeToRefs } from "pinia";
 
 const routes = [
     {
@@ -39,12 +40,17 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     const userStore = useUserStore();
+    const { currentUser } = storeToRefs(userStore);
+
+    if (to.hash) {
+        return;
+    }
 
     if (to.meta.fullUserData) {
         await userStore.getCurrentUserFullData();
     } else await userStore.getCurrentUser();
 
-    if (to.meta.requiresAuth && !userStore.currentUser) {
+    if (to.meta.requiresAuth && !currentUser.value) {
         return {
             name: "login",
         };

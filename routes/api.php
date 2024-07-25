@@ -111,6 +111,7 @@ Route::delete('product-filter/{product}/{filter}/{filter_choice}', [ProductFilte
 
 
 Route::apiResource('users', UserController::class)->except($except);
+Route::post('users/change-password-first-time', [UserController::class, 'changePasswordFirstTime']);
 Route::put('users/change-password/{user}', [UserController::class, 'changePassword']);
 Route::post('users/reset-password/{user}', [UserController::class, 'resetPassword']);
 Route::post('users/{user}/{action}/permissions/{permission}', [UserController::class, 'modifyUserPermissions']);
