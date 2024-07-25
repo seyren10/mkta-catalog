@@ -175,17 +175,6 @@
                 </div>
             </template>
         </v-tab>
-
-        <v-toast
-            :type="!isIncludedInWishlist() ? 'danger' : 'success'"
-            v-model="toast"
-        >
-            {{
-                !isIncludedInWishlist()
-                    ? "Item removed from wishlist."
-                    : "Item added to wishlist."
-            }}
-        </v-toast>
     </div>
 </template>
 
@@ -209,8 +198,7 @@ const wishlistStore = useWishlistStore();
 const { loading, wishlists } = storeToRefs(wishlistStore);
 const IMPERIAL_lENGTH = 2.54;
 const IMPERIAL_POUND = 2.205;
-
-const toast = ref(false);
+const toast = inject("toast");
 
 const isIncludedInWishlist = () =>
     wishlistStore.isIncludedOnWishlist(product.value);
@@ -219,7 +207,12 @@ const addToWishlist = async () => {
     await wishlistStore.addToWishlist(product.value);
     await wishlistStore.getWishlists();
 
-    toast.value = true;
+    toast({
+        props: {
+            type: "success",
+        },
+        content: `${product.value.title} added to wishlist`,
+    });
 };
 
 const removeFromWishlist = async () => {
@@ -231,7 +224,13 @@ const removeFromWishlist = async () => {
 
     if (wishlist) await wishlistStore.deleteWishlist(wishlist.id);
     await wishlistStore.getWishlists();
-    toast.value = true;
+    // toast.value = true;
+    toast({
+        props: {
+            type: "danger",
+        },
+        content: `${product.value.title} removed from wishlist`,
+    });
 };
 
 const breadCrumbData = computed(() => {

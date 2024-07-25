@@ -31,7 +31,6 @@ import VChipInput from "./components/Chips/VChipInput.vue";
 import VChipGroup from "./components/Chips/VChipGroup.vue";
 import VChip from "./components/Chips/VChip.vue";
 import VBadge from "./components/VBadge.vue";
-import VToast from "./components/Toast/VToast.vue";
 
 //custom directives
 import intersect from "@/directives/intersectionObserver.js";
@@ -73,7 +72,6 @@ app.component("v-chip-input", VChipInput);
 app.component("v-chip-group", VChipGroup);
 app.component("v-chip", VChip);
 app.component("v-badge", VBadge);
-app.component("v-toast", VToast);
 
 //directives
 app.directive("intersect", intersect);

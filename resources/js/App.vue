@@ -13,6 +13,8 @@
             </Suspense>
         </template>
     </RouterView>
+
+    <VToaster v-bind="toaster"></VToaster>
 </template>
 
 <script setup>
@@ -24,12 +26,15 @@ import { useWishlistStore } from "./stores/wishlistStore";
 import { useFilterStore } from "@/stores/filterStore";
 import { useProductStore } from "./stores/productStore";
 import { RouterView, useRouter } from "vue-router";
+import { useToaster } from "./composables/useToaster";
 
 import VLoader from "./components/base_components/VLoader.vue";
+import VToaster from "./components/Toast/VToaster.vue";
 
 const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
 const router = useRouter();
+const { toaster, addToast } = useToaster({ timeout: 3000 });
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
@@ -66,4 +71,5 @@ provide("copyText", (text) => {
         document.getSelection().addRange(selected);
     }
 });
+provide("toast", addToast);
 </script>

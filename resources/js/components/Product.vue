@@ -86,16 +86,6 @@
                 </div>
             </div>
         </slot>
-
-        <v-toast
-            :type="isIncludedOnWishlist() ? 'success' : 'danger'"
-            v-model="toast"
-        >
-            <template v-if="isIncludedOnWishlist()">
-                Item added to wishlist.
-            </template>
-            <template v-else> Item removed from wishlist. </template>
-        </v-toast>
     </div>
 </template>
 
@@ -114,10 +104,9 @@ const props = defineProps({
     },
 });
 
-const toast = ref(false);
-
 const wishlistStore = inject("wishlistStore");
 const { loading, wishlists } = storeToRefs(wishlistStore);
+const toast = inject("toast");
 
 const isIncludedOnWishlist = () => {
     return wishlistStore.isIncludedOnWishlist(props.item);
@@ -128,7 +117,13 @@ const handleAddToWishlist = async () => {
     await wishlistStore.getWishlists();
 
     //show add toast
-    toast.value = true;
+    toast({
+        props: {
+            type: "success",
+        },
+        timeout: 5000,
+        content: `${props.item.title} added to wishlist`,
+    });
 };
 
 const handleRemoveFromWishlist = async () => {
@@ -142,7 +137,14 @@ const handleRemoveFromWishlist = async () => {
     await wishlistStore.getWishlists();
 
     //show delete toast
-    toast.value = true;
+    toast({
+        props: {
+            type: "info",
+        },
+        timeout: 1000,
+
+        content: `${props.item.title} removed from wishlist`,
+    });
 };
 const s3 = inject("s3");
 </script>
