@@ -3,7 +3,7 @@
         <li v-for="(listItem, index) in JSON.parse(value)">
             <div class="group relative flex items-center gap-x-2 rounded-lg p-1 text-sm hover:bg-gray-50">
               <div>
-                <v-icon :name="(listItem.icon) != '' ? listItem.icon  :  'la-cog-solid'" scale="1.3"></v-icon>
+                <v-icon :name="((listItem.icon) != '') || ( listItem.icon == undefined ) ? listItem.icon  :  'la-cog-solid'" scale="1.3"></v-icon>
               </div>
               <div class="flex-auto">
                 <p  class="block font-semibold text-gray-900">

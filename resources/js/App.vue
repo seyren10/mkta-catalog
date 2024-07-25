@@ -3,7 +3,6 @@
         <template v-if="Component">
             <Suspense timeout="0">
                 <component :is="Component" />
-
                 <template v-slot:fallback>
                     <!-- <Spinner /> -->
                     <div class="absolute inset-0 grid place-content-center">
@@ -17,12 +16,14 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { provide } from "vue";
+import { provide, ref } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useWishlistStore } from "./stores/wishlistStore";
 import { useFilterStore } from "@/stores/filterStore";
 import { useProductStore } from "./stores/productStore";
+import { useNotificationStore } from "./stores/notificationStore.js";
+
 import { RouterView, useRouter } from "vue-router";
 
 import VLoader from "./components/base_components/VLoader.vue";
@@ -35,6 +36,9 @@ const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 const wishlistStore = useWishlistStore();
 const filterStore = useFilterStore();
+const notificationStore = useNotificationStore();
+const { notifications, isRefreshing } = storeToRefs(notificationStore);
+
 
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
@@ -66,4 +70,10 @@ provide("copyText", (text) => {
         document.getSelection().addRange(selected);
     }
 });
+const sec = ref(60);
+setInterval( async() => {
+    if( currentUser.value !== null && isRefreshing){
+        await notificationStore.getNotifications( currentUser.value.id);
+    }
+}, 1000 * sec.value );
 </script>

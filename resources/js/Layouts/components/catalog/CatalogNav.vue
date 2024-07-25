@@ -17,16 +17,18 @@
             <!-- #endregion toolbar-header -->
 
             <!-- #region mobile-user-avatar -->
-            <div
+            <!-- <div
+                
                 class="ml-auto flex w-fit cursor-pointer items-center gap-2 py-2 md:hidden"
             >
-                <span class="text-slate-200 underline">{{ user.name }}</span>
+            sa
+                <span class="text-slate-200 underline">{{ user?.name }}ss</span>
                 <img
                     src="/mk-images/hero-images/3.png"
                     alt="profile"
                     class="max-w-5 rounded-full bg-white ring ring-slate-700"
                 />
-            </div>
+            </div> -->
             <!-- #endregion mobile-user-avatar -->
 
             <div class="mt-3 flex items-center justify-between gap-5">
@@ -72,7 +74,7 @@
 
                 <!-- #region user-avatar -->
                 <div class="hidden cursor-pointer items-center gap-2 md:flex">
-                    <span class="underline">{{ user.name }}</span>
+                    <span class="underline">{{ user?.name }}</span>
                     <router-link :to="{ name: 'profile' }">
                         <img
                             src="/mk-images/hero-images/4.png"

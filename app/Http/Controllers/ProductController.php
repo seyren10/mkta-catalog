@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Jobs\ZipProductImages;
 use App\Models\Category;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductFilter;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Storage;
+use Madnest\Madzipper\Madzipper;
 
 class ProductController extends Controller
 {
@@ -150,6 +153,10 @@ class ProductController extends Controller
             ), 422);
             DB::rollback();
         }
+    }
+    public static function zipProductImages(Product $product){
+        dispatch(new ZipProductImages($product->id, Auth()->user()->id));
+        return response()->noContent();
     }
     #endregion
 

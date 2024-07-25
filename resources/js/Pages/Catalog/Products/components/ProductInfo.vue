@@ -168,6 +168,10 @@
                         </p>
                     </div>
                     <v-button
+                        @click="()=>{
+                            showDownloadToast = true;
+                            productStore.zipProductImages(product.id)
+                        }"
                         prepend-inner-icon="oi-file-zip"
                         class="bg-accent text-white"
                         >Download ZIP file</v-button
@@ -175,6 +179,16 @@
                 </div>
             </template>
         </v-tab>
+
+
+        <v-toast
+            :timeout="10000"
+
+            type="success"
+            v-model="showDownloadToast"
+        >
+        We are currently preparing the file; please wait. You will receive a notification when the file is ready.
+        </v-toast>
 
         <v-toast
             :type="!isIncludedInWishlist() ? 'danger' : 'success'"
@@ -192,6 +206,8 @@
 <script setup>
 import { inject, computed, ref } from "vue";
 import { useWishlistStore } from "../../../../stores/wishlistStore";
+import { useProductStore } from "../../../../stores/productStore.js";
+
 import { storeToRefs } from "pinia";
 
 import ContactSales from "@/components/ContactSales.vue";
@@ -206,6 +222,8 @@ const s3 = inject("s3");
 const conversion = ref("metric");
 const contact = ref(false);
 const wishlistStore = useWishlistStore();
+const productStore = useProductStore();
+
 const { loading, wishlists } = storeToRefs(wishlistStore);
 const IMPERIAL_lENGTH = 2.54;
 const IMPERIAL_POUND = 2.205;
@@ -264,6 +282,11 @@ const product = computed(() => {
 const variants = computed(() => {
     return product.value.variants;
 });
+
+
+const showDownloadToast = ref(false);
+
+
 </script>
 
 <style lang="scss" scoped></style>

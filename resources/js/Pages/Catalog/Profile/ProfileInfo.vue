@@ -8,18 +8,17 @@
                 no-overlay
             ></v-text-on-image>
         </div>
-
         <ul class="mt-5 grid gap-2">
             <li class="flex items-center gap-3">
-                <span class="text-slate-400">name:</span>
+                <span class="text-slate-400">Name:</span>
                 <span>{{ user.name }}</span>
             </li>
             <li class="flex items-center gap-3">
-                <span class="text-slate-400">email:</span>
+                <span class="text-slate-400">Email:</span>
                 <span>{{ user.email }}</span>
             </li>
             <li class="flex items-center gap-3">
-                <span class="text-slate-400">status:</span>
+                <span class="text-slate-400">Status:</span>
                 <span
                     :class="`${userStatusColor} rounded-lg px-2 py-1 text-xs`"
                     >{{ userStatus }}</span
@@ -28,26 +27,14 @@
         </ul>
         <ul>
             <li class="flex items-center gap-3">
-                <span class="text-slate-400">areas:</span>
+                <span class="text-slate-400">Areas:</span>
                 <span> {{ userAreas }}</span>
             </li>
             <li class="flex items-center gap-3">
-                <span class="text-slate-400">companies:</span>
+                <span class="text-slate-400">Companies:</span>
                 <span> {{ userCompanies }}</span>
             </li>
         </ul>
-
-        <div class="mt-auto">
-            <v-button
-                append-inner-icon="pr-sign-out"
-                icon-size="1"
-                outlined
-                class="w-full"
-                :loading="loading"
-                @click="handleLogout"
-                >Logout</v-button
-            >
-        </div>
     </div>
 </template>
 
@@ -89,7 +76,7 @@ const userCompanies = computed(() => {
         .join(",");
 });
 
-async function handleLogout() {
+const  handleLogout = async() => {
     await authStore.logout();
     await router.push({ name: "login" });
 }

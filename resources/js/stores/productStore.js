@@ -209,11 +209,18 @@ export const useProductStore = defineStore("products", () => {
         }
     }
 
+    const zipProductImages = async(product_id)=>{
+        try {
+            const res = await exec("/api/product-images/zip/" + product_id, "get", {});
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     return {
         getProductItemsWithCategoryId,
 
-
+        zipProductImages,
 
         getProductFilter,
         addProductFilter,
