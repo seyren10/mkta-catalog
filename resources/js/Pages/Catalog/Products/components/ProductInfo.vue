@@ -128,7 +128,6 @@
                             >Imperial</v-button
                         >
                     </div>
-
                     <ul class="grid grid-cols-2 gap-3">
                         <li
                             v-for="(detail, key) in product.details"
@@ -141,6 +140,10 @@
                             <span v-html="detail"> </span>
                         </li>
                     </ul>
+                    <div class="py-2 text-justify" >
+                        <v-icon class="me-2" name="pr-info-circle"></v-icon>
+                        While we make every effort to ensure accuracy, actual product dimensions may vary slightly due to manufacturing processes or measurement techniques.
+                    </div>
                 </div>
             </template>
             <template #content.download>
