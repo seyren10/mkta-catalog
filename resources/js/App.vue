@@ -35,7 +35,7 @@ import VToaster from "./components/Toast/VToaster.vue";
 const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
 const router = useRouter();
-const { toaster, addToast } = useToaster({ timeout: 3000 });
+const { toaster, addToast, deleteToast } = useToaster({ timeout: 3000 });
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
@@ -43,7 +43,6 @@ const wishlistStore = useWishlistStore();
 const filterStore = useFilterStore();
 const notificationStore = useNotificationStore();
 const { notifications, isRefreshing } = storeToRefs(notificationStore);
-
 
 provide("categoryStore", categoryStore);
 provide("productStore", productStore);
@@ -75,11 +74,14 @@ provide("copyText", (text) => {
         document.getSelection().addRange(selected);
     }
 });
+
+provide("addToast", addToast);
+provide("deleteToast", deleteToast);
+
 const sec = ref(60);
-setInterval( async() => {
-    if( currentUser.value !== null && isRefreshing){
-        await notificationStore.getNotifications( currentUser.value.id);
+setInterval(async () => {
+    if (currentUser.value !== null && isRefreshing) {
+        await notificationStore.getNotifications(currentUser.value.id);
     }
-}, 1000 * sec.value );
-provide("toast", addToast);
+}, 1000 * sec.value);
 </script>

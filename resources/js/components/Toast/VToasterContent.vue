@@ -14,20 +14,19 @@
                 <slot> </slot>
             </div>
 
-            <div v-if="!closable" class="text-primary">
+            <div v-if="closable" class="text-primary">
                 <v-button
                     icon="md-close-round"
                     icon-size=".9"
-                    @click="emit('close')"
+                    @click="deleteToast(id)"
                 ></v-button>
             </div>
         </div>
-        <div class="h-1" :class="`${computedType.bgClass}`"></div>
     </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = defineProps({
     type: {
@@ -39,7 +38,10 @@ const props = defineProps({
         type: [String, Object],
         default: "",
     },
+    id: String,
 });
+
+const deleteToast = inject("deleteToast");
 
 const computedType = computed(() => {
     switch (props.type) {

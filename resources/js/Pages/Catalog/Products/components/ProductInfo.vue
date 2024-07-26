@@ -168,10 +168,12 @@
                         </p>
                     </div>
                     <v-button
-                        @click="()=>{
-                            showDownloadToast = true;
-                            productStore.zipProductImages(product.id)
-                        }"
+                        @click="
+                            () => {
+                                showDownloadToast = true;
+                                productStore.zipProductImages(product.id);
+                            }
+                        "
                         prepend-inner-icon="oi-file-zip"
                         class="bg-accent text-white"
                         >Download ZIP file</v-button
@@ -179,17 +181,6 @@
                 </div>
             </template>
         </v-tab>
-
-        <v-toast
-            :type="!isIncludedInWishlist() ? 'danger' : 'success'"
-            v-model="toast"
-        >
-            {{
-                !isIncludedInWishlist()
-                    ? "Item removed from wishlist."
-                    : "Item added to wishlist."
-            }}
-        </v-toast>
     </div>
 </template>
 
@@ -217,7 +208,7 @@ const productStore = useProductStore();
 const { loading, wishlists } = storeToRefs(wishlistStore);
 const IMPERIAL_lENGTH = 2.54;
 const IMPERIAL_POUND = 2.205;
-const toast = inject("toast");
+const addToast = inject("addToast");
 
 const isIncludedInWishlist = () =>
     wishlistStore.isIncludedOnWishlist(product.value);
@@ -226,9 +217,10 @@ const addToWishlist = async () => {
     await wishlistStore.addToWishlist(product.value);
     await wishlistStore.getWishlists();
 
-    toast({
+    addToast({
         props: {
             type: "success",
+            closable: true,
         },
         content: `${product.value.title} added to wishlist`,
     });
@@ -244,9 +236,9 @@ const removeFromWishlist = async () => {
     if (wishlist) await wishlistStore.deleteWishlist(wishlist.id);
     await wishlistStore.getWishlists();
     // toast.value = true;
-    toast({
+    addToast({
         props: {
-            type: "danger",
+            type: "info",
         },
         content: `${product.value.title} removed from wishlist`,
     });
@@ -283,10 +275,7 @@ const variants = computed(() => {
     return product.value.variants;
 });
 
-
 const showDownloadToast = ref(false);
-
-
 </script>
 
 <style lang="scss" scoped></style>

@@ -9,7 +9,7 @@
             >
                 <VToasterContent
                     v-for="child in children"
-                    :key="child.id"
+                    :key="child.props.id"
                     v-bind="child.props"
                 >
                     {{ child.content }}

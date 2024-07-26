@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 export const useToaster = (props) => {
     const toaster = ref({
@@ -10,7 +10,7 @@ export const useToaster = (props) => {
     const intervalId = ref(null);
 
     function addToast(options) {
-        options.id = Math.floor(Math.random() * 10_000).toString();
+        options.props.id = Math.floor(Math.random() * 10_000).toString();
 
         toaster.value.children.push(options);
 
@@ -29,5 +29,11 @@ export const useToaster = (props) => {
         }, toaster.value.children[0].timeout || toaster.value.timeout);
     }
 
-    return { toaster: toaster.value, addToast };
+    function deleteToast(toastId) {
+        toaster.value.children = toaster.value.children.filter(
+            (t) => t.props.id !== toastId,
+        );
+    }
+
+    return { toaster: toaster.value, addToast, deleteToast };
 };

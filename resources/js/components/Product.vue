@@ -106,7 +106,7 @@ const props = defineProps({
 
 const wishlistStore = inject("wishlistStore");
 const { loading, wishlists } = storeToRefs(wishlistStore);
-const toast = inject("toast");
+const addToast = inject("addToast");
 
 const isIncludedOnWishlist = () => {
     return wishlistStore.isIncludedOnWishlist(props.item);
@@ -117,11 +117,11 @@ const handleAddToWishlist = async () => {
     await wishlistStore.getWishlists();
 
     //show add toast
-    toast({
+    addToast({
         props: {
             type: "success",
         },
-        timeout: 5000,
+
         content: `${props.item.title} added to wishlist`,
     });
 };
@@ -137,11 +137,10 @@ const handleRemoveFromWishlist = async () => {
     await wishlistStore.getWishlists();
 
     //show delete toast
-    toast({
+    addToast({
         props: {
             type: "info",
         },
-        timeout: 1000,
 
         content: `${props.item.title} removed from wishlist`,
     });
