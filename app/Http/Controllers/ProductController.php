@@ -60,6 +60,20 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
+    public function latestProducts(Request $request)
+    {
+        $count = $request->has('count') ? $request->count :  20;
+
+        return ProductResource::collection(Product::latest()->take($count)->get());
+    }
+
+    public function randomProducts(Request $request)
+    {
+        $count = $request->has('count') ? $request->count :  20;
+
+        return ProductResource::collection(Product::inRandomOrder()->take($count)->get());
+    }
+
     public function getProductsWithCategoryId(Request $request, Category $category)
     {
         $query = Product::whereHas('product_categories', function ($query) use ($category) {
@@ -154,7 +168,8 @@ class ProductController extends Controller
             DB::rollback();
         }
     }
-    public static function zipProductImages(Product $product){
+    public static function zipProductImages(Product $product)
+    {
         dispatch(new ZipProductImages($product->id, Auth()->user()->id));
         return response()->noContent();
     }

@@ -18,9 +18,9 @@
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
             <div
                 v-for="item in items"
-                :class="`overflow-hidden rounded-lg ${item.imageClass}`"
+                class="overflow-hidden rounded-lg border bg-primary text-white"
             >
-                <Product :item="item" class="bg-slate-1000">
+                <Product :item="item" class="bg-slate-1000" no-overlay>
                     <template
                         v-for="(_, slotName) in $slots"
                         #[slotName]="{ item: props }"

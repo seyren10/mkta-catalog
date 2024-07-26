@@ -68,11 +68,15 @@ Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [
 Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
 
 #region Product Routes
-Route::get('product/cached', [ProductController::class, 'indexCached']);
+
+
+Route::prefix('product')->controller(ProductController::class)->group(function () {
+    Route::get('/latest', [ProductController::class, 'latestProducts']);
+    Route::get('/cached', [ProductController::class, 'indexCached']);
+    Route::get('/random', [ProductController::class, 'randomProducts']);
+});
 Route::apiResource('product', ProductController::class)->except($except);
 Route::get('product-images/zip/{product}', [ProductController::class, "zipProductImages"]);
-
-
 
 Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
 Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
@@ -96,6 +100,7 @@ Route::get('products/related/{product}', [RelatedProductController::class, 'show
 #endregion 
 
 #region Recommended Product
+
 Route::apiResource('products/recommended', RecommendedProductController::class)->only(['destroy']);
 Route::post('products/recommended/{product}/{recommendedProduct}', [RecommendedProductController::class, 'store']);
 Route::get('products/recommended/{product}', [RecommendedProductController::class, 'show']);
