@@ -5,11 +5,10 @@
             <div>
                 <v-heading type="h2">Reach us</v-heading>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Omnis magnam quam sequi corrupti in, cupiditate sapiente
-                    voluptas, at consectetur, ad commodi recusandae
-                    necessitatibus aliquam facilis? Minima quam molestias labore
-                    accusantium.
+                    We'd love to hear from you! Whether you have questions, need
+                    support, or want to share your feedback, feel free to reach
+                    out to us. Our team is dedicated to providing you with the
+                    best assistance possible.
                 </p>
 
                 <v-text-icon :items="infoList" class="my-5 grid" />

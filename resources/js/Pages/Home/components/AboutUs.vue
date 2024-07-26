@@ -5,45 +5,37 @@
             <div
                 class="overflow-hidden rounded-lg bg-red-100 md:col-span-3 md:max-h-56"
             >
-                <VImageTextOverlay
+                <v-text-on-image
                     title="Nutcrackers"
-                    src="/mk-images/nutcrackers.jpg"
-                    class="h-full w-full"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat magnam fugit enim in sint quis nemo nobis modi
-                    quaerat.</VImageTextOverlay
-                >
+                    :image="s3('aiayJKSffhV6yJkYmlfaOVThtayDrlFh61tgWU7o.jpg')"
+                    class="h-full"
+                    no-overlay
+                ></v-text-on-image>
             </div>
 
             <div class="overflow-hidden rounded-lg bg-red-200">
-                <VImageTextOverlay
+                <v-text-on-image
                     title="Witch"
-                    src="/mk-images/halloween.jpg"
-                    class="h-full w-full"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat magnam fugit enim in sint quis nemo nobis modi
-                    quaerat.</VImageTextOverlay
-                >
+                    :image="s3('ikKZguF9HWpoa6jRM6sjlqoiOxYEd9ZBX8d03Lwp.jpg')"
+                    class="h-full"
+                    no-overlay
+                ></v-text-on-image>
             </div>
             <div class="overflow-hidden rounded-lg bg-red-300 md:col-span-2">
-                <VImageTextOverlay
+                <v-text-on-image
                     title="InLiteFi"
-                    src="/mk-images/inlitefi.jpg"
-                    class="h-full w-full"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat magnam fugit enim in sint quis nemo nobis modi
-                    quaerat.</VImageTextOverlay
-                >
+                    :image="s3('msIIdY6EnCf4VDIFnnROQ78WEaWQSliUpYrjv4tm.jpg')"
+                    class="h-full"
+                    no-overlay
+                ></v-text-on-image>
             </div>
             <div class="overflow-hidden rounded-lg bg-red-400 md:row-span-2">
-                <VImageTextOverlay
+                <v-text-on-image
                     title="Winter"
-                    src="/mk-images/winter.jpg"
-                    class="h-full w-full"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat magnam fugit enim in sint quis nemo nobis modi
-                    quaerat.</VImageTextOverlay
-                >
+                    :image="s3('EwWzSTCCLqXOGCYOOFsucvEI1XcwKIV7QgXnhiIL.jpg')"
+                    class="h-full"
+                    no-overlay
+                ></v-text-on-image>
             </div>
 
             <div
@@ -78,42 +70,40 @@
             <div
                 class="overflow-hidden rounded-lg bg-red-700 md:col-span-1 md:row-span-2"
             >
-                <VImageTextOverlay
+                <v-text-on-image
                     title="Witch"
-                    src="/mk-images/halloween.jpg"
-                    class="h-full w-full"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat magnam fugit enim in sint quis nemo nobis modi
-                    quaerat.</VImageTextOverlay
-                >
+                    :image="s3('CF4K0me1eX98nDZgffM2yvZakGryDBWw91SGRf6s.jpg')"
+                    class="h-full"
+                    no-overlay
+                ></v-text-on-image>
             </div>
             <div
                 class="overflow-hidden rounded-lg bg-red-800 md:col-span-4 md:max-h-56"
             >
-                <VImageTextOverlay
-                    src="/mk-images/creation_group.png"
-                    class="h-full w-full"
-                    no-popup
-                ></VImageTextOverlay>
+                <v-text-on-image
+                    :image="s3('qHAjp9RAHnR8CUsxd7nQzqZTzXKdrluHECZQmZ0M.jpg')"
+                    no-overlay
+                    class="h-full"
+                ></v-text-on-image>
             </div>
             <div
                 class="overflow-hidden rounded-lg bg-red-600 md:col-span-2 md:max-h-56"
             >
-                <VImageTextOverlay
+                <v-text-on-image
                     title="Winter"
-                    src="/mk-images/winter.jpg"
+                    :image="s3('xtMDWidjQGtrUQuFHL8p1pgWnNMNfsTv9xNKgqXo.jpg')"
                     class="h-full w-full"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat magnam fugit enim in sint quis nemo nobis modi
-                    quaerat.</VImageTextOverlay
-                >
+                    no-overlay
+                ></v-text-on-image>
             </div>
         </div>
     </section>
 </template>
 
 <script setup>
-import VImageTextOverlay from "../../../components/VImageTextOverlay.vue";
+import { inject } from "vue";
+
+const s3 = inject("s3");
 </script>
 
 <style scoped></style>
