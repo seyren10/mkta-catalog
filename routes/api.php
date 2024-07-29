@@ -59,6 +59,7 @@ Route::apiResource('roles', RolesController::class)->except(['create', 'edit']);
 Route::apiResource('permissions', PermissionController::class)->except(['create', 'edit']);
 Route::apiResource('categories', CategoryController::class)->except(['create', 'edit']);
 Route::put('categories/image/{category}', [CategoryController::class, 'updateCoverPhoto']);
+Route::put('categories/banner-image/{category}', [CategoryController::class, 'updateBannerImage']);
 
 
 

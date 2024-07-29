@@ -4,10 +4,10 @@
         v-intersect="handleIntersect"
     >
         <img
-            src="/Logo.svg"
+            src="/Logo.png"
             ref="imageRef"
             alt=""
-            class="h-full w-full bg-white object-cover duration-300 group-hover/toi:scale-105"
+            class="h-full w-full bg-primary object-cover duration-300 group-hover/toi:scale-105"
         />
         <slot
             name="overlay"
@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 
 const props = defineProps({
     image: String,
@@ -68,6 +68,11 @@ onMounted(() => {
     imageRef.value.addEventListener("error", (e) => {
         e.target.setAttribute("src", "/illustrations/no-photo.jpg");
     });
+});
+
+onUpdated(() => {
+    //update the image when props.image udpated.
+    imageRef.value.setAttribute("src", props.image);
 });
 //methods
 const handleIntersect = (entry) => {

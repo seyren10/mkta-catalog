@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::where('parent_id',0)->get());
+        return CategoryResource::collection(Category::where('parent_id', 0)->get());
     }
 
     /**
@@ -52,7 +52,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-       //
+        //
     }
 
     /**
@@ -60,17 +60,27 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $category->title =ucwords($request->title) ?? $category->title;
+        $category->title = ucwords($request->title) ?? $category->title;
         $category->description = ucfirst($request->description) ??  $category->description;
         $category->cover_html = ($request->cover_html) ??  $category->cover_html;
 
         $category->save();
         return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
     }
-    public function updateCoverPhoto(Request $request, Category $category){
+
+    public function updateCoverPhoto(Request $request, Category $category)
+    {
         $category->file_id = $request->file_id;
         $category->save();
         return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
+    }
+
+    public function updateBannerImage(Request $request, Category $category)
+    {
+        $category->banner_file_id = $request->banner_file_id;
+        $category->save();
+
+        return response()->noContent();
     }
 
     /**

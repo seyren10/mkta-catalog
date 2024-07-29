@@ -13,7 +13,7 @@
                 no-overlay
                 v-for="product in products"
                 :item="product"
-                class="rounded-lg bg-slate-100"
+                class="rounded-lg bg-primary text-white"
                 v-if="productCount"
             ></Product>
             <div

@@ -1,7 +1,7 @@
 <template>
     <div class="container my-8">
         <header
-            class="grid overflow-hidden rounded-t-lg bg-white p-10 pb-0 md:grid-cols-2 md:grid-rows-[min]"
+            class="grid gap-5 overflow-hidden rounded-lg bg-white p-5 md:grid-cols-2 md:grid-rows-[min]"
         >
             <div class="row-start-1 md:col-[1/-1]">
                 <BreadCrumb
@@ -11,11 +11,15 @@
                     ]"
                 ></BreadCrumb>
             </div>
+
+            <div class="col-span-2">
+                <v-text-on-image
+                    :image="bannerImage"
+                    no-overlay
+                    class="aspect-[4/1]"
+                ></v-text-on-image>
+            </div>
         </header>
-        <header
-            class="mb-5 grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
-            v-html="fix_content(category.cover_html)"
-        ></header>
         <nav class="mt-8">
             <ul class="flex flex-wrap gap-3">
                 <li
@@ -54,7 +58,7 @@
                 <template #default>
                     <Product
                         no-overlay
-                        class="overflow-hidden rounded-lg bg-slate-100"
+                        class="overflow-hidden rounded-lg bg-primary text-white"
                         v-for="product in products"
                         :item="product"
                         :key="product.id"
@@ -73,7 +77,7 @@
 </template>
 
 <script setup>
-import { inject, ref, watch } from "vue";
+import { computed, inject, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
 import { useRoute } from "vue-router";
@@ -92,7 +96,7 @@ const s3 = inject("s3");
 
 //stores
 const categoryStore = inject("categoryStore");
-const category = ref(null);
+const { category } = storeToRefs(categoryStore);
 const productStore = inject("productStore");
 const route = useRoute();
 
@@ -105,13 +109,12 @@ const {
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
 const sortBy = ref(0);
-
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 
 const fetchProducts = async (categoryId) => {
     loading.value = true;
 
-    category.value = categoryStore.getCategoryWithId(+categoryId);
+    await categoryStore.getCategoryWithId(+categoryId);
 
     const queriesExceptPage = Object.keys(route.query).reduce((acc, query) => {
         /* add queries that is not 'page' key and its value is not empty */
@@ -132,6 +135,9 @@ const fetchProducts = async (categoryId) => {
     loading.value = false;
 };
 
+const bannerImage = computed(() => {
+    return s3(category.value.banner_file?.filename);
+});
 const handlePageChange = (page) => {
     if (page.url === null) return;
 
@@ -141,29 +147,6 @@ const handlePageChange = (page) => {
 };
 
 await fetchProducts(+props.id);
-
-const fix_content = (content_html) => {
-    let tempContent = content_html;
-
-    [
-        {
-            keyword: "{{category_title}}",
-            value: category.value.title,
-        },
-        {
-            keyword: "{{category_description}}",
-            value: category.value.description,
-        },
-        {
-            keyword: "{{category_image}}",
-            value: s3(category.value.img),
-        },
-    ].forEach((element) => {
-        let regex = new RegExp(element.keyword, "g");
-        tempContent = tempContent.replace(regex, element.value);
-    });
-    return tempContent;
-};
 </script>
 
 <style lang="scss" scoped></style>

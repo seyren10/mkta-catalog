@@ -23,12 +23,12 @@
                 >
                     <template #prepend-inner>
                         <v-icon
-                            name="la-search-solid"
+                            name="fa-regular-handshake"
                             class="mr-2"
-                            animation="wrench"
+                            scale="1.3"
                         ></v-icon>
                     </template>
-                    <span>Browse our catalog</span>
+                    <span>Become our partner</span>
                 </v-button>
                 <v-button
                     v-else

@@ -86,7 +86,7 @@
                 >
             </div>
             <section
-                class="primary-gradient grid rounded-lg p-3 text-[.8rem] md:col-span-2 md:grid-cols-[1fr,18rem]"
+                class="bg-[#04151f] grid rounded-lg p-3 text-[.8rem] md:col-span-2 md:grid-cols-[1fr,18rem]"
             >
                 <v-text-icon
                     :items="infoList"

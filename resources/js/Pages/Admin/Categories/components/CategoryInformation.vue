@@ -18,6 +18,24 @@
                 Cover Photo
             </v-button>
         </div>
+
+        <div class="col-span-3 md:col-span-1">
+            <v-text-on-image
+                class="border bg-gray-400 p-2 aspect-video"
+                title="Thumbnail"
+                subtitle="subtitle"
+                align="center"
+                :noOverlay="true"
+                :appear="false"
+                :image="bannerImage"
+            />
+            <v-button
+                @click="fileUploadDialog = true"
+                class="my-2 w-full bg-accent text-white"
+                ><v-icon name="bi-card-image" class="me-2"></v-icon>Update
+                Banner Image
+            </v-button>
+        </div>
         <div class="col-span-3 px-2 md:col-span-2">
             <div class="grid grid-cols-1 gap-y-2">
                 <v-text-field
@@ -83,12 +101,32 @@
                 />
             </div>
         </v-dialog>
+
+        <v-dialog v-model="fileUploadDialog" persistent max-width="1000">
+            <template #header="props">
+                <div class="flex items-center justify-between p-3">
+                    <h3 class="text-sm font-medium">Select Banner Image</h3>
+                    <v-button
+                        icon="md-close-round"
+                        icon-size="1"
+                        v-bind="props"
+                    ></v-button>
+                </div>
+            </template>
+
+            <CMSImageFileSelection
+                items-per-page="30"
+                @submit="handleUpdloadBanner"
+            ></CMSImageFileSelection>
+        </v-dialog>
     </div>
     <!-- </v-card> -->
 </template>
 <script setup>
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
+
+import CMSImageFileSelection from "../../CMS/Catalog/CMSImage/CMSImageFileSelection.vue";
 
 const router = inject("router");
 const props = defineProps({
@@ -97,6 +135,7 @@ const props = defineProps({
 
 import { useCategoryStore } from "@/stores/categoryStore";
 const categoryStore = useCategoryStore();
+const addToast = inject("addToast");
 const { category, form, loading, errors } = storeToRefs(categoryStore);
 const refresh = async () => {
     await categoryStore.getCategory(props.id);
@@ -106,9 +145,15 @@ if (!category.length) {
 }
 
 const s3 = inject("s3");
+const fileUploadDialog = ref(false);
 import fileIndex from "../../Files/Index.vue";
-
 const insertCategoryImage = ref({ show: false, file_id: -1 });
+const tempContent = ref(false);
+
+const bannerImage = computed(() => {
+    console.log(category.value.banner_file?.title);
+    return s3(category.value.banner_file?.filename);
+});
 const close_insertCategoryImage_data = () => {
     insertCategoryImage.value.show = false;
 };
@@ -117,8 +162,6 @@ const submit_insertCategorymage_data = async (data) => {
     await categoryStore.updateCategoryImage(props.id, curData.id);
     close_insertCategoryImage_data();
 };
-
-const tempContent = ref(false);
 const fix_content = () => {
     tempContent.value = form.value.cover_html;
 
@@ -140,6 +183,24 @@ const fix_content = () => {
         tempContent.value = tempContent.value.replace(regex, element.value);
     });
 };
+
+async function handleUpdloadBanner(file) {
+    if (file.length <= 1) {
+        await categoryStore.updateBannerImage(props.id, file.at(0).id);
+
+        if (!errors.value) {
+            fileUploadDialog.value = false;
+            addToast({
+                props: {
+                    type: "success",
+                },
+                content: "Banner image updated successfully.",
+            });
+            await refresh();
+        }
+    }
+}
+
 fix_content();
 </script>
 

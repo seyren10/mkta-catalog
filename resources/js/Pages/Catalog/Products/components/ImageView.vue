@@ -1,7 +1,7 @@
 <template>
-    <div class="items flex gap-3">
+    <div class="flex gap-3">
         <div
-            class="scrollbar hidden max-h-[30rem] max-w-[5rem] auto-rows-[min-content] gap-5 self-center overflow-y-auto p-2 lg:grid"
+            class="scrollbar hidden max-h-[30rem] min-w-[4rem] max-w-[4rem] gap-5 self-center overflow-y-auto p-2 lg:grid"
         >
             <img
                 v-for="(img, index) in productImages"

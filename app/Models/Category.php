@@ -9,12 +9,19 @@ class Category extends Model
 {
     use HasFactory;
     protected $fillable = ["title", "description", 'parent_id', 'file_id', "cover_html"];
-    protected $hidden = ["created_at", "updated_at", 'laravel_through_key'];
-    protected $with = ["sub_categories", 'file', 'parent_category'];
+    protected $hidden = ["created_at", "updated_at", 'laravel_through_key', 'banner_file_id'];
+    protected $with = ["sub_categories", 'file', 'parent_category', 'bannerFile'];
+
     public function file()
     {
         return $this->hasOne(File::class, 'id', 'file_id');
     }
+
+    public function bannerFile()
+    {
+        return $this->hasOne(File::class, 'id', 'banner_file_id');
+    }
+
     public function parent_category()
     {
         return $this->hasOne(Category::class, 'id', 'parent_id')->without($this->with);
