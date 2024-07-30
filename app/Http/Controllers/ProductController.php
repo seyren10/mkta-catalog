@@ -82,6 +82,7 @@ class ProductController extends Controller
             }
         });
 
+        /* filtering */
         if ($request->has('filters')) {
             $query->whereHas('productFilters', function ($query) use ($request) {
                 $filterTitles = Filter::all()->pluck('title')->toArray();
@@ -93,6 +94,15 @@ class ProductController extends Controller
                 }
                 $query->whereIn('filter_choice_id', $choiceIds);
             });
+        }
+
+        /* sorting */
+        if ($request->has('sortBy')) {
+            if ($request->sortBy === 'any-order') {
+                $query->inRandomOrder();
+            } else if ($request->sortBy === 'newest-first') {
+                $query->orderByDesc('created_at');
+            }
         }
 
         $restricted_products = $request->session()->get('restricted_products', array());

@@ -41,11 +41,8 @@
                             <v-select
                                 position="bottom"
                                 v-model="sortBy"
-                                :items="[
-                                    { title: 'Newest first', id: 0 },
-                                    { title: 'Popular', id: 1 },
-                                    { title: 'Highest rated', id: 2 },
-                                ]"
+                                :items="sortData"
+                                item-value="value"
                             ></v-select>
                         </div>
                     </div>
@@ -72,7 +69,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
 import { useRoute } from "vue-router";
@@ -103,10 +100,33 @@ const {
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
-const sortBy = ref(0);
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
+const sortData = [
+    {
+        title: "Any order",
+        id: 0,
+        value: "any-order",
+    },
+    {
+        title: "Newest First",
+        id: 1,
+        value: "newest-first",
+    },
+];
+const { sortBy } = useSortBy((val) => fetchProducts(+props.id));
 
-const fetchProducts = async (categoryId) => {
+const bannerImage = computed(() => {
+    return s3(category.value.banner_file?.filename);
+});
+const handlePageChange = (page) => {
+    if (page.url === null) return;
+
+    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
+
+    setPage(+pageNumber);
+};
+
+async function fetchProducts(categoryId) {
     loading.value = true;
 
     await categoryStore.getCategoryWithId(+categoryId);
@@ -125,23 +145,29 @@ const fetchProducts = async (categoryId) => {
         includeProductFilter: true,
         page: page.value,
         filters: queriesExceptPage,
+        sortBy: sortBy.value,
     });
 
     loading.value = false;
-};
+}
 
-const bannerImage = computed(() => {
-    return s3(category.value.banner_file?.filename);
+function useSortBy(cb) {
+    const sortBy = ref(null);
+
+    watch(sortBy, (newValue) => {
+        cb(newValue);
+    });
+
+    return { sortBy };
+}
+
+/* hooks */
+
+onBeforeMount(async () => {
+    sortBy.value = sortData.at(0).value;
+
+    await fetchProducts(+props.id);
 });
-const handlePageChange = (page) => {
-    if (page.url === null) return;
-
-    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
-
-    setPage(+pageNumber);
-};
-
-await fetchProducts(+props.id);
 </script>
 
 <style lang="scss" scoped></style>
