@@ -7,7 +7,8 @@
             src="/Logo.png"
             ref="imageRef"
             alt=""
-            class="h-full w-full bg-primary object-cover duration-300 group-hover/toi:scale-105"
+            class="h-full w-full bg-primary object-cover"
+            :class="{ 'duration-300 group-hover/toi:scale-105': hover }"
         />
         <slot
             name="overlay"
@@ -61,6 +62,7 @@ const props = defineProps({
     },
     noOverlay: Boolean,
     appear: Boolean,
+    hover: Boolean,
 });
 const imageRef = ref(null);
 

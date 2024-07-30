@@ -1,24 +1,19 @@
 <template>
     <div class="container my-8">
-        <header
-            class="grid gap-5 overflow-hidden rounded-lg bg-white p-5 md:grid-cols-2 md:grid-rows-[min]"
-        >
-            <div class="row-start-1 md:col-[1/-1]">
-                <BreadCrumb
-                    :items="[
-                        { name: 'catalog', text: 'Catalog' },
-                        { name: 'categories', text: 'Categories' },
-                    ]"
-                ></BreadCrumb>
-            </div>
+        <header class="relative overflow-hidden rounded-lg bg-white">
+            <BreadCrumb
+                class="absolute left-4 top-4 z-10 text-white"
+                :items="[
+                    { name: 'catalog', text: 'Catalog' },
+                    { name: 'categories', text: 'Categories' },
+                ]"
+            ></BreadCrumb>
 
-            <div class="col-span-2">
-                <v-text-on-image
-                    :image="bannerImage"
-                    no-overlay
-                    class="aspect-[4/1]"
-                ></v-text-on-image>
-            </div>
+            <v-text-on-image
+                :image="bannerImage"
+                no-overlay
+                class="aspect-[4/1] h-full"
+            ></v-text-on-image>
         </header>
         <nav class="mt-8">
             <ul class="flex flex-wrap gap-3">

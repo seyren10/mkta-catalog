@@ -82,7 +82,7 @@
                     >
                         <v-text-on-image
                             :image="
-                                s3(variant.product_images?.at(0).file.filename)
+                                s3(variant.product_images?.at(0)?.file.filename)
                             "
                             no-overlay
                             class="max-w-12"
