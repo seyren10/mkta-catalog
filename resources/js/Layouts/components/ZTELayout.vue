@@ -1,6 +1,6 @@
 <template>
     <div
-        class="hover: grid min-h-screen grid-rows-[min-content,1fr] overflow-hidden text-sm transition-[grid-template-columns] duration-300 ease-out"
+        class="hover: grid h-screen grid-rows-[min-content,1fr] overflow-hidden text-sm transition-[grid-template-columns] duration-300 ease-out"
         :class="{
             'grid-cols-[max(17rem),1fr]': toggleSideBar,
             'grid-cols-[0rem,_1fr]': !toggleSideBar,
@@ -27,7 +27,9 @@
         </v-toolbar>
 
         <!-- maincontent -->
-        <slot />
+        <div class="overflow-auto">
+            <slot />
+        </div>
         <!-- /maincontent -->
     </div>
 </template>

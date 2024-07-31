@@ -1,9 +1,15 @@
 <template>
-    <div class="grow rounded-lg border p-3" >
+    <div class="relative grow rounded-lg border p-3">
+        <span
+            class="absolute -top-2 left-[50%] -translate-x-[50%] bg-white text-xs"
+        >
+            Image</span
+        >
         <div class="flex items-start gap-3">
             <v-button
                 class="bg-accent text-xs text-white"
                 prepend-inner-icon="pr-file"
+                icon-size=".8"
                 @click="dialog = !dialog"
                 >Select Image
             </v-button>

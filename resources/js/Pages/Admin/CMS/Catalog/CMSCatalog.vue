@@ -1,18 +1,27 @@
 <template>
-    <div>
+    <div class="flex flex-wrap gap-4">
+        <CMSButton @select="handleAddComponent" class="basis-full"></CMSButton>
+
         <component
-            :is="{ ...parentNode.component }"
-            v-bind="parentNode.props"
-        ></component>
+            v-for="node in nodes"
+            :key="node.component.props.id"
+            :is="node.component.type"
+            v-bind="node.component.props"
+        />
     </div>
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
+import CMSButton from "./CMSButton/CMSButton.vue";
 import { useCMSStore } from "../../../../stores/ui/CMSStore";
+import { storeToRefs } from "pinia";
 
-const CMSStore = useCMSStore();
-const { parentNode } = storeToRefs(CMSStore);
+const cmsStore = useCMSStore();
+const { nodes } = storeToRefs(cmsStore);
+
+function handleAddComponent(node) {
+    cmsStore.addToNodes(node);
+}
 </script>
 
 <style lang="scss" scoped></style>

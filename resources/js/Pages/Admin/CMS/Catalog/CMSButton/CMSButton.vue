@@ -13,12 +13,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { provide, ref } from "vue";
 
 import CMSButtonMenu from "./CMSButtonMenu.vue";
 
-const showMenu = ref(false);
+const props = defineProps({
+    menuContent: Array,
+});
 const emits = defineEmits(["select"]);
+const showMenu = ref(false);
 
 function handleAdd(node) {
     emits("select", node);
@@ -31,6 +34,8 @@ function handleShowMenu() {
 function hideMenu() {
     showMenu.value = false;
 }
+
+provide("menuContent", props.menuContent);
 </script>
 
 <style lang="scss" scoped></style>
