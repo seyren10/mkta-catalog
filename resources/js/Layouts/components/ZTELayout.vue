@@ -27,7 +27,7 @@
         </v-toolbar>
 
         <!-- maincontent -->
-        <div class="overflow-auto">
+        <div class="overflow-auto bg-white">
             <slot />
         </div>
         <!-- /maincontent -->
