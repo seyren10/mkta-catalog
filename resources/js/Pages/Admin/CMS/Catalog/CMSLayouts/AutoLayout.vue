@@ -1,12 +1,11 @@
 <template>
-    <div class="relative flex-1 rounded-lg border p-3 space-y-3">
-        <span
-            class="absolute -top-2 left-[50%] -translate-x-[50%] bg-white text-xs"
-        >
-            Auto-layout</span
-        >
+    <div class="relative flex-1 space-y-3 rounded-lg border p-3">
+        <CMSHeading>Auto-Layout</CMSHeading>
 
-        <CMSButton @select="handleAddComponent"></CMSButton>
+        <div class="flex basis-full justify-between">
+            <CMSButton @select="handleAddNode"></CMSButton>
+            <CMSButtonClose @click="handleDeleteNode(props)"></CMSButtonClose>
+        </div>
 
         <component
             v-for="child in children"
@@ -18,8 +17,11 @@
 </template>
 
 <script setup>
-import CMSButton from "../CMSButton/CMSButton.vue";
 import { useCMSStore } from "../../../../../stores/ui/CMSStore";
+
+import CMSButton from "../CMSButton/CMSButton.vue";
+import CMSHeading from "../CMSHeading.vue";
+import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
 
 const props = defineProps({
     id: String,
@@ -28,8 +30,12 @@ const props = defineProps({
 });
 const cmsStore = useCMSStore();
 
-function handleAddComponent(node) {
+function handleAddNode(node) {
     cmsStore.addToNodes(node, props.id);
+}
+
+function handleDeleteNode(node) {
+    cmsStore.deleteNode(node);
 }
 </script>
 

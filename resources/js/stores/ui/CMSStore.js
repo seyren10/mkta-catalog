@@ -62,7 +62,7 @@ export const useCMSStore = defineStore("CMSStore", () => {
             nodes.value,
             nodeToAdd.component.props.parentId,
         );
-        console.log(foundNode);
+
         if (foundNode)
             foundNode.component.props.children = [
                 ...foundNode.component.props.children,
@@ -71,17 +71,31 @@ export const useCMSStore = defineStore("CMSStore", () => {
         else nodes.value.push(nodeToAdd);
     }
 
-    function findNode(nodes, parentId) {
+    function deleteNode(node) {
+        const foundNode = findNode(nodes.value, node.parentId);
+
+        if (foundNode) {
+            //node is a sub-node (child of existing parent node)
+            foundNode.component.props.children =
+                foundNode.component.props.children.filter(
+                    (n) => n.component.props.id !== node.id,
+                );
+        } else {
+            //node is part of root nodes (top level node)
+            nodes.value = nodes.value.filter(
+                (n) => n.component.props.id !== node.id,
+            );
+        }
+    }
+
+    function findNode(nodes, id) {
         for (const node of nodes) {
-            if (node.component.props.id === parentId) {
+            if (node.component.props.id === id) {
                 return node;
             }
 
             if (node.component.props.children) {
-                const foundNode = findNode(
-                    node.component.props.children,
-                    parentId,
-                );
+                const foundNode = findNode(node.component.props.children, id);
                 if (foundNode) {
                     return foundNode;
                 }
@@ -91,19 +105,9 @@ export const useCMSStore = defineStore("CMSStore", () => {
         return null;
     }
 
-    // function findNode(nodes, parentId) {
-    //     for (const node of nodes) {
-    //         if (node.component.props.id === parentId) {
-    //             return node;
-    //         } else {
-    //             return findNode(node.component.props.children, parentId);
-    //         }
-    //     }
-
-    //     return null;
-    // }
     return {
         addToNodes,
+        deleteNode,
         findNode,
         components,
         nodes,
