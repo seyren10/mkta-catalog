@@ -1,10 +1,6 @@
 <template>
-    <div class="relative grow rounded-lg border p-3">
-        <span
-            class="absolute -top-2 left-[50%] -translate-x-[50%] bg-white text-xs"
-        >
-            Image</span
-        >
+    <div class="relative basis-full space-y-3 rounded-lg border p-3">
+        <CMSHeading>Image</CMSHeading>
         <div class="flex items-start gap-3">
             <v-button
                 class="bg-accent text-xs text-white"
@@ -22,7 +18,13 @@
                 />
                 <p>{{ selectedImage.title }}</p>
             </div>
+
+            <CMSButtonClose
+                class="ml-auto"
+                @click="handleDeleteNode"
+            ></CMSButtonClose>
         </div>
+        <CMSImageLink></CMSImageLink>
         <v-dialog v-model="dialog" persistent max-width="1000">
             <template #header="props">
                 <div class="flex items-center justify-between p-3">
@@ -48,6 +50,9 @@ import { inject, onMounted, ref } from "vue";
 import { useCMSStore } from "../../../../../stores/ui/CMSStore";
 
 import CMSImageFileSelection from "./CMSImageFileSelection.vue";
+import CMSHeading from "../CMSHeading.vue";
+import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
+import CMSImageLink from "./CMSImageLink.vue";
 
 const props = defineProps({
     id: String,
@@ -55,12 +60,12 @@ const props = defineProps({
     type: String,
 });
 const dialog = ref(false);
-const CMSStore = useCMSStore();
-const selectedImage = ref(null);
+const cmsStore = useCMSStore();
 const s3 = inject("s3");
+const selectedImage = ref(null);
 
-function handleRemoveNode(node) {
-    CMSStore.removeNode({ props: { id: props.id, parentId: props.parentId } });
+function handleDeleteNode() {
+    cmsStore.deleteNode(props);
 }
 
 function handleSubmit(items) {
