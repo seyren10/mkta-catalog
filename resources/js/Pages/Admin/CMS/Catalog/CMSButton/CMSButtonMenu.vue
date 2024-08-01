@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute top-[120%] z-10" ref="overlay">
+    <div class="absolute z-10" ref="overlay">
         <div class="grid w-max gap-2 rounded-lg border bg-white p-3 shadow-sm">
             <div v-for="(menu, key) in components" :key="key">
                 <p>{{ key }}</p>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useCMSStore } from "../../../../../stores/ui/CMSStore";
 import { useClickOutside } from "../../../../../composables/useClickOutside";
 import { storeToRefs } from "pinia";
@@ -35,6 +35,16 @@ useClickOutside(overlay, () => emits("close"));
 function handleAdd(node) {
     emits("select", node);
 }
+
+onMounted(() => {
+    const overlayRect = overlay.value.getBoundingClientRect();
+
+    if (overlayRect.top > window.innerHeight / 2) {
+        overlay.value.classList.add("bottom-[130%]");
+    } else {
+        overlay.value.classList.add("top-[130%]");
+    }
+});
 </script>
 
 <style lang="scss" scoped></style>
