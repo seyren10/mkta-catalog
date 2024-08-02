@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
-import { markRaw, ref, shallowRef } from "vue";
+import { markRaw, ref, unref } from "vue";
 
 import Layout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/Layout.vue";
 import AutoLayout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/AutoLayout.vue";
 import CMSImage from "../../Pages/Admin/CMS/Catalog/CMSImage/CMSImage.vue";
+import CMSCarousel from "../../Pages/Admin/CMS/Catalog/CMSCarousel/CMSCarousel.vue";
 
 export const useCMSStore = defineStore("CMSStore", () => {
     const nodes = ref([]);
@@ -37,6 +38,14 @@ export const useCMSStore = defineStore("CMSStore", () => {
                 icon: "pr-image",
                 component: {
                     type: markRaw(CMSImage),
+                    props: {},
+                },
+            },
+            {
+                title: "Image Carousel",
+                icon: "pr-images",
+                component: {
+                    type: markRaw(CMSCarousel),
                     props: {},
                 },
             },
@@ -88,6 +97,25 @@ export const useCMSStore = defineStore("CMSStore", () => {
         }
     }
 
+    function updateNode(node) {
+        const foundNode = findNode(nodes.value, node.parentId);
+
+        if (foundNode) {
+            //node is a sub-node (child of existing parent node)
+            foundNode.props.children = foundNode.props.children.map((child) => {
+                return node.id === child.id ? node : child;
+            });
+        } else {
+            console.log(node);
+            //node is part of root nodes (top level node)
+            nodes.value = nodes.value.map((n) => {
+                return n.component.props.id === node.id
+                    ? { ...n, cmsData: { ...node.cmsData } }
+                    : n;
+            });
+        }
+    }
+
     function findNode(nodes, id) {
         for (const node of nodes) {
             if (node.component.props.id === id) {
@@ -109,6 +137,7 @@ export const useCMSStore = defineStore("CMSStore", () => {
         addToNodes,
         deleteNode,
         findNode,
+        updateNode,
         components,
         nodes,
     };

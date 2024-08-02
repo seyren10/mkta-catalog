@@ -27,20 +27,21 @@
             <v-button
                 class="bg-slate-400 text-xs text-white"
                 @click="handleCheckRoute"
-                >Verify link</v-button
+                >verify and save</v-button
             >
         </div>
     </div>
 </template>
 
 <script setup>
-import { inject, ref, watch } from "vue";
+import { inject, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const { link, checkRoute, path } = useLink();
-
+const link = defineModel("link");
+const path = defineModel("path", { default: "/" });
 const isRouteValid = ref(false);
 const addToast = inject("addToast");
+const router = useRouter();
 
 function handleCheckRoute() {
     isRouteValid.value = checkRoute();
@@ -48,29 +49,19 @@ function handleCheckRoute() {
         props: {
             type: isRouteValid.value ? "success" : "danger",
         },
-        content: isRouteValid.value ? "Link is valid" : "Invalid link",
+        content: isRouteValid.value
+            ? "Link is valid"
+            : "Invalid link (changes may not apply when save)",
     });
 }
+function checkRoute() {
+    const resolved = router.resolve(path.value);
 
-function useLink() {
-    const link = ref(false);
-    const path = ref("");
-
-    const router = useRouter();
-
-    function checkRoute() {
-        const resolved = router.resolve(path.value);
-
-        console.log(resolved.matched);
-        return (
-            resolved.matched.length > 0 &&
-            resolved.matched.at(0).name !== "notFound"
-        );
-    }
-
-    watch(link, (newValue) => {});
-
-    return { link, checkRoute, path };
+    console.log(resolved.matched);
+    return (
+        resolved.matched.length > 0 &&
+        resolved.matched.at(0).name !== "notFound"
+    );
 }
 </script>
 
