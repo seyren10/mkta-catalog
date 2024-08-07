@@ -70,7 +70,7 @@
 
 <script setup>
 import { inject, ref } from "vue";
-import { useCMSStore } from "../../../../../stores/ui/CMSStore";
+import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
 
 import CMSImageFileSelection from "../CMSImage/CMSImageFileSelection.vue";
 import CMSHeading from "../CMSHeading.vue";
@@ -89,7 +89,7 @@ const props = defineProps({
 const { handleFileSelection, selectedFiles, fileSelector } = useFileSelection(
     props.data,
 );
-const cmsStore = useCMSStore();
+const cmsStore = useCMSUIStore();
 const addToast = inject("addToast");
 const selectedFile = ref(null);
 

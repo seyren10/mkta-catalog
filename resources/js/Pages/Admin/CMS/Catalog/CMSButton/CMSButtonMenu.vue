@@ -21,12 +21,12 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useCMSStore } from "../../../../../stores/ui/CMSStore";
+import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
 import { useClickOutside } from "../../../../../composables/useClickOutside";
 import { storeToRefs } from "pinia";
 
 const emits = defineEmits(["select", "close"]);
-const cmsStore = useCMSStore();
+const cmsStore = useCMSUIStore();
 const { components } = storeToRefs(cmsStore);
 const overlay = ref(null);
 

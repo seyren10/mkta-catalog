@@ -16,11 +16,11 @@
 </template>
 
 <script setup>
-import { useCMSStore } from "../../../../stores/ui/CMSStore";
+import { useCMSUIStore } from "../../../../stores/ui/CMSUIStore";
 
 import CMSButton from "./CMSButton/CMSButton.vue";
 
-const cmsStore = useCMSStore();
+const cmsStore = useCMSUIStore();
 function handleAddComponent(node) {
     cmsStore.addToNodes(node);
 }

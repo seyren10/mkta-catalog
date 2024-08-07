@@ -56,7 +56,7 @@
 
 <script setup>
 import { inject, ref } from "vue";
-import { useCMSStore } from "../../../../../stores/ui/CMSStore";
+import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
 
 import CMSImageFileSelection from "./CMSImageFileSelection.vue";
 import CMSHeading from "../CMSHeading.vue";
@@ -71,7 +71,7 @@ const props = defineProps({
 });
 
 const dialog = ref(false);
-const cmsStore = useCMSStore();
+const cmsStore = useCMSUIStore();
 const selectedImage = ref(props.data);
 const s3 = inject("s3");
 const addToast = inject("addToast");

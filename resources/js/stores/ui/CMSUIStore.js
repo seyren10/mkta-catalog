@@ -6,7 +6,7 @@ import AutoLayout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/AutoLayout.vue"
 import CMSImage from "../../Pages/Admin/CMS/Catalog/CMSImage/CMSImage.vue";
 import CMSCarousel from "../../Pages/Admin/CMS/Catalog/CMSCarousel/CMSCarousel.vue";
 
-export const useCMSStore = defineStore("CMSStore", () => {
+export const useCMSUIStore = defineStore("CMSUIStore", () => {
     const nodes = ref([]);
 
     const components = ref({
@@ -154,24 +154,22 @@ export const useCMSStore = defineStore("CMSStore", () => {
         localStorage.setItem("nodes", JSON.stringify(nodes.value));
     }
 
-    function getNodes() {
-        const val = JSON.parse(localStorage.getItem("nodes"));
+    function getNodes(data) {
+        if (!data) return;
 
-        if (!val) return;
+        setComponentType(data);
 
-        tranverseNode(val);
-
-        nodes.value = val;
+        nodes.value = data;
     }
 
-    function tranverseNode(nodes) {
+    function setComponentType(nodes) {
         nodes.forEach((node) => {
             node.component.type = getComponentType(node.type);
 
             const subNodes = node.component.props.children;
 
             if (subNodes) {
-                tranverseNode(subNodes);
+                setComponentType(subNodes);
             }
         });
     }

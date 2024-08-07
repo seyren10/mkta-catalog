@@ -12,6 +12,7 @@
             <v-button
                 class="bg-accent text-xs text-white"
                 @click="handleSaveNodes"
+                :loading="cmsLoading"
                 >Save CMS</v-button
             >
         </div>
@@ -19,31 +20,48 @@
 </template>
 
 <script setup>
-import { useCMSStore } from "../../../../stores/ui/CMSStore";
 import { storeToRefs } from "pinia";
 import { inject, onBeforeUnmount, onMounted } from "vue";
+import { useCMSUIStore } from "../../../../stores/ui/CMSUIStore";
+import { useCMSStore } from "../../../../stores/CMSStore";
 
 import ToolbarButton from "./ToolbarButton.vue";
 
+const cmsUIStore = useCMSUIStore();
+const { nodes } = storeToRefs(cmsUIStore);
 const cmsStore = useCMSStore();
-const { nodes } = storeToRefs(cmsStore);
+const { errors: cmsErrors, loading: cmsLoading } = storeToRefs(cmsStore);
 const addToast = inject("addToast");
 const setToolbarComponent = inject("setToolbarComponent");
 
-function handleSaveNodes() {
-    cmsStore.saveNodes();
+const databaseNodes = await cmsStore.getContent(13);
+cmsUIStore.getNodes(databaseNodes);
 
-    addToast({
-        props: {
-            type: "success",
-        },
-        content: "Catalog Contents saved.",
-    });
+async function handleSaveNodes() {
+    const form = {
+        title: "sample1",
+        data: JSON.stringify(nodes.value),
+    };
+    await cmsStore.addContent(form);
+
+    if (cmsErrors.value) {
+        addToast({
+            props: {
+                type: "danger",
+            },
+            content: "Something went wrong",
+        });
+    } else
+        addToast({
+            props: {
+                type: "success",
+            },
+            content: "Catalog Contents saved.",
+        });
 }
 
 onMounted(() => {
     setToolbarComponent(ToolbarButton);
-    cmsStore.getNodes();
 });
 
 onBeforeUnmount(() => {

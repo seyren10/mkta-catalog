@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaCodeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyCodeController;
+use App\Http\Controllers\ContentManagementController;
 use App\Http\Controllers\currentController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FilterChoiceController;
@@ -136,4 +137,6 @@ Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index",
 
 
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);
+
+Route::apiResource('content-management', ContentManagementController::class);
 // });

@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { useCMSStore } from "../../../../../stores/ui/CMSStore";
+import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
 
 import CMSButton from "../CMSButton/CMSButton.vue";
 import CMSHeading from "../CMSHeading.vue";
@@ -29,7 +29,7 @@ const props = defineProps({
     parentId: String,
     children: Array,
 });
-const cmsStore = useCMSStore();
+const cmsStore = useCMSUIStore();
 
 function handleAddNode(node) {
     cmsStore.addToNodes(node, props.id);
