@@ -72,6 +72,7 @@ const router = inject("router");
 import { useCategoryStore } from "@/stores/categoryStore";
 const categoryStore = useCategoryStore();
 const { category, form, loading, errors } = storeToRefs(categoryStore);
+
 if (!category.length) {
     await categoryStore.getCategory(props.id);
 }

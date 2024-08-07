@@ -58,6 +58,7 @@ if (!categories.value.length)
         includeSubCategories: true,
         includeParentCategory: true,
         includeFile: true,
+        includeBannerImage: true,
     });
 
 if (!filters.value.length) await filterStore.getFilters();
@@ -70,8 +71,7 @@ const handleScrollToTop = () => {
     window.scrollTo({ top: 0 });
 };
 
-
-const user = inject('currentUser')
+const user = inject("currentUser");
 </script>
 
 <style lang="scss" scoped></style>

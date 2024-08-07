@@ -8,7 +8,7 @@
         <template #sidebar>
             <div class="p-3">
                 <div class="flex items-center gap-2">
-                    <img src="/Logo.svg" alt="" class="max-w-[5rem]" />
+                    <img src="/Logo.png" alt="" class="max-w-[5rem]" />
                     <v-heading type="h3" class="text-slate-600"
                         >Admin Panel</v-heading
                     >

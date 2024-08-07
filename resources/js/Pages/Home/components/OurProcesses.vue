@@ -4,10 +4,12 @@
         <div class="grid gap-5 md:grid-cols-2">
             <div class="grid">
                 <video
-                    controls
+                    autoplay
+                    muted
+                    loop
                     src="https://mkta-portal.s3.us-east-2.amazonaws.com/finale+werewolf.mp4"
                     class="h-full rounded-lg"
-                    poster="/Logo.svg"
+                    poster="/Logo.png"
                 ></video>
 
                 <div class="relative isolate mt-5 self-end">

@@ -52,6 +52,12 @@ class CategoryResource extends JsonResource
             unset($data['sub_categories']);
         }
         #endregion
+
+
+        if (!$request->has('includeBannerImage'))
+            unset($data['banner_file']);
+
+
         return $data;
     }
 }

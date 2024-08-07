@@ -1,7 +1,7 @@
 <template>
     <nav class="flex items-center justify-between bg-white p-2 shadow md:px-10">
         <div class="w-[5rem]">
-            <img src="/Logo.svg" alt="" />
+            <img src="/Logo.png" alt="" />
         </div>
         <ul class="hidden flex-wrap justify-center gap-5 md:flex">
             <li
@@ -19,7 +19,7 @@
             </li>
             <li
                 v-if="user"
-                class="primary-gradient bg-clip-text font-bold text-transparent"
+                class="bg-[#04151f] bg-clip-text font-bold text-transparent"
             >
                 <router-link :to="{ name: 'catalog' }">Catalog</router-link>
             </li>
@@ -95,7 +95,7 @@
                 ></v-icon>
                 <div class="mt-10 grid gap-5">
                     <div>
-                        <img src="/Logo.svg" alt="" />
+                        <img src="/Logo.png" alt="" />
                     </div>
                     <v-button
                         v-if="!user"

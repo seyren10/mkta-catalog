@@ -1,21 +1,20 @@
 <template>
     <div class="container my-8">
-        <header
-            class="grid overflow-hidden rounded-t-lg bg-white p-10 pb-0 md:grid-cols-2 md:grid-rows-[min]"
-        >
-            <div class="row-start-1 md:col-[1/-1]">
-                <BreadCrumb
-                    :items="[
-                        { name: 'catalog', text: 'Catalog' },
-                        { name: 'categories', text: 'Categories' },
-                    ]"
-                ></BreadCrumb>
-            </div>
+        <header class="relative overflow-hidden rounded-lg bg-white">
+            <BreadCrumb
+                class="absolute left-4 top-4 z-10 text-white"
+                :items="[
+                    { name: 'catalog', text: 'Catalog' },
+                    { name: 'categories', text: 'Categories' },
+                ]"
+            ></BreadCrumb>
+
+            <v-text-on-image
+                :image="bannerImage"
+                no-overlay
+                class="aspect-[4/1] h-full"
+            ></v-text-on-image>
         </header>
-        <header
-            class="mb-5 grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
-            v-html="fix_content(category.cover_html)"
-        ></header>
         <nav class="mt-8">
             <ul class="flex flex-wrap gap-3">
                 <li
@@ -42,11 +41,8 @@
                             <v-select
                                 position="bottom"
                                 v-model="sortBy"
-                                :items="[
-                                    { title: 'Newest first', id: 0 },
-                                    { title: 'Popular', id: 1 },
-                                    { title: 'Highest rated', id: 2 },
-                                ]"
+                                :items="sortData"
+                                item-value="value"
                             ></v-select>
                         </div>
                     </div>
@@ -54,7 +50,7 @@
                 <template #default>
                     <Product
                         no-overlay
-                        class="overflow-hidden rounded-lg bg-slate-100"
+                        class="overflow-hidden rounded-lg bg-primary text-white"
                         v-for="product in products"
                         :item="product"
                         :key="product.id"
@@ -73,7 +69,7 @@
 </template>
 
 <script setup>
-import { inject, ref, watch } from "vue";
+import { computed, inject, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
 import { useRoute } from "vue-router";
@@ -92,7 +88,7 @@ const s3 = inject("s3");
 
 //stores
 const categoryStore = inject("categoryStore");
-const category = ref(null);
+const { category } = storeToRefs(categoryStore);
 const productStore = inject("productStore");
 const route = useRoute();
 
@@ -104,14 +100,36 @@ const {
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 const loading = ref(false);
-const sortBy = ref(0);
-
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
+const sortData = [
+    {
+        title: "Any order",
+        id: 0,
+        value: "any-order",
+    },
+    {
+        title: "Newest First",
+        id: 1,
+        value: "newest-first",
+    },
+];
+const { sortBy } = useSortBy((val) => fetchProducts(+props.id));
 
-const fetchProducts = async (categoryId) => {
+const bannerImage = computed(() => {
+    return s3(category.value.banner_file?.filename);
+});
+const handlePageChange = (page) => {
+    if (page.url === null) return;
+
+    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
+
+    setPage(+pageNumber);
+};
+
+async function fetchProducts(categoryId) {
     loading.value = true;
 
-    category.value = categoryStore.getCategoryWithId(+categoryId);
+    await categoryStore.getCategoryWithId(+categoryId);
 
     const queriesExceptPage = Object.keys(route.query).reduce((acc, query) => {
         /* add queries that is not 'page' key and its value is not empty */
@@ -127,43 +145,29 @@ const fetchProducts = async (categoryId) => {
         includeProductFilter: true,
         page: page.value,
         filters: queriesExceptPage,
+        sortBy: sortBy.value,
     });
 
     loading.value = false;
-};
+}
 
-const handlePageChange = (page) => {
-    if (page.url === null) return;
+function useSortBy(cb) {
+    const sortBy = ref(null);
 
-    const pageNumber = page.url.match(/[?&]page=(\d+)/)?.at(1);
-
-    setPage(+pageNumber);
-};
-
-await fetchProducts(+props.id);
-
-const fix_content = (content_html) => {
-    let tempContent = content_html;
-
-    [
-        {
-            keyword: "{{category_title}}",
-            value: category.value.title,
-        },
-        {
-            keyword: "{{category_description}}",
-            value: category.value.description,
-        },
-        {
-            keyword: "{{category_image}}",
-            value: s3(category.value.img),
-        },
-    ].forEach((element) => {
-        let regex = new RegExp(element.keyword, "g");
-        tempContent = tempContent.replace(regex, element.value);
+    watch(sortBy, (newValue) => {
+        cb(newValue);
     });
-    return tempContent;
-};
+
+    return { sortBy };
+}
+
+/* hooks */
+
+onBeforeMount(async () => {
+    sortBy.value = sortData.at(0).value;
+
+    await fetchProducts(+props.id);
+});
 </script>
 
 <style lang="scss" scoped></style>

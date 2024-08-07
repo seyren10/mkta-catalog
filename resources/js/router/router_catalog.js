@@ -39,6 +39,7 @@ const catalog_routes = [
                             includeSubCategories: true,
                             includeParentCategory: true,
                             includeFile: true,
+                            includeBannerImage: true,
                         });
 
                     //redirect the user to not found page when

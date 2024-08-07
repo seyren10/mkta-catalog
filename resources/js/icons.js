@@ -129,9 +129,13 @@ import {
     PrSignOut,
     LaMehBlank,
     BiBell,
+    FaRegularHandshake,
+    RiLink,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    RiLink,
+    FaRegularHandshake,
     BiBell,
     LaMehBlank,
     PrSignOut,

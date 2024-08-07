@@ -1,9 +1,11 @@
 <template>
-    <div class="grow rounded-lg border p-3" >
+    <div class="relative basis-full space-y-3 rounded-lg border p-3">
+        <CMSHeading>Image</CMSHeading>
         <div class="flex items-start gap-3">
             <v-button
                 class="bg-accent text-xs text-white"
                 prepend-inner-icon="pr-file"
+                icon-size=".8"
                 @click="dialog = !dialog"
                 >Select Image
             </v-button>
@@ -16,6 +18,21 @@
                 />
                 <p>{{ selectedImage.title }}</p>
             </div>
+
+            <CMSButtonClose
+                class="ml-auto"
+                @click="handleDeleteNode"
+            ></CMSButtonClose>
+        </div>
+
+        <CMSImageLink
+            v-if="selectedImage"
+            v-model:path="selectedImage.path"
+            v-model:link="selectedImage.link"
+        ></CMSImageLink>
+
+        <div class="flex justify-end">
+            <CMSButtonSave @click="handleUpdateNode"></CMSButtonSave>
         </div>
         <v-dialog v-model="dialog" persistent max-width="1000">
             <template #header="props">
@@ -38,33 +55,46 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from "vue";
-import { useCMSStore } from "../../../../../stores/ui/CMSStore";
+import { inject, ref } from "vue";
+import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
 
 import CMSImageFileSelection from "./CMSImageFileSelection.vue";
+import CMSHeading from "../CMSHeading.vue";
+import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
+import CMSImageLink from "./CMSImageLink.vue";
+import CMSButtonSave from "../CMSButton/CMSButtonSave.vue";
 
 const props = defineProps({
     id: String,
     parentId: String,
-    type: String,
+    data: Object,
 });
-const dialog = ref(false);
-const CMSStore = useCMSStore();
-const selectedImage = ref(null);
-const s3 = inject("s3");
 
-function handleRemoveNode(node) {
-    CMSStore.removeNode({ props: { id: props.id, parentId: props.parentId } });
+const dialog = ref(false);
+const cmsStore = useCMSUIStore();
+const selectedImage = ref(props.data);
+const s3 = inject("s3");
+const addToast = inject("addToast");
+
+function handleDeleteNode() {
+    cmsStore.deleteNode(props);
+}
+
+function handleUpdateNode() {
+    cmsStore.updateNode({ ...props, data: selectedImage.value });
+
+    addToast({
+        props: {
+            type: "success",
+        },
+        content: "Carousel Saved.",
+    });
 }
 
 function handleSubmit(items) {
     dialog.value = false;
     selectedImage.value = items.at(0);
 }
-
-onMounted(() => {
-    console.log("cms image", props.id);
-});
 </script>
 
 <style lang="scss" scoped></style>

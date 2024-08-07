@@ -60,6 +60,20 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
+    public function latestProducts(Request $request)
+    {
+        $count = $request->has('count') ? $request->count :  20;
+
+        return ProductResource::collection(Product::latest()->take($count)->get());
+    }
+
+    public function randomProducts(Request $request)
+    {
+        $count = $request->has('count') ? $request->count :  20;
+
+        return ProductResource::collection(Product::inRandomOrder()->take($count)->get());
+    }
+
     public function getProductsWithCategoryId(Request $request, Category $category)
     {
         $query = Product::whereHas('product_categories', function ($query) use ($category) {
@@ -68,6 +82,7 @@ class ProductController extends Controller
             }
         });
 
+        /* filtering */
         if ($request->has('filters')) {
             $query->whereHas('productFilters', function ($query) use ($request) {
                 $filterTitles = Filter::all()->pluck('title')->toArray();
@@ -79,6 +94,15 @@ class ProductController extends Controller
                 }
                 $query->whereIn('filter_choice_id', $choiceIds);
             });
+        }
+
+        /* sorting */
+        if ($request->has('sortBy')) {
+            if ($request->sortBy === 'any-order') {
+                $query->inRandomOrder();
+            } else if ($request->sortBy === 'newest-first') {
+                $query->orderByDesc('created_at');
+            }
         }
 
         $restricted_products = $request->session()->get('restricted_products', array());
@@ -154,7 +178,8 @@ class ProductController extends Controller
             DB::rollback();
         }
     }
-    public static function zipProductImages(Product $product){
+    public static function zipProductImages(Product $product)
+    {
         dispatch(new ZipProductImages($product->id, Auth()->user()->id));
         return response()->noContent();
     }

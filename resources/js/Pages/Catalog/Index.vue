@@ -6,9 +6,9 @@
                 class="row-span-2"
                 auto-scroll
                 :items="[
-                    '/carousel-test/carousel-1.jpg',
-                    '/carousel-test/carousel-2.jpg',
-                    '/carousel-test/carousel-3.jpg',
+                    '/temp-images/1.jpg',
+                    '/temp-images/2.jpg',
+                    '/temp-images/3.webp',
                 ]"
                 item-size="100%"
             >
@@ -24,13 +24,13 @@
             </v-horizontal-scroller>
 
             <v-text-on-image
-                image="/carousel-test/10416177.jpg"
-                class="aspect-[3/1] h-full min-w-full rounded-lg object-cover md:max-w-[25rem]"
+                image="/temp-images/4.jpg"
+                class="aspect-[3/1] h-full rounded-lg md:max-w-[25rem]"
                 no-overlay
             />
             <v-text-on-image
-                image="/carousel-test/eeq.jpg"
-                class="aspect-[3/1] h-full min-w-full rounded-lg object-cover md:max-w-[25rem]"
+                image="/temp-images/5.jfif"
+                class="aspect-[3/1] h-full rounded-lg object-cover md:max-w-[25rem]"
                 subtitle="whitespace-nowrap overflow-hidden [text-overflow:ellipsis] mt-2 text-[.8rem] text-slate-300"
             >
                 <template #overlay-title>
@@ -45,13 +45,18 @@
 
         <!-- #region featured-products -->
         <section class="space-y-10">
-            <FeaturedProducts titleIcon="ri-fire-line" title="Top selling">
+            <FeaturedProducts
+                titleIcon="ri-fire-line"
+                title="Top selling"
+                :items="topSellingProducts"
+            >
                 <template #content.icon="{ item }">
                     <div
                         :class="item.class"
-                        class="rounded-md bg-red-500 px-1 text-[.7rem] text-white"
+                        class="flex items-center gap-1 rounded-md bg-red-500 px-1 text-[.7rem] text-white"
                     >
-                        16% off
+                        <v-icon name="ri-fire-line" scale=".7"></v-icon
+                        ><strong>HOT</strong>
                     </div>
                 </template>
             </FeaturedProducts>
@@ -59,18 +64,20 @@
             <FeaturedProducts
                 titleIcon="md-newreleases-outlined"
                 title="New Arrivals"
+                :items="latestProducts"
             >
                 <template #content.icon="{ item }">
-                    <div
-                        :class="item.class"
-                        class="rounded-md bg-accent px-1 text-[.7rem] text-white"
-                    >
-                        MK Mall
+                    <div :class="item.class">
+                        <v-icon name="md-fibernew"></v-icon>
                     </div>
                 </template>
             </FeaturedProducts>
 
-            <FeaturedProducts titleIcon="bi-snow" title="Seasonal">
+            <FeaturedProducts
+                titleIcon="bi-snow"
+                title="Seasonal"
+                :items="seasonalProducts"
+            >
                 <template #content.icon="{ item }">
                     <div :class="item.class"></div>
                 </template>
@@ -158,6 +165,7 @@
 <script setup>
 import { inject, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { useAxios } from "@/composables/useAxios";
 
 import FeaturedProducts from "./components/FeaturedProducts.vue";
 import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
@@ -166,9 +174,20 @@ import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
 const { categories } = storeToRefs(inject("categoryStore"));
 const user = inject("currentUser");
 const firstTimeLogin = ref(true);
-//reactives
+const { loading, errors, exec } = useAxios();
 
 //async
+const latestProducts = ref(
+    await exec("/api/product/latest").then((res) => res.data.data),
+);
+const topSellingProducts = ref(
+    await exec("/api/product/random").then((res) => res.data.data),
+);
+const seasonalProducts = ref(
+    await exec("/api/product/random", "get", { count: 30 }).then(
+        (res) => res.data.data,
+    ),
+);
 </script>
 
 <style lang="scss" scoped></style>

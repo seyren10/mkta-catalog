@@ -4,24 +4,10 @@
             <v-text-on-image
                 v-bind="$attrs"
                 :class="`aspect-square cursor-pointer rounded-none`"
-                :image="s3(item?.product_images?.at(0)?.file.filename)"
+                :image="s3(item?.product_thumbnail?.file?.filename)"
             >
                 <template #overlay="overlayProps">
                     <slot name="overlay" :item="item">
-                        <!-- <div
-                            v-bind="overlayProps"
-                            class="absolute bottom-1 left-1 max-w-[96%] rounded-lg bg-black bg-opacity-50 p-3 text-white"
-                        >
-                            <p
-                                class="text-[.8rem]"
-                                v-for="(detail, key) in item.details"
-                                :key="key"
-                            >
-                                <span class="capitalize">{{ key }}</span> :
-                                <span class="text-slate-300"> {{ detail }}</span>
-                            </p>
-                        </div> -->
-
                         <!-- #region new -->
                         <div
                             v-if="item.meta?.isNew"
