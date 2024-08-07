@@ -57,7 +57,6 @@ function handleCheckRoute() {
 function checkRoute() {
     const resolved = router.resolve(path.value);
 
-    console.log(resolved.matched);
     return (
         resolved.matched.length > 0 &&
         resolved.matched.at(0).name !== "notFound"

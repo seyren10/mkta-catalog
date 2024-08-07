@@ -109,12 +109,18 @@ export const useCMSStore = defineStore("CMSStore", () => {
         const foundNode = findNode(nodes.value, node.parentId);
 
         if (foundNode) {
+            console.log(foundNode);
             //node is a sub-node (child of existing parent node)
-            foundNode.props.children = foundNode.props.children.map((child) => {
-                return node.id === child.id ? node : child;
-            });
+            foundNode.component.props.children =
+                foundNode.component.props.children.map((child) => {
+                    return node.id === child.component.props.id
+                        ? {
+                              ...child,
+                              data: JSON.parse(JSON.stringify(node.data)),
+                          }
+                        : child;
+                });
         } else {
-            console.log(node);
             //node is part of root nodes (top level node)
             nodes.value = nodes.value.map((n) => {
                 return n.component.props.id === node.id
@@ -152,13 +158,22 @@ export const useCMSStore = defineStore("CMSStore", () => {
         const val = JSON.parse(localStorage.getItem("nodes"));
 
         if (!val) return;
-        val.forEach((node) => {
-            node.component.type = getComponentType(node.type);
-        });
 
-        console.log(val);
+        tranverseNode(val);
 
         nodes.value = val;
+    }
+
+    function tranverseNode(nodes) {
+        nodes.forEach((node) => {
+            node.component.type = getComponentType(node.type);
+
+            const subNodes = node.component.props.children;
+
+            if (subNodes) {
+                tranverseNode(subNodes);
+            }
+        });
     }
 
     function getComponentType(type) {

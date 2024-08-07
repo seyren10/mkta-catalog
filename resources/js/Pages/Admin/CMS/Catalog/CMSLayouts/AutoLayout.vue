@@ -12,6 +12,7 @@
             :key="child.component.props.id"
             :is="child.component.type"
             v-bind="child.component.props"
+            :data="child.data"
         ></component>
     </div>
 </template>

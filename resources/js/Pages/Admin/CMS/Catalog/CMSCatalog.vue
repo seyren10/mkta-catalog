@@ -10,9 +10,13 @@
             :data="node.data"
         />
 
-        <v-button class="bg-accent text-xs text-white" @click="handleSaveNodes"
-            >Save CMS</v-button
-        >
+        <div class="shrink-0 basis-full">
+            <v-button
+                class="bg-accent text-xs text-white"
+                @click="handleSaveNodes"
+                >Save CMS</v-button
+            >
+        </div>
     </div>
 </template>
 
@@ -20,7 +24,7 @@
 import CMSButton from "./CMSButton/CMSButton.vue";
 import { useCMSStore } from "../../../../stores/ui/CMSStore";
 import { storeToRefs } from "pinia";
-import { inject, onBeforeMount, onMounted } from "vue";
+import { inject, onMounted } from "vue";
 
 const cmsStore = useCMSStore();
 const { nodes } = storeToRefs(cmsStore);
