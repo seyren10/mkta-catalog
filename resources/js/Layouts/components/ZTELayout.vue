@@ -15,16 +15,17 @@
 
         <!-- Tool Bar -->
 
-        <v-toolbar class="border-b border-slate-300">
-            <template #title>
-                <v-button
-                    @click="toggleSideBar = !toggleSideBar"
-                    icon="hi-menu-alt-4"
-                    class="mr-3"
-                    >qwe</v-button
-                >
-            </template>
-        </v-toolbar>
+        <div
+            class="flex items-center justify-between border-b border-slate-300 px-3 py-1"
+        >
+            <v-button
+                @click="toggleSideBar = !toggleSideBar"
+                icon="hi-menu-alt-4"
+                class="mr-3"
+                >qwe</v-button
+            >
+            <component :is="toolbarComponent"></component>
+        </div>
 
         <!-- maincontent -->
         <div class="overflow-auto bg-white">
@@ -35,18 +36,26 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { markRaw, provide, ref, watch } from "vue";
 import { useMedia } from "@/composables/useMedia";
 
 //reactives
 const toggleSideBar = ref(true);
 const { isMatched } = useMedia("(max-width: 768px )");
 
+const toolbarComponent = ref(null);
+
 watch(isMatched, (newValue) => {
     if (newValue) {
         toggleSideBar.value = false;
     }
 });
+
+function setToolbarComponent(component) {
+    toolbarComponent.value = markRaw(component);
+}
+
+provide("setToolbarComponent", setToolbarComponent);
 </script>
 
 <style lang="scss" scoped></style>

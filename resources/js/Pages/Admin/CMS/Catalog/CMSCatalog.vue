@@ -1,7 +1,5 @@
 <template>
     <div class="flex flex-wrap gap-4">
-        <CMSButton @select="handleAddComponent" class="basis-full"></CMSButton>
-
         <component
             v-for="node in nodes"
             :key="node.component.props.id"
@@ -21,18 +19,16 @@
 </template>
 
 <script setup>
-import CMSButton from "./CMSButton/CMSButton.vue";
 import { useCMSStore } from "../../../../stores/ui/CMSStore";
 import { storeToRefs } from "pinia";
-import { inject, onMounted } from "vue";
+import { inject, onBeforeUnmount, onMounted } from "vue";
+
+import ToolbarButton from "./ToolbarButton.vue";
 
 const cmsStore = useCMSStore();
 const { nodes } = storeToRefs(cmsStore);
 const addToast = inject("addToast");
-
-function handleAddComponent(node) {
-    cmsStore.addToNodes(node);
-}
+const setToolbarComponent = inject("setToolbarComponent");
 
 function handleSaveNodes() {
     cmsStore.saveNodes();
@@ -46,7 +42,12 @@ function handleSaveNodes() {
 }
 
 onMounted(() => {
+    setToolbarComponent(ToolbarButton);
     cmsStore.getNodes();
+});
+
+onBeforeUnmount(() => {
+    setToolbarComponent(null);
 });
 </script>
 

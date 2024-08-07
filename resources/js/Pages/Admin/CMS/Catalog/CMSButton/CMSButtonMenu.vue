@@ -44,6 +44,10 @@ onMounted(() => {
     } else {
         overlay.value.classList.add("top-[130%]");
     }
+
+    if (overlayRect.left > window.innerWidth / 2) {
+        overlay.value.classList.add("right-2");
+    }
 });
 </script>
 

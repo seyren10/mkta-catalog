@@ -1,8 +1,10 @@
 <template>
     <div class="relative">
-        <button class="rounded-lg border" @click="handleShowMenu">
-            <v-icon name="bi-plus" scale="1.3" ></v-icon>
-        </button>
+        <slot name="button" @click="handleShowMenu">
+            <button class="rounded-lg border" @click="handleShowMenu">
+                <v-icon name="bi-plus" scale="1.3"></v-icon>
+            </button>
+        </slot>
 
         <CMSButtonMenu
             v-if="showMenu"
