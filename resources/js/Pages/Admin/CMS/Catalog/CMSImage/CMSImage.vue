@@ -24,7 +24,16 @@
                 @click="handleDeleteNode"
             ></CMSButtonClose>
         </div>
-        <CMSImageLink></CMSImageLink>
+
+        <CMSImageLink
+            v-if="selectedImage"
+            v-model:path="selectedImage.path"
+            v-model:link="selectedImage.link"
+        ></CMSImageLink>
+
+        <div class="flex justify-end">
+            <CMSButtonSave @click="handleUpdateNode"></CMSButtonSave>
+        </div>
         <v-dialog v-model="dialog" persistent max-width="1000">
             <template #header="props">
                 <div class="flex items-center justify-between p-3">
@@ -46,36 +55,46 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from "vue";
+import { inject, ref } from "vue";
 import { useCMSStore } from "../../../../../stores/ui/CMSStore";
 
 import CMSImageFileSelection from "./CMSImageFileSelection.vue";
 import CMSHeading from "../CMSHeading.vue";
 import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
 import CMSImageLink from "./CMSImageLink.vue";
+import CMSButtonSave from "../CMSButton/CMSButtonSave.vue";
 
 const props = defineProps({
     id: String,
     parentId: String,
-    type: String,
+    data: Object,
 });
+
 const dialog = ref(false);
 const cmsStore = useCMSStore();
+const selectedImage = ref(props.data);
 const s3 = inject("s3");
-const selectedImage = ref(null);
+const addToast = inject("addToast");
 
 function handleDeleteNode() {
     cmsStore.deleteNode(props);
+}
+
+function handleUpdateNode() {
+    cmsStore.updateNode({ ...props, data: selectedImage.value });
+
+    addToast({
+        props: {
+            type: "success",
+        },
+        content: "Carousel Saved.",
+    });
 }
 
 function handleSubmit(items) {
     dialog.value = false;
     selectedImage.value = items.at(0);
 }
-
-onMounted(() => {
-    console.log("cms image", props.id);
-});
 </script>
 
 <style lang="scss" scoped></style>

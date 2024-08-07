@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const link = defineModel("link");
@@ -63,6 +63,10 @@ function checkRoute() {
         resolved.matched.at(0).name !== "notFound"
     );
 }
+
+onBeforeMount(() => {
+    isRouteValid.value = checkRoute();
+});
 </script>
 
 <style lang="scss" scoped></style>

@@ -31,7 +31,6 @@ const emits = defineEmits(["select"]);
 const s3 = inject("s3");
 const selectedItem = ref(null);
 
-
 function handleSelection(item) {
     selectedItem.value = item;
     emits("select", item);

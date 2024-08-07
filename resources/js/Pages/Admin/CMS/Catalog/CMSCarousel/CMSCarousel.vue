@@ -83,8 +83,12 @@ const props = defineProps({
     id: String,
     parentId: String,
     type: String,
+    data: Object,
 });
-const { handleFileSelection, selectedFiles, fileSelector } = useFileSelection();
+
+const { handleFileSelection, selectedFiles, fileSelector } = useFileSelection(
+    props.data,
+);
 const cmsStore = useCMSStore();
 const addToast = inject("addToast");
 const selectedFile = ref(null);
@@ -98,7 +102,7 @@ function handleImageSelection(item) {
 }
 
 function handleUpdateNode() {
-    cmsStore.updateNode({ ...props, cmsData: selectedFiles });
+    cmsStore.updateNode({ ...props, data: selectedFiles.value });
 
     addToast({
         props: {
@@ -107,8 +111,9 @@ function handleUpdateNode() {
         content: "Carousel Saved.",
     });
 }
-function useFileSelection() {
-    const selectedFiles = ref([]);
+
+function useFileSelection(selected = []) {
+    const selectedFiles = ref(selected);
     const fileSelector = ref(false);
 
     function handleFileSelection(files) {

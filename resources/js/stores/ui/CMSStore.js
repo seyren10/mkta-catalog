@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { markRaw, ref, unref } from "vue";
+import { markRaw, ref } from "vue";
 
 import Layout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/Layout.vue";
 import AutoLayout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/AutoLayout.vue";
@@ -20,6 +20,7 @@ export const useCMSStore = defineStore("CMSStore", () => {
                         children: [],
                     },
                 },
+                type: "layout",
             },
             {
                 title: "auto-fit layout",
@@ -30,6 +31,7 @@ export const useCMSStore = defineStore("CMSStore", () => {
                         children: [],
                     },
                 },
+                type: "layout-auto",
             },
         ],
         elements: [
@@ -38,8 +40,13 @@ export const useCMSStore = defineStore("CMSStore", () => {
                 icon: "pr-image",
                 component: {
                     type: markRaw(CMSImage),
-                    props: {},
+                    props: {
+                        link: false,
+                        path: "/",
+                        image: null,
+                    },
                 },
+                type: "image",
             },
             {
                 title: "Image Carousel",
@@ -48,6 +55,7 @@ export const useCMSStore = defineStore("CMSStore", () => {
                     type: markRaw(CMSCarousel),
                     props: {},
                 },
+                type: "carousel",
             },
         ],
     });
@@ -110,7 +118,10 @@ export const useCMSStore = defineStore("CMSStore", () => {
             //node is part of root nodes (top level node)
             nodes.value = nodes.value.map((n) => {
                 return n.component.props.id === node.id
-                    ? { ...n, cmsData: { ...node.cmsData } }
+                    ? {
+                          ...n,
+                          data: JSON.parse(JSON.stringify(node.data)),
+                      }
                     : n;
             });
         }
@@ -133,11 +144,48 @@ export const useCMSStore = defineStore("CMSStore", () => {
         return null;
     }
 
+    function saveNodes() {
+        localStorage.setItem("nodes", JSON.stringify(nodes.value));
+    }
+
+    function getNodes() {
+        const val = JSON.parse(localStorage.getItem("nodes"));
+
+        if (!val) return;
+        val.forEach((node) => {
+            node.component.type = getComponentType(node.type);
+        });
+
+        console.log(val);
+
+        nodes.value = val;
+    }
+
+    function getComponentType(type) {
+        switch (type) {
+            case "image":
+                return markRaw(CMSImage);
+            case "carousel":
+                return markRaw(CMSCarousel);
+            case "layout":
+                return markRaw(Layout);
+            case "layout-auto":
+                return markRaw(AutoLayout);
+            case "image":
+                return markRaw(CMSImage);
+
+            default:
+                break;
+        }
+    }
+
     return {
         addToNodes,
         deleteNode,
         findNode,
         updateNode,
+        saveNodes,
+        getNodes,
         components,
         nodes,
     };
