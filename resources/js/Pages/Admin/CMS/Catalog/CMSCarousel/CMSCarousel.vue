@@ -1,5 +1,5 @@
 <template>
-    <div class="relative basis-full space-y-3 rounded-lg border p-3">
+    <div class="relative col-span-full space-y-3 rounded-lg border p-3">
         <CMSHeading>Image Carousel</CMSHeading>
         <div class="flex items-start gap-3">
             <v-button

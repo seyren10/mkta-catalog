@@ -76,9 +76,9 @@ const userCompanies = computed(() => {
         .join(",");
 });
 
-const  handleLogout = async() => {
+const handleLogout = async () => {
     await authStore.logout();
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

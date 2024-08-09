@@ -1,7 +1,9 @@
 <template>
-    <div class="relative flex basis-full flex-wrap gap-3 rounded-lg border p-3">
-        <CMSHeading>Layout</CMSHeading>
-        <div class="flex basis-full justify-between">
+    <div
+        class="relative col-span-full grid grid-cols-12 gap-4 rounded-lg border p-3"
+    >
+        <CMSHeading>Grid</CMSHeading>
+        <div class="col-span-full flex justify-between">
             <CMSButton @select="handleAddNode"></CMSButton>
             <CMSButtonClose @click="handleDeleteNode(props)"></CMSButtonClose>
         </div>

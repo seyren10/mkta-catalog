@@ -131,9 +131,13 @@ import {
     BiBell,
     FaRegularHandshake,
     RiLink,
+    BiShieldCheck,
+    BiShield,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    BiShield,
+    BiShieldCheck,
     RiLink,
     FaRegularHandshake,
     BiBell,

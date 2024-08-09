@@ -1,9 +1,25 @@
 <template>
-    <div class="relative flex-1 space-y-3 rounded-lg border p-3">
-        <CMSHeading>Auto-Layout</CMSHeading>
+    <div
+        class="relative flex-1 space-y-3 rounded-lg border p-3"
+        :style="{ gridColumn: `span ${size}/ span ${size}` }"
+    >
+        <CMSHeading>Grid Item</CMSHeading>
 
         <div class="flex basis-full justify-between">
             <CMSButton @select="handleAddNode"></CMSButton>
+            <div>
+                <label :for="selectId" class="mr-2 text-xs">grid size</label>
+                <select
+                    class="rounded-lg border p-1"
+                    :id="selectId"
+                    :value="size"
+                    @change="handlePropsChange"
+                >
+                    <option v-for="(_, index) in Array(12)" :value="index + 1">
+                        {{ index + 1 }}
+                    </option>
+                </select>
+            </div>
             <CMSButtonClose @click="handleDeleteNode(props)"></CMSButtonClose>
         </div>
 
@@ -28,8 +44,13 @@ const props = defineProps({
     id: String,
     parentId: String,
     children: Array,
+    size: {
+        type: Number,
+        default: 1,
+    },
 });
 const cmsStore = useCMSUIStore();
+const selectId = Math.random().toString();
 
 function handleAddNode(node) {
     cmsStore.addToNodes(node, props.id);
@@ -37,6 +58,15 @@ function handleAddNode(node) {
 
 function handleDeleteNode(node) {
     cmsStore.deleteNode(node);
+}
+
+function handlePropsChange(event) {
+    const newProps = {
+        ...props,
+        size: +event.target.value,
+    };
+    console.log(newProps);
+    cmsStore.setComponentProps(newProps);
 }
 </script>
 

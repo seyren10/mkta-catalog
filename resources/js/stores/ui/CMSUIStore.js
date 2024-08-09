@@ -5,14 +5,19 @@ import Layout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/Layout.vue";
 import AutoLayout from "../../Pages/Admin/CMS/Catalog/CMSLayouts/AutoLayout.vue";
 import CMSImage from "../../Pages/Admin/CMS/Catalog/CMSImage/CMSImage.vue";
 import CMSCarousel from "../../Pages/Admin/CMS/Catalog/CMSCarousel/CMSCarousel.vue";
+import CMSTextOnImage from "../../Pages/Catalog/CMS/CMSTextOnImage.vue";
+import CMSLayout from "../../Pages/Catalog/CMS/CMSLayout.vue";
+import CMSAutoLayout from "../../Pages/Catalog/CMS/CMSAutoLayout.vue";
+import CMSCatalogCarousel from "../../Pages/Catalog/CMS/CMSCatalogCarousel.vue";
 
 export const useCMSUIStore = defineStore("CMSUIStore", () => {
     const nodes = ref([]);
+    const environment = ref("admin");
 
     const components = ref({
         layouts: [
             {
-                title: "1:1 Layout",
+                title: "Grid",
                 icon: "ri-checkbox-blank-line",
                 component: {
                     type: markRaw(Layout),
@@ -23,12 +28,13 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
                 type: "layout",
             },
             {
-                title: "auto-fit layout",
+                title: "Grid Item",
                 icon: "bi-grid",
                 component: {
                     type: markRaw(AutoLayout),
                     props: {
                         children: [],
+                        size: 12,
                     },
                 },
                 type: "layout-auto",
@@ -150,16 +156,51 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
         return null;
     }
 
-    function saveNodes() {
-        localStorage.setItem("nodes", JSON.stringify(nodes.value));
-    }
-
-    function getNodes(data) {
+    function getNodes(data, env = "admin") {
+        environment.value = env;
         if (!data) return;
 
         setComponentType(data);
 
         nodes.value = data;
+    }
+
+    function setComponentProps(props) {
+        const foundNode = findNode(nodes.value, props.parentId);
+
+        if (foundNode) {
+            console.log(foundNode);
+            //node is a sub-node (child of existing parent node)
+            foundNode.component.props.children =
+                foundNode.component.props.children.map((child) => {
+                    return child.component.props.id === props.id
+                        ? {
+                              ...child,
+                              component: {
+                                  ...child.component,
+                                  props: {
+                                      ...props,
+                                  },
+                              },
+                          }
+                        : child;
+                });
+        } else {
+            //node is part of root nodes (top level node)
+            nodes.value = nodes.value.map((n) => {
+                return n.component.props.id === props.id
+                    ? {
+                          ...n,
+                          component: {
+                              ...n.component,
+                              props: {
+                                  ...props,
+                              },
+                          },
+                      }
+                    : n;
+            });
+        }
     }
 
     function setComponentType(nodes) {
@@ -177,15 +218,23 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
     function getComponentType(type) {
         switch (type) {
             case "image":
-                return markRaw(CMSImage);
+                return markRaw(
+                    environment.value === "admin" ? CMSImage : CMSTextOnImage,
+                );
             case "carousel":
-                return markRaw(CMSCarousel);
+                return markRaw(
+                    environment.value === "admin"
+                        ? CMSCarousel
+                        : CMSCatalogCarousel,
+                );
             case "layout":
-                return markRaw(Layout);
+                return markRaw(
+                    environment.value === "admin" ? Layout : CMSLayout,
+                );
             case "layout-auto":
-                return markRaw(AutoLayout);
-            case "image":
-                return markRaw(CMSImage);
+                return markRaw(
+                    environment.value === "admin" ? AutoLayout : CMSAutoLayout,
+                );
 
             default:
                 break;
@@ -197,7 +246,7 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
         deleteNode,
         findNode,
         updateNode,
-        saveNodes,
+        setComponentProps,
         getNodes,
         components,
         nodes,

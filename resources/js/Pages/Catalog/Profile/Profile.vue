@@ -85,7 +85,6 @@ const { loading } = storeToRefs(authStore);
 //!SECTION -> Functions
 const handleLogout = async () => {
     await authStore.logout();
-    await router.push({ name: "index" });
 };
 
 const currentPage = shallowRef({

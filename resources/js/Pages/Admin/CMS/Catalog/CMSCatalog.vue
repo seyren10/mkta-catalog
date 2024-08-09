@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-wrap gap-4">
+    <div class="grid grid-cols-12 gap-4">
         <component
             v-for="node in nodes"
             :key="node.component.props.id"
@@ -8,7 +8,7 @@
             :data="node.data"
         />
 
-        <div class="shrink-0 basis-full">
+        <div class="col-span-full">
             <v-button
                 class="bg-accent text-xs text-white"
                 @click="handleSaveNodes"
