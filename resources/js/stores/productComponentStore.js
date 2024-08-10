@@ -7,7 +7,7 @@ export const useProductComponentStore = defineStore("productComponent", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
     const components = ref([]);
-    const form = reactive({
+    const form = ref({
         type: null,
         is_visible: true,
         index: 100,

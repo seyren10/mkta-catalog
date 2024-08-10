@@ -20,7 +20,6 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
             <template v-for="(component, index) in components">
-
                 <componentsViewer
                     :class="( ['table'].includes(component.type) ? 'col-span-2' : '') + '  '"
                     :product_id="id"
@@ -48,36 +47,23 @@ import { storeToRefs } from "pinia";
 import newComponent from "./essentials/newComponent.vue";
 /*SECTION - End Components */
 
-/*SECTION - Props */
-const props = defineProps({
-    id: String,
-});
-/*SECTION - End Props */
+const product_item = inject("product_item");
+const productStore = inject("productStore");
+
 
 /*SECTION - Variables */
 const showNewComponent = ref(false);
 
 /*SECTION - End Variables */
 
-/*SECTION - Product Info */
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-if (!product_item.length) {
-    await productStore.getProductItem(props.id);
-}
-/*SECTION - End Product Info */
 /*SECTION - Product Component */
 import { useProductComponentStore } from "@/stores/productComponentStore";
 import componentsViewer from "./essentials/componentsViewer.vue";
 const productComponentStore = useProductComponentStore();
 const { components } = storeToRefs(productComponentStore);
-if (!product_item.length) {
-    await productComponentStore.getProductComponent(props.id);
-}
 /*SECTION - End Product Component */
 const refreshComponent = async () => {
-    await productComponentStore.getProductComponent(props.id);
+    await productComponentStore.getProductComponent(product_item.value.id);
 };
 
 const newComponentClose = async () => {

@@ -26,24 +26,24 @@
         >
             /*ANCHOR - Product Images */
             <template #content.ProductImages>
-                <productImages :id="id" />
+                <productImages />
             </template>
             /*ANCHOR - Product Categories */
             <template #content.Categories>
-                <productCategories :id="id" />
+                <productCategories/>
             </template>
             /*ANCHOR - Components */
             <template #content.ProductComponents>
-                <productComponents :id="id" />
+                <productComponents  />
             </template>
             /*ANCHOR - Restriction and Exemptions */
             <template #content.ProductAccess>
-                <productRestrictionExemption :id="id" />
+                <productRestrictionExemption />
             </template>
             /*ANCHOR - NonWishlist_Customers */
-            <template class="p-3" #content.NonWishlistCustomers>
-                <productNonWishList :id="id" />
-            </template>
+            <!-- <template class="p-3" #content.NonWishlistCustomers>
+                <productNonWishList  />
+            </template> -->
             /*ANCHOR - Product Information */
             <template class="p-3" #content.ProdInfo>
                 <div class="p-3">
@@ -52,7 +52,6 @@
                         Volume and Weights
                     </p>
                     <productItemForm
-                        :id="id"
                         :showTitle="false"
                         :readOnlyData="['form.id']"
                     />
@@ -76,21 +75,20 @@
             </template>
             /*ANCHOR - Related Products */
             <template class="p-3" #content.RelatedProduct>
-                <relatedProduct :id="id" />
+                <relatedProduct />
             </template>
             <template class="p-3" #content.RecommendedProduct>
-                <recommendedProduct :id="id" />
+                <recommendedProduct  />
             </template>
             <template class="p-3" #content.ProductFilters>
-                <productFilter :id="id"/>
+                <productFilter/>
             </template>
-            
         </v-tab>
     </div>
 </template>
 <script setup>
 import productItemForm from "./components/productItemForm.vue";
-import productNonWishList from "./components/productNonWishList.vue";
+// import productNonWishList from "./components/productNonWishList.vue";
 import productRestrictionExemption from "./components/productRestrictionExemption.vue";
 import productCategories from "./components/productCategories.vue";
 import productComponents from "./components/productComponents.vue";
@@ -105,18 +103,28 @@ const props = defineProps({
     id: String,
 });
 
-import { onBeforeMount, ref, watch, computed, inject } from "vue";
+
+
+import { onBeforeMount, ref, watch, computed, inject, provide } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useProductStore } from "@/stores/productStore";
 const productStore = useProductStore();
-const { product_item, isValid } = storeToRefs(productStore);
+const { product_item, form, isValid } = storeToRefs(productStore);
 
 if (!product_item.length) {
-    await productStore.getProductItem(props.id);
+    await productStore.getProductItem(props.id, {
+        includeRelatedProducts:true,
+        includeRecommendedProduct: true
+    });
 }
 
-const currentTab = ref("ProductComponents");
+provide('productStore', productStore);
+provide('product_item', product_item);
+
+
+
+const currentTab = ref("ProdInfo");
 const tabs = ref([
     {
         icon: "bi-cart4",
@@ -142,12 +150,12 @@ const tabs = ref([
         title: "Images",
         value: "ProductImages",
     },
-    {
-        icon: "bi-cart-x",
-        title: "Non Wishlist Customers",
-        iconScale: "1.5",
-        value: "NonWishlistCustomers",
-    },
+    // {
+    //     icon: "bi-cart-x",
+    //     title: "Non Wishlist Customers",
+    //     iconScale: "1.5",
+    //     value: "NonWishlistCustomers",
+    // },
     {
         icon: "ai-closed-access",
         iconScale: "1.5",

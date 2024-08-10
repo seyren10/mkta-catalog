@@ -129,9 +129,11 @@ import {
     PrSignOut,
     LaMehBlank,
     BiBell,
+    HiSolidDatabase,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    HiSolidDatabase,
     BiBell,
     LaMehBlank,
     PrSignOut,

@@ -7,13 +7,13 @@ export const useAreaStore = defineStore("area", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
 
-    const area = reactive({
+    const area = ref({
         id: 0,
         title: "",
         description: "",
     });
     const areas = ref([]);
-    const form = reactive({
+    const form = ref({
         title: "",
         description: "",
     });

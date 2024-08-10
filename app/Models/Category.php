@@ -11,6 +11,7 @@ class Category extends Model
     protected $fillable = ["title", "description", 'parent_id', 'file_id', "cover_html"];
     protected $hidden = ["created_at", "updated_at", 'laravel_through_key'];
     protected $with = ["sub_categories", 'file', 'parent_category'];
+    
     public function file()
     {
         return $this->hasOne(File::class, 'id', 'file_id');

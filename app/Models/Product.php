@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
 class Product extends Model
@@ -82,5 +83,9 @@ class Product extends Model
         return static::whereNot(function ($query) use ($product) {
             $query->where('id', $product->id);
         })->where('parent_code', $product->parent_code)->get();
+    }
+    public function sync_product_categories()
+    {
+        return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
 }

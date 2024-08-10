@@ -53,6 +53,11 @@
                 /> -->
                 <VRouteNav
                     v-if="true"
+                    :title="'Data Manager'"
+                    :items="dataManagement"
+                />
+                <VRouteNav
+                    v-if="true"
                     :title="'Others'"
                     :items="file_management"
                 />
@@ -166,6 +171,24 @@ const contentManagement = [
         to: "cmsCatalog",
         icon: "fa-cogs",
     },
+];
+
+const dataManagement = [
+    {
+        title: "Product Table",
+        to: "productDataIndex",
+        icon: "hi-solid-database",
+    },
+    {
+        title: "Filter Table",
+        to: "filterDataIndex",
+        icon: "hi-solid-database",
+    },
+    // {
+    //     title: "Company Table",
+    //     to: "dataIndex",
+    //     icon: "hi-solid-database",
+    // }
 ];
 //provide/inject
 const currentUser = inject("currentUser");

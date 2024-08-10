@@ -1,74 +1,52 @@
 <template>
     <div>
-        <v-text-field prepend-inner-icon="la-search-solid" v-model="search" />
+        <v-text-field
+            prepend-inner-icon="la-search-solid"
+            @keyup.enter="
+                () => {
+                    pageNumber = 1;
+                    refresh();
+                }
+            "
+            v-model="search"
+        />
+
         <div v-show="!allowMultiple" class="my-2 text-xl">Select one only</div>
         <div v-show="allowMultiple && isSelection" class="my-2 text-xl">
             Selected: {{ selectedItemKeys.length }} items
         </div>
-        <v-data-table
-            class="my-2 border-none"
-            :noHeader="true"
-            :headers="headers"
-            :items="product_items"
-            :search="search"
-        >
-            <template #item.data="{ item }">
-                <div class="grid grid-cols-12 gap-2 border py-2">
-                    <div class="col-span-1">
-                        <div class="flex justify-end">
-                            <v-icon
-                                :color="
-                                    isSelected(item.raw.id) ? 'green' : 'black'
-                                "
-                                class="ml-auto"
-                                scale="2"
-                                :name="
-                                    isSelected(item.raw.id)
-                                        ? 'bi-check-circle-fill'
-                                        : 'bi-circle'
-                                "
-                                @click="
-                                    () => {
-                                        if (isSelected(item.raw.id)) {
-                                            removeItem(item.raw);
-                                        } else {
-                                            appendItem(item.raw);
-                                        }
-                                    }
-                                "
-                            />
-                        </div>
-                    </div>
-                    <div class="col-span-12 sm:col-span-3 lg:col-span-2">
-                        <div class="grid w-full justify-items-center">
-                            <v-text-on-image
-                                class="h-[150px] max-h-[150px] w-[150px] max-w-[150px] border-none"
-                                title="Thumbnail"
-                                :noOverlay="true"
-                                :image="
-                                    s3(
-                                        item.raw?.product_thumbnail?.file
-                                            ?.filename,
-                                    )
-                                "
-                            />
-                            <div>
-                                <span class="text-center">{{
-                                    item.raw.id
-                                }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-span-12 sm:col-span-8">
-                        <pre></pre>
-                        <p class="text-xl">{{ item.raw.title }}</p>
-                        <span class="text-gray-400">{{
-                            item.raw.description
-                        }}</span>
-                    </div>
-                </div>
-            </template>
-        </v-data-table>
+        <div class="grid grid-cols-1 gap-2 md:grid-cols-6">
+            <div
+                :class="'rounded-lg border p-2 ' + (isSelected(item.id) ? ' border-green-500 border-2' : '')"
+                v-for="item in product_items"
+                :key="item.id"
+                @click="
+                    () => {
+                        if (isSelected(item.id)) {
+                            removeItem(item);
+                        } else {
+                            appendItem(item);
+                        }
+                    }
+                "
+            >
+                <smallCard :product="item">
+                    <template #prepend>
+                        <v-icon
+                            :color="isSelected(item.id) ? 'green' : 'black'"
+                            class="ml-auto"
+                            scale="1.5"
+                            :name="
+                                isSelected(item.id)
+                                    ? 'bi-check-circle-fill'
+                                    : 'bi-circle'
+                            "
+                        />
+                    </template>
+                </smallCard>
+            </div>
+        </div>
+        <pagination @page-change="handlePageChange" :items="paginationLinks" />
         <div class="my-2 flex justify-between" v-show="isSelection">
             <v-button
                 @click="cancel"
@@ -86,12 +64,21 @@
     </div>
 </template>
 <script setup>
+import pagination from "@/components/PaginationLinks.vue";
+import { useQuery } from "@/composables/useQuery";
+
+import smallCard from "./smallCard_Product.vue";
+
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
 const s3 = inject("s3");
 
 const props = defineProps({
+    unlistedProducts: {
+        type: Array,
+        default: [],
+    },
     isSelection: {
         type: Boolean,
         default: true,
@@ -102,24 +89,6 @@ const props = defineProps({
     },
 });
 
-
-
-
-
-
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_items, isValid } = storeToRefs(productStore);
-
-const refresh = async () => {
-    await productStore.getProductItems();
-};
-
-if (!product_items.length) {
-    refresh();
-}
-
-const search = ref("");
 const headers = ref([
     {
         value: "",
@@ -129,6 +98,35 @@ const headers = ref([
     },
 ]);
 
+import { useProductStore } from "@/stores/productStore";
+const productStore = useProductStore();
+const { isValid } = storeToRefs(productStore);
+
+const product_items = ref(null);
+const paginationLinks = ref(null);
+const [page, setPage] = useQuery("page", () => refresh());
+
+const search = ref("");
+const pageNumber = ref(1);
+const refresh = async () => {
+    const res = await productStore.getProductItems(
+        {
+            q: search.value,
+            page: pageNumber.value,
+            unlisted: props.unlistedProducts,
+        },
+        false,
+    );
+    product_items.value = res.data;
+    paginationLinks.value = res.pagination;
+};
+if (!product_items.length) {
+    refresh();
+}
+const handlePageChange = (page) => {
+    pageNumber.value = page.label;
+    refresh();
+};
 
 //SECTION - Pop Up Variables and Functions
 
@@ -159,8 +157,4 @@ const cancel = () => {
     emit("close");
     emit("cancel");
 };
-
-
-
-
 </script>

@@ -6,7 +6,7 @@
         </h2>
         <div class="text-gray-700">
             
-            <accessType :product_id="id" :access_type_id="access_type.id" v-for="(access_type) in product_access_types" />
+            <accessType :product_id="product_item.id" :access_type_id="access_type.id" v-for="(access_type) in product_access_types" />
         </div>
     </div>
 </template>
@@ -19,14 +19,9 @@ import { storeToRefs } from "pinia";
 const props = defineProps({
     id: String,
 });
-/*SECTION - Product Data */
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-if (!product_item.length && props.id != "") {
-    await productStore.getProductItem(props.id);
-}
-/*SECTION - End Product Data */
+const product_item = inject("product_item");
+const productStore = inject("productStore");
+
 
 /*SECTION - Restriction and Exemption */
 import { useProductAccessTypeStore } from "@/stores/productAccessTypeStore";

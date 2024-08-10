@@ -8,7 +8,7 @@ export const useNonWishlistStore = defineStore("nonWishlist", () => {
     const { loading, errors, exec } = useAxios();
 
     const non_wishlist_data = ref([]);
-    const form = reactive({
+    const form = ref({
         product_id: 0,
         user_id: 0,
     });

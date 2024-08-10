@@ -9,7 +9,7 @@ export const useFileStore = defineStore("portalFiles", () => {
 
     const files = ref([]);
     const file = ref([]);
-    const form = reactive({
+    const form = ref({
         title: "",
         eFile: null,
     });

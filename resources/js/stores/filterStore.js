@@ -90,6 +90,14 @@ export const useFilterStore = defineStore("filterStore", () => {
             console.log(e);
         }
     };
+
+    const batchUpdate = async(requestData)=>{
+        try {
+            const res = await exec(["/api/filter-batch"].join("/"), "put", requestData);
+        } catch (e) {
+            console.log(e);
+        }
+    }
     return {
         filters,
         filter,
@@ -104,5 +112,6 @@ export const useFilterStore = defineStore("filterStore", () => {
         addFilterChoice,
         updateFilterChoice,
         deleteFilterChoice,
+        batchUpdate
     };
 });

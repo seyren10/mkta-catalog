@@ -48,34 +48,24 @@ import ProductList from "../reusableComponents/Index.vue";
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
-const s3 = inject("s3");
 
 const emit = defineEmits(["update"]);
-const props = defineProps({
-    id: String,
-});
 
-//SECTION - Product Store
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-const refreshProductData = async () => {
-    await productStore.getProductItem(props.id, {
-        includeProductCategoriesKey: true,
-    });
-};
-if (!product_item.length) {
-    refreshProductData();
-}
+const s3 = inject("s3");
+const productStore = inject("productStore");
+const product_item = inject("product_item");
 
-//SECTION - Product Store
+//SECTION - Link Store
 import { useLinkProductStore } from "@/stores/linkProductStore";
 const linkProductStore = useLinkProductStore();
 const { related_products } = storeToRefs(linkProductStore);
 const refreshRelatedProducts = async () => {
-    await linkProductStore.getRelatedProducts(props.id);
+    await linkProductStore.getRelatedProducts(product_item.value.id);
 };
-if (!related_products.length) {
+
+if(product_item.value.related_product.length > 0){
+    related_products.value = product_item.value.related_product;
+}else{
     refreshRelatedProducts();
 }
 
@@ -86,15 +76,14 @@ const closeRelatedProducts = () => {
     insertRelatedProduct.value = false;
 };
 const removeRelatedProduct = async (id) => {
-    console.log(id);
     await linkProductStore.removeRelatedProduct(id);
     refreshRelatedProducts();
 };
 const appendRelatedProducts = async (data) => {
     data.forEach(async (element) => {
-        await linkProductStore.appendRelatedProduct(props.id, element.id);
+        await linkProductStore.appendRelatedProduct(product_item.value.id, element.id);
         if (appendRelatedProducts_BothWays) {
-            await linkProductStore.appendRelatedProduct(element.id, props.id);
+            await linkProductStore.appendRelatedProduct(element.id, product_item.value.id);
         }
     });
     closeRelatedProducts();

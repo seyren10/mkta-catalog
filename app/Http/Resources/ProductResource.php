@@ -5,17 +5,16 @@ namespace App\Http\Resources;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Log;
 
 class ProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
-        
+
         #region Wishlist Button
         $nonwishlistproduct = $request->session()->get('nonwishlist_products', array())->toArray();
-        $data['show_wishlist_button'] = !in_array($data['id'], $nonwishlistproduct);
+        $data['show_wishlist_button'] = true || !in_array($data['id'], $nonwishlistproduct);
         $data['show_wishlist_button_data'] = $nonwishlistproduct;
         #endregion
         #region Product Categories
@@ -29,7 +28,7 @@ class ProductResource extends JsonResource
             unset($data['product_categories']);
         }
         #endregion
-        #region Product Categories
+        #region Product Categories Keys
         if ($request->has('includeProductCategoryKeys')) {
             if ($request->includeProductCategoryKeys === 'true' || $request->includeProductCategoryKeys === true) {
                 $data['product_category_keys'] = (collect($data['product_categories']))->pluck('id');
@@ -117,7 +116,10 @@ class ProductResource extends JsonResource
         }
 
         if ($request->has('includeVariants')) {
-            $data['variants'] = Product::variants($this);
+            $restricted_products = $request->session()->get('restricted_products', array());
+            $collect = collect(Product::variants($this));
+            $data['variants'] = $collect->whereNotIn('id', $restricted_products)->toArray();
+            // $data['variants'] = Product::variants($this)->whereNotIn('id', $restricted_products);
         }
         #endregion
         #region Related Products

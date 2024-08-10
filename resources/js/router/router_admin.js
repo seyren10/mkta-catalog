@@ -217,6 +217,24 @@ const contentManagement = [
     },
 ];
 
+const dataManagement = [
+    {
+        path: "data-table-products",
+        name: "productDataIndex",
+        component: () => import("@/Pages/Admin/Data/Product/index.vue"),
+    },
+    {
+        path: "data-table-filters",
+        name: "filterDataIndex",
+        component: () => import("@/Pages/Admin/Data/Filter/index.vue"),
+    },
+    {
+        path: "data-table-categories",
+        name: "categoryDataIndex",
+        component: () => import("@/Pages/Admin/Data/Category/index.vue"),
+    },
+];
+
 const admin_routes = [
     {
         path: "/admin",
@@ -231,6 +249,7 @@ const admin_routes = [
             ...product_management,
             ...file_management,
             ...contentManagement,
+            ...dataManagement
         ],
     },
 ];

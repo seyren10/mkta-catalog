@@ -117,36 +117,25 @@ import { onBeforeMount, ref, watch, inject } from "vue";
 import { storeToRefs } from "pinia";
 
 //SECTION - Components
-const s3 = inject("s3");
-
 import fileIndex from "../../Files/Index.vue";
 
-/*SECTION - Props */
-const props = defineProps({
-    id: String,
-});
+const s3 = inject("s3");
+const product_item = inject("product_item");
+const productStore = inject("productStore");
 
-//SECTION - Product Store
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-const refreshProductData = async () => {
-    await productStore.getProductItem(props.id, {
-        includeProductCategoriesKey: true,
-    });
-};
-if (!product_item.length) {
-    refreshProductData();
-}
+
 //SECTION - Product Image Store
 import { useProductImageStore } from "@/stores/productImagesStore";
-import { IoMagnet } from "oh-vue-icons/icons";
 const productImagesStore = useProductImageStore();
 const { productImage, form } = storeToRefs(productImagesStore);
+
+
 const refreshProductImage = async () => {
-    await productImagesStore.getProductImage(props.id);
+    await productImagesStore.getProductImage(product_item.value.id);
 };
-if (!productImage.length) {
+if(product_item.value.product_images.length > 0){
+    productImage.value = product_item.value.product_images;
+}else{
     refreshProductImage();
 }
 
@@ -184,7 +173,7 @@ const close_insertProductImage_data = () => {
 };
 const submit_insertProductImage_data = async (data) => {
     data.forEach((element) => {
-        form.value.product_id = props.id;
+        form.value.product_id = product_item.value.id;
         form.value.file_id = element.id;
         productImagesStore.insertProductImage();
     });

@@ -5,7 +5,7 @@ import { useAxios } from "@/composables/useAxios";
 export const useCategoryStore = defineStore("categories", () => {
     const { loading, errors, exec } = useAxios();
     /*
-    const categories = reactive([
+    const categories = ref([
         {
             id: 1,
             name: "Christmas",
@@ -214,7 +214,7 @@ export const useCategoryStore = defineStore("categories", () => {
      */
     const categories = ref([]);
     const category = ref([]);
-    const form = reactive({
+    const form = ref({
         img: "",
         title: "",
         description: "",
@@ -272,6 +272,7 @@ export const useCategoryStore = defineStore("categories", () => {
     const getCategory = async (id, requestData = null) => {
         try {
             let defaultData = {
+                includeCoverHTML: true,
                 includeSubCategories: true,
                 includeFile: true,
                 includeParentCategory: true,
@@ -293,7 +294,18 @@ export const useCategoryStore = defineStore("categories", () => {
     };
     const getCategories = async (requestData = null) => {
         try {
-            const res = await exec("/api/categories", "get", requestData);
+
+            let defaultData = {
+                includeCoverHTML: true,
+                includeSubCategories: true,
+                includeFile: true,
+                includeParentCategory: true,
+            };
+
+            const res = await exec("/api/categories", "get", {
+                ...defaultData,
+                ...requestData,
+            });
             categories.value = res.data.data;
         } catch (e) {
             console.log(e);
