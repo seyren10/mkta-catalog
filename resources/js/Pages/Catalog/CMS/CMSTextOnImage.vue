@@ -1,0 +1,29 @@
+<template>
+    <div class="col-span-full">
+        <v-text-on-image
+            class="aspect-[3/1]"
+            v-if="!data?.link"
+            :image="s3(data.filename)"
+            no-overlay
+        ></v-text-on-image>
+        <router-link v-else :to="data.path">
+            <v-text-on-image
+                class="aspect-[3/1]"
+                :image="s3(data.filename)"
+                no-overlay
+            ></v-text-on-image>
+        </router-link>
+    </div>
+</template>
+
+<script setup>
+import { inject } from "vue";
+
+const props = defineProps({
+    data: Object,
+});
+
+const s3 = inject("s3");
+</script>
+
+<style lang="scss" scoped></style>

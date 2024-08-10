@@ -1,8 +1,10 @@
 <template>
     <div class="relative">
-        <button class="rounded-lg border" @click="handleShowMenu">
-            <v-icon name="bi-plus" scale="1.3"></v-icon>
-        </button>
+        <slot name="button" @click="handleShowMenu">
+            <button class="rounded-lg border" @click="handleShowMenu">
+                <v-icon name="bi-plus" scale="1.3"></v-icon>
+            </button>
+        </slot>
 
         <CMSButtonMenu
             v-if="showMenu"
@@ -13,12 +15,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { provide, ref } from "vue";
 
 import CMSButtonMenu from "./CMSButtonMenu.vue";
 
-const showMenu = ref(false);
+const props = defineProps({
+    menuContent: Array,
+});
 const emits = defineEmits(["select"]);
+const showMenu = ref(false);
 
 function handleAdd(node) {
     emits("select", node);
@@ -31,6 +36,8 @@ function handleShowMenu() {
 function hideMenu() {
     showMenu.value = false;
 }
+
+provide("menuContent", props.menuContent);
 </script>
 
 <style lang="scss" scoped></style>

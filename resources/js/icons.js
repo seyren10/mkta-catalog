@@ -129,11 +129,14 @@ import {
     PrSignOut,
     LaMehBlank,
     BiBell,
+    FaRegularHandshake,
+    RiLink,
+    BiShieldCheck,
+    BiShield,
     HiSolidDatabase,
 } from "oh-vue-icons/icons";
 
 addIcons(
-    HiSolidDatabase,
     BiBell,
     LaMehBlank,
     PrSignOut,

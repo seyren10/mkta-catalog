@@ -82,6 +82,7 @@ const props = defineProps({
         default: 25,
     },
     multiple: Boolean,
+    items: Array,
 });
 
 const s3 = inject("s3");
@@ -89,7 +90,9 @@ const emits = defineEmits(["submit"]);
 const { files, getFiles, loading } = useFiles(useFileStore());
 const search = ref("");
 const showSelected = ref(false);
-const { handleClearSelection, handleSelect, selectedItems } = useSelection();
+const { handleClearSelection, handleSelect, selectedItems } = useSelection(
+    props.items,
+);
 
 const searchItems = computed(() => {
     if (showSelected.value) {
@@ -123,8 +126,8 @@ function useFiles(fileStore) {
     return { files, getFiles, loading };
 }
 
-function useSelection() {
-    const selectedItems = ref([]);
+function useSelection(selected = []) {
+    const selectedItems = ref(selected);
 
     function handleSelect(item) {
         if (!props.multiple) {

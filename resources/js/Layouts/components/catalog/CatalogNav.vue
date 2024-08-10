@@ -1,5 +1,5 @@
 <template>
-    <nav class="primary-gradient">
+    <nav class="bg-[#04151f]">
         <div class="container">
             <!-- #region toolbar-header -->
             <div
@@ -34,9 +34,9 @@
             <div class="mt-3 flex items-center justify-between gap-5">
                 <!-- #region mk-logo -->
                 <img
-                    src="/MKLogo-White.svg"
+                    src="/Logo.png"
                     alt=""
-                    class="mr-3 hidden max-w-[6rem] cursor-pointer sm:block"
+                    class="mr-3 hidden max-w-[10rem] cursor-pointer sm:block"
                     @click="$router.push({ name: 'catalog' })"
                 />
                 <!-- #endregion mk-logo -->
@@ -101,7 +101,7 @@
                     <template #default="{ loaded }">
                         <div
                             v-if="loaded"
-                            class="scrollbar primary-gradient max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain p-5"
+                            class="scrollbar bg-[#04151f] max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain p-5"
                         >
                             <div class="mb-8">
                                 <h1

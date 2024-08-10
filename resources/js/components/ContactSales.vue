@@ -32,7 +32,7 @@
         </section>
     </div>
 
-    <section class="primary-gradient p-3 text-[.8rem] md:col-span-2">
+    <section class="bg-[#04151f] p-3 text-[.8rem] md:col-span-2">
         <v-text-icon
             :items="infoList"
             class="grid text-slate-400 *:items-start"
