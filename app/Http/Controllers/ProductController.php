@@ -9,14 +9,12 @@ use App\Models\Category;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\ProductCategory;
-use App\Models\ProductFilter;
-use Illuminate\Http\File;
+use App\Models\RecommendedProduct;
+use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Madnest\Madzipper\Madzipper;
 
 class ProductController extends Controller
 {
@@ -28,26 +26,33 @@ class ProductController extends Controller
     {
         $restricted_products = $request->session()->get('restricted_products', array());
 
+        $products = Product::whereNotIn('id', $restricted_products);
+
         /* Searching products */
         $query = $request->q;
+
+        if($request->has('unlisted')){
+            $products->whereNotIn('id', $request->unlisted);
+        }
+
         if ($query) {
-            $searchedProducts = Product::whereAny([
+            $searchedProducts = $products->whereAny([
                 'id', 'title', 'description',
-            ], 'LIKE', '%' . $query . '%')->whereNotIn('id', $restricted_products)->paginate(30)->withQueryString();
+            ], 'LIKE', '%' . $query . '%')->paginate(30)->withQueryString();
 
             return ProductResource::collection($searchedProducts);
         }
 
-        return ProductResource::collection(Product::whereNotIn('id', $restricted_products)->paginate(30)->withQueryString());
+        return ProductResource::collection($products->paginate(30)->withQueryString());
     }
 
-    /* 
-        Display a listing of resource and add it to the cache
-        this is to make the retrieval faster on subsequent request
-    */
+    /*
+    Display a listing of resource and add it to the cache
+    this is to make the retrieval faster on subsequent request
+     */
     public function indexCached()
     {
-        $time = now()->addHour(); //validity of the cache 
+        $time = now()->addHour(); //validity of the cache
 
         if (request()->has('refresh')) {
             Cache::store('file')->forget('products');
@@ -182,6 +187,79 @@ class ProductController extends Controller
     {
         dispatch(new ZipProductImages($product->id, Auth()->user()->id));
         return response()->noContent();
+    }
+    public static function batchUpdate(Request $request)
+    {
+        foreach ($request->products as $key => $value) {
+            $curProduct = Product::where('id', $key)->with([])->first();
+            #region Data Structure Validation
+            $allowContinue = [
+                !($curProduct === null),
+                array_key_exists('prod_data', $value),
+                array_key_exists('cat_data', $value),
+                array_key_exists('related', $value),
+                array_key_exists('recommended', $value),
+            ];
+            if (in_array(false, $allowContinue)) {
+                continue;
+            }
+            $allowContinue = [
+                array_key_exists('append', $value['related']),
+                array_key_exists('remove', $value['related']),
+                array_key_exists('append', $value['recommended']),
+                array_key_exists('remove', $value['recommended']),
+            ];
+            if (in_array(false, $allowContinue)) {
+                continue;
+            }
+            #endregion
+
+            #region Product Info Update
+            foreach ($value['prod_data'] as $col => $data) {
+                $curProduct[$col] = $data;
+            }
+            $curProduct->save();
+            #endregion
+            #region Product Categories
+            // ProductCategory::where('product_id', $key)->delete();
+            $curProduct->sync_product_categories()->sync($value['cat_data']);
+            #endregion
+            #region Product Related
+            $linkProducts = $value['related'];
+                #region Append
+                foreach ($linkProducts['append'] as $appendValue) {
+                    RelatedProduct::create(
+                        array(
+                            'product_id' => $curProduct->id,
+                            'related_product_id' => $appendValue,
+                        )
+                    );
+                }
+                #endregion
+                #region Remove
+                RelatedProduct::whereIn('related_product_id', $linkProducts['remove'])->delete();
+                #endregion
+            #endregion
+            #region Product Recommended
+            $linkProducts = $value['recommended'];
+                #region Append
+                foreach ($linkProducts['append'] as $appendValue) {
+                    RecommendedProduct::create(
+                        array(
+                            'product_id' => $curProduct->id,
+                            'recommended_product_id' => $appendValue,
+                        )
+                    );
+                }
+                #endregion
+                #region Remove
+
+                RecommendedProduct::whereIn('recommended_product_id', $linkProducts['remove'])->delete();
+                #endregion
+            #endregion
+
+        }
+        return response()->noContent(200);
     }
     #endregion
 

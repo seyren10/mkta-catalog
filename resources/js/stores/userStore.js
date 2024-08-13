@@ -6,7 +6,7 @@ export const useUserStore = defineStore("user", () => {
     const currentUser = ref(null);
     const user = ref([]);
     const users = ref([]);
-    const form = reactive({
+    const form = ref({
         name: "",
         email: "",
         password: "",

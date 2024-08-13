@@ -16,4 +16,7 @@ class ProductFilter extends Model
     {
         return $this->hasOne(Filter::class);
     }
+
+    
+    
 }

@@ -50,32 +50,21 @@ import { storeToRefs } from "pinia";
 
 const s3 = inject("s3");
 
+const product_item = inject("product_item");
+const productStore = inject("productStore");
+
 const emit = defineEmits(["update"]);
-const props = defineProps({
-    id: String,
-});
 
-//SECTION - Product Store
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-const refreshProductData = async () => {
-    await productStore.getProductItem(props.id, {
-        includeProductCategoriesKey: true,
-    });
-};
-if (!product_item.length) {
-    refreshProductData();
-}
-
-//SECTION - Product Store
+//SECTION - Link Store
 import { useLinkProductStore } from "@/stores/linkProductStore";
 const linkProductStore = useLinkProductStore();
 const { recommended_products } = storeToRefs(linkProductStore);
 const refreshrecommendedProducts = async () => {
-    await linkProductStore.getRecommendedProducts(props.id);
+    await linkProductStore.getRecommendedProducts(product_item.value.id);
 };
-if (!recommended_products.length) {
+if(product_item.value.recommended_product.length > 0){
+    recommended_products.value = product_item.value.recommended_product	;
+}else{
     refreshrecommendedProducts();
 }
 
@@ -92,9 +81,9 @@ const removeRecommededProduct = async (id) => {
 };
 const appendRecommendedProducts = async (data) => {
     data.forEach(async (element) => {
-        await linkProductStore.appendRecommendedProduct(props.id, element.id);
+        await linkProductStore.appendRecommendedProduct(product_item.value.id, element.id);
         if (appendRecommendedProducts_BothWays) {
-            await linkProductStore.appendRecommendedProduct(element.id, props.id);
+            await linkProductStore.appendRecommendedProduct(element.id, product_item.value.id);
         }
     });
     closerecommendedProducts();

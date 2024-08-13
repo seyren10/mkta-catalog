@@ -52,6 +52,28 @@ class CategoryResource extends JsonResource
             unset($data['sub_categories']);
         }
         #endregion
+        #region Cover HTML
+        $removeCoverHTML = true;
+        if ($request->has('includeCoverHTML')) {
+            if ($request->includeCoverHTML === 'true' || $request->includeCoverHTML === true) {
+                $removeCoverHTML = false;
+            }
+        }
+        if ($removeCoverHTML) {
+            unset($data['cover_html']);
+        }
+        #endregion
+        #region Cover HTML
+        $removeCoverHTML = true;
+        if ($request->has('includeCoverHTML')) {
+            if ($request->includeCoverHTML === 'true' || $request->includeCoverHTML === true) {
+                $removeCoverHTML = false;
+            }
+        }
+        if ($removeCoverHTML) {
+            unset($data['cover_html']);
+        }
+        #endregion
 
 
         if (!$request->has('includeBannerImage'))

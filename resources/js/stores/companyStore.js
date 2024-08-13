@@ -7,13 +7,13 @@ export const useCompanyStore = defineStore("company", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
 
-    const company = reactive({
+    const company = ref({
         id: 0,
         title: "",
         description: "",
     });
     const companies = ref([]);
-    const form = reactive({
+    const form = ref({
         title: "",
         description: "",
     });

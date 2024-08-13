@@ -7,7 +7,7 @@ export const useProductStore = defineStore("products", () => {
     //states
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
-    const form = reactive({
+    const form = ref({
         id: "",
         parent_code: "",
         title: "",
@@ -90,7 +90,11 @@ export const useProductStore = defineStore("products", () => {
             pagination.value = res.data.meta;
         } catch (e) {}
     };
-    const getProductItems = async (requestData = null) => {
+    const getProductItems = async (requestData = null, useStore = true) => {
+        let arrayData = {
+            data: {},
+            pagination: {},
+        };
         try {
             let defaultData = {
                 includeParentCode: true,
@@ -99,10 +103,18 @@ export const useProductStore = defineStore("products", () => {
                 ...defaultData,
                 ...requestData,
             });
-            product_items.value = res.data.data;
-            pagination.value = res.data.meta;
+            if (useStore) {
+                product_items.value = res.data.data;
+                pagination.value = res.data.meta;
+            } else {
+                arrayData = {
+                    data: res.data.data,
+                    pagination: res.data.meta.links,
+                };
+            }
         } catch (e) {
-            console.log(e);
+        } finally {
+            return arrayData;
         }
     };
     const getProductItem = async (id, requestData = null) => {
@@ -176,7 +188,7 @@ export const useProductStore = defineStore("products", () => {
         form.dimension_height = 0.0;
     };
 
-    const getProductFilter = async(product_id)=>{
+    const getProductFilter = async (product_id) => {
         try {
             const res = await exec(
                 ["/api/product-filter", product_id].join("/"),
@@ -187,37 +199,60 @@ export const useProductStore = defineStore("products", () => {
         } catch (e) {
             console.log(e);
         }
-    }
-    const addProductFilter = async( product_id, filter_id, option_id )=>{
+    };
+    const addProductFilter = async (product_id, filter_id, option_id) => {
         try {
             const res = await exec(
-                ["/api/product-filter", product_id, filter_id, option_id].join("/"),
+                ["/api/product-filter", product_id, filter_id, option_id].join(
+                    "/",
+                ),
                 "post",
             );
         } catch (e) {
             console.log(e);
         }
-    }
-    const removeProductFilter = async( product_id, filter_id, option_id )=>{
+    };
+    const removeProductFilter = async (product_id, filter_id, option_id) => {
         try {
             const res = await exec(
-                ["/api/product-filter", product_id, filter_id, option_id].join("/"),
+                ["/api/product-filter", product_id, filter_id, option_id].join(
+                    "/",
+                ),
                 "delete",
             );
         } catch (e) {
             console.log(e);
         }
-    }
+    };
 
-    const zipProductImages = async(product_id)=>{
+    const zipProductImages = async (product_id) => {
         try {
-            const res = await exec("/api/product-images/zip/" + product_id, "get", {});
+            const res = await exec(
+                "/api/product-images/zip/" + product_id,
+                "get",
+                {},
+            );
         } catch (e) {
             console.log(e);
         }
-    }
+    };
+
+    const tablebatch_updateProducts = async (product_data) => {
+        try {
+            const res = await exec("/api/product-batch", "put", {
+                products : product_data
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            resetForm();
+        }
+    };
 
     return {
+
+        tablebatch_updateProducts,
+
         getProductItemsWithCategoryId,
 
         zipProductImages,

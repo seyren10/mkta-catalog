@@ -9,6 +9,7 @@ class Category extends Model
 {
     use HasFactory;
     protected $fillable = ["title", "description", 'parent_id', 'file_id', "cover_html"];
+    
     protected $hidden = ["created_at", "updated_at", 'laravel_through_key', 'banner_file_id'];
     protected $with = ["sub_categories", 'file', 'parent_category', 'bannerFile'];
 

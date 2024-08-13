@@ -123,16 +123,9 @@ const props = defineProps({
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item, isValid } = storeToRefs(productStore);
+const product_item = inject("product_item");
+const productStore = inject("productStore");
 
-const refreshProductData = async () => {
-    await productStore.getProductItem(props.id);
-};
-if (!product_item.length) {
-    refreshProductData();
-}
 
 //!SECTION -> Filters
 import { useFilterStore } from "@/stores/filterStore";
@@ -141,6 +134,7 @@ const { filters } = storeToRefs(filterStore);
 const refreshFilter = async () => {
     await filterStore.getFilters();
 };
+
 if (!filters.length) {
     refreshFilter();
 }
@@ -177,15 +171,21 @@ const AppendFilterChoice = async () => {
 //!SECTION
 const product_filter = ref([]);
 const refreshProductFilter = async () => {
-    product_filter.value = await productStore.getProductFilter(props.id);
+    product_filter.value = await productStore.getProductFilter(product_item.value.id);
 };
-refreshProductFilter();
+if(product_item.value.product_filter.length > 0){
+    product_filter.value = product_item.value.product_filter;
+}else{
+    refreshProductFilter();
+}
+
+
 const selectProductFilterChoice = async (filter_id, option_id) => {
-    await productStore.addProductFilter(props.id, filter_id, option_id);
+    await productStore.addProductFilter(product_item.value.id, filter_id, option_id);
     refreshProductFilter();
 };
 const removeProductFilterChoice = async (filter_id, option_id) => {
-    await productStore.removeProductFilter(props.id, filter_id, option_id);
+    await productStore.removeProductFilter(product_item.value.id, filter_id, option_id);
     refreshProductFilter();
 };
 </script>

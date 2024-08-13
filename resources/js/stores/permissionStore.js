@@ -7,14 +7,14 @@ export const usePermissionStore = defineStore("permissions", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
 
-    const permission = reactive({
+    const permission = ref({
         id: 0,
         key: "",
         title: "",
         description: "",
     });
     const permissions = ref([]);
-    const form = reactive({
+    const form = ref({
         key: "",
         title: "",
         description: "",

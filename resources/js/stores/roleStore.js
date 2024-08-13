@@ -9,7 +9,7 @@ export const useRoleStore = defineStore("roles", () => {
 
     const role = ref([]);
     const roles = ref([]);
-    const form = reactive({
+    const form = ref({
         title: "",
         description: "",
     });

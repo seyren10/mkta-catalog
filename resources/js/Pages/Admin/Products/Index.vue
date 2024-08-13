@@ -125,18 +125,10 @@ import { useQuery } from "../../../composables/useQuery";
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
-
 import { useProductStore } from "@/stores/productStore";
 const productStore = useProductStore();
 const { product_items, isValid, paginationLinks } = storeToRefs(productStore);
-
 const showInsert = ref(false);
-
-
-
-
-
-
 const [page, setPage] = useQuery("page", () => refresh());
 const [searchQuery, setSearchQuery] = useQuery("search", () => refresh());
 const search = ref(searchQuery.value);

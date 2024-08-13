@@ -10,7 +10,7 @@ export const useProductImageStore = defineStore("productImages", () => {
     const productImages = ref([]);
     const productImage = ref([]);
 
-    const form = reactive({
+    const form = ref({
         product_id: 0,
         is_thumbnail: 0,
         file_id: 0,

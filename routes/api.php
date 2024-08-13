@@ -48,6 +48,7 @@ Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']
 
 
 Route::apiResource('filters', FilterController::class)->except(['create', 'edit']);
+Route::put('filter-batch', [FilterController::class, 'batchUpdate']);
 Route::post('filters/choice/{filter}', [FilterChoiceController::class, 'store']);
 Route::put('filters/choice/{filter_choice}', [FilterChoiceController::class, 'update']);
 Route::delete('filters/choice/{filter_choice}', [FilterChoiceController::class, 'destroy']);
@@ -75,6 +76,7 @@ Route::delete('product-access/{action_type}/{product}/{product_access}/{value}',
 Route::prefix('product')->controller(ProductController::class)->group(function () {
     Route::get('/latest', [ProductController::class, 'latestProducts']);
     Route::get('/cached', [ProductController::class, 'indexCached']);
+Route::put('product-batch', [ProductController::class, 'batchUpdate']);
     Route::get('/random', [ProductController::class, 'randomProducts']);
 });
 Route::apiResource('product', ProductController::class)->except($except);

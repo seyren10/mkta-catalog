@@ -68,22 +68,16 @@ import { storeToRefs } from "pinia";
 import checkboxCategory from "./essentials/checkboxCategory.vue";
 /*SECTION - End Components */
 
-/*SECTION - Props */
-const props = defineProps({
-    id: String,
-});
-/*SECTION - End Props */
 /*SECTION - Variables */
 const collections = ref({});
 /*SECTION - End Variables */
 
 /*SECTION - Product Info */
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-if (!product_item.length) {
-    await productStore.getProductItem(props.id, {includeProductCategoriesKey : true});
-}
+const product_item = inject("product_item");
+const productStore = inject("productStore");
+
+
+
 /*SECTION - End Product Info */
 /*SECTION - Categories */
 import { useCategoryStore } from "@/stores/categoryStore";

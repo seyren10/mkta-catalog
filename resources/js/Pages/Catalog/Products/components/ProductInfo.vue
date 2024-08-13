@@ -68,7 +68,6 @@
                 <ContactSales class="p-5" :item="product"></ContactSales>
             </v-dialog>
         </div>
-
         <div v-if="variants.length">
             <h3 class="mb-3 text-slate-500">Variants:</h3>
             <ul class="flex flex-wrap gap-3">

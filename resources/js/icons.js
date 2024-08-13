@@ -133,13 +133,10 @@ import {
     RiLink,
     BiShieldCheck,
     BiShield,
+    HiSolidDatabase,
 } from "oh-vue-icons/icons";
 
 addIcons(
-    BiShield,
-    BiShieldCheck,
-    RiLink,
-    FaRegularHandshake,
     BiBell,
     LaMehBlank,
     PrSignOut,

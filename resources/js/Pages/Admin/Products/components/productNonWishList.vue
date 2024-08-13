@@ -39,10 +39,6 @@
 <script setup>
 import { onBeforeMount, ref, watch, inject, computed } from "vue";
 import { storeToRefs } from "pinia";
-
-const props = defineProps({
-    id: String,
-});
 /*SECTION - Customer Data */
 import { useCustomerStore } from "@/stores/customerStore";
 const customerStore = useCustomerStore();
@@ -52,21 +48,18 @@ if (!customers.length) {
 }
 /*SECTION - End Customer Data */
 /*SECTION - Product Data */
-import { useProductStore } from "@/stores/productStore";
-const productStore = useProductStore();
-const { product_item } = storeToRefs(productStore);
-if (!product_item.length && props.id != "") {
-    await productStore.getProductItem(props.id);
-}
+const product_item = inject("product_item");
+const productStore = inject("productStore");
+
 /*SECTION - End Product Data */
 
 /*SECTION - Non Wishlist */
 import { useNonWishlistStore } from "@/stores/nonWishlistStore";
 const nonWishlistStore = useNonWishlistStore();
 const { non_wishlist_data, form } = storeToRefs(nonWishlistStore);
-form.value.product_id = props.id;
+form.value.product_id = product_item.value.id;
 if (!non_wishlist_data.length) {
-    nonWishlistStore.getNonWishlist("product", props.id);
+    nonWishlistStore.getNonWishlist("product", product_item.value.id);
 }
 /*SECTION - End of Non Wishlist */
 
@@ -95,6 +88,6 @@ const NonWishListCustomers_data = computed(() => {
 });
 
 const refresh = () => {
-    nonWishlistStore.getNonWishlist("product", props.id);
+    nonWishlistStore.getNonWishlist("product", product_item.value.id);
 };
 </script>

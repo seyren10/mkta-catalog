@@ -10,7 +10,7 @@ export const useProductAccessTypeStore = defineStore(
         const { loading, errors, exec } = useAxios();
         const product_access_type = ref([]);
         const product_access_types = ref([]);
-        const form = reactive({
+        const form = ref({
             type: "",
             title: "",
             description: "",
