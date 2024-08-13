@@ -44,6 +44,7 @@ import { useCMSStore } from "@/stores/CMSStore";
 import { useCMSUIStore } from "@/stores/ui/CMSUIStore";
 
 import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
+import FeaturedProducts from "./components/FeaturedProducts.vue";
 
 const user = inject("currentUser");
 const firstTimeLogin = ref(true);

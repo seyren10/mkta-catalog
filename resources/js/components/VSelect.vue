@@ -27,7 +27,7 @@
                 leave-active-class="duration-300 ease"
             >
                 <ul
-                    class="absolute inset-x-0 z-[2000] overflow-hidden rounded-lg border bg-white"
+                    class="absolute inset-x-0 z-[2000] overflow-auto max-h-[15rem] scrollbar rounded-lg border bg-white"
                     :class="{
                         'bottom-[110%]': position === 'top',
                         'top-[110%]': position === 'bottom',
@@ -74,7 +74,7 @@ const props = defineProps({
     modelValue: {},
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "change"]);
 
 const showSelection = ref(false);
 const densityValues = useDensityValues(props.density);
@@ -91,6 +91,7 @@ const value = computed(() => {
 //methods
 const handleSelected = (value) => {
     emit("update:modelValue", value);
+    emit("change", value);
 };
 </script>
 

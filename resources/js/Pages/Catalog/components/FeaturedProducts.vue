@@ -42,11 +42,6 @@ const props = defineProps({
     title: String,
     imageProps: Object,
 });
-
-//functions
-const handleIntersect = (entry) => {
-    console.log(entry.target);
-};
 </script>
 
 <style lang="scss" scoped></style>

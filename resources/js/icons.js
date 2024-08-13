@@ -134,9 +134,18 @@ import {
     BiShieldCheck,
     BiShield,
     HiSolidDatabase,
+    CoStar,
+    BiListCheck,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    BiListCheck,
+    FaRegularHandshake,
+    RiLink,
+    BiShieldCheck,
+    BiShield,
+    HiSolidDatabase,
+    CoStar,
     BiBell,
     LaMehBlank,
     PrSignOut,

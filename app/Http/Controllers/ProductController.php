@@ -30,20 +30,23 @@ class ProductController extends Controller
 
         /* Searching products */
         $query = $request->q;
+        $perPage = $request->perPage ?? 30;
 
-        if($request->has('unlisted')){
+        if ($request->has('unlisted')) {
             $products->whereNotIn('id', $request->unlisted);
         }
 
         if ($query) {
             $searchedProducts = $products->whereAny([
-                'id', 'title', 'description',
-            ], 'LIKE', '%' . $query . '%')->paginate(30)->withQueryString();
+                'id',
+                'title',
+                'description',
+            ], 'LIKE', '%' . $query . '%')->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
 
             return ProductResource::collection($searchedProducts);
         }
 
-        return ProductResource::collection($products->paginate(30)->withQueryString());
+        return ProductResource::collection($products->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString());
     }
 
     /*
@@ -86,6 +89,16 @@ class ProductController extends Controller
                 $query->where('product_categories.category_id', $category->id);
             }
         });
+
+        $search = $request->q;
+
+        if ($search) {
+            $query->whereAny([
+                'id',
+                'title',
+                'description',
+            ], 'LIKE', '%' . $search . '%');
+        }
 
         /* filtering */
         if ($request->has('filters')) {
@@ -226,36 +239,36 @@ class ProductController extends Controller
             #endregion
             #region Product Related
             $linkProducts = $value['related'];
-                #region Append
-                foreach ($linkProducts['append'] as $appendValue) {
-                    RelatedProduct::create(
-                        array(
-                            'product_id' => $curProduct->id,
-                            'related_product_id' => $appendValue,
-                        )
-                    );
-                }
-                #endregion
-                #region Remove
-                RelatedProduct::whereIn('related_product_id', $linkProducts['remove'])->delete();
-                #endregion
+            #region Append
+            foreach ($linkProducts['append'] as $appendValue) {
+                RelatedProduct::create(
+                    array(
+                        'product_id' => $curProduct->id,
+                        'related_product_id' => $appendValue,
+                    )
+                );
+            }
+            #endregion
+            #region Remove
+            RelatedProduct::whereIn('related_product_id', $linkProducts['remove'])->delete();
+            #endregion
             #endregion
             #region Product Recommended
             $linkProducts = $value['recommended'];
-                #region Append
-                foreach ($linkProducts['append'] as $appendValue) {
-                    RecommendedProduct::create(
-                        array(
-                            'product_id' => $curProduct->id,
-                            'recommended_product_id' => $appendValue,
-                        )
-                    );
-                }
-                #endregion
-                #region Remove
+            #region Append
+            foreach ($linkProducts['append'] as $appendValue) {
+                RecommendedProduct::create(
+                    array(
+                        'product_id' => $curProduct->id,
+                        'recommended_product_id' => $appendValue,
+                    )
+                );
+            }
+            #endregion
+            #region Remove
 
-                RecommendedProduct::whereIn('recommended_product_id', $linkProducts['remove'])->delete();
-                #endregion
+            RecommendedProduct::whereIn('recommended_product_id', $linkProducts['remove'])->delete();
+            #endregion
             #endregion
 
         }
