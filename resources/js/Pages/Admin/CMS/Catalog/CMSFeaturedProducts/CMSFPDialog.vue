@@ -60,7 +60,7 @@
             </ul>
             <div v-else class="text-center">No Product found.</div>
         </div>
-        <div v-else class="g rid place-content-center">
+        <div v-else class="grid place-content-center">
             <VLoader></VLoader>
         </div>
 
@@ -76,9 +76,7 @@
                     label="view selected"
                     v-model="viewSelected"
                 ></v-checkbox>
-            </div>
 
-            <div class="flex gap-1">
                 <v-button
                     prepend-inner-icon="bi-list-check"
                     class="text-xs"
@@ -94,6 +92,10 @@
                     >Unselect All</v-button
                 >
             </div>
+
+            <div class="rounded-lg bg-accent text-white">
+                <v-button @click="save">Save</v-button>
+            </div>
         </div>
     </div>
 </template>
@@ -106,6 +108,8 @@ import { computed, inject, ref } from "vue";
 import CMSFPDialogToolbar from "./CMSFPDialogToolbar.vue";
 import VLoader from "@/components/base_components/VLoader.vue";
 
+const model = defineModel({ default: [] });
+const emits = defineEmits(["save"]);
 const {
     products,
     pagination,
@@ -142,6 +146,10 @@ function handleChange(data) {
     getProducts(data);
 }
 
+function save() {
+    model.value = selectedProducts.value;
+    emits("save");
+}
 function useProducts() {
     const productStore = useProductStore();
 
@@ -224,7 +232,7 @@ function useProducts() {
 }
 
 function useSelectedProducts(products) {
-    const selectedProducts = ref([]);
+    const selectedProducts = ref(model.value);
 
     function existInSelected(product) {
         return selectedProducts.value.find((p) => p.id === product.id);

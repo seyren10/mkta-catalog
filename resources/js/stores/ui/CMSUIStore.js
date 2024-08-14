@@ -10,6 +10,7 @@ import CMSLayout from "../../Pages/Catalog/CMS/CMSLayout.vue";
 import CMSAutoLayout from "../../Pages/Catalog/CMS/CMSAutoLayout.vue";
 import CMSCatalogCarousel from "../../Pages/Catalog/CMS/CMSCatalogCarousel.vue";
 import CMSFeaturedProducts from "../../Pages/Admin/CMS/Catalog/CMSFeaturedProducts/CMSFeaturedProducts.vue";
+import CMSCatalogFeaturedProducts from "../../Pages/Catalog/CMS/CMSCatalogFeaturedProducts.vue";
 
 export const useCMSUIStore = defineStore("CMSUIStore", () => {
     const nodes = ref([]);
@@ -244,6 +245,12 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
             case "layout-auto":
                 return markRaw(
                     environment.value === "admin" ? AutoLayout : CMSAutoLayout,
+                );
+            case "products":
+                return markRaw(
+                    environment.value === "admin"
+                        ? CMSFeaturedProducts
+                        : CMSCatalogFeaturedProducts,
                 );
 
             default:

@@ -2,7 +2,7 @@
     <v-card class="relative border-none">
         <template #header>
             <div
-                class="sticky top-[10rem] z-[10] flex items-center justify-center gap-3 rounded-lg bg-white py-5 text-primary md:top-[9.75rem]"
+                class="sticky top-[8rem] z-[10] flex items-center justify-center gap-3 rounded-lg bg-white py-5 text-primary md:top-[14rem]"
             >
                 <v-icon
                     :name="titleIcon"
@@ -17,7 +17,7 @@
 
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
             <div
-                v-for="item in items"
+                v-for="item in displayItems"
                 class="overflow-hidden rounded-lg border bg-primary text-white"
             >
                 <Product :item="item" class="bg-slate-1000" no-overlay>
@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import Product from "../../../components/Product.vue";
 
 const props = defineProps({
@@ -41,6 +42,15 @@ const props = defineProps({
     titleIcon: String,
     title: String,
     imageProps: Object,
+    displayLimit: Number,
+});
+
+const displayItems = computed(() => {
+    if (props.displayLimit <= 0 || props.displayLimit > props.items.length) {
+        return props.items;
+    } else {
+        return props.items.slice(0, props.displayLimit);
+    }
 });
 </script>
 

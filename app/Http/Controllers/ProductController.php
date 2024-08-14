@@ -91,6 +91,7 @@ class ProductController extends Controller
         });
 
         $search = $request->q;
+        $perPage = $request->perPage ?? 32;
 
         if ($search) {
             $query->whereAny([
@@ -126,7 +127,7 @@ class ProductController extends Controller
         $restricted_products = $request->session()->get('restricted_products', array());
         $query->whereNotIn('id', $restricted_products);
 
-        return ProductResource::collection($query->paginate(32)->withQueryString());
+        return ProductResource::collection($query->paginate($perPage)->withQueryString());
     }
 
     public function store(ProductRequest $request)

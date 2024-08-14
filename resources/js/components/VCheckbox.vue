@@ -48,7 +48,7 @@ const isChecked = computed(() => {
 
 //methods
 const handleCheck = () => {
-    if (hasMultipleValues) {
+    if (hasMultipleValues.value) {
         //remove the value on the v-model when existed and add when not
         if (model.value?.includes(props.value))
             model.value = model.value.filter((e) => e !== props.value);
