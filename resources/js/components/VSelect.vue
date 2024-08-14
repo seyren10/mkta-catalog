@@ -27,11 +27,12 @@
                 leave-active-class="duration-300 ease"
             >
                 <ul
-                    class="absolute inset-x-0 z-[2000] overflow-hidden rounded-lg border bg-white"
+                    class="absolute inset-x-0 z-[2000] overflow-y-auto rounded-lg border bg-white"
                     :class="{
                         'bottom-[110%]': position === 'top',
                         'top-[110%]': position === 'bottom',
                     }"
+                    :style="{maxHeight: ( displayLength * 50 ) + 'px'}"
                     v-show="showSelection"
                 >
                     <li
@@ -67,6 +68,7 @@ defineOptions({
 const props = defineProps({
     ...useInput(),
     ...useDensity(),
+    displayLength : { type: Number, default: 3 },
     position: { type: String, default: "top" },
     items: { type: Array },
     itemTitle: { type: String },

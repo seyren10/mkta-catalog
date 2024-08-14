@@ -11,6 +11,7 @@ export const useCustomerStore = defineStore("customer", () => {
         name: "",
         email: "",
         password: "",
+        company_id: 0,
         is_active: true,
         role_id: 2,
     });
@@ -41,8 +42,7 @@ export const useCustomerStore = defineStore("customer", () => {
     };
     const addCustomer = async () => {
         try {
-            const res = await exec("/api/customers", "post", form);
-            form.password = res.data.password;
+            const res = await exec("/api/customers", "post", form.value);
         } catch (e) {
             console.log(e);
         }

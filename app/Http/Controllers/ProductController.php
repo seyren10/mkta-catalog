@@ -14,7 +14,6 @@ use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -31,7 +30,7 @@ class ProductController extends Controller
         /* Searching products */
         $query = $request->q;
 
-        if($request->has('unlisted')){
+        if ($request->has('unlisted')) {
             $products->whereNotIn('id', $request->unlisted);
         }
 
@@ -67,14 +66,14 @@ class ProductController extends Controller
 
     public function latestProducts(Request $request)
     {
-        $count = $request->has('count') ? $request->count :  20;
+        $count = $request->has('count') ? $request->count : 20;
 
         return ProductResource::collection(Product::latest()->take($count)->get());
     }
 
     public function randomProducts(Request $request)
     {
-        $count = $request->has('count') ? $request->count :  20;
+        $count = $request->has('count') ? $request->count : 20;
 
         return ProductResource::collection(Product::inRandomOrder()->take($count)->get());
     }
@@ -222,40 +221,49 @@ class ProductController extends Controller
             #endregion
             #region Product Categories
             // ProductCategory::where('product_id', $key)->delete();
-            $curProduct->sync_product_categories()->sync($value['cat_data']);
+            // Remove the value 0
+            $array = $value['cat_data'];
+            $valueToRemove = 0;
+            $key = array_search($valueToRemove, $array);
+
+            if ($key !== false) {
+                unset($array[$key]);
+            }
+            $array = array_values($array);
+            $curProduct->sync_product_categories()->sync($array);
             #endregion
             #region Product Related
             $linkProducts = $value['related'];
-                #region Append
-                foreach ($linkProducts['append'] as $appendValue) {
-                    RelatedProduct::create(
-                        array(
-                            'product_id' => $curProduct->id,
-                            'related_product_id' => $appendValue,
-                        )
-                    );
-                }
-                #endregion
-                #region Remove
-                RelatedProduct::whereIn('related_product_id', $linkProducts['remove'])->delete();
-                #endregion
+            #region Append
+            foreach ($linkProducts['append'] as $appendValue) {
+                RelatedProduct::create(
+                    array(
+                        'product_id' => $curProduct->id,
+                        'related_product_id' => $appendValue,
+                    )
+                );
+            }
+            #endregion
+            #region Remove
+            RelatedProduct::whereIn('related_product_id', $linkProducts['remove'])->delete();
+            #endregion
             #endregion
             #region Product Recommended
             $linkProducts = $value['recommended'];
-                #region Append
-                foreach ($linkProducts['append'] as $appendValue) {
-                    RecommendedProduct::create(
-                        array(
-                            'product_id' => $curProduct->id,
-                            'recommended_product_id' => $appendValue,
-                        )
-                    );
-                }
-                #endregion
-                #region Remove
+            #region Append
+            foreach ($linkProducts['append'] as $appendValue) {
+                RecommendedProduct::create(
+                    array(
+                        'product_id' => $curProduct->id,
+                        'recommended_product_id' => $appendValue,
+                    )
+                );
+            }
+            #endregion
+            #region Remove
 
-                RecommendedProduct::whereIn('recommended_product_id', $linkProducts['remove'])->delete();
-                #endregion
+            RecommendedProduct::whereIn('recommended_product_id', $linkProducts['remove'])->delete();
+            #endregion
             #endregion
 
         }

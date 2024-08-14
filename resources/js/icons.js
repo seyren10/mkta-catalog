@@ -137,6 +137,11 @@ import {
 } from "oh-vue-icons/icons";
 
 addIcons(
+    FaRegularHandshake,
+    RiLink,
+    BiShieldCheck,
+    BiShield,
+    HiSolidDatabase,
     BiBell,
     LaMehBlank,
     PrSignOut,

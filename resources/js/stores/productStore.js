@@ -239,7 +239,7 @@ export const useProductStore = defineStore("products", () => {
 
     const tablebatch_updateProducts = async (product_data) => {
         try {
-            const res = await exec("/api/product-batch", "put", {
+            const res = await exec("/api/data-table/product", "put", {
                 products : product_data
             });
         } catch (e) {

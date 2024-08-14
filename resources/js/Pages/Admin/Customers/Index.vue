@@ -83,86 +83,19 @@
         v-model="showInsert"
         persistent
         title="New Customer"
-        @close="customerStore.resetForm()"
+        @close="closeInsert"
     >
         <div class="min-w-[800px] p-5">
-            <div class="">
-                <v-text-field
-                    label="Name"
-                    v-model="form.name"
-                    prepend-inner-icon="fa-user-alt"
-                    clearable
-                />
-                <hr class="my-1" width="0%" />
-                <v-text-field
-                    type="email"
-                    prepend-inner-icon="pr-globe"
-                    v-model="form.email"
-                    label="Email"
-                    clearable
-                />
-                <hr class="my-1" width="0%" />
-            </div>
-            <div class="ml-auto w-fit">
-                <v-button
-                    prepend-inner-icon="fa-user-plus"
-                    outlined
-                    :loading="loading"
-                    v-show="!isExist"
-                    @click="
-                        () => {
-                            showInsert = false;
-                            customerStore.addCustomer();
-                            showPassword = true;
-                        }
-                    "
-                    class="my-2 block rounded-lg bg-accent p-2 text-lg text-white disabled:bg-gray-500"
-                    >Save Customer</v-button
-                >
-            </div>
-        </div>
-    </v-dialog>
-    <v-dialog
-        v-model="showPassword"
-        @close="
-            () => {
-                showPassword = false;
-                showInsert = false;
-                customerStore.resetForm();
-                customerStore.getCustomers({ includeRoleData: true });
-            }
-        "
-        persistent
-        title="New Customer Password"
-    >
-        <div class="min-w-[800px] p-5">
-            <p>Password for {{ form.email }}</p>
-            <v-heading type="h2">{{ form.password }}</v-heading>
-            <div class="ml-auto w-fit">
-                <v-button
-                    prepend-inner-icon="md-close-round"
-                    outlined
-                    @click="
-                        () => {
-                            showPassword = false;
-                            showInsert = false;
-                            customerStore.resetForm();
-                            customerStore.getCustomers({
-                                includeRoleData: true,
-                            });
-                        }
-                    "
-                    class="block rounded-lg bg-accent p-2 text-lg uppercase text-white disabled:bg-gray-500"
-                    >close</v-button
-                >
-            </div>
+            <newCustomers @close="closeInsert" />
         </div>
     </v-dialog>
 </template>
 
 <script setup>
-import { onBeforeMount, ref, watch, inject } from "vue";
+import { onBeforeMount, ref, watch, inject, provide } from "vue";
 import { storeToRefs } from "pinia";
+
+import newCustomers from "./newCustomers.vue";
 
 import { useCustomerStore } from "@/stores/customerStore";
 
@@ -172,9 +105,10 @@ const { isExist, customers, form, loading, errors } =
 
 const router = inject("router");
 
+provide("customerStore", customerStore);
+
 const search = ref("");
 const showInsert = ref(false);
-const showPassword = ref(false);
 
 if (!customers.length) {
     await customerStore.getCustomers({ includeRoleData: true });
@@ -206,6 +140,14 @@ const headers = ref([
         sortable: false,
     },
 ]);
+
+const closeInsert = () => {
+    customerStore.resetForm();
+    showInsert.value = false;
+    customerStore.getCustomers({
+        includeRoleData: true,
+    });
+};
 </script>
 
 <style lang="scss" scoped></style>

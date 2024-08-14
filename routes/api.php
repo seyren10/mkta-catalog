@@ -26,11 +26,6 @@ use App\Http\Controllers\UserWishlistController;
 use App\Services\UserServices;
 use Illuminate\Support\Facades\Route;
 
-
-
-
-
-
 $except = ['create', 'edit', 'destroy'];
 
 Route::get('/user', [AuthController::class, 'getUserData'])->middleware('auth:sanctum');
@@ -46,14 +41,11 @@ Route::apiResource('portal-files', FileController::class)->only(['store', 'index
 Route::get('current/{category}', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
 
-
 Route::apiResource('filters', FilterController::class)->except(['create', 'edit']);
 Route::put('filter-batch', [FilterController::class, 'batchUpdate']);
 Route::post('filters/choice/{filter}', [FilterChoiceController::class, 'store']);
 Route::put('filters/choice/{filter_choice}', [FilterChoiceController::class, 'update']);
 Route::delete('filters/choice/{filter_choice}', [FilterChoiceController::class, 'destroy']);
-
-
 
 Route::apiResource('area-code', AreaCodeController::class)->except(['create', 'edit']);
 Route::apiResource('company-code', CompanyCodeController::class)->except(['create', 'edit']);
@@ -63,8 +55,6 @@ Route::apiResource('categories', CategoryController::class)->except(['create', '
 Route::put('categories/image/{category}', [CategoryController::class, 'updateCoverPhoto']);
 Route::put('categories/banner-image/{category}', [CategoryController::class, 'updateBannerImage']);
 
-
-
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except(['create', 'edit']);
 Route::get('product-access/{product_access}', [ProductAccessController::class, 'show']);
 Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
@@ -72,13 +62,18 @@ Route::delete('product-access/{action_type}/{product}/{product_access}/{value}',
 
 #region Product Routes
 
-
 Route::prefix('product')->controller(ProductController::class)->group(function () {
     Route::get('/latest', [ProductController::class, 'latestProducts']);
     Route::get('/cached', [ProductController::class, 'indexCached']);
-Route::put('product-batch', [ProductController::class, 'batchUpdate']);
+    
     Route::get('/random', [ProductController::class, 'randomProducts']);
 });
+Route::prefix('data-table')->controller(ProductController::class)->group(function () {
+    Route::put('/product', [ProductController::class, 'batchUpdate']);
+});
+
+
+
 Route::apiResource('product', ProductController::class)->except($except);
 Route::get('product-images/zip/{product}', [ProductController::class, "zipProductImages"]);
 
@@ -101,14 +96,14 @@ Route::delete('product-components/{product_component}', [ProductComponentControl
 Route::apiResource('products/related', RelatedProductController::class)->only(['destroy']);
 Route::post('products/related/{product}/{relatedProduct}', [RelatedProductController::class, 'store']);
 Route::get('products/related/{product}', [RelatedProductController::class, 'show']);
-#endregion 
+#endregion
 
 #region Recommended Product
 
 Route::apiResource('products/recommended', RecommendedProductController::class)->only(['destroy']);
 Route::post('products/recommended/{product}/{recommendedProduct}', [RecommendedProductController::class, 'store']);
 Route::get('products/recommended/{product}', [RecommendedProductController::class, 'show']);
-#endregion 
+#endregion
 #region Product Filter
 Route::get('product-filter/{product}', [ProductFilterController::class, 'show']);
 Route::post('product-filter/{product}/{filter}/{filter_choice}', [ProductFilterController::class, 'store']);
@@ -117,7 +112,6 @@ Route::delete('product-filter/{product}/{filter}/{filter_choice}', [ProductFilte
 #endregion
 
 #endregion
-
 
 Route::apiResource('users', UserController::class)->except($except);
 Route::post('users/change-password-first-time', [UserController::class, 'changePasswordFirstTime']);
@@ -136,7 +130,6 @@ Route::post('customers/{user}/{action}/company-code/{company_code}', [UserContro
 Route::delete('customer-wishlist/delete-all-user-wishlists', [UserWishlistController::class, 'destroyUserWishlistAll']);
 Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store', 'index', 'destroy']);
 Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
-
 
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);
 

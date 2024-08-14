@@ -1,6 +1,5 @@
 <template>
     <v-text-on-image
-
         :image="value"
         class="aspect-square cursor-zoom-in w-full"
         @click="PreviewImage = true"

@@ -61,13 +61,11 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $password = Str::random(10);
         $user = User::create(
             array(
                 "name" => $request->name,
                 "email" => $request->email,
-                "password" => Hash::make($password),
-
+                "password" => Hash::make($request->password),
                 "is_active" => true,
                 "role_id" => $request->role_id ?? 2,
             )
@@ -75,7 +73,6 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User created successfully',
             'user' => $user,
-            'password' => $password
         ], 200);
     }
 
