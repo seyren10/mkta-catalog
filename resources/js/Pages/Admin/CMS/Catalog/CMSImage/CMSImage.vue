@@ -25,11 +25,18 @@
             ></CMSButtonClose>
         </div>
 
-        <CMSImageLink
-            v-if="selectedImage"
-            v-model:path="selectedImage.path"
-            v-model:link="selectedImage.link"
-        ></CMSImageLink>
+        <template v-if="selectedImage">
+            <CMSImageLink
+                v-model:path="selectedImage.path"
+                v-model:link="selectedImage.link"
+            ></CMSImageLink>
+
+            <CMSImageOverlay
+                v-model:overlay="selectedImage.overlay"
+                v-model:heading="selectedImage.heading"
+                v-model:paragraph="selectedImage.paragraph"
+            ></CMSImageOverlay>
+        </template>
 
         <div class="flex justify-end">
             <CMSButtonSave @click="handleUpdateNode"></CMSButtonSave>
@@ -63,6 +70,7 @@ import CMSHeading from "../CMSHeading.vue";
 import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
 import CMSImageLink from "./CMSImageLink.vue";
 import CMSButtonSave from "../CMSButton/CMSButtonSave.vue";
+import CMSImageOverlay from "./CMSImageOverlay.vue";
 
 const props = defineProps({
     id: String,

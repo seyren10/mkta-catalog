@@ -4,13 +4,17 @@
             class="aspect-[3/1]"
             v-if="!data?.link"
             :image="s3(data.filename)"
-            no-overlay
+            :no-overlay="!data.overlay"
+            :title="data.heading"
+            :subtitle="data.paragraph"
         ></v-text-on-image>
         <router-link v-else :to="data.path">
             <v-text-on-image
                 class="aspect-[3/1]"
                 :image="s3(data.filename)"
-                no-overlay
+                :no-overlay="!data.overlay"
+                :title="data.heading"
+                :subtitle="data.paragraph"
             ></v-text-on-image>
         </router-link>
     </div>
