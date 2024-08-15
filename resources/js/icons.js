@@ -136,9 +136,19 @@ import {
     HiSolidDatabase,
     CoStar,
     BiListCheck,
+    RiHeading,
+    RiParagraph,
+    CoJustifyLeft,
+    CoJustifyCenter,
+    CoJustifyRight,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    CoJustifyLeft,
+    CoJustifyCenter,
+    CoJustifyRight,
+    RiParagraph,
+    RiHeading,
     BiListCheck,
     FaRegularHandshake,
     RiLink,
