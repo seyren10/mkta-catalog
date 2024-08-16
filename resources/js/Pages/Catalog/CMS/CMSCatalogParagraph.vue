@@ -1,6 +1,6 @@
 <template>
-    <div class="col-span-full" :class="`${getDataClassList()}`">
-        <p v-html="formattedText"></p>
+    <div class="col-span-full grid">
+        <p v-html="formattedText" :class="`${getDataClassList()}`"></p>
     </div>
 </template>
 
@@ -20,7 +20,7 @@ function getDataClassList() {
             acc.push(props.data.classList[cur]);
             return acc;
         }, [])
-        ?.join();
+        ?.join(" ");
 }
 </script>
 

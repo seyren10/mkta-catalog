@@ -29,6 +29,19 @@
                     @click="setJustify(justify)"
                 ></v-button>
             </div>
+            <div class="flex overflow-hidden rounded-lg border">
+                <v-button
+                    v-for="verticalAlign in verticalAlignData"
+                    :key="verticalAlign.icon"
+                    :icon="verticalAlign.icon"
+                    class="rounded-none"
+                    :class="{
+                        'bg-slate-400 text-white':
+                            classList.verticalAlign === verticalAlign.class,
+                    }"
+                    @click="setVerticalAlign(verticalAlign)"
+                ></v-button>
+            </div>
         </div>
 
         <div class="flex justify-end">
@@ -57,6 +70,7 @@ const text = ref(props.data?.text ?? "");
 const classList = ref(
     props.data?.classList ?? {
         justify: "text-left",
+        verticalAlign: "self-start",
     },
 );
 
@@ -71,8 +85,18 @@ const justifyData = [
     { icon: "co-justify-right", class: "text-right" },
 ];
 
+const verticalAlignData = [
+    { icon: "co-vertical-align-top", class: "self-start" },
+    { icon: "co-vertical-align-center", class: "self-center" },
+    { icon: "co-vertical-align-bottom", class: "self-end" },
+];
+
 function setJustify(justify) {
     classList.value.justify = justify.class;
+}
+
+function setVerticalAlign(verticalAlign) {
+    classList.value.verticalAlign = verticalAlign.class;
 }
 
 function handleDeleteNode() {

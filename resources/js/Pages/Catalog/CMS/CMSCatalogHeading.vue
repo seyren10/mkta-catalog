@@ -1,5 +1,5 @@
 <template>
-    <div class="col-span-full">
+    <div class="col-span-full grid">
         <component
             :is="data.headingType ?? 'p'"
             :class="`${getHeadingClass()} ${getDataClassList()}`"
@@ -20,7 +20,7 @@ function getDataClassList() {
             acc.push(props.data.classList[cur]);
             return acc;
         }, [])
-        ?.join();
+        ?.join(" ");
 }
 
 function getHeadingClass() {

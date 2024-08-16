@@ -141,9 +141,15 @@ import {
     CoJustifyLeft,
     CoJustifyCenter,
     CoJustifyRight,
+    CoVerticalAlignBottom,
+    CoVerticalAlignCenter,
+    CoVerticalAlignTop,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    CoVerticalAlignBottom,
+    CoVerticalAlignCenter,
+    CoVerticalAlignTop,
     CoJustifyLeft,
     CoJustifyCenter,
     CoJustifyRight,
