@@ -16,9 +16,9 @@ export const useProductImageStore = defineStore("productImages", () => {
         file_id: 0,
     });
     const resetForm = () => {
-        form.product_id = 0;
-        form.is_thumbnail = 0;
-        form.file_id = 0;
+        form.value.product_id = 0;
+        form.value.is_thumbnail = 0;
+        form.value.file_id = 0;
     };
     const moveProductImage = async (id, step) => {
         try {
@@ -32,7 +32,7 @@ export const useProductImageStore = defineStore("productImages", () => {
     };
     const insertProductImage = async () => {
         try {
-            const res = await exec("/api/product-images", "post", form);
+            const res = await exec("/api/product-images", "post", form.value);
         } catch (e) {
             console.log(e);
         }

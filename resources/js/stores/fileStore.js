@@ -13,15 +13,15 @@ export const useFileStore = defineStore("portalFiles", () => {
         title: "",
         eFile: null,
     });
-    const resetForm = () => {
-        form.eFile = null;
-        form.title = "";
+    const resetform = () => {
+        form.value.eFile = null;
+        form.value.title = "";
     };
     const uploadFile = async () => {
         try {
-            const res = await exec("/api/portal-files", "post", form);
+            const res = await exec("/api/portal-files", "post", form.value);
         } catch (e) {
-            form.eFile = null
+            form.value.eFile = null
         }
     };
     const renameFile = async (id, FileName) => {
@@ -29,7 +29,7 @@ export const useFileStore = defineStore("portalFiles", () => {
             const res = await exec("/api/portal-files/" + id, "put", {
                 title: FileName,
             });
-            resetForm();
+            resetform();
         } catch (e) {
             console.log(e);
         }
@@ -37,7 +37,7 @@ export const useFileStore = defineStore("portalFiles", () => {
     const deleteFile = async (id) => {
         try {
             const res = await exec("/api/portal-files/" + id, "delete");
-            resetForm();
+            resetform();
         } catch (e) {
             console.log(e);
         }
@@ -52,7 +52,7 @@ export const useFileStore = defineStore("portalFiles", () => {
     };
     
     return {
-        resetForm,
+        resetform,
         uploadFile,
         renameFile,
         deleteFile,

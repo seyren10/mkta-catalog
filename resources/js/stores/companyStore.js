@@ -18,29 +18,29 @@ export const useCompanyStore = defineStore("company", () => {
         description: "",
     });
     const resetForm = ()=>{
-            form.title = "";
-            form.description = "";
+            form.value.title = "";
+            form.value.description = "";
     }
     const isExist = computed(() => {
         if (
-            form.title.trim().length == 0 ||
-            form.description.trim().length == 0
+            form.value.title.trim().length == 0 ||
+            form.value.description.trim().length == 0
         ) {
             return true;
         }
         return companies.value.some((element) => {
             return (
                 element.title.trim().toLowerCase() ==
-                    form.title.trim().toLowerCase()
+                    form.value.title.trim().toLowerCase()
             );
         });
     });
     const addCompany = async () => {
         try {
-            form.title = form.title.trim();
-            form.description = form.description.trim();
-            const res = await exec("/api/company-code", "post", form);
-            form = {
+            form.value.title = form.value.title.trim();
+            form.value.description = form.value.description.trim();
+            const res = await exec("/api/company-code", "post", form.value);
+            form.value = {
                 title: "",
                 description: "",
             };
@@ -52,9 +52,9 @@ export const useCompanyStore = defineStore("company", () => {
         try {
             const res = await exec(
                 "/api/company-code/" + id,
-                "put", form
+                "put", form.value
             );
-            form = {
+            form.value = {
                 title: "",
                 description: "",
             };

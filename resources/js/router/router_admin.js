@@ -229,9 +229,9 @@ const dataManagement = [
         component: () => import("@/Pages/Admin/Data/Filter/index.vue"),
     },
     {
-        path: "data-table-categories",
-        name: "categoryDataIndex",
-        component: () => import("@/Pages/Admin/Data/Category/index.vue"),
+        path: "data-table-product-access",
+        name: "productAccessDataIndex",
+        component: () => import("@/Pages/Admin/Data/ProductAccessTypes/index.vue"),
     },
 ];
 

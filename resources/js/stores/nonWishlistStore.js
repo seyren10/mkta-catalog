@@ -13,8 +13,8 @@ export const useNonWishlistStore = defineStore("nonWishlist", () => {
         user_id: 0,
     });
     const resetForm = () => {
-        form.product_id = 0;
-        form.user_id = 0;
+        form.value.product_id = 0;
+        form.value.user_id = 0;
     };
     const getNonWishlist = async (type, value, requestData = null) => {
         try {
@@ -33,7 +33,7 @@ export const useNonWishlistStore = defineStore("nonWishlist", () => {
     };
     const addNonWishlist = async () => {
         try {
-            const res = await exec("/api/non-wishlist", "post", form);
+            const res = await exec("/api/non-wishlist", "post", form.value);
         } catch (e) {
             console.log(e);
         }

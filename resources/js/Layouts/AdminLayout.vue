@@ -184,11 +184,11 @@ const dataManagement = [
         to: "filterDataIndex",
         icon: "hi-solid-database",
     },
-    // {
-    //     title: "Company Table",
-    //     to: "dataIndex",
-    //     icon: "hi-solid-database",
-    // }
+    {
+        title: "Product Access Table",
+        to: "productAccessDataIndex",
+        icon: "hi-solid-database",
+    }
 ];
 //provide/inject
 const currentUser = inject("currentUser");

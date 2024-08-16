@@ -15,35 +15,35 @@ export const useRoleStore = defineStore("roles", () => {
     });
 
     const resetForm = () => {
-        form.title = "";
-        form.description = "";
+        form.value.title = "";
+        form.value.description = "";
     };
     const isExist = computed(() => {
         if (
-            form.title.trim().length == 0 ||
-            form.description.trim().length == 0
+            form.value.title.trim().length == 0 ||
+            form.value.description.trim().length == 0
         ) {
             return true;
         }
         return roles.value.some((element) => {
             return (
                 element.title.trim().toLowerCase() ==
-                form.title.trim().toLowerCase()
+                form.value.title.trim().toLowerCase()
             );
         });
     });
     const addRole = async () => {
         try {
-            form.title = form.title.trim();
-            form.description = form.description.trim();
-            const res = await exec("/api/roles", "post", form);
+            form.value.title = form.value.title.trim();
+            form.value.description = form.value.description.trim();
+            const res = await exec("/api/roles", "post", form.value);
         } catch (e) {
             console.log(e);
         }
     };
     const updateRole = async (id) => {
         try {
-            const res = await exec("/api/roles/" + id, "put", form);
+            const res = await exec("/api/roles/" + id, "put", form.value);
         } catch (e) {
             console.log(e);
         }
@@ -59,8 +59,8 @@ export const useRoleStore = defineStore("roles", () => {
         try {
             const res = await exec("/api/roles/" + id, "get", requestData);
             role.value = res.data.data;
-            form.title = role.value.title;
-            form.description = role.value.description;
+            form.value.title = role.value.title;
+            form.value.description = role.value.description;
         } catch (e) {
             console.log(e);
         }
