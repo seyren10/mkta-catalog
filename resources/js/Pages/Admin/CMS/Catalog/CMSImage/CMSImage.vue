@@ -36,6 +36,19 @@
                 v-model:heading="selectedImage.heading"
                 v-model:paragraph="selectedImage.paragraph"
             ></CMSImageOverlay>
+
+            <div class="flex w-min overflow-hidden rounded-lg border">
+                <v-button
+                    v-for="aspect in aspectRatioData"
+                    :key="aspect.icon"
+                    :icon="aspect.icon"
+                    class="rounded-none"
+                    :class="{
+                        'bg-slate-400 text-white': aspectRatio === aspect.class,
+                    }"
+                    @click="setAspectRatio(aspect)"
+                ></v-button>
+            </div>
         </template>
 
         <div class="flex justify-end">
@@ -83,7 +96,17 @@ const cmsStore = useCMSUIStore();
 const selectedImage = ref(props.data);
 const s3 = inject("s3");
 const addToast = inject("addToast");
+const aspectRatio = ref(props.data?.aspectRatio ?? "aspect-square");
 
+const aspectRatioData = [
+    { icon: "co-square", class: "aspect-square" },
+    { icon: "co-rectangle", class: "aspect-video" },
+];
+
+function setAspectRatio(ar) {
+    aspectRatio.value = ar.class;
+    selectedImage.value.aspectRatio = ar.class;
+}
 function handleDeleteNode() {
     cmsStore.deleteNode(props);
 }

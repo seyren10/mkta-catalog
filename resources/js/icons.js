@@ -144,9 +144,13 @@ import {
     CoVerticalAlignBottom,
     CoVerticalAlignCenter,
     CoVerticalAlignTop,
+    CoSquare,
+    CoRectangle,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    CoSquare,
+    CoRectangle,
     CoVerticalAlignBottom,
     CoVerticalAlignCenter,
     CoVerticalAlignTop,

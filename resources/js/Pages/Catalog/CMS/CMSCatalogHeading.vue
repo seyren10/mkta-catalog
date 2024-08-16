@@ -26,7 +26,7 @@ function getDataClassList() {
 function getHeadingClass() {
     switch (props.data.headingType) {
         case "h1":
-            return "text-head ";
+            return "text-head leading-10";
         case "h2":
             return "text-[1.2rem]";
         case "h3":
