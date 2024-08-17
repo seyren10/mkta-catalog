@@ -27,15 +27,17 @@ class FileController extends Controller
     public function indexCache()
     {
         /* add reset params to get the latest File data */
-        if (request()->has('reset')) {
-            Cache::store('file')->forget('portal-files');
-        }
+        // if (request()->has('reset')) {
+        //     Cache::store('file')->forget('portal-files');
+        // }
 
-        $files = Cache::store('file')->remember('portal-files', now()->addHour(), function () {
-            return File::orderBy('created_at', "DESC")->get();
-        });
+        // $files = Cache::store('file')->remember('portal-files', now()->addHour(), function () {
+        //     return File::orderBy('created_at', "DESC")->get();
+        // });
 
-        return FileResource::collection($files);
+        // return FileResource::collection($files);
+
+        return FileResource::collection(File::orderBy('created_at', "DESC")->get());
     }
 
     public function index()

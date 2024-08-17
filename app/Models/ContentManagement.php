@@ -11,7 +11,8 @@ class ContentManagement extends Model
 
     protected $fillable = [
         'title',
-        'data'
+        'data',
+        'active'
     ];
 
     protected $casts = [

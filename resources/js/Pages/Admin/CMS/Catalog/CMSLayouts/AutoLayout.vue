@@ -1,11 +1,11 @@
 <template>
     <div
-        class="relative flex-1 space-y-3 rounded-lg border p-3"
+        class="relative grid gap-3 space-y-3 self-start rounded-lg border p-3 md:grid-cols-12"
         :style="{ gridColumn: `span ${size}/ span ${size}` }"
     >
         <CMSHeading>Grid Item</CMSHeading>
 
-        <div class="flex basis-full justify-between">
+        <div class="col-span-full flex basis-full justify-between self-start">
             <CMSButton @select="handleAddNode"></CMSButton>
             <div>
                 <label :for="selectId" class="mr-2 text-xs">grid size</label>

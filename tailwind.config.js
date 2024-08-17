@@ -34,6 +34,7 @@ export default {
                 appear: "appear 800ms ease-out both",
                 wiggle: "wiggle 1s ease-in-out infinite",
                 "spin-slow": "spin 1.5s linear infinite",
+                loading: "loading 500ms ease infinite alternate",
             },
             keyframes: {
                 appear: {
@@ -43,6 +44,10 @@ export default {
                 wiggle: {
                     "0%, 100%": { transform: "rotate(-3deg)" },
                     "50%": { transform: "rotate(3deg)" },
+                },
+                loading: {
+                    from: { transform: "translateX(-100%)" },
+                    to: { transform: "translateX(200%)" },
                 },
             },
             backgroundImage: {

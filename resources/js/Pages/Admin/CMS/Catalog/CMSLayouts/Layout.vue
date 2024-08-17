@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative col-span-full grid grid-cols-12 gap-4 rounded-lg border p-3"
+        class="relative col-span-full grid grid-cols-12 gap-4 rounded-lg border-2 border-slate-400 p-3"
     >
         <CMSHeading>Grid</CMSHeading>
         <div class="col-span-full flex justify-between">

@@ -1,7 +1,7 @@
 <template>
-    <div class="col-span-full">
+    <div class="col-span-full ">
         <v-text-on-image
-            class="aspect-[3/1]"
+            :class="`${data.aspectRatio}`"
             v-if="!data?.link"
             :image="s3(data.filename)"
             :no-overlay="!data.overlay"
@@ -10,7 +10,7 @@
         ></v-text-on-image>
         <router-link v-else :to="data.path">
             <v-text-on-image
-                class="aspect-[3/1]"
+                :class="`${data.aspectRatio}`"
                 :image="s3(data.filename)"
                 :no-overlay="!data.overlay"
                 :title="data.heading"

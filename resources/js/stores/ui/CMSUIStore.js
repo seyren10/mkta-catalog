@@ -9,6 +9,12 @@ import CMSTextOnImage from "../../Pages/Catalog/CMS/CMSTextOnImage.vue";
 import CMSLayout from "../../Pages/Catalog/CMS/CMSLayout.vue";
 import CMSAutoLayout from "../../Pages/Catalog/CMS/CMSAutoLayout.vue";
 import CMSCatalogCarousel from "../../Pages/Catalog/CMS/CMSCatalogCarousel.vue";
+import CMSFeaturedProducts from "../../Pages/Admin/CMS/Catalog/CMSFeaturedProducts/CMSFeaturedProducts.vue";
+import CMSCatalogFeaturedProducts from "../../Pages/Catalog/CMS/CMSCatalogFeaturedProducts.vue";
+import CMSH from "../../Pages/Admin/CMS/Catalog/CMSTypography/CMSH.vue";
+import CMSParagraph from "../../Pages/Admin/CMS/Catalog/CMSTypography/CMSParagraph.vue";
+import CMSCatalogHeading from "../../Pages/Catalog/CMS/CMSCatalogHeading.vue";
+import CMSCatalogParagraph from "../../Pages/Catalog/CMS/CMSCatalogParagraph.vue";
 
 export const useCMSUIStore = defineStore("CMSUIStore", () => {
     const nodes = ref([]);
@@ -62,6 +68,35 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
                     props: {},
                 },
                 type: "carousel",
+            },
+            {
+                title: "Featured Products",
+                icon: "co-star",
+                component: {
+                    type: markRaw(CMSFeaturedProducts),
+                    props: {},
+                },
+                type: "products",
+            },
+        ],
+        typography: [
+            {
+                title: "Heading",
+                icon: "ri-heading",
+                component: {
+                    type: markRaw(CMSH),
+                    props: {},
+                },
+                type: "heading",
+            },
+            {
+                title: "Paragraph",
+                icon: "ri-paragraph",
+                component: {
+                    type: markRaw(CMSParagraph),
+                    props: {},
+                },
+                type: "paragraph",
             },
         ],
     });
@@ -234,6 +269,22 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
             case "layout-auto":
                 return markRaw(
                     environment.value === "admin" ? AutoLayout : CMSAutoLayout,
+                );
+            case "products":
+                return markRaw(
+                    environment.value === "admin"
+                        ? CMSFeaturedProducts
+                        : CMSCatalogFeaturedProducts,
+                );
+            case "heading":
+                return markRaw(
+                    environment.value === "admin" ? CMSH : CMSCatalogHeading,
+                );
+            case "paragraph":
+                return markRaw(
+                    environment.value === "admin"
+                        ? CMSParagraph
+                        : CMSCatalogParagraph,
                 );
 
             default:
