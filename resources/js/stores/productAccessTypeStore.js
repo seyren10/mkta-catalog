@@ -113,9 +113,12 @@ export const useProductAccessTypeStore = defineStore(
                 form.value.ref_table = product_access_type.value.ref_table;
                 form.value.ref_column = product_access_type.value.ref_column;
 
-                form.value.display_column = product_access_type.value.display_column;
-                form.value.source_table = product_access_type.value.source_table;
-                form.value.source_column = product_access_type.value.source_column;
+                form.value.display_column =
+                    product_access_type.value.display_column;
+                form.value.source_table =
+                    product_access_type.value.source_table;
+                form.value.source_column =
+                    product_access_type.value.source_column;
                 // };
             } catch (e) {
                 console.log(e);
@@ -182,16 +185,31 @@ export const useProductAccessTypeStore = defineStore(
             }
         };
 
-        const getProductAccessTypes = async () => {
+        const getProductAccessTypes = async (requestData = null) => {
             try {
-                const res = await exec("/api/product-access-type");
+                const res = await exec("/api/product-access-type", "get", {
+                    ...requestData,
+                });
                 product_access_types.value = res.data.data;
             } catch (e) {
                 console.log(e);
             }
         };
 
+        const batchUpdate = async (requestData) => {
+            try {
+                const res = await exec(
+                    ["/api/data-table/product-access-type"].join("/"),
+                    "put",
+                    { PAT_Changes : requestData},
+                );
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
         return {
+            batchUpdate,
             resetForm,
             addProductAccessType,
             updateProductAccessType,

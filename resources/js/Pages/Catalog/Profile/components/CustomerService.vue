@@ -1,6 +1,6 @@
 <template>
     <div class="grid">
-        Customer Service
+        Coming Soon
     </div>
 </template>
 <script setup>

@@ -93,7 +93,7 @@ export const useFilterStore = defineStore("filterStore", () => {
 
     const batchUpdate = async(requestData)=>{
         try {
-            const res = await exec(["/api/filter-batch"].join("/"), "put", requestData);
+            const res = await exec(["/api/data-table/filter"].join("/"), "put", requestData);
         } catch (e) {
             console.log(e);
         }

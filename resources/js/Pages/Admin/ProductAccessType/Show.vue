@@ -21,7 +21,6 @@
         <div class="pt-2">
             <h2 class="text-xl font-bold">Product Access Types</h2>
             <p class="text-gray-600">If you are not a developer, go away!!!!</p>
-
             <div class="grid grid-cols-2">
                 <div>
                     <v-text-field
@@ -106,7 +105,7 @@
                                 "
                             />
                         </div>
-                        <!-- <div class="col-span-4 sm:col-span-2">
+                        <div class="col-span-4 sm:col-span-2">
                             <v-text-field
                                 label="Display Column"
                                 v-model="form.display_column"
@@ -117,10 +116,13 @@
                                     ' table'
                                 "
                             />
-                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <div class="col-span-2">
+                    <div>
+                        columns is case sensitive
+                    </div>
                     <v-button
                         :loading="loading"
                         prepend-inner-icon="md-save-round"
