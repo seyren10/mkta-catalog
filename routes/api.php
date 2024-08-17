@@ -23,6 +23,7 @@ use App\Http\Controllers\RelatedProductController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserWishlistController;
+use App\Models\ProductAccessType;
 use App\Services\UserServices;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +43,7 @@ Route::get('current/{category}', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
 
 Route::apiResource('filters', FilterController::class)->except(['create', 'edit']);
-Route::put('filter-batch', [FilterController::class, 'batchUpdate']);
+
 Route::post('filters/choice/{filter}', [FilterChoiceController::class, 'store']);
 Route::put('filters/choice/{filter_choice}', [FilterChoiceController::class, 'update']);
 Route::delete('filters/choice/{filter_choice}', [FilterChoiceController::class, 'destroy']);
@@ -56,6 +57,7 @@ Route::put('categories/image/{category}', [CategoryController::class, 'updateCov
 Route::put('categories/banner-image/{category}', [CategoryController::class, 'updateBannerImage']);
 
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except(['create', 'edit']);
+
 Route::get('product-access/{product_access}', [ProductAccessController::class, 'show']);
 Route::post('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
 Route::delete('product-access/{action_type}/{product}/{product_access}/{value}', [ProductAccessController::class, 'modify_ProductAccess']);
@@ -70,6 +72,8 @@ Route::prefix('product')->controller(ProductController::class)->group(function (
 });
 Route::prefix('data-table')->controller(ProductController::class)->group(function () {
     Route::put('/product', [ProductController::class, 'batchUpdate']);
+    Route::put('/product-access-type', [ProductAccessTypeController::class, 'batchUpdate']);
+    Route::put('/filter', [FilterController::class, 'batchUpdate']);
 });
 
 

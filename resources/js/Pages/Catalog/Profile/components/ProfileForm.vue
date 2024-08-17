@@ -2,18 +2,19 @@
     <div class="grid grid-cols-1 gap-3">
         <v-text-field
             label="Name"
+            readonly
             v-model="currentUser.name"
             prepend-inner-icon="fa-user-alt"
             clearable
         />
         <v-text-field
             type="email"
+            readonly
             prepend-inner-icon="pr-globe"
             v-model="currentUser.email"
             label="Email"
-            disabled
         />
-        <div class="grid grid-cols-12">
+        <div class="grid grid-cols-12 hidden">
             <div class="col-span-12 md:col-span-6">
                 <v-button
                     @click="
@@ -35,10 +36,8 @@
                     >Update Information</v-button
                 >
             </div>
+            <p>NOT YET DONE</p>
         </div>
-
-
-        NOT YET DONE
     </div>
 </template>
 <script setup>
