@@ -57,7 +57,6 @@ const handleBodyClick = (e) => {
 
 //lifecycle hooks
 onMounted(() => {
-    // console.log("sampler");
 });
 
 //custom directives

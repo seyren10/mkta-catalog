@@ -105,7 +105,6 @@ function useTemplate() {
         await cmsStore.setActiveContent(template.id);
         if (typeof template.data === "string") {
             template.data = JSON.parse(template.data);
-            console.log(template);
         }
 
         cmsUIStore.getNodes(template.data);

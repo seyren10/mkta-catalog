@@ -75,7 +75,6 @@ const closerecommendedProducts = () => {
     insertrecommendedProduct.value = false;
 };
 const removeRecommededProduct = async (id) => {
-    console.log(id);
     await linkProductStore.removeRecommededProduct(id);
     refreshrecommendedProducts();
 };

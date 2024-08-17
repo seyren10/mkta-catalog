@@ -231,9 +231,13 @@ const dataManagement = [
     {
         path: "data-table-product-access",
         name: "productAccessDataIndex",
-        component: () => import("@/Pages/Admin/Data/ProductAccessTypes/index.vue"),
+        component: () =>
+            import("@/Pages/Admin/Data/ProductAccessTypes/index.vue"),
     },
 ];
+
+import { useUserStore } from "@/stores/userStore";
+import { storeToRefs } from "pinia";
 
 const admin_routes = [
     {
@@ -242,6 +246,7 @@ const admin_routes = [
         component: AdminLayout,
         meta: {
             requiresAuth: true,
+            permissionId: 1,
         },
         children: [
             ...user_management,
@@ -249,8 +254,19 @@ const admin_routes = [
             ...product_management,
             ...file_management,
             ...contentManagement,
-            ...dataManagement
+            ...dataManagement,
         ],
+        beforeEnter: (to, from, next) => {
+            const userStore = useUserStore();
+            const { currentUser } = storeToRefs(userStore);
+            console.log(currentUser.value);
+
+            if (currentUser.value.role_data.id === 2) {
+                return next({ name: "notFound" });
+            }
+
+            next();
+        },
     },
 ];
 

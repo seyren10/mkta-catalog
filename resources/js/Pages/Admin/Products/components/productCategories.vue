@@ -18,7 +18,6 @@
                                 categories = [...categories,...new Set(collections[key]) ]
                             }
                             let col_Categories = [...categories];
-                            console.log(col_Categories)
                             await productStore.updateProductCategories(id, col_Categories);
                             await productStore.getProductItem(id);
                         }

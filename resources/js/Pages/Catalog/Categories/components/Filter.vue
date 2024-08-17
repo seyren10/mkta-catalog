@@ -184,7 +184,6 @@ const handleClearFilter = async (key) => {
         return acc;
     }, {});
 
-    // console.log(query);
     await router.push({
         query,
     });

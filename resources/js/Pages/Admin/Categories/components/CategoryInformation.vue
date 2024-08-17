@@ -151,7 +151,6 @@ const insertCategoryImage = ref({ show: false, file_id: -1 });
 const tempContent = ref(false);
 
 const bannerImage = computed(() => {
-    console.log(category.value.banner_file?.title);
     return s3(category.value.banner_file?.filename);
 });
 const close_insertCategoryImage_data = () => {

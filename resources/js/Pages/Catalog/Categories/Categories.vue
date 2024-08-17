@@ -2,7 +2,7 @@
     <div class="container my-8">
         <header class="relative overflow-hidden rounded-lg bg-white">
             <BreadCrumb
-                class="absolute left-4 top-4 z-10 text-white"
+                class="absolute left-1 top-0 z-10 text-white"
                 :items="[
                     { name: 'catalog', text: 'Catalog' },
                     { name: 'categories', text: 'Categories' },
@@ -12,7 +12,7 @@
             <v-text-on-image
                 :image="bannerImage"
                 no-overlay
-                class="aspect-[4/1] h-full"
+                class="aspect-[11/1] h-full"
             ></v-text-on-image>
         </header>
         <nav class="mt-8">

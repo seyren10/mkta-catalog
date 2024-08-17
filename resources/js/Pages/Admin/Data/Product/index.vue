@@ -720,7 +720,6 @@ if (!categories.length) {
     await categoryStore.getCategories({ includeSubCategories: true });
 }
 const categoryChange = (data, product_id, product_index) => {
-    console.log("Category Change" + product_items.value[product_index].id);
     // addChanges(product_id, "cat_data", null, product_items.value[product_index].product_category_keys);
 };
 
@@ -858,7 +857,6 @@ const addFromSource = (sourceIndex, column, data) => {
     structure["id"] = -1;
     structure["product_id"] = product_items.value[sourceIndex].id;
     structure["product"] = data;
-    console.log(column);
     if (column === "Related") {
         structure["related_product_id"] = data.id;
         column = "related_product";
@@ -867,7 +865,6 @@ const addFromSource = (sourceIndex, column, data) => {
         structure["recommended_product_id"] = data.id;
         column = "recommended_product";
     }
-    console.log(structure);
 
     product_items.value[sourceIndex][column].push(structure);
 };

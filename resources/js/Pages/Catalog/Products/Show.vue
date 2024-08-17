@@ -83,7 +83,6 @@ async function init() {
         includeRecommendedProduct: true,
     });
 }
-console.log("init again");
 
 const addItem_in_LocalStorage = () => {
     let recentItems = localStorage.getItem("recent");
