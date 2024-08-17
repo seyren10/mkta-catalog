@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('content_management', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('title');
-            $table->json('data')->default('"[]"');
+        Schema::table('content_management', function (Blueprint $table) {
+            $table->boolean('active')->default(false)->comment('only 1 row should be active');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('content_management');
+        Schema::table('content_management', function (Blueprint $table) {
+            $table->dropColumn('active');
+        });
     }
 };

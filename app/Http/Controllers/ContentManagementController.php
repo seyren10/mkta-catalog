@@ -14,19 +14,20 @@ class ContentManagementController extends Controller
     public function index()
     {
         $query = ContentManagement::all();
+
+        if ($query->isEmpty()) {
+            ContentManagement::create([
+                'title' => 'default',
+                'data' => "[]",
+                'active' => true
+            ]);
+
+            $query = ContentManagement::all();
+        }
+
         return ContentManagementResource::collection($query);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         ContentManagement::updateOrCreate(
@@ -44,21 +45,16 @@ class ContentManagementController extends Controller
     {
         return new ContentManagementResource($content_management);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ContentManagement $contentManagement)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ContentManagement $contentManagement)
+    public function update(Request $request, ContentManagement $content_management)
     {
-        //
+        $content_management->update([
+            ...$request->all()
+        ]);
+
+        return response()->noContent();
     }
 
     /**
@@ -67,5 +63,19 @@ class ContentManagementController extends Controller
     public function destroy(ContentManagement $contentManagement)
     {
         //
+    }
+
+    public function setActiveContent(ContentManagement $content_management)
+    {
+        $currentlyActiveContent = ContentManagement::where('active', true);
+        $currentlyActiveContent->update([
+            'active' => false
+        ]);
+
+        $content_management->update([
+            'active' => true
+        ]);
+
+        return new ContentManagementResource($content_management);
     }
 }
