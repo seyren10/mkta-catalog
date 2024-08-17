@@ -47,12 +47,24 @@ import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
 
 const user = inject("currentUser");
 const firstTimeLogin = ref(true);
-const cmsSTore = useCMSStore();
-const cmsUIStore = useCMSUIStore();
-const { nodes } = storeToRefs(cmsUIStore);
+const { nodes } = await useTemplate();
 
-const databaseNodes = await cmsSTore.getContent(13);
-cmsUIStore.getNodes(databaseNodes, "catalog");
+async function useTemplate() {
+    const cmsSTore = useCMSStore();
+    const cmsUIStore = useCMSUIStore();
+
+    const { nodes } = storeToRefs(cmsUIStore);
+    const { activeTemplate, templates } = storeToRefs(cmsSTore);
+
+    if (!templates.value.length) await cmsSTore.getContents();
+
+    const databaseNodes = await cmsSTore.getContent(activeTemplate.value.id);
+    cmsUIStore.getNodes(databaseNodes, "catalog");
+
+    return {
+        nodes,
+    };
+}
 </script>
 
 <style lang="scss" scoped></style>

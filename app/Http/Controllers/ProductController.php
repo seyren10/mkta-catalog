@@ -29,6 +29,7 @@ class ProductController extends Controller
 
         /* Searching products */
         $query = $request->q;
+        $perPage = $request->perPage ?? 30;
 
         if ($request->has('unlisted')) {
             $products->whereNotIn('id', $request->unlisted);
@@ -36,13 +37,15 @@ class ProductController extends Controller
 
         if ($query) {
             $searchedProducts = $products->whereAny([
-                'id', 'title', 'description',
-            ], 'LIKE', '%' . $query . '%')->paginate(30)->withQueryString();
+                'id',
+                'title',
+                'description',
+            ], 'LIKE', '%' . $query . '%')->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
 
             return ProductResource::collection($searchedProducts);
         }
 
-        return ProductResource::collection($products->paginate(30)->withQueryString());
+        return ProductResource::collection($products->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString());
     }
 
     /*
@@ -86,6 +89,17 @@ class ProductController extends Controller
             }
         });
 
+        $search = $request->q;
+        $perPage = $request->perPage ?? 32;
+
+        if ($search) {
+            $query->whereAny([
+                'id',
+                'title',
+                'description',
+            ], 'LIKE', '%' . $search . '%');
+        }
+
         /* filtering */
         if ($request->has('filters')) {
             $query->whereHas('productFilters', function ($query) use ($request) {
@@ -112,7 +126,7 @@ class ProductController extends Controller
         $restricted_products = $request->session()->get('restricted_products', array());
         $query->whereNotIn('id', $restricted_products);
 
-        return ProductResource::collection($query->paginate(32)->withQueryString());
+        return ProductResource::collection($query->paginate($perPage)->withQueryString());
     }
 
     public function store(ProductRequest $request)

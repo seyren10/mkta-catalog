@@ -52,7 +52,8 @@ defineProps({
 
 const infoList = computed(() => {
     return [
-        { title: "Contact", value: "09563040025" },
+        { title: "Contact (Denmark)", value: "+45 41 10 64 74" },
+        { title: "Contact (Philippines)", value: "+63 917 564 9864" },
         { title: "Email", value: "sales@mkta.com.ph" },
         {
             title: "Address",

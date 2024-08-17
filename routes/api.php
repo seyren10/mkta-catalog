@@ -67,7 +67,7 @@ Route::delete('product-access/{action_type}/{product}/{product_access}/{value}',
 Route::prefix('product')->controller(ProductController::class)->group(function () {
     Route::get('/latest', [ProductController::class, 'latestProducts']);
     Route::get('/cached', [ProductController::class, 'indexCached']);
-    
+    Route::put('product-batch', [ProductController::class, 'batchUpdate']);
     Route::get('/random', [ProductController::class, 'randomProducts']);
 });
 Route::prefix('data-table')->controller(ProductController::class)->group(function () {
@@ -138,4 +138,7 @@ Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index",
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);
 
 Route::apiResource('content-management', ContentManagementController::class);
+Route::prefix('content-management')->group(function () {
+    Route::put('/set-active-content/{content_management}', [ContentManagementController::class, 'setActiveContent']);
+});
 // });

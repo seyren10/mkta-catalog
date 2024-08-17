@@ -22,7 +22,7 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes: [...home_routes, ...catalog_routes, ...admin_routes, ...routes],
-    
+
     // scrollBehavior(to, from, savedPosition) {
     //     if (to.hash) {
     //         return {
@@ -43,9 +43,9 @@ router.beforeEach(async (to, from) => {
     const userStore = useUserStore();
     const { currentUser } = storeToRefs(userStore);
 
-    if (to.hash) {
-        return;
-    }
+    // if (to.hash) {
+    //     return;
+    // }
 
     if (to.meta.fullUserData) {
         await userStore.getCurrentUserFullData();
