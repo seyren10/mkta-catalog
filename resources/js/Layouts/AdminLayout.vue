@@ -188,9 +188,15 @@ const dataManagement = [
         title: "Product Access Table",
         to: "productAccessDataIndex",
         icon: "hi-solid-database",
+    },
+    {
+        title: "Category Table",
+        to: "categoryDataIndex",
+        icon: "hi-solid-database",
     }
 ];
 //provide/inject
+
 const currentUser = inject("currentUser");
 </script>
 

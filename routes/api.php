@@ -74,6 +74,7 @@ Route::prefix('data-table')->controller(ProductController::class)->group(functio
     Route::put('/product', [ProductController::class, 'batchUpdate']);
     Route::put('/product-access-type', [ProductAccessTypeController::class, 'batchUpdate']);
     Route::put('/filter', [FilterController::class, 'batchUpdate']);
+    Route::put('/categories', [CategoryController::class, 'batchUpdate']);
 });
 
 

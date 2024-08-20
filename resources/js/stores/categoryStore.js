@@ -99,6 +99,7 @@ export const useCategoryStore = defineStore("categories", () => {
                 ...requestData,
             });
             categories.value = res.data.data;
+            return categories.value
         } catch (e) {
             console.log(e);
         }
@@ -117,7 +118,22 @@ export const useCategoryStore = defineStore("categories", () => {
             banner_file_id: fileId,
         });
     }
+
+    const batchUpdate = async (requestData) => {
+        try {
+            const res = await exec(
+                ["/api/data-table/categories"].join("/"),
+                "put",
+                { categories : requestData},
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     return {
+        batchUpdate,
+        
         form,
         category,
         categories,
