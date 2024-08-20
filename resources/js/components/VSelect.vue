@@ -27,7 +27,7 @@
                 leave-active-class="duration-300 ease"
             >
                 <ul
-                    class="absolute inset-x-0 z-[2000] overflow-auto max-h-[15rem] scrollbar rounded-lg border bg-white"
+                    class="scrollbar absolute inset-x-0 z-[2000] max-h-[15rem] overflow-auto rounded-lg border bg-white"
                     :class="{
                         'bottom-[110%]': position === 'top',
                         'top-[110%]': position === 'bottom',

@@ -301,5 +301,6 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
         getNodes,
         components,
         nodes,
+        environment,
     };
 });

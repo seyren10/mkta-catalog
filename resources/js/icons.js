@@ -146,9 +146,17 @@ import {
     CoVerticalAlignTop,
     CoSquare,
     CoRectangle,
+    FaRegularSave,
+    HiTemplate,
+    PrBookmark,
+    HiSave,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    HiSave,
+    PrBookmark,
+    HiTemplate,
+    FaRegularSave,
     CoSquare,
     CoRectangle,
     CoVerticalAlignBottom,

@@ -2,10 +2,16 @@
     <AppMenu :loading="cmsLoading">
         <template #activator="{ props }">
             <button
-                class="rounded-full bg-blue-500 bg-opacity-20 px-2 py-1 text-blue-500"
+                class="flex items-center gap-2 rounded-full bg-blue-500 bg-opacity-20 px-2 py-1 text-blue-500"
                 v-bind="props"
             >
-                {{ activeTemplate.title }}
+                <span>{{ editingTemplate.title }}</span>
+
+                <v-icon
+                    v-if="activeTemplate.id === editingTemplate.id"
+                    name="oi-dot-fill"
+                    class="text-green-500"
+                ></v-icon>
             </button>
         </template>
 
@@ -45,17 +51,33 @@
                             class="flex cursor-pointer items-center justify-between rounded-lg p-2 hover:bg-slate-200"
                             :class="{
                                 'bg-slate-200':
-                                    template.id === activeTemplate.id,
+                                    template.id === editingTemplate.id,
                             }"
-                            @click="setActiveTemplate(template, close)"
+                            @click="setEditingTemplate(template, close)"
                         >
                             <span>{{ template.title }}</span>
-                            <v-icon
-                                name="bi-check"
-                                v-if="template.id === activeTemplate.id"
-                            ></v-icon>
+
+                            <div>
+                                <v-icon
+                                    name="oi-dot-fill"
+                                    class="text-green-500"
+                                    v-if="activeTemplate.id === template.id"
+                                ></v-icon>
+                                <v-icon
+                                    name="bi-check"
+                                    v-if="template.id === editingTemplate.id"
+                                ></v-icon>
+                            </div>
                         </li>
                     </ul>
+                </div>
+
+                <div>
+                    <v-button
+                        class="border text-primary"
+                        @click="setActiveTemplate"
+                        >set as active template</v-button
+                    >
                 </div>
             </div>
         </template>
@@ -75,7 +97,9 @@ const textfield = ref(null);
 const templateText = ref("");
 const {
     templates,
+    setEditingTemplate,
     setActiveTemplate,
+    editingTemplate,
     activeTemplate,
     addTemplate,
     cmsLoading,
@@ -97,12 +121,14 @@ function useTemplate() {
     const cmsUIStore = useCMSUIStore();
     const {
         templates,
+        editingTemplate,
         activeTemplate,
         loading: cmsLoading,
     } = storeToRefs(cmsStore);
 
-    async function setActiveTemplate(template, cb = () => {}) {
-        await cmsStore.setActiveContent(template.id);
+    async function setEditingTemplate(template, cb = () => {}) {
+        editingTemplate.value = template;
+
         if (typeof template.data === "string") {
             template.data = JSON.parse(template.data);
             console.log(template);
@@ -123,9 +149,15 @@ function useTemplate() {
         templateText.value = "";
     }
 
+    async function setActiveTemplate() {
+        await cmsStore.setActiveContent(editingTemplate.value.id);
+    }
+
     return {
         templates,
+        editingTemplate,
         activeTemplate,
+        setEditingTemplate,
         setActiveTemplate,
         addTemplate,
         cmsLoading,

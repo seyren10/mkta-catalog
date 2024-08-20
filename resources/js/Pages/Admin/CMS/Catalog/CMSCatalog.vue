@@ -7,15 +7,6 @@
             v-bind="node.component.props"
             :data="node.data"
         />
-
-        <div class="col-span-full">
-            <v-button
-                class="bg-accent text-xs text-white"
-                @click="updateContent"
-                :loading="cmsLoading"
-                >Save CMS</v-button
-            >
-        </div>
     </div>
 </template>
 
@@ -30,10 +21,7 @@ import ToolbarButton from "./ToolbarButton.vue";
 const addToast = inject("addToast");
 const setToolbarComponent = inject("setToolbarComponent");
 
-const { cmsLoading, updateContent, nodes } = await useTemplate();
-
-// const databaseNodes = await cmsStore.getContent(13);
-// cmsUIStore.getNodes(databaseNodes);
+const { nodes } = await useTemplate();
 
 async function useTemplate() {
     const cmsStore = useCMSStore();
@@ -42,42 +30,19 @@ async function useTemplate() {
         errors: cmsErrors,
         loading: cmsLoading,
         templates,
-        activeTemplate,
+        editingTemplate,
     } = storeToRefs(cmsStore);
     const { nodes } = storeToRefs(cmsUIStore);
 
     await cmsStore.getContents();
 
-    const data = JSON.parse(activeTemplate.value.data);
+    const data = JSON.parse(editingTemplate.value.data);
     cmsUIStore.getNodes(data);
 
-    async function updateContent() {
-        const form = {
-            data: JSON.stringify(nodes.value),
-        };
-
-        await cmsStore.updateContent(activeTemplate.value.id, form);
-
-        if (cmsErrors.value) {
-            addToast({
-                props: {
-                    type: "danger",
-                },
-                content: "Something went wrong",
-            });
-        } else
-            addToast({
-                props: {
-                    type: "success",
-                },
-                content: "Catalog Contents saved.",
-            });
-    }
     return {
         cmsErrors,
         cmsLoading,
         templates,
-        updateContent,
         nodes,
     };
 }

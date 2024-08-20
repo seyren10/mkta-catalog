@@ -5,13 +5,17 @@ export const useCMSStore = defineStore("CMSStore", () => {
     const { loading, errors, exec } = useAxios();
 
     const templates = ref([]);
+    const editingTemplate = ref({});
     const activeTemplate = ref({});
 
     async function getContents() {
         const res = await exec("/api/content-management");
 
         templates.value = res.data.data;
-        activeTemplate.value = templates.value.find((t) => t.active);
+
+        activeTemplate.value = editingTemplate.value = templates.value.find(
+            (t) => t.active,
+        );
         return res.data.data;
     }
 
@@ -43,7 +47,8 @@ export const useCMSStore = defineStore("CMSStore", () => {
         updateContent,
         getContent,
         templates,
-        activeTemplate,
+        editingTemplate,
         setActiveContent,
+        activeTemplate,
     };
 });
