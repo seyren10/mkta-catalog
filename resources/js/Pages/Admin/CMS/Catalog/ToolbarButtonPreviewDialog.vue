@@ -1,5 +1,5 @@
 <template>
-    <div class="relative bg-white p-5">
+    <div class="relative bg-white p-5 space-y-6">
         <component
             v-for="node in nodes"
             :key="node.component.props.id"

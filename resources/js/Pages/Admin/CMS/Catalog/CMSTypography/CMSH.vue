@@ -3,11 +3,15 @@
         <CMSHeading>Heading</CMSHeading>
 
         <div class="flex items-start gap-3">
-            <v-select
-                :items="headingTypeData"
-                v-model="headingType"
-                item-value="value"
-            ></v-select>
+            <select v-model="headingType">
+                <option
+                    v-for="h in headingTypeData"
+                    :key="h.id"
+                    :value="h.value"
+                >
+                    {{ h.title }}
+                </option>
+            </select>
             <v-text-field placeholder="Text" v-model="text"></v-text-field>
             <CMSButtonClose
                 class="ml-auto"
