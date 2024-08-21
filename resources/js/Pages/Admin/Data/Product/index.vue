@@ -43,6 +43,7 @@
                         <th
                             v-show="request.includeProductInformation.value"
                             class="min-w-[200px] border-b px-4 py-2"
+                            rowspan="1"
                             colspan="3"
                         >
                             Product Info
@@ -119,11 +120,14 @@
                                 : ' bg-white '
                         "
                     >
+                        <!-- Product Code -->
                         <td
                             class="fixed-column sticky left-0 border px-4 py-2 text-center align-top"
                         >
                             <p class="text-xl">{{ item.id }}</p>
                         </td>
+
+                        <!-- Product Information - Parent Code | Title | Description -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductInformation.value"
@@ -183,8 +187,9 @@
                             </v-textarea>
                         </td>
 
+                        <!-- Dimensions -->
                         <td
-                            class="grid min-w-12 gap-2 border-b px-4 py-2 align-top"
+                            class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductDimensions.value"
                         >
                             <v-text-field
@@ -237,8 +242,9 @@
                             </v-text-field>
                         </td>
                         <!-- <td></td> -->
+                        <!-- Weight -->
                         <td
-                            class="grid min-w-12 gap-2 border-b px-4 py-2 align-top"
+                            class="min-w-12 gap-2 border-b px-4 py-2 align-top"
                             v-show="request.includeProductWeight.value"
                         >
                             <v-text-field
@@ -272,7 +278,7 @@
                                 <template #append-inner> kgs </template>
                             </v-text-field>
                         </td>
-
+                        <!-- Volume -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductVolume.value"
@@ -295,6 +301,7 @@
                                 </template>
                             </v-text-field>
                         </td>
+                        <!-- Related and Recommended Products -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductRelated.value"
@@ -576,15 +583,15 @@ const request = ref({
     },
     includeProductVolume: {
         text: "Product Volume",
-        value: !true,
+        value: true,
     },
     includeProductRelated: {
         text: "Related Products",
-        value: !true,
+        value: true,
     },
     includeProductRecommended: {
         text: "Recommended Products",
-        value: !true,
+        value: true,
     },
 });
 const collections = ref({});
