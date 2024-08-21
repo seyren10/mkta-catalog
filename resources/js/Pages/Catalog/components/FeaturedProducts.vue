@@ -20,13 +20,13 @@
                             {{ title }}
                         </h3>
                     </div>
-                    <router-link
-                        to="#"
+                    <button
+                        @click="featuredDialog = true"
                         class="flex items-center gap-2 text-blue-400"
                     >
-                        <span> See all </span>
-                        <v-icon name="md-keyboardarrowright-round"></v-icon
-                    ></router-link>
+                        <span> View all </span>
+                        <v-icon name="md-keyboardarrowright-round"></v-icon>
+                    </button>
                 </div>
             </div>
         </template>
@@ -46,15 +46,32 @@
                 </Product>
             </div>
         </div>
+
+        <AppDialog
+            v-model="featuredDialog"
+            class="scrollbar max-h-[90%] overflow-hidden rounded-lg bg-white"
+            max-width="1200"
+            fixed-toolbar
+        >
+            <template #title>
+                <div class="flex items-center gap-2">
+                    <v-icon :name="titleIcon"></v-icon>
+                    <h3 class="text-sm font-bold">{{ title }}</h3>
+                </div>
+            </template>
+            <FeaturedProductsDialog :items="items"></FeaturedProductsDialog>
+        </AppDialog>
     </v-card>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useCMSUIStore } from "@/stores/ui/CMSUIStore";
 import { storeToRefs } from "pinia";
 
 import Product from "../../../components/Product.vue";
+import AppDialog from "@/components/Dialog/AppDialog.vue";
+import FeaturedProductsDialog from "./FeaturedProductsDialog.vue";
 
 const props = defineProps({
     items: Array,
@@ -64,6 +81,7 @@ const props = defineProps({
     displayLimit: Number,
 });
 const { environment } = storeToRefs(useCMSUIStore());
+const featuredDialog = ref(false);
 
 const displayItems = computed(() => {
     if (props.displayLimit <= 0 || props.displayLimit > props.items.length) {

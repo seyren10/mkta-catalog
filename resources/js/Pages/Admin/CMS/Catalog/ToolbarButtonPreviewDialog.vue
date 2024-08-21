@@ -1,5 +1,5 @@
 <template>
-    <div class="relative bg-white p-5 space-y-6">
+    <div class="relative space-y-6 bg-white p-5">
         <component
             v-for="node in nodes"
             :key="node.component.props.id"
@@ -9,7 +9,7 @@
         />
 
         <div
-            class="fixed right-8 z-[100] top-4 space-y-4 rounded-lg bg-blue-400 p-3 text-white"
+            class="fixed right-8 top-4 z-[100] space-y-4 rounded-lg bg-blue-400 p-3 text-white"
         >
             <div class="flex items-center gap-2">
                 <span> Preview Mode </span>

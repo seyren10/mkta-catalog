@@ -39,7 +39,6 @@
 <script setup>
 import { inject, ref } from "vue";
 import { storeToRefs } from "pinia";
-
 import { useCMSStore } from "@/stores/CMSStore";
 import { useCMSUIStore } from "@/stores/ui/CMSUIStore";
 
@@ -48,7 +47,6 @@ import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
 const user = inject("currentUser");
 const firstTimeLogin = ref(true);
 const { nodes } = await useTemplate();
-
 async function useTemplate() {
     const cmsSTore = useCMSStore();
     const cmsUIStore = useCMSUIStore();
