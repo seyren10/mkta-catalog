@@ -43,6 +43,7 @@ Route::apiResource('roles', RolesController::class)->except(['create', 'edit']);
 Route::post('roles/{role}/{action}/permissions/{permission}', [RolesController::class, 'modifyRolesPermission']);
 Route::apiResource('permissions', PermissionController::class)->except(['create', 'edit']);
 Route::apiResource('product-access-type', ProductAccessTypeController::class)->except(['create', 'edit']);
+Route::put('data-table/product-access-type', [ProductAccessTypeController::class, 'batchUpdate']);
 Route::get('notifications/{user}', [NotificationController::class, 'index']);
 
 Route::delete('customer-wishlist/delete-all-user-wishlists', [UserWishlistController::class, 'destroyUserWishlistAll']);

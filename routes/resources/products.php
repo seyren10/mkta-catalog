@@ -16,4 +16,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('product/category/{category}', [ProductController::class, 'getProductsWithCategoryId']);
     Route::put('product-categories/{product}', [ProductController::class, "modifyProductCategories"]);
     Route::apiResource('product', ProductController::class)->except(['create', 'edit', 'destroy']);
+    Route::put('data-table/product', [ProductController::class, 'batchUpdate']);
 });
