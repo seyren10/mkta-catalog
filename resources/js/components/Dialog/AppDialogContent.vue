@@ -8,6 +8,16 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted, onUnmounted } from "vue";
+
+onMounted(() => {
+    document.body.classList.add("overflow-hidden");
+});
+
+onUnmounted(() => {
+    document.body.classList.remove("overflow-hidden");
+});
+</script>
 
 <style lang="scss" scoped></style>

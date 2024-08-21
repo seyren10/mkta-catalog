@@ -4,7 +4,7 @@
 
         <Teleport to="#overlay">
             <div
-                class="absolute inset-0 z-[200] bg-black bg-opacity-20"
+                class="fixed inset-0 z-[3000] bg-black bg-opacity-20"
                 v-if="dialog"
             ></div>
             <Transition
@@ -14,17 +14,28 @@
                 leave-to-class="opacity-0"
             >
                 <div
-                    class="absolute inset-0 z-[201] text-xs"
+                    class="fixed inset-0 z-[3001] text-xs"
                     :class="{ 'grid place-content-center': !fullScreen }"
                     v-if="dialog"
                 >
                     <AppDialogContent
-                        class="my-auto overflow-y-auto overflow-x-hidden"
+                        class="relative my-auto min-w-[30rem] overflow-y-auto overflow-x-hidden mx-4"
                         :style="{
                             maxWidth: !fullScreen ? `${maxWidth}px` : 'auto',
                         }"
                         v-bind="$attrs"
                     >
+                        <slot
+                            name="toolbar"
+                            :props="{ close: handleCloseDialog }"
+                        >
+                            <AppDialogToolbar v-bind="props">
+                                <template #title>
+                                    <slot name="title"></slot>
+                                </template>
+                            </AppDialogToolbar>
+                        </slot>
+
                         <slot
                             :props="{ closeDialog: () => handleCloseDialog() }"
                         ></slot>
@@ -36,8 +47,11 @@
 </template>
 
 <script setup>
-import AppDialogContent from "./AppDialogContent.vue";
+import { provide, useSlots } from "vue";
 import { useKey } from "@/composables/useKey";
+
+import AppDialogContent from "./AppDialogContent.vue";
+import AppDialogToolbar from "./AppDialogToolbar.vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -47,8 +61,12 @@ const props = defineProps({
     persistent: Boolean,
     fullScreen: { type: Boolean, default: false },
     maxWidth: { type: [Number, String], default: "800" },
+    ...AppDialogToolbar.props,
 });
 const dialog = defineModel({ default: false });
+const slots = useSlots();
+
+console.log(slots);
 useKey("Escape", handleCloseDialog);
 
 const listeners = {
@@ -61,6 +79,8 @@ function handleCloseDialog() {
     dialog.value = false;
     emits("close");
 }
+
+provide("close", handleCloseDialog);
 </script>
 
 <style lang="scss" scoped></style>
