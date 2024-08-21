@@ -18,37 +18,37 @@ export const useUserStore = defineStore("user", () => {
     //actions
     const isExist = computed(() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(form.email)) {
+        if (!emailRegex.test(form.value.email)) {
             return true;
         }
-        if (form.email.trim().length == 0) {
+        if (form.value.email.trim().length == 0) {
             return true;
         }
         return users.value.some((element) => {
             return (
                 element.email.trim().toLowerCase() ==
-                form.email.trim().toLowerCase()
+                form.value.email.trim().toLowerCase()
             );
         });
     });
     const resetForm = () => {
-        form.name = "";
-        form.email = "";
-        form.password = "";
-        form.is_active = 0;
-        form.role_id = 1;
+        form.value.name = "";
+        form.value.email = "";
+        form.value.password = "";
+        form.value.is_active = 0;
+        form.value.role_id = 1;
     };
     const addUser = async () => {
         try {
-            const res = await exec("/api/users", "post", form);
-            form.password = res.data.password;
+            const res = await exec("/api/users", "post", form.value);
+            form.value.password = res.data.password;
         } catch (e) {
             console.log(e);
         }
     };
     const updateUser = async (id) => {
         try {
-            const res = await exec("/api/users/" + id, "put", form);
+            const res = await exec("/api/users/" + id, "put", form.value);
         } catch (e) {
             console.log(e);
         }
@@ -58,24 +58,24 @@ export const useUserStore = defineStore("user", () => {
             const res = await exec(
                 "/api/users/reset-password/" + id,
                 "post",
-                form,
+                form.value,
             );
-            form.password = res.data.password;
+            form.value.password = res.data.password;
         } catch (e) {
             console.log(e);
         }
     };
     const changePasswordFirstTime = async (form) => {
-        await exec("/api/users/change-password-first-time", "post", form);
+        await exec("/api/users/change-password-first-time", "post", form.value);
     };
     const changePassword = async (id) => {
         try {
             const res = await exec(
                 "/api/users/change-password/" + id,
                 "put",
-                form,
+                form.value,
             );
-            form.password = res.data.password;
+            form.value.password = res.data.password;
         } catch (e) {
             console.log(e);
         }
@@ -126,10 +126,10 @@ export const useUserStore = defineStore("user", () => {
         try {
             const res = await exec("/api/users/" + id, "get", requestData);
             user.value = res.data.data;
-            form.name = user.value.name;
-            form.email = user.value.email;
-            form.is_active = user.value.is_active;
-            form.role_id = user.value.role_id ?? user.value.role_data.id;
+            form.value.name = user.value.name;
+            form.value.email = user.value.email;
+            form.value.is_active = user.value.is_active;
+            form.value.role_id = user.value.role_id ?? user.value.role_data.id;
         } catch (e) {
             console.log(e);
         }

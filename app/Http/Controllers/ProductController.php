@@ -14,7 +14,6 @@ use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -70,14 +69,14 @@ class ProductController extends Controller
 
     public function latestProducts(Request $request)
     {
-        $count = $request->has('count') ? $request->count :  20;
+        $count = $request->has('count') ? $request->count : 20;
 
         return ProductResource::collection(Product::latest()->take($count)->get());
     }
 
     public function randomProducts(Request $request)
     {
-        $count = $request->has('count') ? $request->count :  20;
+        $count = $request->has('count') ? $request->count : 20;
 
         return ProductResource::collection(Product::inRandomOrder()->take($count)->get());
     }
@@ -236,7 +235,16 @@ class ProductController extends Controller
             #endregion
             #region Product Categories
             // ProductCategory::where('product_id', $key)->delete();
-            $curProduct->sync_product_categories()->sync($value['cat_data']);
+            // Remove the value 0
+            $array = $value['cat_data'];
+            $valueToRemove = 0;
+            $key = array_search($valueToRemove, $array);
+
+            if ($key !== false) {
+                unset($array[$key]);
+            }
+            $array = array_values($array);
+            $curProduct->sync_product_categories()->sync($array);
             #endregion
             #region Product Related
             $linkProducts = $value['related'];

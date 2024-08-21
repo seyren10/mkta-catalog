@@ -1,70 +1,67 @@
 <template>
     <!-- <v-card class="border-0"> -->
-    <div class="grid grid-cols-3 gap-0">
-        <div class="col-span-3 md:col-span-1">
-            <v-text-on-image
-                class="border bg-gray-400 p-2"
-                title="Thumbnail"
-                subtitle="subtitle"
-                align="center"
-                :noOverlay="true"
-                :appear="false"
-                :image="s3(category.img)"
-            />
-            <v-button
-                @click="insertCategoryImage.show = true"
-                class="my-2 w-full bg-accent text-white"
-                ><v-icon name="bi-card-image" class="me-2"></v-icon> Select
-                Cover Photo
-            </v-button>
-        </div>
-
-        <div class="col-span-3 md:col-span-1">
-            <v-text-on-image
-                class="border bg-gray-400 p-2 aspect-video"
-                title="Thumbnail"
-                subtitle="subtitle"
-                align="center"
-                :noOverlay="true"
-                :appear="false"
-                :image="bannerImage"
-            />
-            <v-button
-                @click="fileUploadDialog = true"
-                class="my-2 w-full bg-accent text-white"
-                ><v-icon name="bi-card-image" class="me-2"></v-icon>Update
-                Banner Image
-            </v-button>
-        </div>
-        <div class="col-span-3 px-2 md:col-span-2">
-            <div class="grid grid-cols-1 gap-y-2">
-                <v-text-field
-                    prepend-inner-icon="px-subtitles"
-                    label="Title"
-                    v-model="form.title"
+    <div class="">
+        <div class="grid grid-cols-4 gap-2">
+            <div class="col-span-1 md:col-span-2">
+                <v-text-on-image
+                    class="border bg-gray-400 p-2"
+                    title="Thumbnail"
+                    subtitle="subtitle"
+                    align="center"
+                    :noOverlay="true"
+                    :appear="false"
+                    :image="s3(category.img)"
                 />
-                <v-text-field
-                    prepend-inner-icon="bi-text-paragraph"
-                    label="Description"
-                    v-model="form.description"
+                <v-button
+                    @click="insertCategoryImage.show = true"
+                    class="my-2 w-full bg-accent text-white"
+                    ><v-icon name="bi-card-image" class="me-2"></v-icon> Select
+                    Cover Photo
+                </v-button>
+            </div>
+            <div class="col-span-1 md:col-span-2">
+                <v-text-on-image
+                    class="aspect-video border bg-gray-400 p-2"
+                    title="Thumbnail"
+                    subtitle="subtitle"
+                    align="center"
+                    :noOverlay="true"
+                    :appear="false"
+                    :image="bannerImage"
                 />
-                <v-textarea
+                <v-button
+                    @click="fileUploadDialog = true"
+                    class="my-2 w-full bg-accent text-white"
+                    ><v-icon name="bi-card-image" class="me-2"></v-icon>Update
+                    Banner Image
+                </v-button>
+            </div>
+            <div class="col-span-1 px-2 md:col-span-4">
+                <div class="grid grid-cols-1 gap-y-2">
+                    <v-text-field
+                        prepend-inner-icon="px-subtitles"
+                        label="Title"
+                        v-model="form.title"
+                    />
+                    <v-text-field
+                        prepend-inner-icon="bi-text-paragraph"
+                        label="Description"
+                        v-model="form.description"
+                    />
+                    <!-- <v-textarea
                     :rows="10"
                     label="Cover"
                     @keyup="fix_content()"
                     v-model="form.cover_html"
                 >
-                    <!-- <template #prepend-inner>
-                        <v-icon name="bi-filetype-html"></v-icon>
-                    </template> -->
-                </v-textarea>
-                <v-button
-                    @click="categoryStore.updateCategory(id)"
-                    prepend-inner-icon="md-save-round"
-                    class="ml-auto bg-accent text-white"
-                    >Update Category</v-button
-                >
-                <ul>
+                </v-textarea> -->
+                    <v-button
+                        @click="categoryStore.updateCategory(id)"
+                        prepend-inner-icon="md-save-round"
+                        class="ml-auto bg-accent text-white"
+                        >Update Category</v-button
+                    >
+                    <!-- <ul>
                     <li>
                         Note: Cover HTML container class is
                         <code
@@ -73,15 +70,16 @@
                             p-10 md:grid-cols-2 md:grid-rows-[min] mb-5</code
                         >
                     </li>
-                </ul>
+                </ul> -->
+                </div>
             </div>
-        </div>
-        <div class="col-span-3 px-2">
+            <!-- <div class="col-span-3 px-2">
             Cover HTML preview
             <header
                 class="mb-5 grid gap-5 overflow-hidden rounded-b-lg bg-white p-10 md:grid-cols-2 md:grid-rows-[min]"
                 v-html="tempContent"
             ></header>
+        </div> -->
         </div>
         <v-dialog
             v-model="insertCategoryImage.show"
@@ -151,7 +149,6 @@ const insertCategoryImage = ref({ show: false, file_id: -1 });
 const tempContent = ref(false);
 
 const bannerImage = computed(() => {
-    console.log(category.value.banner_file?.title);
     return s3(category.value.banner_file?.filename);
 });
 const close_insertCategoryImage_data = () => {
@@ -162,27 +159,27 @@ const submit_insertCategorymage_data = async (data) => {
     await categoryStore.updateCategoryImage(props.id, curData.id);
     close_insertCategoryImage_data();
 };
-const fix_content = () => {
-    tempContent.value = form.value.cover_html;
+// const fix_content = () => {
+//     tempContent.value = form.value.cover_html;
 
-    [
-        {
-            keyword: "{{category_title}}",
-            value: category.value.title,
-        },
-        {
-            keyword: "{{category_description}}",
-            value: category.value.description,
-        },
-        {
-            keyword: "{{category_image}}",
-            value: s3(category.value.img),
-        },
-    ].forEach((element) => {
-        let regex = new RegExp(element.keyword, "g");
-        tempContent.value = tempContent.value.replace(regex, element.value);
-    });
-};
+//     [
+//         {
+//             keyword: "{{category_title}}",
+//             value: category.value.title,
+//         },
+//         {
+//             keyword: "{{category_description}}",
+//             value: category.value.description,
+//         },
+//         {
+//             keyword: "{{category_image}}",
+//             value: s3(category.value.img),
+//         },
+//     ].forEach((element) => {
+//         let regex = new RegExp(element.keyword, "g");
+//         tempContent.value = tempContent.value.replace(regex, element.value);
+//     });
+// };
 
 async function handleUpdloadBanner(file) {
     if (file.length <= 1) {
@@ -201,7 +198,7 @@ async function handleUpdloadBanner(file) {
     }
 }
 
-fix_content();
+// fix_content();
 </script>
 
 <style lang="scss" scoped></style>

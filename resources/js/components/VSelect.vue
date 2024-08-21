@@ -32,6 +32,7 @@
                         'bottom-[110%]': position === 'top',
                         'top-[110%]': position === 'bottom',
                     }"
+                    :style="{maxHeight: ( displayLength * 50 ) + 'px'}"
                     v-show="showSelection"
                 >
                     <li
@@ -67,6 +68,7 @@ defineOptions({
 const props = defineProps({
     ...useInput(),
     ...useDensity(),
+    displayLength : { type: Number, default: 3 },
     position: { type: String, default: "top" },
     items: { type: Array },
     itemTitle: { type: String },

@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-2 md:grid-cols-2">
+    <div class="grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div
             v-for="(component_data, index) in product.product_components
                 .filter((obj) => obj.is_visible == 1)
@@ -12,7 +12,7 @@
             :class="'rounded-lg bg-transparent p-2' + ( component_data.type == 'table' ? ' col-span-2 ' : '' ) "
         >
             <h2
-                class="w-full border-b-2 py-2 text-[1.5rem] font-bold tracking-wide"
+                class="w-full border-b-2 py-2 text-[1.1rem] font-bold tracking-wide"
             >
                 {{ component_data.title }}
             </h2>

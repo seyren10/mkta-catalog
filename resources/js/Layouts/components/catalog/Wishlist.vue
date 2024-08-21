@@ -86,7 +86,7 @@
                 >
             </div>
             <section
-                class="bg-[#04151f] grid rounded-lg p-3 text-[.8rem] md:col-span-2 md:grid-cols-[1fr,18rem]"
+                class="grid rounded-lg bg-[#04151f] p-3 text-[.8rem] md:col-span-2 md:grid-cols-[1fr,18rem]"
             >
                 <v-text-icon
                     :items="infoList"
@@ -95,7 +95,7 @@
                     icon-size="1"
                 />
 
-                <MKMap class="rounded-lg overflow-hidden"> </MKMap>
+                <MKMap class="overflow-hidden rounded-lg"> </MKMap>
             </section>
         </div>
     </v-dialog>
@@ -117,7 +117,8 @@ const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
 
 const infoList = computed(() => {
     return [
-        { title: "Contact", value: "09563040025" },
+        { title: "Contact (Denmark)", value: "+45 41 10 64 74" },
+        { title: "Contact (Philippines)", value: "+63 917 564 9864" },
         { title: "Email", value: "sales@mkta.com.ph" },
         {
             title: "Address",

@@ -22,47 +22,47 @@ export const useProductAccessTypeStore = defineStore(
             source_column: "",
         });
         const resetForm = () => {
-            form.type = "";
-            form.title = "";
-            form.description = "";
+            form.value.type = "";
+            form.value.title = "";
+            form.value.description = "";
 
-            form.ref_type = "direct";
-            form.ref_table = "";
-            form.ref_column = "";
-            form.display_column = "";
+            form.value.ref_type = "direct";
+            form.value.ref_table = "";
+            form.value.ref_column = "";
+            form.value.display_column = "";
 
-            form.source_table = "";
-            form.source_column = "";
+            form.value.source_table = "";
+            form.value.source_column = "";
         };
         const isExist = computed(() => {
             if (
-                form.type.trim().length == 0 ||
-                form.title.trim().length == 0 ||
-                form.description.trim().length == 0 ||
-                form.ref_type.trim().length == 0 ||
-                form.ref_table.trim().length == 0 ||
-                form.ref_column.trim().length == 0 ||
-                form.source_table.trim().length == 0 ||
-                form.source_column.trim().length == 0
+                form.value.type.trim().length == 0 ||
+                form.value.title.trim().length == 0 ||
+                form.value.description.trim().length == 0 ||
+                form.value.ref_type.trim().length == 0 ||
+                form.value.ref_table.trim().length == 0 ||
+                form.value.ref_column.trim().length == 0 ||
+                form.value.source_table.trim().length == 0 ||
+                form.value.source_column.trim().length == 0
             ) {
                 return true;
             }
             return product_access_types.value.some((element) => {
                 return (
                     element.type.trim().toLowerCase() ==
-                        form.type.trim().toLowerCase() ||
+                        form.value.type.trim().toLowerCase() ||
                     element.title.trim().toLowerCase() ==
-                        form.title.trim().toLowerCase()
+                        form.value.title.trim().toLowerCase()
                 );
             });
         });
         const addProductAccessType = async () => {
             try {
-                form.type = form.type.trim().toLowerCase();
+                form.value.type = form.value.type.trim().toLowerCase();
                 const res = await exec(
                     "/api/product-access-type",
                     "post",
-                    form,
+                    form.value,
                 );
                 resetForm();
             } catch (e) {
@@ -74,7 +74,7 @@ export const useProductAccessTypeStore = defineStore(
                 const res = await exec(
                     "/api/product-access-type/" + id,
                     "put",
-                    form,
+                    form.value,
                 );
                 resetForm();
             } catch (e) {
@@ -105,17 +105,20 @@ export const useProductAccessTypeStore = defineStore(
                     },
                 );
                 product_access_type.value = res.data.data;
-                // form = {
-                form.type = product_access_type.value.type;
-                form.title = product_access_type.value.title;
-                form.description = product_access_type.value.description;
-                form.ref_type = product_access_type.value.ref_type;
-                form.ref_table = product_access_type.value.ref_table;
-                form.ref_column = product_access_type.value.ref_column;
+                // form.value = {
+                form.value.type = product_access_type.value.type;
+                form.value.title = product_access_type.value.title;
+                form.value.description = product_access_type.value.description;
+                form.value.ref_type = product_access_type.value.ref_type;
+                form.value.ref_table = product_access_type.value.ref_table;
+                form.value.ref_column = product_access_type.value.ref_column;
 
-                form.display_column = product_access_type.value.display_column;
-                form.source_table = product_access_type.value.source_table;
-                form.source_column = product_access_type.value.source_column;
+                form.value.display_column =
+                    product_access_type.value.display_column;
+                form.value.source_table =
+                    product_access_type.value.source_table;
+                form.value.source_column =
+                    product_access_type.value.source_column;
                 // };
             } catch (e) {
                 console.log(e);
@@ -182,16 +185,31 @@ export const useProductAccessTypeStore = defineStore(
             }
         };
 
-        const getProductAccessTypes = async () => {
+        const getProductAccessTypes = async (requestData = null) => {
             try {
-                const res = await exec("/api/product-access-type");
+                const res = await exec("/api/product-access-type", "get", {
+                    ...requestData,
+                });
                 product_access_types.value = res.data.data;
             } catch (e) {
                 console.log(e);
             }
         };
 
+        const batchUpdate = async (requestData) => {
+            try {
+                const res = await exec(
+                    ["/api/data-table/product-access-type"].join("/"),
+                    "put",
+                    { PAT_Changes : requestData},
+                );
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
         return {
+            batchUpdate,
             resetForm,
             addProductAccessType,
             updateProductAccessType,

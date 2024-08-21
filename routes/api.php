@@ -10,13 +10,9 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserWishlistController;
+use App\Models\ProductAccessType;
 use App\Services\UserServices;
 use Illuminate\Support\Facades\Route;
-
-
-
-
-
 
 $except = ['create', 'edit', 'destroy'];
 

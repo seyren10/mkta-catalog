@@ -31,7 +31,7 @@ export const useProductStore = defineStore("products", () => {
 
     //computed
     const isValid = computed(() => {
-        if (form.id == "" || form.title == "") {
+        if (form.value.id == "" || form.value.title == "") {
             return false;
         }
         return true;
@@ -44,8 +44,8 @@ export const useProductStore = defineStore("products", () => {
 
     const addProductItem = async () => {
         try {
-            form.id = form.id.replace(/ /g, "-");
-            const res = await exec("/api/product", "post", form);
+            form.value.id = form.value.id.replace(/ /g, "-");
+            const res = await exec("/api/product", "post", form.value);
         } catch (e) {
             console.log(e);
         } finally {
@@ -54,7 +54,7 @@ export const useProductStore = defineStore("products", () => {
     };
     const updateProductItem = async (id) => {
         try {
-            const res = await exec("/api/product/" + id, "put", form);
+            const res = await exec("/api/product/" + id, "put", form.value);
         } catch (e) {
             console.log(e);
         } finally {
@@ -63,7 +63,7 @@ export const useProductStore = defineStore("products", () => {
     };
     const deleteProductItem = async (id) => {
         try {
-            const res = await exec("/api/product/" + id, "destroy", { form });
+            const res = await exec("/api/product/" + id, "destroy",  form.value);
         } catch (e) {
             console.log(e);
         } finally {
@@ -138,17 +138,17 @@ export const useProductStore = defineStore("products", () => {
             });
 
             product_item.value = res.data.data;
-            form.value = product_item.value;
-            form.id = product_item.value.id;
-            form.parent_code = product_item.value.parent_code;
-            form.title = product_item.value.title;
-            form.description = product_item.value.description;
-            form.volume = product_item.value.volume;
-            form.weight_net = product_item.value.weight_net;
-            form.weight_gross = product_item.value.weight_gross;
-            form.dimension_length = product_item.value.dimension_length;
-            form.dimension_width = product_item.value.dimension_width;
-            form.dimension_height = product_item.value.dimension_height;
+            form.value.value = product_item.value;
+            form.value.id = product_item.value.id;
+            form.value.parent_code = product_item.value.parent_code;
+            form.value.title = product_item.value.title;
+            form.value.description = product_item.value.description;
+            form.value.volume = product_item.value.volume;
+            form.value.weight_net = product_item.value.weight_net;
+            form.value.weight_gross = product_item.value.weight_gross;
+            form.value.dimension_length = product_item.value.dimension_length;
+            form.value.dimension_width = product_item.value.dimension_width;
+            form.value.dimension_height = product_item.value.dimension_height;
         } catch (e) {
             console.log(e);
         }
@@ -177,15 +177,15 @@ export const useProductStore = defineStore("products", () => {
         }
     };
     const resetForm = () => {
-        form.parent_code = "";
-        form.title = "";
-        form.description = "";
-        form.volume = 0.0;
-        form.weight_net = 0.0;
-        form.weight_gross = 0.0;
-        form.dimension_length = 0.0;
-        form.dimension_width = 0.0;
-        form.dimension_height = 0.0;
+        form.value.parent_code = "";
+        form.value.title = "";
+        form.value.description = "";
+        form.value.volume = 0.0;
+        form.value.weight_net = 0.0;
+        form.value.weight_gross = 0.0;
+        form.value.dimension_length = 0.0;
+        form.value.dimension_width = 0.0;
+        form.value.dimension_height = 0.0;
     };
 
     const getProductFilter = async (product_id) => {
@@ -239,7 +239,7 @@ export const useProductStore = defineStore("products", () => {
 
     const tablebatch_updateProducts = async (product_data) => {
         try {
-            const res = await exec("/api/product-batch", "put", {
+            const res = await exec("/api/data-table/product", "put", {
                 products : product_data
             });
         } catch (e) {

@@ -33,7 +33,7 @@ class CategoryResource extends JsonResource
         $removeParentCategory = true;
         if ($request->has('includeParentCategory')) {
             if ($request->includeParentCategory === 'true' || $request->includeParentCategory === true) {
-                unset($data['parent_id']);
+                // unset($data['parent_id']);
                 $removeParentCategory = false;
             }
         }
@@ -52,15 +52,15 @@ class CategoryResource extends JsonResource
             unset($data['sub_categories']);
         }
         #endregion
-        #region Cover HTML
-        $removeCoverHTML = true;
-        if ($request->has('includeCoverHTML')) {
-            if ($request->includeCoverHTML === 'true' || $request->includeCoverHTML === true) {
-                $removeCoverHTML = false;
+        #region Products
+        $removeProducts = true;
+        if ($request->has('includeProducts')) {
+            if ($request->includeProducts === 'true' || $request->includeProducts === true) {
+                $removeProducts = false;
             }
         }
-        if ($removeCoverHTML) {
-            unset($data['cover_html']);
+        if ($removeProducts) {
+            unset($data['products']);
         }
         #endregion
         #region Cover HTML
@@ -73,13 +73,10 @@ class CategoryResource extends JsonResource
         if ($removeCoverHTML) {
             unset($data['cover_html']);
         }
+        unset($data['cover_html']);
         #endregion
-
-
         if (!$request->has('includeBannerImage'))
             unset($data['banner_file']);
-
-
         return $data;
     }
 }

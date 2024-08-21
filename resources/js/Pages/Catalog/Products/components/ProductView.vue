@@ -4,8 +4,8 @@
             <slot name="header"></slot>
         </v-sheet>
 
-        <div class="grid grid-cols-[min-content_,_1fr] gap-5">
-            <div class="min-w-[15rem] text-slate-500">
+        <div class="grid lg:grid-cols-[min-content_,_1fr] gap-5">
+            <div class="min-w-[15rem] text-slate-500 hidden lg:block">
                 <slot name="aside"></slot>
             </div>
 

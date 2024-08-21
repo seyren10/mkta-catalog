@@ -131,7 +131,6 @@ function useTemplate() {
 
         if (typeof template.data === "string") {
             template.data = JSON.parse(template.data);
-            console.log(template);
         }
 
         cmsUIStore.getNodes(template.data);

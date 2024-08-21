@@ -65,7 +65,6 @@ function handlePropsChange(event) {
         ...props,
         size: +event.target.value,
     };
-    console.log(newProps);
     cmsStore.setComponentProps(newProps);
 }
 </script>

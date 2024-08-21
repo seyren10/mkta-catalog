@@ -15,36 +15,36 @@ export const useProductComponentStore = defineStore("productComponent", () => {
         value: [],
     });
     const resetForm = () => {
-        form.type = null;
-        form.is_visible = true;
-        form.index = 100;
-        form.title = "";
-        form.value = [];
+        form.value.type = null;
+        form.value.is_visible = true;
+        form.value.index = 100;
+        form.value.title = "";
+        form.value.value = [];
     };
     const addProductComponent = async (product_id) => {
         if (product_id == "") {
             return;
         }
         try {
-            form.type = form.type.trim().toLowerCase();
-            switch (form.type) {
+            form.value.type = form.value.type.trim().toLowerCase();
+            switch (form.value.type) {
                 case "list":
-                    form.value = JSON.stringify(form.value);
+                    form.value.value = JSON.stringify(form.value.value);
                     break;
                 case "file":
-                    form.value = JSON.stringify(form.value);
+                    form.value.value = JSON.stringify(form.value.value);
                     break;
                 case "album":
-                    form.value = JSON.stringify(form.value);
+                    form.value.value = JSON.stringify(form.value.value);
                     break;
                 case "table":
-                    form.value = JSON.stringify(form.value);
+                    form.value.value = JSON.stringify(form.value.value);
                     break;
             }
             const res = await exec(
                 "/api/product-components/" + product_id,
                 "post",
-                form,
+                form.value,
             );
             resetForm();
         } catch (e) {

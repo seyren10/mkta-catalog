@@ -20,34 +20,34 @@ export const usePermissionStore = defineStore("permissions", () => {
         description: "",
     });
     const resetForm = ()=>{
-            form.key = "";
-            form.title = "";
-            form.description = "";
+            form.value.key = "";
+            form.value.title = "";
+            form.value.description = "";
     }
     const isExist = computed(() => {
         if (
-            form.title.trim().length == 0 ||
-            form.key.trim().length == 0 ||
-            form.description.trim().length == 0
+            form.value.title.trim().length == 0 ||
+            form.value.key.trim().length == 0 ||
+            form.value.description.trim().length == 0
         ) {
             return true;
         }
         return permissions.value.some((element) => {
             return (
                 element.key.trim().toLowerCase() ==
-                    form.key.trim().toLowerCase() ||
+                    form.value.key.trim().toLowerCase() ||
                 element.title.trim().toLowerCase() ==
-                    form.title.trim().toLowerCase()
+                    form.value.title.trim().toLowerCase()
             );
         });
     });
     const addPermission = async () => {
         try {
-            form.key = form.key.trim().toLowerCase();
-            form.title = form.title.trim();
-            form.description = form.description.trim();
-            const res = await exec("/api/permissions", "post", form);
-            form = {
+            form.value.key = form.value.key.trim().toLowerCase();
+            form.value.title = form.value.title.trim();
+            form.value.description = form.value.description.trim();
+            const res = await exec("/api/permissions", "post", form.value);
+            form.value = {
                 key: "",
                 title: "",
                 description: "",
@@ -60,9 +60,9 @@ export const usePermissionStore = defineStore("permissions", () => {
         try {
             const res = await exec(
                 "/api/permissions/" + id,
-                "put", form
+                "put", form.value
             );
-            form = {
+            form.value = {
                 key: "",
                 title: "",
                 description: "",

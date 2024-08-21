@@ -15,17 +15,17 @@ export const useCategoryStore = defineStore("categories", () => {
         cover_html: "",
     });
     const resetForm = () => {
-        form.title = "";
-        form.description = "";
-        form.parent_id = 0;
-        form.file_id = 0;
-        form.cover_html = 0;
+        form.value.title = "";
+        form.value.description = "";
+        form.value.parent_id = 0;
+        form.value.file_id = 0;
+        form.value.cover_html = 0;
     };
     const addCategory = async () => {
         try {
-            const res = await exec("/api/categories", "post", form);
-            if (form.parent_id != 0) {
-                getCategory(form.parent_id);
+            const res = await exec("/api/categories", "post", form.value);
+            if (form.value.parent_id != 0) {
+                getCategory(form.value.parent_id);
             } else {
                 getCategories();
             }
@@ -35,7 +35,7 @@ export const useCategoryStore = defineStore("categories", () => {
     };
     const updateCategory = async (id) => {
         try {
-            const res = await exec("/api/categories/" + id, "put", form);
+            const res = await exec("/api/categories/" + id, "put", form.value);
             getCategory(id);
         } catch (e) {
             console.log(e);
@@ -75,11 +75,11 @@ export const useCategoryStore = defineStore("categories", () => {
                 ...defaultData,
             });
             category.value = res.data.data;
-            form.title = category.value.title;
-            form.description = category.value.description;
-            form.parent_id = category.value.parent_id;
-            form.file_id = category.value.file_id ?? category.img;
-            form.cover_html = category.value.cover_html;
+            form.value.title = category.value.title;
+            form.value.description = category.value.description;
+            form.value.parent_id = category.value.parent_id;
+            form.value.file_id = category.value.file_id ?? category.img;
+            form.value.cover_html = category.value.cover_html;
         } catch (e) {
             console.log(e);
         }
@@ -99,6 +99,7 @@ export const useCategoryStore = defineStore("categories", () => {
                 ...requestData,
             });
             categories.value = res.data.data;
+            return categories.value
         } catch (e) {
             console.log(e);
         }
@@ -117,7 +118,22 @@ export const useCategoryStore = defineStore("categories", () => {
             banner_file_id: fileId,
         });
     }
+
+    const batchUpdate = async (requestData) => {
+        try {
+            const res = await exec(
+                ["/api/data-table/categories"].join("/"),
+                "put",
+                { categories : requestData},
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     return {
+        batchUpdate,
+        
         form,
         category,
         categories,

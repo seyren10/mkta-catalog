@@ -93,96 +93,9 @@
                 </li>
             </ul>
         </div>
-        <v-tab
-            no-navigation
-            header-class=" !px-0 bg-white border-b pb-2"
-            :tabs="[
-                { title: 'Overview', value: 'basic' },
-                { title: 'Technical Info', value: 'tech' },
-                { title: 'Download Image', value: 'download' },
-            ]"
-        >
-            <template #content.basic>
-                <div class="py-3">
-                    {{ product.description }}
-                </div>
-            </template>
-            <template #content.tech>
-                <div class="p-3">
-                    <div class="mb-4 flex w-fit gap-2">
-                        <v-button
-                            class="text-xs"
-                            @click="conversion = 'metric'"
-                            :class="{
-                                'bg-accent text-white': conversion === 'metric',
-                            }"
-                            >Metric</v-button
-                        >
-                        <v-button
-                            class="text-xs"
-                            :class="{
-                                'bg-accent text-white': conversion !== 'metric',
-                            }"
-                            @click="conversion = 'imperial'"
-                            >Imperial</v-button
-                        >
-                    </div>
-                    <ul class="grid grid-cols-2 gap-3">
-                        <li
-                            v-for="(detail, key) in product.details"
-                            :key="key"
-                            class="flex gap-3"
-                        >
-                            <span class="min-w-[5rem] capitalize text-slate-400"
-                                >{{ key }}:</span
-                            >
-                            <span v-html="detail"> </span>
-                        </li>
-                    </ul>
-                    <div class="py-2 text-justify" >
-                        <v-icon class="me-2" name="pr-info-circle"></v-icon>
-                        While we make every effort to ensure accuracy, actual product dimensions may vary slightly due to manufacturing processes or measurement techniques.
-                    </div>
-                </div>
-            </template>
-            <template #content.download>
-                <div class="mt-3 space-y-5">
-                    <div
-                        class="flex gap-2 rounded-lg bg-slate-100 p-3 text-[.8rem]"
-                    >
-                        <v-icon
-                            name="pr-exclamation-circle"
-                            scale="1.2"
-                            class="fill-slate-400"
-                        ></v-icon>
-                        <p class="text-slate-400">
-                            <span
-                                class="flex items-center font-medium text-primary"
-                            >
-                                Important Note:</span
-                            >
-                            By downloading the zip file containing images from
-                            our website, you agree not to distribute these
-                            images or claim them as your own. Unauthorized use,
-                            reproduction, or distribution is prohibited and may
-                            result in legal action. Thank you for respecting our
-                            terms and supporting our work.
-                        </p>
-                    </div>
-                    <v-button
-                        @click="
-                            () => {
-                                showDownloadToast = true;
-                                productStore.zipProductImages(product.id);
-                            }
-                        "
-                        prepend-inner-icon="oi-file-zip"
-                        class="bg-accent text-white"
-                        >Download ZIP file</v-button
-                    >
-                </div>
-            </template>
-        </v-tab>
+        <div class="py-3 ">
+            {{ product.description }}
+        </div>
     </div>
 </template>
 
@@ -196,6 +109,9 @@ import { storeToRefs } from "pinia";
 import ContactSales from "@/components/ContactSales.vue";
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import VIconWrapper from "@/components/base_components/VIconWrapper.vue";
+
+import TechInfo from "./ProductInfo/TechInfo.vue";
+import Download from "./ProductInfo/Download.vue";
 
 //reactives
 const injectedProduct = inject("product");

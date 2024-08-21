@@ -1,12 +1,17 @@
 <template>
     <ProductView>
         <template #header>
-            <ImageView></ImageView>
-            <ProductInfo></ProductInfo>
+            <ImageView />
+            <ProductInfo />
         </template>
         <template #aside> <RecentViewed></RecentViewed> </template>
-        <template #component v-if="product.product_components.length > 0">
-            <ProductComponents />
+        <template #component>
+            <TechInfo />
+            <ProductComponents v-if="product.product_components.length > 0" />
+            <RelatedProducts v-if="product.related_product.length > 0" />
+            <RecommendedProducts
+                v-if="product.recommended_product.length > 0"
+            />
         </template>
     </ProductView>
     <LightBox v-model="lightbox" :items="productImages" :key="id"></LightBox>
@@ -25,6 +30,9 @@ import RecentViewed from "./components/RecentViewed.vue";
 import ProductComponents from "./components/ProductComponents.vue";
 
 import RelatedProducts from "./components/RelatedProducts.vue";
+import RecommendedProducts from "./components/RecommendedProducts.vue";
+
+import TechInfo from "./components/ProductInfo/TechInfo.vue";
 
 const props = defineProps({
     id: String,
@@ -70,9 +78,11 @@ provide("category", category);
 //init
 
 async function init() {
-    await productStore.getProductItem(props.id);
+    await productStore.getProductItem(props.id, {
+        includeRelatedProducts: true,
+        includeRecommendedProduct: true,
+    });
 }
-console.log("init again");
 
 const addItem_in_LocalStorage = () => {
     let recentItems = localStorage.getItem("recent");

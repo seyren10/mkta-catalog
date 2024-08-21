@@ -66,7 +66,6 @@ function reposition() {
 
         if (activatorRect.top > window.innerHeight / 2) {
             /* position the menu on top of the activator  */
-            console.log(menuRect.height);
             menuRef.value.style.top =
                 activatorRect.top - menuRect.height - 2 + "px";
         } else {

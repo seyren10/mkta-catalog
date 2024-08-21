@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -34,7 +35,7 @@ class CategoryController extends Controller
         $category = Category::create(array(
             "title" => ucwords($request->title),
             "description" => ucfirst($request->description) ?? "",
-            "parent_id" => ucfirst($request->parent_id) ?? null
+            "parent_id" => ucfirst($request->parent_id) ?? null,
         ));
         return response()->json(['message' => 'Category created successfully', 'category' => $category], 200);
     }
@@ -61,8 +62,8 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $category->title = ucwords($request->title) ?? $category->title;
-        $category->description = ucfirst($request->description) ??  $category->description;
-        $category->cover_html = ($request->cover_html) ??  $category->cover_html;
+        $category->description = ucfirst($request->description) ?? $category->description;
+        $category->cover_html = ($request->cover_html) ?? $category->cover_html;
 
         $category->save();
         return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
@@ -91,4 +92,57 @@ class CategoryController extends Controller
         $category->delete();
     }
     #endregion
+    #region Custom Functions
+    public static function batchUpdate(Request $request)
+    {
+        // return response()->noContent(200);
+
+        // foreach ($request->categories as $key => $curData) {
+        $curData = $request->categories;
+        $allowContinue = [
+            array_key_exists('data', $curData),
+            array_key_exists('remove', $curData),
+            array_key_exists('append', $curData),
+        ];
+        if (in_array(false, $allowContinue)) {
+            return response()->noContent(200);
+
+        }
+        $data_id = $curData['data']['id'];
+        $data_parent = $curData['data']['parent_id'];
+
+        $data_remove = $curData['remove'];
+        $data_append = $curData['append'];
+
+        $curCategory = Category::where('id', $data_id)->first();
+        $curParent = Category::where('id', $data_parent)->first();
+
+        if ($curCategory === null) {
+            return response()->noContent(200);
+
+        }
+
+        ProductCategory::where('category_id', $curCategory->id)->whereIn('product_id', $data_remove)->delete();
+        foreach ($data_append as $product_id) {
+            ProductCategory::create(
+                array(
+                    'category_id' => $curCategory->id,
+                    'product_id' => $product_id,
+                )
+            );
+            if ($curParent !== null) {
+                ProductCategory::create(
+                    array(
+                        'category_id' => $curParent->id,
+                        'product_id' => $product_id,
+                    )
+                );
+            }
+        }
+
+        // }
+        return response()->noContent(200);
+    }
+    #endregion
+
 }

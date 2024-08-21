@@ -3,13 +3,13 @@
         <h2
             class="w-full border-b-2 py-2 text-[1.5rem] font-bold tracking-wide"
         >
-            Related Products
+            Recommended Products
         </h2>
         <div
             class="relative grid h-full auto-rows-min grid-cols-2 gap-5 rounded-lg bg-white p-5 md:grid-cols-3 lg:grid-cols-4"
         >
             <template
-                v-for="(recProduct, relIndex) in product.related_product"
+                v-for="(recProduct, relIndex) in product.recommended_product"
                 :key="recProduct.product.id"
             >
                 <Product_Card

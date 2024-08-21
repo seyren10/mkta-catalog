@@ -11,12 +11,11 @@
             </div>
         </v-accordion>
         <div :disabled="Object.keys(productChanges).length > 0">
-
             <v-text-field
                 @keyup.enter="refresh"
                 prepend-inner-icon="la-search-solid"
                 v-model="search"
-                :disabled="! (Object.keys(productChanges).length > 0)"
+                :disabled="Object.keys(productChanges).length > 0"
             />
             <pagination
                 @page-change="handlePageChange"
@@ -27,13 +26,7 @@
                 page to clear the changes
             </p>
         </div>
-        <v-button
-            v-show="Object.keys(productChanges).length > 0"
-            @click="saveChanges"
-            class="m-3 border bg-green-500 text-white"
-            prepend-inner-icon="md-save-round"
-            >Save</v-button
-        >
+
         <div class="overflow scrollbar mx-auto !max-w-[85vw] border">
             <table
                 class="table-fixed divide-y divide-gray-200"
@@ -50,6 +43,7 @@
                         <th
                             v-show="request.includeProductInformation.value"
                             class="min-w-[200px] border-b px-4 py-2"
+                            rowspan="1"
                             colspan="3"
                         >
                             Product Info
@@ -57,48 +51,42 @@
                         <th
                             v-show="request.includeProductDimensions.value"
                             class="min-w-[200px] border-b px-4 py-2"
-                            colspan="3"
+                            rowspan="2"
+                            colspan="1"
                         >
                             Dimensions
                         </th>
                         <th
                             v-show="request.includeProductWeight.value"
                             class="min-w-[200px] border-b px-4 py-2"
-                            colspan="2"
+                            rowspan="2"
+                            colspan="1"
                         >
                             Weight
                         </th>
                         <th
                             v-show="request.includeProductVolume.value"
                             class="min-w-[200px] border-b px-4 py-2"
-                            colspan="1"
                             rowspan="2"
+                            colspan="1"
                         >
                             Volume
                         </th>
                         <th
                             v-show="request.includeProductRelated.value"
                             class="min-w-[300px] border-b px-4 py-2"
-                            colspan="1"
                             rowspan="2"
+                            colspan="1"
                         >
                             Related Products
                         </th>
                         <th
                             v-show="request.includeProductRecommended.value"
                             class="min-w-[300px] border-b px-4 py-2"
-                            colspan="1"
                             rowspan="2"
+                            colspan="1"
                         >
                             Recommended Products
-                        </th>
-                        <th
-                            v-show="request.includeProductCategories.value"
-                            class="min-w-[300px] border-b px-4 py-2"
-                            colspan="1"
-                            rowspan="2"
-                        >
-                            Categories
                         </th>
                     </tr>
                     <tr>
@@ -120,38 +108,6 @@
                         >
                             Description
                         </th>
-
-                        <th
-                            class="min-w-[250px] border-b px-4 py-2"
-                            v-show="request.includeProductDimensions.value"
-                        >
-                            Length
-                        </th>
-                        <th
-                            class="min-w-[250px] border-b px-4 py-2"
-                            v-show="request.includeProductDimensions.value"
-                        >
-                            Width
-                        </th>
-                        <th
-                            class="min-w-[250px] border-b px-4 py-2"
-                            v-show="request.includeProductDimensions.value"
-                        >
-                            Height
-                        </th>
-
-                        <th
-                            class="min-w-[250px] border-b px-4 py-2"
-                            v-show="request.includeProductWeight.value"
-                        >
-                            Net
-                        </th>
-                        <th
-                            class="min-w-[250px] border-b px-4 py-2"
-                            v-show="request.includeProductWeight.value"
-                        >
-                            Gross
-                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-gray-20 divide-y bg-slate-500">
@@ -164,11 +120,14 @@
                                 : ' bg-white '
                         "
                     >
+                        <!-- Product Code -->
                         <td
                             class="fixed-column sticky left-0 border px-4 py-2 text-center align-top"
                         >
                             <p class="text-xl">{{ item.id }}</p>
                         </td>
+
+                        <!-- Product Information - Parent Code | Title | Description -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductInformation.value"
@@ -228,6 +187,7 @@
                             </v-textarea>
                         </td>
 
+                        <!-- Dimensions -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductDimensions.value"
@@ -235,7 +195,7 @@
                             <v-text-field
                                 type="number"
                                 persistent-hint
-                                hint="Length"
+                                label="Length"
                                 v-model="item.dimension_length"
                                 @keyup.enter="
                                     addChanges(
@@ -248,15 +208,10 @@
                             >
                                 <template #append-inner> cm </template>
                             </v-text-field>
-                        </td>
-                        <td
-                            class="min-w-12 border-b px-4 py-2 align-top"
-                            v-show="request.includeProductDimensions.value"
-                        >
                             <v-text-field
                                 type="number"
                                 persistent-hint
-                                hint="Width"
+                                label="Width"
                                 v-model="item.dimension_width"
                                 @keyup.enter="
                                     addChanges(
@@ -269,15 +224,10 @@
                             >
                                 <template #append-inner> cm </template>
                             </v-text-field>
-                        </td>
-                        <td
-                            class="min-w-12 border-b px-4 py-2 align-top"
-                            v-show="request.includeProductDimensions.value"
-                        >
                             <v-text-field
                                 type="number"
                                 persistent-hint
-                                hint="Height"
+                                label="Height"
                                 v-model="item.dimension_height"
                                 @keyup.enter="
                                     addChanges(
@@ -291,13 +241,15 @@
                                 <template #append-inner> cm </template>
                             </v-text-field>
                         </td>
+                        <!-- <td></td> -->
+                        <!-- Weight -->
                         <td
-                            class="min-w-12 border-b px-4 py-2 align-top"
+                            class="min-w-12 gap-2 border-b px-4 py-2 align-top"
                             v-show="request.includeProductWeight.value"
                         >
                             <v-text-field
                                 persistent-hint
-                                hint="Net"
+                                label="Net"
                                 v-model="item.weight_net"
                                 @keyup.enter="
                                     addChanges(
@@ -310,14 +262,9 @@
                             >
                                 <template #append-inner> kgs </template>
                             </v-text-field>
-                        </td>
-                        <td
-                            class="min-w-12 border-b px-4 py-2 align-top"
-                            v-show="request.includeProductWeight.value"
-                        >
                             <v-text-field
                                 persistent-hint
-                                hint="Gross"
+                                label="Gross"
                                 v-model="item.weight_gross"
                                 @keyup.enter="
                                     addChanges(
@@ -331,13 +278,14 @@
                                 <template #append-inner> kgs </template>
                             </v-text-field>
                         </td>
+                        <!-- Volume -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductVolume.value"
                         >
                             <v-text-field
                                 persistent-hint
-                                hint="Volume"
+                                label="Volume"
                                 v-model="item.volume"
                                 @keyup.enter="
                                     addChanges(
@@ -353,6 +301,7 @@
                                 </template>
                             </v-text-field>
                         </td>
+                        <!-- Related and Recommended Products -->
                         <td
                             class="min-w-12 border-b px-4 py-2 align-top"
                             v-show="request.includeProductRelated.value"
@@ -505,37 +454,17 @@
                                 </li>
                             </ul>
                         </td>
-                        <td
-                            class="w-full min-w-12 overflow-auto border-b px-4 py-2 align-top"
-                            v-show="request.includeProductCategories.value"
-                        >
-                            <div
-                                :id="item.id"
-                                :key="item.id"
-                                class="!max-h-[300px]"
-                            >
-                                <template v-for="parent in categories">
-                                    <checkboxDataCategory
-                                        :keyVal="item.id"
-                                        @change="addChanges(
-                                                    item.id,
-                                                    'cat_data',
-                                                    null,
-                                                    item.product_category_keys,
-                                                )"
-                                        v-model="item.product_category_keys"
-                                        :parent_Key="0"
-                                        :id="parent.id"
-                                        :label="parent.title"
-                                        :children="parent.sub_categories"
-                                    />
-                                </template>
-                            </div>
-                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <v-button
+            v-show="Object.keys(productChanges).length > 0"
+            @click="saveChanges"
+            class="m-3 ml-auto border bg-green-500 text-white"
+            prepend-inner-icon="md-save-round"
+            >Save</v-button
+        >
     </div>
     <v-dialog
         persistent
@@ -642,30 +571,26 @@ import { useQuery } from "@/composables/useQuery";
 const request = ref({
     includeProductInformation: {
         text: "Product Information",
-        value: !true,
+        value: true,
     },
     includeProductDimensions: {
         text: "Product Dimensions",
-        value: !true,
+        value: true,
     },
     includeProductWeight: {
         text: "Product Weight",
-        value: !true,
+        value: true,
     },
     includeProductVolume: {
         text: "Product Volume",
-        value: !true,
+        value: true,
     },
     includeProductRelated: {
         text: "Related Products",
-        value: !true,
+        value: true,
     },
     includeProductRecommended: {
         text: "Recommended Products",
-        value: !true,
-    },
-    includeProductCategories: {
-        text: "Product Categories",
         value: true,
     },
 });
@@ -720,7 +645,6 @@ if (!categories.length) {
     await categoryStore.getCategories({ includeSubCategories: true });
 }
 const categoryChange = (data, product_id, product_index) => {
-    console.log("Category Change" + product_items.value[product_index].id);
     // addChanges(product_id, "cat_data", null, product_items.value[product_index].product_category_keys);
 };
 
@@ -858,7 +782,6 @@ const addFromSource = (sourceIndex, column, data) => {
     structure["id"] = -1;
     structure["product_id"] = product_items.value[sourceIndex].id;
     structure["product"] = data;
-    console.log(column);
     if (column === "Related") {
         structure["related_product_id"] = data.id;
         column = "related_product";
@@ -867,7 +790,6 @@ const addFromSource = (sourceIndex, column, data) => {
         structure["recommended_product_id"] = data.id;
         column = "recommended_product";
     }
-    console.log(structure);
 
     product_items.value[sourceIndex][column].push(structure);
 };
