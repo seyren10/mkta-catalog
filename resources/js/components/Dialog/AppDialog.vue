@@ -19,7 +19,7 @@
                     v-if="dialog"
                 >
                     <AppDialogContent
-                        class="relative my-auto min-w-[30rem] overflow-y-auto overflow-x-hidden mx-4"
+                        class="relative my-auto min-w-[30rem] overflow-y-auto overflow-x-hidden mx-4 md:mx-0"
                         :style="{
                             maxWidth: !fullScreen ? `${maxWidth}px` : 'auto',
                         }"

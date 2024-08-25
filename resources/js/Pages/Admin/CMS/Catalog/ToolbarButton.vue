@@ -27,7 +27,9 @@
                         >Save CMS</v-button
                     >
                 </template>
-
+                <template #toolbar>
+                    <div></div>
+                </template>
                 <template #default="{ props }">
                     <ToolbarButtonPreviewDialog
                         @close="props.closeDialog()"
