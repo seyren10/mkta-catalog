@@ -9,7 +9,7 @@ class RelatedProduct extends Model
 {
     use HasFactory;
     protected $fillable = ["related_product_id", "product_id"];
-    protected $hidden = [ "created_at", "updated_at"];
+    protected $hidden = ["created_at", "updated_at"];
     protected $with = ['product'];
 
     public function product()
