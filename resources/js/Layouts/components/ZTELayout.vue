@@ -7,9 +7,7 @@
         }"
     >
         <!-- SideBar -->
-        <div
-            class="row-span-2 row-start-1 overflow-hidden border-r border-slate-300"
-        >
+        <div class="row-span-2 row-start-1 border-r border-slate-300">
             <slot name="sidebar"> SideBar </slot>
         </div>
 
