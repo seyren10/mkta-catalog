@@ -150,9 +150,11 @@ import {
     HiTemplate,
     PrBookmark,
     HiSave,
+    PrUser,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    PrUser,
     HiSave,
     PrBookmark,
     HiTemplate,

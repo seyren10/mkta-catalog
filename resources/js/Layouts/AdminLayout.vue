@@ -6,7 +6,7 @@
             </div>
         </template>
         <template #sidebar>
-            <div class="grid gap-3 p-3">
+            <div class="grid gap-3 p-3 mt-8">
                 <div class="space-y-4 rounded-lg bg-primary p-3">
                     <div class="flex items-center gap-2">
                         <img src="/Logo.png" alt="" class="max-w-[5rem]" />
@@ -14,7 +14,9 @@
                             >Admin Panel</v-heading
                         >
                     </div>
-                    <div class="mb-4 flex gap-3 rounded-lg bg-stone-200 p-2">
+                    <div
+                        class="mb-4 flex items-start gap-3 rounded-lg bg-stone-200 p-2"
+                    >
                         <div class="max-w-[3rem] rounded-full bg-white">
                             <img src="/mk-images/hero-images/7.png" alt="" />
                         </div>
@@ -23,13 +25,22 @@
                             <span class="text-[.8rem] text-slate-400">{{
                                 currentUser.role_data.title
                             }}</span>
+
+                            <div class="flex justify-end gap-4">
+                                <v-button
+                                    icon="pr-user"
+                                    icon-size="1"
+                                ></v-button>
+                                <v-button
+                                    icon="pr-sign-out"
+                                    icon-size="1"
+                                ></v-button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="scrollbar max-h-[91%] space-y-3 overflow-y-auto"
-                >
+                <div class="scrollbar max-h-[91%] space-y-3 overflow-y-auto">
                     <VRouteNav
                         title="Content Management"
                         :items="contentManagement"
