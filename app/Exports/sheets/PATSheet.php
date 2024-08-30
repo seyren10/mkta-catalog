@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PATSheet implements FromArray, WithTitle, WithStyles, ShouldAutoSize
 {
+
     private $data;
     public function __construct($data)
     {

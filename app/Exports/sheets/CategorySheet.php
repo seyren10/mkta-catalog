@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Exports\Sheets;
 
-use Illuminate\Support\Facades\Log;
+
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -10,12 +11,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class CategorySheet implements FromArray, WithTitle, WithStyles, WithHeadings
 {
+  
     protected $category;
 
     public function headings(): array
     {
         return [
-            'ID', 'Parent', 'Title', 'Description'
+            'ID',
+            'Parent',
+            'Title',
+            'Description'
         ];
     }
 
@@ -31,7 +36,7 @@ class CategorySheet implements FromArray, WithTitle, WithStyles, WithHeadings
             array_push($products, [$value->product_id, $value->title]);
         }
         $catData =  [
-            [$this->category->id, ($this->category->parent_category ? $this->category->parent_category->title: ''), $this->category->title, $this->category->description, 'Product will be also added to the parent category'],
+            [$this->category->id, ($this->category->parent_category ? $this->category->parent_category->title : ''), $this->category->title, $this->category->description, 'Product will be also added to the parent category'],
             ['Products'],
             ...$products
         ];

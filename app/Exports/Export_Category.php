@@ -3,10 +3,11 @@ namespace App\Exports;
 
 use App\Exports\sheets\CategorySheet;
 use App\Models\Category;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class Export_Category implements WithMultipleSheets
+class Export_Category implements WithMultipleSheets, ShouldQueue
 {
     use Exportable;
 

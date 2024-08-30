@@ -20,21 +20,22 @@ use Maatwebsite\Excel\Facades\Excel;
 class ExcelImportController extends Controller
 {
 
-    public static function template_downloads(Request $request, $template)
+    public static function template_downloads($template)
     {
         switch ($template) {
             case 'categories':
-                // Excel::store(new Export_Category, "resources/".$template.'.xlsx', "s3");
-                return Excel::download(new Export_Category, $template.'.xlsx');
+                Excel::store(new Export_Category, "resources/{$template}.xlsx", "s3");
                 break;
             case 'product-filters':
-                return Excel::download(new Export_ProductFilter,  $template.'.xlsx');
+                Excel::store(new Export_ProductFilter, "resources/{$template}.xlsx", "s3");
                 break;
             case 'product-restriction-and-exemptions':
-                return Excel::download(new Export_ProductAccess,  $template.'.xlsx');
+                Excel::store(new Export_ProductAccess, "resources/{$template}.xlsx", "s3");
                 break;
             default:
-                return response(array("message" => "fuck shit"), 404);
+                // Excel::store(new Export_Category, "resources/categories.xlsx", "s3");
+                Excel::store(new Export_ProductFilter, "resources/product-filters.xlsx", "s3");
+                Excel::store(new Export_ProductFilter, "resources/product-restriction-and-exemptions.xlsx", "s3");
                 break;
         }
     }
@@ -72,7 +73,5 @@ class ExcelImportController extends Controller
         $filePath = Storage::disk('local')->path($path);
         Excel::queueImport(new ProductRestrictionAndExemption($filePath), $filePath);
         return response()->json(['message' => 'File is being processed!']);
-
     }
-
 }

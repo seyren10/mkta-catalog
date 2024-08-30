@@ -52,7 +52,7 @@ pages.value = [
     ...pages.value,
     {
         pageTitle: "Categories",
-        templateURL: "/api/data-imports/templates/categories",
+        templateURL: "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/categories.xlsx",
         actionURL: "/api/data-imports/categories",
         templateNotes: [
             {
@@ -82,7 +82,7 @@ pages.value = [
     ...pages.value,
     {
         pageTitle: "Product Filters",
-        templateURL: "/api/data-imports/templates/product-filters",
+        templateURL: "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/product-filters.xlsx",
         actionURL: "/api/data-imports/product-filters",
         templateNotes: [
 
@@ -102,7 +102,7 @@ pages.value = [
     ...pages.value,
     {
         pageTitle: "Product Restriction and Exemption",
-        templateURL: "/api/data-imports/templates/product-restriction-and-exemptions",
+        templateURL: "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/product-restriction-and-exemptions.xlsx",
         actionURL: "/api/data-imports/product-restriction-and-exemptions",
         templateNotes: [
 

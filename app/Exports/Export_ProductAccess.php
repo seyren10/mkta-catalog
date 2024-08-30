@@ -6,13 +6,14 @@ use App\Exports\sheets\FilterSheet;
 use App\Exports\sheets\PATSheet;
 use App\Models\Filter;
 use App\Models\ProductAccessType;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class Export_ProductAccess implements WithMultipleSheets
+class Export_ProductAccess implements WithMultipleSheets,ShouldQueue
 {
     use Exportable;
     public function __construct()
