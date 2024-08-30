@@ -80,8 +80,12 @@ provide("deleteToast", deleteToast);
 
 const sec = ref(60);
 setInterval(async () => {
-    if (currentUser.value !== null && isRefreshing) {
-        await notificationStore.getNotifications(currentUser.value.id);
+    if (!router.currentRoute.value.fullPath.includes("admin")) {
+        if (currentUser.value !== null && isRefreshing) {
+            await notificationStore.getNotifications(currentUser.value.id);
+        }
+    }else{
+        // console.log('Skipped Notification Updates')
     }
 }, 1000 * sec.value);
 </script>

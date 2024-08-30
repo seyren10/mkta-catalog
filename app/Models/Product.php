@@ -84,8 +84,16 @@ class Product extends Model
             $query->where('id', $product->id);
         })->where('parent_code', $product->parent_code)->get();
     }
+    
     public function sync_product_categories()
     {
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
+    public function sync_related_products(){
+        return $this->belongsToMany(RelatedProduct::class, 'related_products', 'product_id', 'related_product_id');
+    }
+    public function sync_recommended_products(){
+        return $this->belongsToMany(RecommendedProduct::class, 'recommended_products', 'product_id', 'recommended_product_id');
+    }
+
 }

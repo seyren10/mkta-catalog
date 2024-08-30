@@ -242,6 +242,15 @@ const dataManagement = [
     },
 ];
 
+
+const uploadManagement = [
+    {
+        path: "data-import",
+        name: "dataImport",
+        component: () => import("@/Pages/Admin/Data/Import/index.vue"),
+    },
+];
+
 import { useUserStore } from "@/stores/userStore";
 import { storeToRefs } from "pinia";
 
@@ -261,6 +270,7 @@ const admin_routes = [
             ...file_management,
             ...contentManagement,
             ...dataManagement,
+            ...uploadManagement
         ],
         beforeEnter: (to, from, next) => {
             const userStore = useUserStore();

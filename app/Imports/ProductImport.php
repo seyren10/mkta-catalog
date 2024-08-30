@@ -4,41 +4,46 @@ namespace App\Imports;
 
 use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class ProductImport implements ToModel, WithBatchInserts, WithChunkReading, ShouldQueue
+class ProductImport implements ToCollection, WithChunkReading, ShouldQueue, WithStartRow
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function model(array $row)
+    public function startRow(): int
     {
-        return new Product([
-            "id" => $row['id'],
-            "parent_code" => $row['parent_code'],
-            "title" => $row['title'],
-            "description" => $row['description'],
-            "volume" => $row['volume'],
-            "weight_net" => $row['weight_net'],
-            "weight_gross" => $row['weight_gross'],
-            "dimension_length" => $row['dimension_length'],
-            "dimension_width" => $row['dimension_width'],
-            "dimension_height" => $row['dimension_height']
-        ]);
+        return 2;
     }
-
-
-    public function batchSize(): int
-    {
-        return 300;
-    }
-
     public function chunkSize(): int
     {
-        return 300;
+        return 1000;
+    }
+    public function collection(Collection $rows)
+    {
+        foreach ($rows as $key => $row) {
+            $data = [
+                'id' => $row[0],
+                'parent_code' => $this->filterValue($row[1]),
+                'title' => $this->filterValue($row[2]),
+                'description' => $this->filterValue($row[3]),
+                'volume' => $this->filterValue($row[4]),
+                'weight_net' => $this->filterValue($row[5]),
+                'weight_gross' => $this->filterValue($row[6]),
+                'dimension_length' => $this->filterValue($row[7]),
+                'dimension_width' => $this->filterValue($row[8]),
+                'dimension_height' => $this->filterValue($row[9]),
+            ];
+            $data = array_filter($data, function ($value) { return !is_null($value) && trim($value) !== ''; });
+            $curProduct = Product::find( $data['id'] );
+            if ($curProduct === null) { continue; }
+            foreach ($data as $col => $value ) { $curProduct[$col] = $value; }
+            $curProduct->save();
+        }
+    }
+    private function filterValue($value)
+    {
+        return !is_null($value) && trim($value) !== '' ? $value : null;
     }
 }
