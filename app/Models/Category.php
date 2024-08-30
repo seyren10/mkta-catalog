@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
     protected $fillable = ["title", "description", 'parent_id', 'file_id', "cover_html"];
-    
+
     protected $hidden = ["created_at", "updated_at", 'laravel_through_key', 'banner_file_id', 'cover_html'];
     protected $with = ["sub_categories", 'file', 'parent_category', 'bannerFile', 'products'];
 
@@ -31,9 +31,14 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id', 'id')->without(['parent_category']);
     }
-    
+
     public function products()
     {
         return $this->hasMany(ProductCategory::class, 'category_id', 'id')->with('product_data');
+    }
+
+    public function sync_product()
+    {
+        return $this->belongsToMany(Product::class, 'product_categories', 'category_id', 'product_id');
     }
 }

@@ -190,26 +190,31 @@ const contentManagement = [
 ];
 
 const dataManagement = [
+    // {
+    //     title: "Product Table",
+    //     to: "productDataIndex",
+    //     icon: "hi-solid-database",
+    // },
+    // {
+    //     title: "Filter Table",
+    //     to: "filterDataIndex",
+    //     icon: "hi-solid-database",
+    // },
+    // {
+    //     title: "Product Access Table",
+    //     to: "productAccessDataIndex",
+    //     icon: "hi-solid-database",
+    // },
+    // {
+    //     title: "Category Table",
+    //     to: "categoryDataIndex",
+    //     icon: "hi-solid-database",
+    // },
     {
-        title: "Product Table",
-        to: "productDataIndex",
-        icon: "hi-solid-database",
-    },
-    {
-        title: "Filter Table",
-        to: "filterDataIndex",
-        icon: "hi-solid-database",
-    },
-    {
-        title: "Product Access Table",
-        to: "productAccessDataIndex",
-        icon: "hi-solid-database",
-    },
-    {
-        title: "Category Table",
-        to: "categoryDataIndex",
-        icon: "hi-solid-database",
-    },
+        title: "Data Upload",
+        to: "dataImport",
+        icon: "fa-cloud-upload-alt",
+    }
 ];
 //provide/inject
 

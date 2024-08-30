@@ -17,7 +17,13 @@ return [
 
     'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
         '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1,192.168.110.111:8000,https://catalog.mkthemedattractions.com.ph,
+        'localhost,
+        localhost:3000,
+        127.0.0.1,
+        127.0.0.1:8000,
+        ::1,
+        192.168.110.111:8000,
+        https://catalog.mkthemedattractions.com.ph,
         http://catalog.mkthemedattractions.com.ph,
         catalog.mkthemedattractions.com.ph,
         107.180.113.41',

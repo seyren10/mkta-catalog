@@ -8,11 +8,15 @@ use App\Models\File;
 use App\Models\ProductAccessType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+
+// use Intervention\Image\Image;
+
+// use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
@@ -68,7 +72,20 @@ class FileController extends Controller
             $type = $curFile->getClientMimeType();
 
             $generated_new_name = bin2hex(now() . $fileName) . "." . $ext;
-            $data = Storage::disk('s3')->put("", $request->file('eFile'));
+            $data = '';
+            if ((str_contains(trim(strtolower($type)), 'image'))) {
+
+                // $image_resize = Image::make($curFile)->resize(700, 700);
+                // $resource = $image_resize->stream()->detach();
+                // Storage::disk('s3')->put("resources", $resource);
+                // $data = Storage::disk('s3')->put("", $curFile);
+
+                $data = Storage::disk('s3')->put("", $request->file('eFile'));
+
+
+            } else {
+                $data = Storage::disk('s3')->put("", $request->file('eFile'));
+            }
 
             #endregion
             $curFile = File::create(
@@ -78,6 +95,7 @@ class FileController extends Controller
                     'type' => $type,
                 )
             );
+
             DB::commit();
 
             return response(array(
@@ -152,10 +170,37 @@ class FileController extends Controller
         $res["File"] = $portal_file->filename;
         $res["isExist"] = Storage::disk('s3')->exists($portal_file->filename);
 
+        // $res["get"] = Storage::disk('s3')->get($portal_file->filename);
+        // $dd = Storage::disk('s3')->delete($res["get"]);
+
         if (Storage::disk('s3')->exists($portal_file->filename)) {
             try {
-                Storage::disk('s3')->delete("\\" . $portal_file->filename);
+                // $deleteFile = "https://mkta-portal.s3.us-east-2.amazonaws.com/".$portal_file->filename;
+                // $deleteFile = parse_url($deleteFile);
+                // $d = Storage::disk('s3')->delete($deleteFile);
+                $d = Storage::disk('s3')->delete($portal_file->filename);
+                // $d = Storage::disk('s3')->delete($portal_file->filename);
+                // $d = Storage::disk('s3')->delete("//mkta-portal//".$portal_file->filename);
+
+                // $s3 = new S3Client(config('filesystems.disks.s3.key'), config('filesystems.disks.s3.secret'));
+                // $bucket = config('filesystems.disks.s3.bucket');
+                // $keyname = config('filesystems.disks.s3.key');
+                // $s3 = new S3Client([
+                //     'version' => 'latest',
+                //     'region' => config('filesystems.disks.s3.region')]);
+                // // $result = $s3->deleteObject(array(
+                // //     'Bucket' => $bucket,
+                // //     'Key' => $keyname,
+                // // ));
+                // $s3->deleteObject($bucket, $portal_file->filename);
+
+                return array(
+                    "file" => $portal_file,
+                    "dd" => $d,
+                    "res" => $res,
+                );
             } catch (\Throwable $th) {
+
                 $res["error"] = $th;
                 $res['file'] = "\\" . $portal_file->filename;
             }

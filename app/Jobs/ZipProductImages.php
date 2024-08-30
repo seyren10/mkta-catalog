@@ -64,8 +64,6 @@ class ZipProductImages implements ShouldQueue
         } catch (\Throwable $th) {
             
         } finally {
-
-            
             foreach ( $productData as $key => $value) {
                 if(!in_array($key,['id', 'title', 'description', 'product_thumbnail'])){
                     unset($productData[$key]);

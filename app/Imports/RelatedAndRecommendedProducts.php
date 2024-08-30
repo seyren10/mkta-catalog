@@ -2,11 +2,9 @@
 
 namespace App\Imports;
 
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -17,7 +15,7 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Sheet;
 
-class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithMultipleSheets, WithEvents
+class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithMultipleSheets, WithEvents
 {
 
     use Importable, RegistersEventListeners;
@@ -25,15 +23,13 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
     {
         return 10000;
     }
-    public function startRow(): int 
+    public function startRow(): int
     {
         return 2;
     }
-    #region for Category Data
+    #region for Data
     private $filePath;
-    private $id;
-    private $title;
-    private $description;
+    private $product_id;
     public function __construct($filePath)
     {
         $this->filePath = $filePath;
@@ -43,7 +39,7 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
         $sheetNames = $this->getSheetNames();
         $sheets = [];
         foreach ($sheetNames as $sheetName) {
-            $sheets[$sheetName] = new CategoryImport($this->filePath);
+            $sheets[$sheetName] = new RelatedAndRecommendedProducts($this->filePath);
         }
         return $sheets;
     }
@@ -57,29 +53,29 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
     {
         return [
             BeforeSheet::class => function (BeforeSheet $event) {
-                $this->id = $event->sheet->getCell('A2');
-                $this->title = $event->sheet->getCell('C2');
-                $this->description = $event->sheet->getCell('D2');
+                $this->product_id = $event->sheet->getTitle();
             },
         ];
     }
     #endregion
     public function collection(Collection $rows)
     {
-        $curCategory = Category::find($this->id);
-        if ($curCategory === null) { 
+        $curProduct = Product::find($this->product_id);
+        if ($curProduct === null) {
             return;
         }
-        $curCategory->title = $this->title ?? $curCategory->title;
-        $curCategory->description = $this->description ?? $curCategory->description;
-        $curCategory->save();
-
-        $products = [];
-        foreach ($rows as $rowIndex => $row) {
-            array_push($products, $row[0]);
+        $related = [];
+        $recommended = [];
+        foreach ($rows as $key => $row) {
+            array_push($related, $row[0]);
+            array_push($recommended, $row[1]);
         }
-        $products = collect(Product::whereIn('id', $products)->get())->pluck('id');
-        $curCategory->sync_product()->sync($products);
+
+        $related = collect(Product::whereIn('id', $related)->get())->pluck('id');
+        $recommended = collect(Product::whereIn('id', $recommended)->get())->pluck('id');
+
+        $curProduct->sync_related_products()->sync($related);
+        $curProduct->sync_recommended_products()->sync($recommended);
     }
 
 }
