@@ -2,25 +2,28 @@
 
 namespace App\Exports\Sheets;
 
-
-use Maatwebsite\Excel\Concerns\FromArray;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CategorySheet implements FromArray, WithTitle, WithStyles, WithHeadings
+class CategorySheet implements FromCollection, WithTitle, WithStyles, WithHeadings, ShouldAutoSize
 {
-  
-    protected $category;
 
+    protected $category;
+    protected $title;
+    
     public function headings(): array
     {
         return [
             'ID',
             'Parent',
             'Title',
-            'Description'
+            'Description',
         ];
     }
 
@@ -29,23 +32,30 @@ class CategorySheet implements FromArray, WithTitle, WithStyles, WithHeadings
         $this->category = $category;
     }
 
-    public function array(): array
+    public function collection()
     {
         $products = [];
-        foreach (collect($this->category->products) as $key => $value) {
-            array_push($products, [$value->product_id, $value->title]);
+        foreach (($this->category['export_products']) as $key => $value) {
+            array_push($products, [$value['product_id']]);
         }
-        $catData =  [
-            [$this->category->id, ($this->category->parent_category ? $this->category->parent_category->title : ''), $this->category->title, $this->category->description, 'Product will be also added to the parent category'],
+        $catData = [
+            [
+                $this->category['id'], 
+                $this->title, 
+                $this->category['title'], 
+                $this->category['description'], 
+                'Product will be also added to the parent category'
+            ],
             ['Products'],
-            ...$products
+            ...$products,
         ];
-        return $catData;
+        // Log::info($catData);
+        return collect($catData);
     }
-
     public function title(): string
     {
-        return (string) ($this->category->parent_category ? $this->category->parent_category->title . ' -> ' : '') . $this->category->title; // Sheet title is the category ID
+        $this->title = (string) ($this->category['parent_category'] ? $this->category['parent_category']['title'] . ' -> ' : '') . $this->category['title']; // Sheet title is the category ID
+        return $this->title;
     }
 
     public function styles(Worksheet $sheet)
@@ -55,26 +65,8 @@ class CategorySheet implements FromArray, WithTitle, WithStyles, WithHeadings
                 'fill' => [
                     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                     'color' => ['argb' => 'FFFFDDDD'], // Light red background
-                ]
+                ],
             ],
-            6 => [
-                'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'color' => ['argb' => 'FFFFDDDD'], // Light red background
-                ]
-            ]
         ];
-    }
-    protected function autoFit(Worksheet $sheet)
-    {
-        // Auto-fit columns
-        foreach ($sheet->getColumnDimensions() as $columnDimension) {
-            $columnDimension->setAutoSize(true);
-        }
-
-        // Auto-fit rows
-        foreach ($sheet->getRowDimensions() as $rowDimension) {
-            $rowDimension->setRowHeight(-1); // Automatically adjust row height
-        }
     }
 }

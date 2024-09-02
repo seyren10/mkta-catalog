@@ -20,22 +20,22 @@ use Maatwebsite\Excel\Facades\Excel;
 class ExcelImportController extends Controller
 {
 
-    public static function template_downloads($template)
+    public static function template_downloads($template, $disk)
     {
         switch ($template) {
             case 'categories':
-                Excel::store(new Export_Category, "resources/{$template}.xlsx", "s3");
+                Excel::store(new Export_Category, "resources/{$template}.xlsx", $disk);
                 break;
             case 'product-filters':
-                Excel::store(new Export_ProductFilter, "resources/{$template}.xlsx", "s3");
+                Excel::store(new Export_ProductFilter, "resources/{$template}.xlsx", $disk);
                 break;
             case 'product-restriction-and-exemptions':
-                Excel::store(new Export_ProductAccess, "resources/{$template}.xlsx", "s3");
+                Excel::store(new Export_ProductAccess, "resources/{$template}.xlsx", $disk);
                 break;
             default:
-                // Excel::store(new Export_Category, "resources/categories.xlsx", "s3");
-                Excel::store(new Export_ProductFilter, "resources/product-filters.xlsx", "s3");
-                Excel::store(new Export_ProductFilter, "resources/product-restriction-and-exemptions.xlsx", "s3");
+                // Excel::store(new Export_Category, "resources/categories.xlsx", $disk);
+                Excel::store(new Export_ProductFilter, "resources/product-filters.xlsx", $disk);
+                Excel::store(new Export_ProductFilter, "resources/product-restriction-and-exemptions.xlsx", $disk);
                 break;
         }
     }

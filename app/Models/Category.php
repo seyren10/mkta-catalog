@@ -36,6 +36,10 @@ class Category extends Model
     {
         return $this->hasMany(ProductCategory::class, 'category_id', 'id')->with('product_data');
     }
+    public function export_products()
+    {
+        return $this->hasMany(ProductCategory::class, 'category_id', 'id');
+    }
 
     public function sync_product()
     {

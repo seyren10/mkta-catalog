@@ -4,13 +4,13 @@ namespace App\Exports\sheets;
 
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-
-class PATSheet implements FromArray, WithTitle, WithStyles, ShouldAutoSize
+class PATSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSize
 {
 
     private $data;
@@ -45,16 +45,16 @@ class PATSheet implements FromArray, WithTitle, WithStyles, ShouldAutoSize
         ];
     }
 
-    public function array(): array
+    public function collection()
     {
         return
-            [
-            ['ID', $this->data->id],
-            ['title', $this->data->title],
-            ['description', $this->data->description],
-            [''],
-            ['', ...(collect($this->data->source_table)->pluck('id'))],
-            ['Product', ...(collect($this->data->source_table)->pluck($this->data->display_column))],
-        ];
+        collect(
+            [['ID', $this->data->id],
+                ['title', $this->data->title],
+                ['description', $this->data->description],
+                [''],
+                ['', ...(collect($this->data->source_table)->pluck('id'))],
+                ['Product', ...(collect($this->data->source_table)->pluck($this->data->display_column))]]
+        );
     }
 }

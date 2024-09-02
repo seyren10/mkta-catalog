@@ -12,7 +12,8 @@ class UploadExportableTemplates extends Command
      *
      * @var string
      */
-    protected $signature = 'app:upload-exportable-templates {option=all}';
+    protected $signature = 'app:upload-exportable-templates {option=all} {disk=s3}';
+    // php artisan app:upload-exportable-templates product-filters
 
     /**
      * The console command description.
@@ -26,6 +27,6 @@ class UploadExportableTemplates extends Command
      */
     public function handle()
     {
-        ExcelImportController::template_downloads($this->argument('option'));
+        ExcelImportController::template_downloads($this->argument('option'), $this->argument('disk'));
     }
 }

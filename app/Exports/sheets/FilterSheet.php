@@ -3,13 +3,14 @@
 namespace App\Exports\sheets;
 
 use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 
-class FilterSheet implements FromArray, WithTitle, WithStyles, ShouldAutoSize
+class FilterSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSize
 {
 
     private $filter_data;
@@ -41,10 +42,10 @@ class FilterSheet implements FromArray, WithTitle, WithStyles, ShouldAutoSize
         ];
     }
 
-    public function array(): array
+    public function collection()
     {
         return
-            [
+            collect(
                 ['ID', $this->filter_data->id],
                 ['title', $this->filter_data->title],
                 ['description', $this->filter_data->description],
@@ -52,6 +53,8 @@ class FilterSheet implements FromArray, WithTitle, WithStyles, ShouldAutoSize
                 [''],
                 ['', ...(collect($this->filter_data->choices)->pluck('id'))],
                 ['Product', ...(collect($this->filter_data->choices)->pluck('value'))]
-            ];
+            );
     }
+
+    
 }

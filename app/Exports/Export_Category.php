@@ -19,7 +19,11 @@ class Export_Category implements WithMultipleSheets, ShouldQueue
     public function sheets(): array
     {
         $sheets = [];
-        $categories = Category::with(['parent_category', 'products'])->get(); // Fetch all categories
+        $categories = Category::with(['parent_category', 'export_products'])
+            // ->take(1)
+            ->select('id', 'title', 'parent_id', 'description')
+            ->get(); // Fetch all categories
+        $categories = ($categories->toArray());
         foreach ($categories as $category) {
             $sheets[] = new CategorySheet($category);
         }
