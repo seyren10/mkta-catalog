@@ -33,7 +33,7 @@ class ExcelImportController extends Controller
                 Excel::store(new Export_ProductAccess, "resources/{$template}.xlsx", $disk);
                 break;
             default:
-                // Excel::store(new Export_Category, "resources/categories.xlsx", $disk);
+                Excel::store(new Export_Category, "resources/categories.xlsx", $disk);
                 Excel::store(new Export_ProductFilter, "resources/product-filters.xlsx", $disk);
                 Excel::store(new Export_ProductFilter, "resources/product-restriction-and-exemptions.xlsx", $disk);
                 break;
