@@ -2,8 +2,7 @@
 
 namespace App\Exports;
 
-use App\Exports\sheets\FilterSheet;
-use App\Exports\sheets\PATSheet;
+use App\Exports\Sheets\PATSheet;
 use App\Models\Filter;
 use App\Models\ProductAccessType;
 use Illuminate\Contracts\Queue\ShouldQueue;

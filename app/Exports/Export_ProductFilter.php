@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Exports\sheets\FilterSheet;
+use App\Exports\Sheets\FilterSheet;
 use App\Models\Filter;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\Exportable;

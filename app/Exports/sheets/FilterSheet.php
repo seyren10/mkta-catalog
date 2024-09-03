@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports\sheets;
+namespace App\Exports\Sheets;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -46,13 +46,13 @@ class FilterSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSi
     {
         return
             collect(
-                ['ID', $this->filter_data->id],
+               [ ['ID', $this->filter_data->id],
                 ['title', $this->filter_data->title],
                 ['description', $this->filter_data->description],
                 ['icon', $this->filter_data->icon],
                 [''],
                 ['', ...(collect($this->filter_data->choices)->pluck('id'))],
-                ['Product', ...(collect($this->filter_data->choices)->pluck('value'))]
+                ['Product', ...(collect($this->filter_data->choices)->pluck('value'))]]
             );
     }
 

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Exports\sheets;
+namespace App\Exports\Sheets;
 
 use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -17,7 +16,7 @@ class PATSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSize
     public function __construct($data)
     {
         $this->data = $data;
-        Log::info($data);
+        // Log::info($data);
     }
 
     public function title(): string
@@ -49,12 +48,14 @@ class PATSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSize
     {
         return
         collect(
-            [['ID', $this->data->id],
+            [
+                ['ID', $this->data->id],
                 ['title', $this->data->title],
                 ['description', $this->data->description],
                 [''],
                 ['', ...(collect($this->data->source_table)->pluck('id'))],
-                ['Product', ...(collect($this->data->source_table)->pluck($this->data->display_column))]]
+                ['Product', ...(collect($this->data->source_table)->pluck($this->data->display_column))]
+            ]
         );
     }
 }
