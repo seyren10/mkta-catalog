@@ -13,7 +13,7 @@ export const useAreaStore = defineStore("area", () => {
         description: "",
     });
     const areas = ref([]);
-    const form = ref({
+    const form = reactive({
         title: "",
         description: "",
     });

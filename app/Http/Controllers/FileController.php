@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Decoders\Base64ImageDecoder;
+use Intervention\Image\Decoders\DataUriImageDecoder;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use Intervention\Image\Laravel\Facades\Image;
-
-// use Intervention\Image\Image;
-
-// use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
-
+    #region Others
     public static function useExampleService(ProductAccessType $product_access_type)
     {
         return response()->json(["message" => new ProductAccessTypeResource($product_access_type)], 200);
@@ -56,10 +56,7 @@ class FileController extends Controller
     {
         //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    #endregion
     public function store(Request $request)
     {
         try {
@@ -74,14 +71,26 @@ class FileController extends Controller
             $generated_new_name = bin2hex(now() . $fileName) . "." . $ext;
             $data = '';
             if ((str_contains(trim(strtolower($type)), 'image'))) {
+                
+                /*
+                    user id
+                    w and h
+                    
+                */
 
-                // $image_resize = Image::make($curFile)->resize(700, 700);
-                // $resource = $image_resize->stream()->detach();
-                // Storage::disk('s3')->put("resources", $resource);
-                // $data = Storage::disk('s3')->put("", $curFile);
+
+                // $path = $request->file('eFile')->store("uploads", 'local');
+                // $fullPath = storage_path('app/' . $path);
+                // $manager = new ImageManager(new Driver());
+                // $image = $manager->read($fullPath);
+                // $image->scale(1000,1000);
+                // $image->save();
+                // return response(array(
+                //     "fullPath" => $fullPath,
+                //     "message" => "File uploaded successfully.",
+                // ), 200);
 
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
-
 
             } else {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
