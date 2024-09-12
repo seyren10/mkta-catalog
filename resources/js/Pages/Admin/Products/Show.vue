@@ -34,7 +34,7 @@
             </template>
             /*ANCHOR - Components */
             <template #content.ProductComponents>
-                <productComponents  />
+                <productComponents  />1
             </template>
             /*ANCHOR - Restriction and Exemptions */
             <template #content.ProductAccess>
@@ -67,10 +67,13 @@
                                 }
                             "
                             prepend-inner-icon="md-save-round"
-                            class="ml-auto bg-accent text-white"
+                            class="ml-auto bg-accent text-white my-2"
                             >Update Product Item</v-button
                         >
                     </div>
+                    <!-- <div>
+                        <pre>{{ productStore.form }}</pre>
+                    </div> -->
                 </div>
             </template>
             /*ANCHOR - Related Products */

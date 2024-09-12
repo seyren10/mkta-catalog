@@ -27,8 +27,8 @@ class Export_Category implements WithMultipleSheets, ShouldQueue
             ->get();
             
         foreach ($categories as $category) {
-            $title = $category->parent_category ? $category->parent_category->title .' -> ' : '';
-            $title = $category->title;
+            $title = $category->parent_category ? $category->parent_category->title .' - ' : '';
+            $title = $title.$category->title;
             $sheets[] = new CategorySheet($title, $category->toArray());
         }
 

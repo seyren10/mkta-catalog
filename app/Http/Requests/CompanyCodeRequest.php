@@ -16,7 +16,7 @@ class CompanyCodeRequest extends FormRequest
     public function input($key = null, $default = null)
     {
         $value = parent::input($key, $default);
-
+ 
         // If a specific key is provided, trim only that value
         if ($key !== null) {
             return is_string($value) ? trim($value) : $value;

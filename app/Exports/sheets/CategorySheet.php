@@ -43,8 +43,6 @@ class CategorySheet implements FromCollection, WithTitle, WithStrictNullComparis
         foreach (($this->category['export_products']) as $key => $value) {
             array_push($products, [$value['product_id']]);
         }
-        // Log::info($this->title);
-        // Log::info($products);
         return collect([
 
             [

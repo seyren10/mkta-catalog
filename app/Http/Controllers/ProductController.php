@@ -154,6 +154,20 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         foreach ($request->all() as $key => $value) {
+            if (!in_array($key, [
+                "id",
+                "parent_code",
+                "title",
+                "description",
+                "volume",
+                "weight_net",
+                "weight_gross",
+                "dimension_length",
+                "dimension_width",
+                "dimension_height",
+            ])) {
+                continue;
+            }
             $product[$key] = $value;
         }
         $product->save();

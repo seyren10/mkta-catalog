@@ -27,12 +27,6 @@ class ProductRestriction extends Model
         $isValid = ProductAccessType::find($PAT);
         // Proceed if there are products in the list
         if ($product_list->isNotEmpty() && $isValid != null) {
-            // Delete existing restrictions for the specified PAT and value
-            self::where([
-                ['product_access_type_id', '=', $PAT],
-                ['value', '=', $value],
-            ])->delete();
-
             // Use a transaction to ensure atomicity of insertions
             DB::transaction(function () use ($PAT, $value, $product_list) {
                 foreach ($product_list as $product_id) {

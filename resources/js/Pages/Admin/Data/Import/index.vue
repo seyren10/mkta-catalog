@@ -108,12 +108,13 @@ pages.value = [
 
         ],
         pageNotes: [
-            {
-                type : 'text',
-                value: 'Product Restriction and Exemption data will be replaced'
-            }
+            
         ],
         isChecked : [
+            {
+                isChecked : false,
+                label: 'I understand that ALL PRODUCT RESTRICTION AND EXEMPTION data will be replaced'
+            },
             {
                 isChecked : false,
                 label : 'I understand that changing the highlighted cells will cause ERROR'

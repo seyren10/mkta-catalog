@@ -21,6 +21,7 @@ return [
         localhost:3000,
         127.0.0.1,
         127.0.0.1:8000,
+        127.0.0.1:9000,
         ::1,
         192.168.110.111:8000,
         https://catalog.mkthemedattractions.com.ph,

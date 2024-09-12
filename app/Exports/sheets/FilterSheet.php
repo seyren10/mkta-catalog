@@ -26,6 +26,10 @@ class FilterSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSi
 
     public function styles(Worksheet $sheet)
     {
+        $sheet->mergeCells('B2:Z2');
+        $sheet->mergeCells('B3:Z3');
+        $sheet->mergeCells('B4:Z4');
+
         return [
             'B1' => [
                 'fill' => [
