@@ -24,10 +24,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithEvents, WithMultipleSheets
 {
-    use Importable, RegistersEventListeners;
+    use Importable;
     public function chunkSize(): int
     {
-        return 1000;
+        return 100;
     }
     public function startRow(): int
     {
@@ -59,28 +59,32 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
     private $product_access_type_id;
     #endregion
     #region Events
-    public function beforeImport(BeforeImport $event)
+    public function registerEvents(): array
     {
-        Schema::disableForeignKeyConstraints();
-        ProductRestriction::truncate();
-        ProductExemption::truncate();
-        Schema::enableForeignKeyConstraints();
-    }
-    public function beforeSheet(BeforeSheet $event)
-    {
-        $this->curSheet = $event->sheet;
-        $this->curSheet = $this->getSheet($event->sheet->getTitle());
-        $this->product_access_type_id = $this->curSheet->getCell('B1')->getValue();
-        $rowValues = [];
-        $rowNumber = 5;
-        foreach ($this->curSheet->getRowIterator($rowNumber, $rowNumber) as $row) {
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(false); // Iterate over all cells, not just those with values
-            foreach ($cellIterator as $cell) {
-                $rowValues[] = $cell->getValue(); // Get the cell value and store it
-            }
-        }
-        $this->rowsValue = $rowValues;
+        return [
+            BeforeImport::class => function(BeforeImport $event) {
+                Log::info('Before Sheet');
+                Schema::disableForeignKeyConstraints();
+                ProductRestriction::truncate();
+                ProductExemption::truncate();
+                Schema::enableForeignKeyConstraints();
+            },
+            BeforeSheet::class => function (BeforeSheet $event) {
+                $this->curSheet = $event->sheet;
+                $this->curSheet = $this->getSheet($event->sheet->getTitle());
+                $this->product_access_type_id = $this->curSheet->getCell('B1')->getValue();
+                $rowValues = [];
+                $rowNumber = 5;
+                foreach ($this->curSheet->getRowIterator($rowNumber, $rowNumber) as $row) {
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(false); // Iterate over all cells, not just those with values
+                    foreach ($cellIterator as $cell) {
+                        $rowValues[] = $cell->getValue(); // Get the cell value and store it
+                    }
+                }
+                $this->rowsValue = $rowValues;
+            },
+        ];
     }
     #endregion
     public function collection(Collection $rows)

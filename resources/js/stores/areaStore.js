@@ -40,10 +40,7 @@ export const useAreaStore = defineStore("area", () => {
             form.title = form.title.trim();
             form.description = form.description.trim();
             const res = await exec("/api/area-code", "post", form);
-            form = {
-                title: "",
-                description: "",
-            };
+            resetForm()
         } catch (e) {
             console.log(e);
         }
@@ -54,10 +51,7 @@ export const useAreaStore = defineStore("area", () => {
                 "/api/area-code/" + id,
                 "put", form
             );
-            form = {
-                title: "",
-                description: "",
-            };
+            resetForm();
         } catch (e) {
             console.log(e);
         }
