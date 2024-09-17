@@ -34,10 +34,8 @@ require __DIR__ . '/resources/related-products.php';
 require __DIR__ . '/resources/users.php';
 require __DIR__ . '/resources/imports.php';
 
-Route::get('current/{category}', [currentController::class, 'current']);
+Route::get('current', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
-
-
 Route::apiResource('area-code', AreaCodeController::class)->except(['create', 'edit']);
 Route::apiResource('company-code', CompanyCodeController::class)->except(['create', 'edit']);
 Route::apiResource('roles', RolesController::class)->except(['create', 'edit']);

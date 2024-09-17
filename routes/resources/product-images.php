@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductImagesController;
 
-Route::middleware(['auth:sanctum'], function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('product-images', [ProductImagesController::class, 'index']);
     Route::get('product-images/{product}', [ProductImagesController::class, 'show']);
     Route::post('product-images', [ProductImagesController::class, 'store']);

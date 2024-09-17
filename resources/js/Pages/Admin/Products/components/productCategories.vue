@@ -18,8 +18,8 @@
                                 categories = [...categories,...new Set(collections[key]) ]
                             }
                             let col_Categories = [...categories];
-                            await productStore.updateProductCategories(id, col_Categories);
-                            await productStore.getProductItem(id);
+                            await productStore.updateProductCategories(product_item.id, col_Categories);
+                            await productStore.getProductItem(product_item.id);
                         }
                     "
                     >Update Product Categories</v-button
@@ -29,7 +29,7 @@
                     prepend-inner-icon="md-refresh-sharp"
                     @click="
                         async () => {
-                            await productStore.getProductItem(id);
+                            await productStore.getProductItem(product_item.id);
                         }
                     "
                     >Refresh</v-button
@@ -74,6 +74,7 @@ const collections = ref({});
 /*SECTION - Product Info */
 const product_item = inject("product_item");
 const productStore = inject("productStore");
+
 
 
 

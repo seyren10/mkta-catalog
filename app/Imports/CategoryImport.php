@@ -4,9 +4,12 @@ namespace App\Imports;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Services\DataImportService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -25,25 +28,26 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
     {
         return 10000;
     }
-    public function startRow(): int 
+    public function startRow(): int
     {
         return 2;
     }
     #region for Category Data
     private $filePath;
     private $id;
-    private $title;
-    private $description;
-    public function __construct($filePath)
+    private $parent;
+    private $key;
+    public function __construct($filePath, $key)
     {
         $this->filePath = $filePath;
+        $this->key = $key;
     }
     public function sheets(): array
     {
         $sheetNames = $this->getSheetNames();
         $sheets = [];
         foreach ($sheetNames as $sheetName) {
-            $sheets[$sheetName] = new CategoryImport($this->filePath);
+            $sheets[$sheetName] = new CategoryImport($this->filePath, $this->key);
         }
         return $sheets;
     }
@@ -57,29 +61,75 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
     {
         return [
             BeforeSheet::class => function (BeforeSheet $event) {
-                $this->id = $event->sheet->getCell('A2');
-                $this->title = $event->sheet->getCell('C2');
-                $this->description = $event->sheet->getCell('D2');
+
+                $catData = self::get_Category($event->sheet->getCell('A2')->getValue(), $event->sheet->getCell('C2')->getValue(), $event->sheet->getCell('D2')->getValue());
+                $this->id = $catData->id;
+                $this->parent = $catData->parent_category->id ?? null;
+                
+                $importData = DataImportService::getDataImport('import-categories', $this->id, $this->key);
+                if( $importData->pass_key != $this->key ){
+                    // Pass key is Different
+                    // things should update
+                    Schema::disableForeignKeyConstraints();
+                    ProductCategory::where('category_id', $this->id)->delete();
+                    Schema::enableForeignKeyConstraints();
+                    $importData->pass_key = $this->key;
+                    $importData->save();
+                }
+
+
             },
         ];
     }
     #endregion
     public function collection(Collection $rows)
     {
-        $curCategory = Category::find($this->id);
-        if ($curCategory === null) { 
-            return;
-        }
-        $curCategory->title = $this->title ?? $curCategory->title;
-        $curCategory->description = $this->description ?? $curCategory->description;
-        $curCategory->save();
-
         $products = [];
-        foreach ($rows as $rowIndex => $row) {
-            array_push($products, $row[0]);
+        foreach ($rows as $key => $row) {
+            $products[] = $row[0];
         }
+        $curCat = $this->id;
         $products = collect(Product::whereIn('id', $products)->get())->pluck('id');
-        $curCategory->sync_product()->sync($products);
-    }
+        $temp = array_map(
+            function($productId) use ($curCat) {
+            return [
+                'category_id' => $curCat,
+                'product_id' => $productId,
+            ];
+        }, $products->toArray() );
+        ProductCategory::insert($temp);
 
+        if($this->parent != null){
+            $parent = $this->parent;
+            $temp = array_map(
+                function($productId) use ($parent) {
+                    $data= [
+                        'category_id' => $parent,
+                        'product_id' => $productId,
+                    ];
+                return $data;
+            }, $products->toArray() );
+            ProductCategory::insert($temp);
+        }
+
+    }
+    public function get_Category($id, $title, $description, $update = true) : Category
+    {
+        $curCategory = Category::find($id);
+        if ($curCategory === null) {
+            return Category::create(
+                array(
+                    'title' =>$title,
+                    'description' =>$description,
+                )
+            );
+        }
+        if($update){
+            $curCategory->title = $title;
+            $curCategory->description = $description;
+            $curCategory->save();
+        }
+        
+        return $curCategory;
+    }
 }

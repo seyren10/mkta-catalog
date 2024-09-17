@@ -22,7 +22,7 @@
             <template v-for="(component, index) in components">
                 <componentsViewer
                     :class="( ['table'].includes(component.type) ? 'col-span-2' : '') + '  '"
-                    :product_id="id"
+                    :product_id="product_item.id"
                     :data="component"
                     @change="refreshComponent"
                 />
@@ -35,7 +35,7 @@
         @close="newComponentClose()"
     >
         <div class="min-w-[800px]">
-            <newComponent :id="id" @submit="newComponentClose()" />
+            <newComponent :id="product_item.id" @submit="newComponentClose()" />
         </div>
     </v-dialog>
 </template>

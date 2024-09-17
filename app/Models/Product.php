@@ -89,6 +89,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
+    
     public function sync_related_products(){
         return $this->belongsToMany(RelatedProduct::class, 'related_products', 'product_id', 'related_product_id');
     }

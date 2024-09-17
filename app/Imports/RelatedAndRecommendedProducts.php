@@ -3,8 +3,12 @@
 namespace App\Imports;
 
 use App\Models\Product;
+use App\Models\RecommendedProduct;
+use App\Models\RelatedProduct;
+use App\Services\DataImportService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -30,16 +34,18 @@ class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithSt
     #region for Data
     private $filePath;
     private $product_id;
-    public function __construct($filePath)
+    private $key;
+    public function __construct($filePath, $key)
     {
         $this->filePath = $filePath;
+        $this->key = $key;
     }
     public function sheets(): array
     {
         $sheetNames = $this->getSheetNames();
         $sheets = [];
         foreach ($sheetNames as $sheetName) {
-            $sheets[$sheetName] = new RelatedAndRecommendedProducts($this->filePath);
+            $sheets[$sheetName] = new RelatedAndRecommendedProducts($this->filePath, $this->key);
         }
         return $sheets;
     }
@@ -53,17 +59,34 @@ class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithSt
     {
         return [
             BeforeSheet::class => function (BeforeSheet $event) {
+
                 $this->product_id = $event->sheet->getTitle();
+                $curProduct = Product::find($this->product_id);
+
+                if ($curProduct === null) {
+                    $this->product_id = -1;
+                    return;
+                }
+
+                $importData = DataImportService::getDataImport('import-products', $this->product_id, $this->key);
+                if( $importData->pass_key != $this->key ){
+                    // Pass key is Different
+                    // things should update
+                    Schema::disableForeignKeyConstraints();
+                    RelatedProduct::where('product_id', $this->product_id)->delete();
+                    RecommendedProduct::where('product_id', $this->product_id)->delete();
+                    Schema::enableForeignKeyConstraints();
+                    $importData->pass_key = $this->key;
+                    $importData->save();
+                }
             },
         ];
     }
     #endregion
     public function collection(Collection $rows)
     {
-        $curProduct = Product::find($this->product_id);
-        if ($curProduct === null) {
-            return;
-        }
+        if( $this->product_id === -1 ){ return; }
+
         $related = [];
         $recommended = [];
         foreach ($rows as $key => $row) {
@@ -74,8 +97,25 @@ class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithSt
         $related = collect(Product::whereIn('id', $related)->get())->pluck('id');
         $recommended = collect(Product::whereIn('id', $recommended)->get())->pluck('id');
 
-        $curProduct->sync_related_products()->sync($related);
-        $curProduct->sync_recommended_products()->sync($recommended);
+        $curProduct = $this->product_id;
+        $temp = array_map(
+            function($productId) use ( $curProduct) {
+            return [
+                'related_product_id' => $productId,
+                'product_id' => $curProduct,
+            ];
+        }, $related->toArray() );
+        RelatedProduct::insert($temp);
+
+        $temp = array_map(
+            function($productId) use ( $curProduct) {
+            return [
+                'recommended_product_id' => $productId,
+                'product_id' => $curProduct,
+            ];
+        }, $recommended->toArray() );
+        RecommendedProduct::insert($temp);
+
     }
 
 }

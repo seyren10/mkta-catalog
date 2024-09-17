@@ -5,20 +5,16 @@ namespace App\Imports;
 use App\Models\Product;
 use App\Models\ProductExemption;
 use App\Models\ProductRestriction;
+use App\Services\DataImportService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use Maatwebsite\Excel\Events\AfterImport;
-use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
@@ -35,9 +31,11 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
     }
     #region for Data
     private $filePath;
-    public function __construct($filePath)
+    private $key;
+    public function __construct($filePath, $key)
     {
         $this->filePath = $filePath;
+        $this->key = $key;
     }
     private function getSheet($SheetName): Worksheet
     {
@@ -51,7 +49,7 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
         $sheetNames = $spreadsheet->getSheetNames();
         $sheets = [];
         foreach ($sheetNames as $sheetName) {
-            $sheets[$sheetName] = new ProductRestrictionAndExemption($this->filePath);
+            $sheets[$sheetName] = new ProductRestrictionAndExemption($this->filePath, $this->key);
         }
         return $sheets;
     }
@@ -62,27 +60,25 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
     public function registerEvents(): array
     {
         return [
-            BeforeImport::class => function(BeforeImport $event) {
-                Log::info('Before Sheet');
-                Schema::disableForeignKeyConstraints();
-                ProductRestriction::truncate();
-                ProductExemption::truncate();
-                Schema::enableForeignKeyConstraints();
-            },
             BeforeSheet::class => function (BeforeSheet $event) {
-                $this->curSheet = $event->sheet;
-                $this->curSheet = $this->getSheet($event->sheet->getTitle());
-                $this->product_access_type_id = $this->curSheet->getCell('B1')->getValue();
-                $rowValues = [];
-                $rowNumber = 5;
-                foreach ($this->curSheet->getRowIterator($rowNumber, $rowNumber) as $row) {
-                    $cellIterator = $row->getCellIterator();
-                    $cellIterator->setIterateOnlyExistingCells(false); // Iterate over all cells, not just those with values
-                    foreach ($cellIterator as $cell) {
-                        $rowValues[] = $cell->getValue(); // Get the cell value and store it
-                    }
+
+                $curSheet = $event->sheet;
+                $curSheet = $this->getSheet($event->sheet->getTitle());
+                $this->product_access_type_id = $curSheet->getCell('B1')->getValue();
+                $this->rowsValue = self::cellIterator($curSheet, 5);
+
+                $importData = DataImportService::getDataImport('import-product-restriction-and-exception', $this->product_access_type_id, $this->key);
+                if ($importData->pass_key != $this->key) {
+                    // Pass key is Different
+                    // things should update
+                    Schema::disableForeignKeyConstraints();
+                    ProductRestriction::where('product_access_type_id', $this->product_access_type_id)->delete();
+                    ProductExemption::where('product_access_type_id', $this->product_access_type_id)->delete();
+                    Schema::enableForeignKeyConstraints();
+                    $importData->pass_key = $this->key;
+                    $importData->save();
                 }
-                $this->rowsValue = $rowValues;
+
             },
         ];
     }
@@ -116,10 +112,48 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
         }
         $ProductList = array_keys($formattedRows);
         $ProductList = collect(Product::whereIn('id', $ProductList)->get())->pluck('id')->toArray();
+
         foreach ($formattedRows as $refValue => $Products) {
+
             if ($refValue == '') {continue;}
-            ProductRestriction::sync_product_restriction($this->product_access_type_id, $refValue, $Products['restricted']);
-            ProductExemption::sync_product_exemption($this->product_access_type_id, $refValue, $Products['exempted']);
+            
+            $cur_PAT = $this->product_access_type_id;
+            $temp = array_map(
+                function ($productId) use ($refValue, $cur_PAT) {
+                    return [
+                        "product_access_type_id" => $cur_PAT,
+                        "value" => $refValue,
+                        'product_id' => $productId,
+                    ];
+                }, $Products['restricted']);
+            ProductRestriction::insert($temp);
+
+            $temp = array_map(
+                function ($productId) use ($refValue, $cur_PAT) {
+                    return [
+                        "product_access_type_id" => $cur_PAT,
+                        "value" => $refValue,
+                        'product_id' => $productId,
+                    ];
+                }, $Products['exempted']);
+            ProductExemption::insert($temp);
         }
+
     }
+
+    #region Functions
+    public function cellIterator(Worksheet $curSheet, $rowNumber): array
+    {
+        $temp = [];
+        foreach ($curSheet->getRowIterator($rowNumber, $rowNumber) as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false); // Iterate over all cells, not just those with values
+            foreach ($cellIterator as $index => $cell) {
+                if ($index == 0) {continue;}
+                $temp[] = $cell->getValue(); // Get the cell value and store it
+            }
+        }
+        return $temp;
+    }
+    #endregion
 }
