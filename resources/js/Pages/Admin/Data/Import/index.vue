@@ -51,6 +51,20 @@ pages.value = [
 pages.value = [
     ...pages.value,
     {
+        pageTitle: "Product Components",
+        templateURL: null,
+        actionURL: "/api/data-imports/product-components",
+        pageNotes: [
+            {
+                type: "text",
+                value: "Product Code of the Target Product should be the name of the sheet",
+            },
+        ],
+    },
+]
+pages.value = [
+    ...pages.value,
+    {
         pageTitle: "Categories",
         templateURL: "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/categories.xlsx",
         actionURL: "/api/data-imports/categories",

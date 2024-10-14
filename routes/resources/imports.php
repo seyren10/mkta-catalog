@@ -8,9 +8,8 @@ Route::middleware(['auth:sanctum'])->prefix('data-imports')->controller(ExcelImp
 
     Route::post('products', [ExcelImportController::class, 'importProducts']);
     Route::post('related-and-recommended-products', [ExcelImportController::class, 'importProductsLink']);
-
     Route::post('categories', [ExcelImportController::class, 'importCategories']);
-    
     Route::post('product-filters', [ExcelImportController::class, 'importFilters']);
     Route::post('product-restriction-and-exemptions', [ExcelImportController::class, 'importProductRestrictionExemption']);
+    Route::post('product-components', [ExcelImportController::class, 'importProductComponents']);
 });

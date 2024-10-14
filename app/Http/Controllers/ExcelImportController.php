@@ -6,6 +6,7 @@ use App\Exports\Export_Category;
 use App\Exports\Export_ProductAccess;
 use App\Exports\Export_ProductFilter;
 use App\Imports\CategoryImport;
+use App\Imports\ProductComponents;
 use App\Imports\ProductFilters;
 use App\Imports\ProductImport;
 use App\Imports\ProductRestrictionAndExemption;
@@ -15,6 +16,7 @@ use App\Services\DataImportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -53,6 +55,14 @@ class ExcelImportController extends Controller
         $filePath = Storage::disk('local')->path($path);
         Excel::queueImport(new RelatedAndRecommendedProducts($filePath, Carbon::now()), $filePath);
         return response()->json(['message' => 'File is being processed!']);
+    }
+    public static function importProductComponents(Request $request)
+    {
+        Log::info(__FUNCTION__);
+        $path = Storage::disk('local')->put("public", $request->file('eFile'));
+        $filePath = Storage::disk('local')->path($path);
+        Excel::import(new ProductComponents($filePath, Carbon::now()), $filePath);
+        // return response()->json(['message' => 'File is being processed!']);
     }
     public static function importCategories(Request $request)
     {
