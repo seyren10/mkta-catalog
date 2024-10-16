@@ -4,6 +4,20 @@
             This section identifies customers who cannot add the product to
             their Wishlist.
         </h2>
+        <div class="">
+            <v-button
+                @click="refreshProductImage()"
+                prepend-inner-icon="md-refresh-sharp"
+                class=" bg-accent text-white h-fit ml-auto m-1"
+                >Refresh Product Images</v-button
+            >
+            <v-button
+                @click="submit_index_changes()"
+                prepend-inner-icon="md-save-round"
+                class=" bg-accent text-white ml-auto m-1"
+                >Save Change on Product Images</v-button
+            >
+        </div>
         <div class="text-gray-700">
             <div class="grid grid-cols-4 gap-2">
                 <div
@@ -27,6 +41,17 @@
                                     name="bi-card-image"
                                 ></v-icon>
                             </v-button>
+                            <div class="text-center">
+                                <v-text-field
+                                    class="text-center"
+                                    label="Order"
+                                    v-model="image.index"
+                                    type="number"
+                                    step="1"
+                                    min="0"
+                                    max="9999"
+                                ></v-text-field>
+                            </div>
                             <v-button
                                 @click="deleteProductImage(image.id)"
                                 class="!rounded-full bg-red-500 !p-1 text-white"
@@ -58,7 +83,10 @@
                                     name="bi-chevron-left"
                                 ></v-icon>
                             </v-button>
-                            <v-button class="!rounded-full border !p-1" @click="setThumbnail(image.id)">
+                            <v-button
+                                class="!rounded-full border !p-1"
+                                @click="setThumbnail(image.id)"
+                            >
                                 <v-icon
                                     scale="1.5"
                                     name="fa-folder-open"
@@ -123,19 +151,17 @@ const s3 = inject("s3");
 const product_item = inject("product_item");
 const productStore = inject("productStore");
 
-
 //SECTION - Product Image Store
 import { useProductImageStore } from "@/stores/productImagesStore";
 const productImagesStore = useProductImageStore();
 const { productImage, form } = storeToRefs(productImagesStore);
 
-
 const refreshProductImage = async () => {
     await productImagesStore.getProductImage(product_item.value.id);
 };
-if(product_item.value.product_images.length > 0){
+if (product_item.value.product_images.length > 0) {
     productImage.value = product_item.value.product_images;
-}else{
+} else {
     refreshProductImage();
 }
 
@@ -171,10 +197,15 @@ const close_insertProductImage_data = () => {
     reset_insertProductImage_data();
     refreshProductImage();
 };
+const submit_index_changes = async()=>{
+    await productImagesStore.updateProductImages();
+    refreshProductImage();
+}
 const submit_insertProductImage_data = async (data) => {
-    data.forEach((element) => {
+    data.forEach((element, index) => {
         form.value.product_id = product_item.value.id;
         form.value.file_id = element.id;
+        form.value.index = index;
         productImagesStore.insertProductImage();
     });
     close_insertProductImage_data();

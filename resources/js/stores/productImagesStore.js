@@ -14,11 +14,14 @@ export const useProductImageStore = defineStore("productImages", () => {
         product_id: 0,
         is_thumbnail: 0,
         file_id: 0,
+        index : 100,
     });
     const resetForm = () => {
         form.value.product_id = 0;
         form.value.is_thumbnail = 0;
         form.value.file_id = 0;
+        form.value.index = 100;
+
     };
     const moveProductImage = async (id, step) => {
         try {
@@ -69,8 +72,19 @@ export const useProductImageStore = defineStore("productImages", () => {
             console.log(e);
         }
     };
+    const updateProductImages = async ()=>{
+        try {
+            const res = await exec("/api/product-images-batch", "post", {
+                product_images : productImage.value
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
     return {
+        updateProductImages,
         resetForm,
         insertProductImage,
         setThumbnail,

@@ -8,6 +8,7 @@ use App\Models\File;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductImagesController extends Controller
 {
@@ -21,7 +22,7 @@ class ProductImagesController extends Controller
      */
     public function show(Product $product)
     {
-        return ProductImageResource::collection(ProductImage::where('product_id', $product->id)->orderBy('index', 'ASC')->get());
+        return ProductImageResource::collection(ProductImage::where('product_id', $product->id)->orderBy('is_thumbnail', 'DESC')->orderBy('index', 'ASC')->get());
     }
 
     /**
@@ -29,11 +30,13 @@ class ProductImagesController extends Controller
      */
     public function store(Request $request)
     {
+        $count = ProductImage::where('product_id')->get()->count() + 1;
         ProductImage::create(
             array(
                 "product_id" => $request->product_id,
                 "is_thumbnail" => $request->is_thumbnail,
                 "file_id" => $request->file_id,
+                "index" =>  $count
             )
         );
         return response()->json(['message' => 'Product Image successfully added'], 200);
@@ -63,6 +66,23 @@ class ProductImagesController extends Controller
         $product_image->index = $product_image->index + $request->step;
         $product_image->save();
         return response()->json(['message' => 'Product Thumbnail successfully updated'], 200);
+    }
+
+    public function updateProductImages(Request $request){
+        ProductImage::upsert(
+            collect($request->product_images)->map( function ($row){
+                unset($row['file']);
+                return $row;
+            } )->toArray(),
+            uniqueBy: [
+                'id',
+            ],
+            update: [
+                'index',
+            ]
+        );
+        return response()->json(['message' => 'Product Images successfully updated'], 200);
+
     }
 
     /**
