@@ -151,9 +151,15 @@ import {
     PrBookmark,
     HiSave,
     PrUser,
+    BiRecycle,
+    FaRecycle,
+MdRestoreSharp,
 } from "oh-vue-icons/icons";
 
 addIcons(
+MdRestoreSharp,
+    FaRecycle,
+    BiRecycle,
     PrUser,
     HiSave,
     PrBookmark,

@@ -22,7 +22,20 @@ export const useLinkProductStore = defineStore("linkProduct", () => {
             return res.data;
         } catch (e) {
             console.log(e);
-
+        } finally {
+            return data;
+        }
+    };
+    const getRelatedProducts_2 = async (product_id) => {
+        let data = [];
+        try {
+            const res = await exec(
+                ["/api/products/related", product_id].join("/"),
+                "get",
+            );
+            data = res.data;
+        } catch (e) {
+            console.log(e);
         } finally {
             return data;
         }
@@ -46,7 +59,7 @@ export const useLinkProductStore = defineStore("linkProduct", () => {
                 "/api/products/related/" + link_id,
                 "delete",
             );
-            console.log(res)
+            console.log(res);
         } catch (e) {
             console.log(e);
         } finally {
@@ -61,6 +74,20 @@ export const useLinkProductStore = defineStore("linkProduct", () => {
                 "get",
             );
             recommended_products.value = res.data;
+            return res.data;
+        } catch (e) {
+            console.log(e);
+        } finally {
+            return data;
+        }
+    };
+    const getRecommendedProducts_2 = async (product_id) => {
+        let data = [];
+        try {
+            const res = await exec(
+                ["/api/products/recommended", product_id].join("/"),
+                "get",
+            );
             return res.data;
         } catch (e) {
             console.log(e);
@@ -100,10 +127,12 @@ export const useLinkProductStore = defineStore("linkProduct", () => {
         recommended_products,
 
         getRelatedProducts,
+        getRelatedProducts_2,
         appendRelatedProduct,
         removeRelatedProduct,
 
         getRecommendedProducts,
+        getRecommendedProducts_2,
         appendRecommendedProduct,
         removeRecommededProduct,
     };

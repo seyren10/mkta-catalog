@@ -47,8 +47,14 @@ import { storeToRefs } from "pinia";
 import newComponent from "./essentials/newComponent.vue";
 /*SECTION - End Components */
 
-const product_item = inject("product_item");
 const productStore = inject("productStore");
+
+const props = defineProps({
+    product_data: {}
+})
+const product_item = ref();
+product_item.value = props.product_data;
+
 
 
 /*SECTION - Variables */
@@ -60,11 +66,14 @@ const showNewComponent = ref(false);
 import { useProductComponentStore } from "@/stores/productComponentStore";
 import componentsViewer from "./essentials/componentsViewer.vue";
 const productComponentStore = useProductComponentStore();
-const { components } = storeToRefs(productComponentStore);
+const {  } = storeToRefs(productComponentStore);
 /*SECTION - End Product Component */
+
+const components = ref([]);
 const refreshComponent = async () => {
-    await productComponentStore.getProductComponent(product_item.value.id);
+    components.value = await productComponentStore.getProductComponent_2(product_item.value.id);
 };
+refreshComponent();
 
 const newComponentClose = async () => {
     showNewComponent.value = false;

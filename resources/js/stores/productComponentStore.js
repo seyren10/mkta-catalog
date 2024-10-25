@@ -99,6 +99,18 @@ export const useProductComponentStore = defineStore("productComponent", () => {
             console.log(e);
         }
     };
+    const getProductComponent_2 = async (product_id) => {
+        try {
+            const res = await exec(
+                "/api/product-components/" + product_id,
+                "get",
+                {},
+            );
+            return res.data.data;
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
     return {
         resetForm,
@@ -106,6 +118,7 @@ export const useProductComponentStore = defineStore("productComponent", () => {
         updateProductComponent,
         deleteProductComponent,
         getProductComponent,
+        getProductComponent_2,
 
         loading,
         errors,

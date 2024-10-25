@@ -1,129 +1,49 @@
-<template>
-    <div class="pt-2">
-        <v-heading type="h2">
-            <v-icon
-                v-if="$route.meta.redirectTo"
-                @click="
-                    () => {
-                        router.push({ name: $route.meta.redirectTo });
-                    }
-                "
-                name="la-arrow-circle-left-solid"
-                scale="1.8"
-            ></v-icon
-            >{{ $route.meta.title }}</v-heading
-        >
-        <p>
-            {{ $route.meta.description }}
-        </p>
-    </div>
-    <div class="my-3">
-        <v-tab
-            headerClass=" bg-white"
-            no-navigation
-            v-model="currentTab"
-            :tabs="tabs"
-        >
-            /*ANCHOR - Product Images */
-            <template #content.ProductImages>
-                <productImages />
-            </template>
-            /*ANCHOR - Product Categories */
-            <template #content.Categories>
-                <productCategories/>
-            </template>
-            /*ANCHOR - Components */
-            <template #content.ProductComponents>
-                <productComponents  />1
-            </template>
-            /*ANCHOR - Restriction and Exemptions */
-            <template #content.ProductAccess>
-                <productRestrictionExemption />
-            </template>
-            /*ANCHOR - NonWishlist_Customers */
-            <!-- <template class="p-3" #content.NonWishlistCustomers>
-                <productNonWishList  />
-            </template> -->
-            /*ANCHOR - Product Information */
-            <template class="p-3" #content.ProdInfo>
-                <div class="p-3">
-                    <p>
-                        A concise overview of the Product, its Dimensions, and
-                        Volume and Weights
-                    </p>
-                    <productItemForm
-                        :showTitle="false"
-                        :readOnlyData="['form.id']"
-                    />
-                    <div>
-                        <v-button
-                            v-show="isValid"
-                            @click="
-                                async () => {
-                                    await productStore.updateProductItem(id);
-                                    productStore.resetForm();
-                                    productStore.getProductItem(id);
-                                    showInsert = false;
-                                }
-                            "
-                            prepend-inner-icon="md-save-round"
-                            class="ml-auto bg-accent text-white my-2"
-                            >Update Product Item</v-button
-                        >
-                    </div>
-                    <!-- <div>
-                        <pre>{{ productStore.form }}</pre>
-                    </div> -->
-                </div>
-            </template>
-            /*ANCHOR - Related Products */
-            <template class="p-3" #content.RelatedProduct>
-                <relatedProduct />
-            </template>
-            <template class="p-3" #content.RecommendedProduct>
-                <recommendedProduct  />
-            </template>
-            <template class="p-3" #content.ProductFilters>
-                <productFilter/>
-            </template>
-        </v-tab>
-    </div>
-</template>
 <script setup>
 import productItemForm from "./components/productItemForm.vue";
-// import productNonWishList from "./components/productNonWishList.vue";
 import productRestrictionExemption from "./components/productRestrictionExemption.vue";
 import productCategories from "./components/productCategories.vue";
 import productComponents from "./components/productComponents.vue";
 import productImages from "./components/productImages.vue";
 import productFilter from "./components/productFilter.vue";
-
+import ProductDeleteForm from "./components/productDeleteForm.vue";
 
 import relatedProduct from "./components/relatedProduct.vue";
 import recommendedProduct from "./components/recommendedProduct.vue";
 const router = inject("router");
+
 const props = defineProps({
     id: String,
 });
-
-
 
 import { onBeforeMount, ref, watch, computed, inject, provide } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useProductStore } from "@/stores/productStore";
+
+const product_item = ref({
+    id : ''
+});
 const productStore = useProductStore();
-const { product_item, form, isValid } = storeToRefs(productStore);
+const { errors } = storeToRefs(productStore);
 
-if (!product_item.length) {
-    await productStore.getProductItem(props.id, {
-        includeRelatedProducts:true,
-        includeRecommendedProduct: true
+provide("productStore", productStore);
+provide("product_item", product_item);
+provide("router", router);
+
+
+
+const refreshProductItem = async () => {
+    product_item.value = await productStore.getProductItem(props.id, {
+        includeRelatedProducts: true,
+        includeRecommendedProduct: true,
+        includeVariants: false,
+        includeProductImages: false,
+        includeProductComponents: false,
     });
-}
+    
+};
+await refreshProductItem();
 
-provide('productStore', productStore);
-provide('product_item', product_item);
 
 
 
@@ -185,3 +105,83 @@ const tabs = ref([
     },
 ]);
 </script>
+<template>
+    <div class="pt-2">
+        <v-heading type="h2">
+            <v-icon
+                v-if="$route.meta.redirectTo"
+                @click="
+                    () => {
+                        router.push({ name: $route.meta.redirectTo });
+                    }
+                "
+                name="la-arrow-circle-left-solid"
+                scale="1.8"
+            ></v-icon
+            >{{ $route.meta.title }}</v-heading
+        >
+        <p>
+            {{ $route.meta.description }}
+        </p>
+    </div>
+    <div class="my-3">
+        <v-tab
+            headerClass=" bg-white"
+            no-navigation
+            v-model="currentTab"
+            :tabs="tabs"
+        >
+            /*ANCHOR - Product Information */
+            <template class="p-3" #content.ProdInfo>
+                <div class="p-3">
+                    <p>
+                        A concise overview of the Product, its Dimensions, and
+                        Volume and Weights
+                    </p>
+                    
+                    <productItemForm
+                        @productItemUpdate="refreshProductItem"
+                        :productItem="product_item"
+                        :showTitle="false"
+                        :readOnlyData="['form.id']"
+                    />
+                    <div class="flex justify-center">
+                        <ProductDeleteForm :product_id="product_item.id" />
+                    </div>
+                    
+                </div>
+            </template>
+            /*ANCHOR - Product Categories */
+            <template #content.Categories>
+                <productCategories @productItemUpdate="refreshProductItem" />
+            </template>
+            /*ANCHOR - Components */
+            <template #content.ProductComponents>
+                <productComponents :product_data="product_item" />
+            </template>
+            /*ANCHOR - Product Images */
+            <template #content.ProductImages>
+                <productImages :product_id="id" />
+            </template>
+
+            /*ANCHOR - Restriction and Exemptions */
+            <template #content.ProductAccess>
+                <productRestrictionExemption
+                    :product_data="product_item"
+                    @productItemUpdate="refreshProductItem"
+                />
+            </template>
+
+            /*ANCHOR - Related Products */
+            <template class="p-3" #content.RelatedProduct>
+                <relatedProduct :product_data="product_item" />
+            </template>
+            <template class="p-3" #content.RecommendedProduct>
+                <recommendedProduct :product_data="product_item" />
+            </template>
+            <template class="p-3" #content.ProductFilters>
+                <productFilter :product_data="product_item" />
+            </template>
+        </v-tab>
+    </div>
+</template>

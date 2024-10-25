@@ -14,6 +14,7 @@ use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -147,7 +148,7 @@ class ProductController extends Controller
         );
         return response()->json(['message' => 'Product created successfully', 'product' => $product], 200);
     }
-    public function show(Product $product)
+    public function show(Request $request, Product $product)
     {
         return new ProductResource($product);
     }

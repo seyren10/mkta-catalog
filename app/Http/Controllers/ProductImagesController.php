@@ -34,7 +34,7 @@ class ProductImagesController extends Controller
         ProductImage::create(
             array(
                 "product_id" => $request->product_id,
-                "is_thumbnail" => $request->is_thumbnail,
+                "is_thumbnail" => $request->is_thumbnail ?? 0,
                 "file_id" => $request->file_id,
                 "index" =>  $count
             )

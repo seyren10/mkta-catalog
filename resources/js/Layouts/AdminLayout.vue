@@ -167,6 +167,7 @@ const product_management = [
         to: "productFilterIndex",
         icon: "hi-solid-filter",
     },
+    
 ];
 const file_management = [
     {
@@ -190,31 +191,17 @@ const contentManagement = [
 ];
 
 const dataManagement = [
-    // {
-    //     title: "Product Table",
-    //     to: "productDataIndex",
-    //     icon: "hi-solid-database",
-    // },
-    // {
-    //     title: "Filter Table",
-    //     to: "filterDataIndex",
-    //     icon: "hi-solid-database",
-    // },
-    // {
-    //     title: "Product Access Table",
-    //     to: "productAccessDataIndex",
-    //     icon: "hi-solid-database",
-    // },
-    // {
-    //     title: "Category Table",
-    //     to: "categoryDataIndex",
-    //     icon: "hi-solid-database",
-    // },
     {
         title: "Data Upload",
         to: "dataImport",
         icon: "fa-cloud-upload-alt",
-    }
+    },
+    {
+        title: "Recycle Bin",
+        to: "dataRecycle",
+        icon: "fa-recycle",
+    },
+
 ];
 //provide/inject
 

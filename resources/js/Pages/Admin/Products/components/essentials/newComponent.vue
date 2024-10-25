@@ -203,11 +203,9 @@ const emit = defineEmits(["submit"]);
 
 import { useProductStore } from "@/stores/productStore";
 const productStore = useProductStore();
-const { product_item, isValid } = storeToRefs(productStore);
+const {  isValid } = storeToRefs(productStore);
+const product_item = inject("product_item");
 
-if (!product_item.length) {
-    await productStore.getProductItem(props.id);
-}
 
 const currentTab = ref("Selection");
 const UIs = ref([

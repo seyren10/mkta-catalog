@@ -17,9 +17,9 @@
                             for( let key in collections){
                                 categories = [...categories,...new Set(collections[key]) ]
                             }
-                            let col_Categories = [...categories];
+                            let col_Categories = [...new Set(categories)];
                             await productStore.updateProductCategories(product_item.id, col_Categories);
-                            await productStore.getProductItem(product_item.id);
+                            $emit('productItemUpdate')
                         }
                     "
                     >Update Product Categories</v-button
@@ -29,7 +29,7 @@
                     prepend-inner-icon="md-refresh-sharp"
                     @click="
                         async () => {
-                            await productStore.getProductItem(product_item.id);
+                            $emit('productItemUpdate')
                         }
                     "
                     >Refresh</v-button
@@ -74,8 +74,7 @@ const collections = ref({});
 /*SECTION - Product Info */
 const product_item = inject("product_item");
 const productStore = inject("productStore");
-
-
+const emits = defineEmits('productItemUpdate')
 
 
 /*SECTION - End Product Info */
@@ -84,7 +83,13 @@ import { useCategoryStore } from "@/stores/categoryStore";
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 if (!categories.length) {
-    await categoryStore.getCategories({ includeSubCategories: true });
+    await categoryStore.getCategories(
+        {
+             includeSubCategories: true ,
+             includeCoverHTML : false,
+             includeFile: false
+
+        });
     categories.value.forEach((element) => {
         let parent = element.id;
         collections.value[parent] = product_item.value.product_category_keys;

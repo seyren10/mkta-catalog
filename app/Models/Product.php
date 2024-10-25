@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
+    use SoftDeletes;
     use HasFactory;
     protected $fillable = [
         "id",
@@ -25,7 +27,7 @@ class Product extends Model
     public $incrementing = false;
     protected $keyType = "string";
     protected $hidden = ["laravel_through_key", 'updated_at'];
-    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail', 'related_product', 'recommended_product', 'product_filter'];
+    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail', 'related_product', 'recommended_product', 'product_filter', 'variants'];
     public function non_wishlist_users()
     {
         return $this->hasMany(NonWishlistUsers::class, 'product_id', 'id')->without(['product']);
@@ -78,11 +80,14 @@ class Product extends Model
         return $this->belongsToMany(FilterChoice::class, 'product_filters', 'product_id', 'filter_choice_id');
     }
 
-    public static function variants($product)
+    public function variants()
     {
-        return static::whereNot(function ($query) use ($product) {
-            $query->where('id', $product->id);
-        })->where('parent_code', $product->parent_code)->get();
+        return $this->hasMany(Product::class,'parent_code', 'parent_code')->withOutEagerLoads();
+
+
+        // return static::whereNot(function ($query) use ($product) {
+        //     $query->where('id', $product->id);
+        // })->where('parent_code', $product->parent_code)->get();
     }
     
     public function sync_product_categories()

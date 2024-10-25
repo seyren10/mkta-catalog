@@ -15,7 +15,7 @@
                 @click="submit_index_changes()"
                 prepend-inner-icon="md-save-round"
                 class=" bg-accent text-white ml-auto m-1"
-                >Save Change on Product Images</v-button
+                >Save Changes on Product Images</v-button
             >
         </div>
         <div class="text-gray-700">
@@ -148,23 +148,24 @@ import { storeToRefs } from "pinia";
 import fileIndex from "../../Files/Index.vue";
 
 const s3 = inject("s3");
-const product_item = inject("product_item");
-const productStore = inject("productStore");
+const props = defineProps({
+    product_id : null
+});
 
 //SECTION - Product Image Store
 import { useProductImageStore } from "@/stores/productImagesStore";
 const productImagesStore = useProductImageStore();
-const { productImage, form } = storeToRefs(productImagesStore);
+const { form } = storeToRefs(productImagesStore);
 
-const refreshProductImage = async () => {
-    await productImagesStore.getProductImage(product_item.value.id);
+
+const productImage = ref([]);
+
+
+const refreshProductImage = async() => {
+    productImage.value = await productImagesStore.getProductImage_2(props.product_id);
 };
-if (product_item.value.product_images.length > 0) {
-    productImage.value = product_item.value.product_images;
-} else {
-    refreshProductImage();
-}
 
+refreshProductImage()
 //SECTION - Variables
 //SECTION - Emits
 //SECTION - Methods
@@ -198,15 +199,12 @@ const close_insertProductImage_data = () => {
     refreshProductImage();
 };
 const submit_index_changes = async()=>{
-    await productImagesStore.updateProductImages();
+    await productImagesStore.updateProductImages_2(productImage.value);
     refreshProductImage();
 }
 const submit_insertProductImage_data = async (data) => {
     data.forEach((element, index) => {
-        form.value.product_id = product_item.value.id;
-        form.value.file_id = element.id;
-        form.value.index = index;
-        productImagesStore.insertProductImage();
+        productImagesStore.insertProductImage_2(props.product_id, element.id, 100);
     });
     close_insertProductImage_data();
 };

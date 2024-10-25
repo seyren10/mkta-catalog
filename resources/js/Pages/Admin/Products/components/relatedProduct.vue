@@ -49,26 +49,29 @@ import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits(["productItemUpdate"]);
 
-const s3 = inject("s3");
-const productStore = inject("productStore");
-const product_item = inject("product_item");
+const props = defineProps({
+    product_data: {}
+})
+const product_item = ref();
+product_item.value = props.product_data;
+
+
 
 //SECTION - Link Store
 import { useLinkProductStore } from "@/stores/linkProductStore";
 const linkProductStore = useLinkProductStore();
-const { related_products } = storeToRefs(linkProductStore);
-const refreshRelatedProducts = async () => {
-    await linkProductStore.getRelatedProducts(product_item.value.id);
+
+const { } = storeToRefs(linkProductStore);
+
+const related_products = ref([]);
+
+const refreshRelatedProducts =  async() => {
+    related_products.value = await linkProductStore.getRelatedProducts_2(product_item.value.id);
 };
 
-if(product_item.value.related_product.length > 0){
-    related_products.value = product_item.value.related_product;
-}else{
-    refreshRelatedProducts();
-}
-
+refreshRelatedProducts();
 //SECTION - Product Store
 const appendRelatedProducts_BothWays = ref(false);
 const insertRelatedProduct = ref(false);
@@ -77,7 +80,7 @@ const closeRelatedProducts = () => {
 };
 const removeRelatedProduct = async (id) => {
     await linkProductStore.removeRelatedProduct(id);
-    refreshRelatedProducts();
+    await refreshRelatedProducts();
 };
 const appendRelatedProducts = async (data) => {
     data.forEach(async (element) => {

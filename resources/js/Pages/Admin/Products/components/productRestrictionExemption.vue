@@ -5,7 +5,6 @@
             their Wishlist.
         </h2>
         <div class="text-gray-700">
-            
             <accessType :product_id="product_item.id" :access_type_id="access_type.id" v-for="(access_type) in product_access_types" />
         </div>
     </div>
@@ -18,10 +17,10 @@ import { onBeforeMount, ref, watch, inject, computed } from "vue";
 import { storeToRefs } from "pinia";
 const props = defineProps({
     id: String,
+    product_data: {}
 });
-const product_item = inject("product_item");
-const productStore = inject("productStore");
-
+const product_item = ref([]);
+product_item.value = props.product_data
 
 /*SECTION - Restriction and Exemption */
 import { useProductAccessTypeStore } from "@/stores/productAccessTypeStore";

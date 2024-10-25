@@ -75,8 +75,9 @@ class CategoryResource extends JsonResource
         }
         unset($data['cover_html']);
         #endregion
-        if (!$request->has('includeBannerImage'))
+        if (!$request->has('includeBannerImage')){
             unset($data['banner_file']);
+        }
         return $data;
     }
 }

@@ -134,5 +134,7 @@ const iconList = [
     "BiMouse",
     "MdFullscreenRound",
     "PrTrash",
+    "FaRecycle",
+    "MdRestoreSharp"
 ];
 export default iconList;

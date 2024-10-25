@@ -136,8 +136,12 @@ const form = ref({
     eFile: null,
 });
 const submit = async () => {
+    isLoading.value = true
     try {
         const res = await exec(props.actionURL, "post", form.value);
+        if (res.status == 200){
+            isLoading.value = false
+        }
         this.$refs.fileUpload.value = "";
     } catch (error) {}
 };

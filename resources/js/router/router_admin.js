@@ -1,6 +1,5 @@
 // adminRouter.js
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { MdChildcareTwotone } from "oh-vue-icons/icons";
 
 const user_management = [
     {
@@ -218,38 +217,46 @@ const contentManagement = [
 ];
 
 const dataManagement = [
-    {
-        path: "data-table-products",
-        name: "productDataIndex",
-        component: () => import("@/Pages/Admin/Data/Product/index.vue"),
-    },
-    {
-        path: "data-table-filters",
-        name: "filterDataIndex",
-        component: () => import("@/Pages/Admin/Data/Filter/index.vue"),
-    },
-    {
-        path: "data-table-product-access",
-        name: "productAccessDataIndex",
-        component: () =>
-            import("@/Pages/Admin/Data/ProductAccessTypes/index.vue"),
-    },
-    {
-        path: "data-table-categories",
-        name: "categoryDataIndex",
-        component: () =>
-            import("@/Pages/Admin/Data/Category/index.vue"),
-    },
-];
-
-
-const uploadManagement = [
+    // {
+    //     path: "data-table-products",
+    //     name: "productDataIndex",
+    //     component: () => import("@/Pages/Admin/Data/Product/index.vue"),
+    // },
+    // {
+    //     path: "data-table-filters",
+    //     name: "filterDataIndex",
+    //     component: () => import("@/Pages/Admin/Data/Filter/index.vue"),
+    // },
+    // {
+    //     path: "data-table-product-access",
+    //     name: "productAccessDataIndex",
+    //     component: () =>
+    //         import("@/Pages/Admin/Data/ProductAccessTypes/index.vue"),
+    // },
+    // {
+    //     path: "data-table-categories",
+    //     name: "categoryDataIndex",
+    //     component: () =>
+    //         import("@/Pages/Admin/Data/Category/index.vue"),
+    // },
     {
         path: "data-import",
         name: "dataImport",
         component: () => import("@/Pages/Admin/Data/Import/index.vue"),
     },
+    {
+        path: "data-recycle",
+        name: "dataRecycle",
+        component: () => import("@/Pages/Admin/RecycleBin/index.vue"),
+    },
+    {
+        path: "data-recycle/product",
+        name: "dataRecycle_Products",
+        component: () => import("@/Pages/Admin/RecycleBin/Products/index.vue"),
+    },
 ];
+
+const uploadManagement = [];
 
 import { useUserStore } from "@/stores/userStore";
 import { storeToRefs } from "pinia";
@@ -270,7 +277,7 @@ const admin_routes = [
             ...file_management,
             ...contentManagement,
             ...dataManagement,
-            ...uploadManagement
+            ...uploadManagement,
         ],
         beforeEnter: (to, from, next) => {
             const userStore = useUserStore();

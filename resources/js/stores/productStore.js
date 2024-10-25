@@ -52,6 +52,17 @@ export const useProductStore = defineStore("products", () => {
             resetForm();
         }
     };
+
+    const updateProductItem_2 = async (id, form) => {
+        try {
+            const res = await exec("/api/product/" + id, "put", form);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            resetForm();
+        }
+    };
+
     const updateProductItem = async (id) => {
         try {
             const res = await exec("/api/product/" + id, "put", form.value);
@@ -62,12 +73,14 @@ export const useProductStore = defineStore("products", () => {
         }
     };
     const deleteProductItem = async (id) => {
+        console.log("Store");
         try {
-            const res = await exec("/api/product/" + id, "destroy",  form.value);
+            const res = await exec("/api/product/" + id, "delete");
+            console.log(res);
+            console.log("Front");
         } catch (e) {
             console.log(e);
         } finally {
-            resetForm();
         }
     };
     const getProductItemsWithCategoryId = async (
@@ -132,10 +145,11 @@ export const useProductStore = defineStore("products", () => {
                 includeProductFilter: true,
                 includeVariants: true,
             };
-            const res = await exec("/api/product/" + id, "get", {
+            requestData = {
                 ...defaultData,
                 ...requestData,
-            });
+            };
+            const res = await exec("/api/product/" + id, "get", requestData);
 
             product_item.value = res.data.data;
             form.value = product_item.value;
@@ -149,8 +163,10 @@ export const useProductStore = defineStore("products", () => {
             form.dimension_length = product_item.value.dimension_length;
             form.dimension_width = product_item.value.dimension_width;
             form.dimension_height = product_item.value.dimension_height;
+            return product_item.value;
         } catch (e) {
-            console.log(e);
+            
+            await router.push({ name: "notFound" });
         }
     };
     const NonWishlistProduct = async (type, product_id, customer_id) => {
@@ -240,7 +256,7 @@ export const useProductStore = defineStore("products", () => {
     const tablebatch_updateProducts = async (product_data) => {
         try {
             const res = await exec("/api/data-table/product", "put", {
-                products : product_data
+                products: product_data,
             });
         } catch (e) {
             console.log(e);
@@ -250,7 +266,6 @@ export const useProductStore = defineStore("products", () => {
     };
 
     return {
-
         tablebatch_updateProducts,
 
         getProductItemsWithCategoryId,
@@ -279,6 +294,7 @@ export const useProductStore = defineStore("products", () => {
         resetForm,
         addProductItem,
         updateProductItem,
+        updateProductItem_2,
         deleteProductItem,
 
         getProductItem,

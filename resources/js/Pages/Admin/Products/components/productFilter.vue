@@ -115,16 +115,24 @@
     </div>
 </template>
 <script setup>
-const router = inject("router");
-const props = defineProps({
-    id: String,
-});
 
 import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
-const product_item = inject("product_item");
+
+const router = inject("router");
+const props = defineProps({
+    id: String,
+    product_data: {}
+});
+
+const product_item = ref();
+product_item.value = props.product_data;
+
+
 const productStore = inject("productStore");
+
+
 
 
 //!SECTION -> Filters

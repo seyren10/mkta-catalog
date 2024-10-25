@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -115,12 +114,22 @@ class ProductResource extends JsonResource
             unset($data['parent_code']);
         }
 
+        #endregion
+        #region Variants
+        $removeVariants = true;
         if ($request->has('includeVariants')) {
-            $restricted_products = $request->session()->get('restricted_products', array());
-            $collect = collect(Product::variants($this));
-            $data['variants'] = $collect->whereNotIn('id', $restricted_products)->toArray();
-            // $data['variants'] = Product::variants($this)->whereNotIn('id', $restricted_products);
+            if ($request->includeVariants === 'true' || $request->includeVariants === true) {
+                $restricted_products = $request->session()->get('restricted_products', array());
+
+                $collect = collect($data['variants'])->whereNotIn('id', $restricted_products);
+                $data['variants'] = $collect->whereNotIn('id', [$data['id']])->toArray();
+                $removeVariants = !true;
+            }
         }
+        if ($removeVariants) {
+            unset($data['variants']);
+        }
+
         #endregion
         #region Related Products
         $removeRelatedProduct = true;
