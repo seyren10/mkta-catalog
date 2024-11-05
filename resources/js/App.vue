@@ -82,7 +82,7 @@ const sec = ref(60);
 setInterval(async () => {
     if (!router.currentRoute.value.fullPath.includes("admin")) {
         if (currentUser.value !== null && isRefreshing) {
-            await notificationStore.getNotifications(currentUser.value.id);
+            // await notificationStore.getNotifications(currentUser.value.id);
         }
     }else{
         // console.log('Skipped Notification Updates')

@@ -27,26 +27,28 @@ const catalog_routes = [
 
                 component: () =>
                     import("@/Pages/Catalog/Categories/Categories.vue"),
-
                 beforeEnter: async (to, from) => {
                     //fetch categories before entering this route
 
                     const categoryStore = useCategoryStore();
                     const { categories } = storeToRefs(categoryStore);
 
-                    if (!categories.value.length)
+                    if (!categories.value.length) {
                         await categoryStore.getCategories({
                             includeSubCategories: true,
                             includeParentCategory: true,
                             includeFile: true,
                             includeBannerImage: true,
+                            sub: to.query.sub,
                         });
+                    }
 
                     //redirect the user to not found page when
                     //they manually typed category ids that doesnt exist
                     const category = categoryStore.getCategoryWithId(
                         +to.params.id,
                     );
+
                     if (!category) {
                         return {
                             name: "notFound",

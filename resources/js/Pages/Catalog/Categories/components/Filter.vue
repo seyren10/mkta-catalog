@@ -201,6 +201,9 @@ init();
 
 function init() {
     for (const key in route.query) {
+        if(['page', 'sub'].includes(key)){
+            continue;
+        }
         if (route.query[key].trim() !== "" && !selectedFilters.value[key]) {
             selectedFilters.value[key] = [];
         }

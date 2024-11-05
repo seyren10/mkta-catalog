@@ -29,7 +29,7 @@ class Category extends Model
     }
     public function sub_categories()
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id')->without(['parent_category']);
+        return $this->hasMany(Category::class, 'parent_id', 'id')->withOutEagerLoads()->with('parent_category');
     }
 
     public function products()

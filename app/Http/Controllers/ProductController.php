@@ -123,6 +123,9 @@ class ProductController extends Controller
                 $query->orderByDesc('created_at');
             }
         }
+        if ($request->has('sub')) {
+            $query->whereIn('id', ProductCategory::where('category_id', $request->sub)->pluck('product_id'));
+        }
 
         $restricted_products = $request->session()->get('restricted_products', array());
         $query->whereNotIn('id', $restricted_products);

@@ -1,6 +1,7 @@
 <template>
     <div class="mx-auto max-w-[60ch] space-y-10">
         <BreadCrumb :items="breadCrumbData" v-if="category"></BreadCrumb>
+
         <div
             v-else
             class="w-fit rounded-xl bg-red-200 px-2 py-1 text-xs text-red-500"
@@ -93,7 +94,7 @@
                 </li>
             </ul>
         </div>
-        <div class="py-3 ">
+        <div class="py-3">
             {{ product.description }}
         </div>
     </div>
@@ -163,12 +164,14 @@ const removeFromWishlist = async () => {
 };
 
 const breadCrumbData = computed(() => {
+    const category = product.value.product_categories?.map((el) => {
+        el["text"] = el["title"]; // Rename 'title' to 'name'
+        el['path'] = `/catalog/categories/${el.id}`;
+        return el; // Return the modified object
+    });
     return [
         { name: "catalog", text: "Catalog" },
-        {
-            path: `/catalog/categories/${product.value.product_categories?.at(0).id}`,
-            text: category.title,
-        },
+        ...category,
         {
             name: product.value?.id,
         },

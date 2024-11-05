@@ -67,7 +67,7 @@ class Product extends Model
             'id',
             'id',
             'category_id'
-        )->withOut(["sub_categories", 'file', 'parent_category']);
+        )->distinct('category_id')->orderBy('category_id','ASC')->withOutEagerLoads();
     }
 
     public function productFilters()

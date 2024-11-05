@@ -21,13 +21,18 @@
                 />
             </div>
         </v-dialog>
-        <CategorySubTree
+        <ul class="grid gap-2 m-5">
+            <li v-for="subCategory in category.sub_categories" class="border-b-2  text-xl my-2">
+                <v-icon name="bi-chevron-right" class="me-2"></v-icon>{{ subCategory.title }}
+            </li>
+        </ul>
+        <!-- <CategorySubTree
             @update="categoryStore.getCategory(id)"
             class="my-2"
             v-for="subCategory in category.sub_categories"
             :data="subCategory"
             :parent_id="category.parent_id"
-        />
+        /> -->
     </div>
 </template>
 <script setup>

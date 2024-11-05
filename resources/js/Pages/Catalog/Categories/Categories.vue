@@ -16,14 +16,22 @@
             ></v-text-on-image>
         </header>
         <nav class="mt-8">
-            <ul class="flex flex-wrap gap-3">
-                <li
+            <div class="flex flex-wrap gap-3">
+                <button
+                    @click="fetchProductsBySub(item)"
+                    
                     v-for="item in category.sub_categories"
-                    class="min-w-fit rounded-lg bg-slate-300 px-3 py-1 text-[.75rem] text-slate-500"
+                    class="min-w-fit rounded-lg px-3 py-1 text-[.75rem] text-slate-500"
+                    :key="category.id + '-' + item.id"
+                    :class="
+                        route.query['sub'] == item.id
+                            ? 'bg-red-300'
+                            : 'bg-slate-300'
+                    "
                 >
                     {{ item.title }}
-                </li>
-            </ul>
+                </button>
+            </div>
         </nav>
         <main class="mt-8">
             <ProductListing :loading="loading">
@@ -34,7 +42,15 @@
                     <div class="flex items-center justify-between">
                         <div class="text-[.8rem] text-slate-500">
                             <strong>{{ totalPages }}</strong> item(s) found for
-                            "{{ category.title }}"
+                            "
+                            {{ category.title }}
+                            {{ route.query.sub ? '>' : '' }}
+                            {{ category.sub_categories.find( 
+                                    (subCat)=>{
+                                        return subCat.id == route.query.sub
+                                    }
+                                )?.title }}
+                            "
                         </div>
                         <div class="flex items-center gap-3">
                             <span>Sort By:</span>
@@ -56,7 +72,6 @@
                         :key="product.id"
                     ></Product>
                 </template>
-
                 <template #footer>
                     <PaginationLinks
                         :items="paginationLinks"
@@ -72,7 +87,7 @@
 import { computed, inject, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
@@ -99,6 +114,7 @@ const {
 } = storeToRefs(productStore);
 
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
+
 const loading = ref(false);
 const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
 const sortData = [
@@ -126,24 +142,36 @@ const handlePageChange = (page) => {
     setPage(+pageNumber);
 };
 
+const [sub, setSub] = useQuery("sub", async () => {
+    await fetchProducts(category.value.id);
+});
+
+function fetchProductsBySub(item) {
+    setSub(item.id);
+}
+
 async function fetchProducts(categoryId) {
     loading.value = true;
 
     await categoryStore.getCategoryWithId(+categoryId);
-
-    const queriesExceptPage = Object.keys(route.query).reduce((acc, query) => {
+    let queriesExceptPage = [];
+    queriesExceptPage = Object.keys(route.query).reduce((acc, query) => {
         /* add queries that is not 'page' key and its value is not empty */
-        if (query !== "page" && route.query[query].trim() !== "") {
+        if (["page", "sub"].includes(query)) {
+            // Skip
+            return acc;
+        }
+        if (route.query[query] !== "") {
             acc[query] = route.query[query];
         }
-
         return acc;
     }, {});
-
     await getProductsWithCategoryId(+categoryId, {
+        includeProductCategoryKeys: true,
         includeProductImages: true,
         includeProductFilter: true,
         page: page.value,
+        sub: sub.value,
         filters: queriesExceptPage,
         sortBy: sortBy.value,
     });

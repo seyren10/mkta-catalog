@@ -53,10 +53,13 @@ const s3 = inject("s3");
 await init();
 
 //computed
-const category = categoryStore.getCategoryWithId(
-    product.value.product_categories?.at(0)?.id,
-);
+// const category = categoryStore.getCategoryWithId(
+//     product.value.product_categories?.at(0)?.id,
+// );
 
+const category = product.value.product_categories;
+
+console.log(category)
 const productImages = computed(() => {
     return product.value.product_images?.reduce((acc, cur) => {
         acc.push(s3(cur.file.filename));
@@ -79,6 +82,7 @@ provide("category", category);
 
 async function init() {
     await productStore.getProductItem(props.id, {
+        // includeProductCategories: false,
         includeRelatedProducts: true,
         includeRecommendedProduct: true,
     });

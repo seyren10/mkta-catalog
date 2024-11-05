@@ -23,16 +23,16 @@ class ProductResource extends JsonResource
                 $removeProductCategories = false;
             }
         }
-        if ($removeProductCategories) {
-            unset($data['product_categories']);
-        }
-        #endregion
         #region Product Categories Keys
         if ($request->has('includeProductCategoryKeys')) {
             if ($request->includeProductCategoryKeys === 'true' || $request->includeProductCategoryKeys === true) {
                 $data['product_category_keys'] = (collect($data['product_categories']))->pluck('id');
             }
         }
+        if ($removeProductCategories) {
+            unset($data['product_categories']);
+        }
+        #endregion
         #endregion
         #region Product Components
         $removeProductComponents = true;

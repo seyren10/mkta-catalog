@@ -108,7 +108,6 @@ export const useCategoryStore = defineStore("categories", () => {
     const getCategoryWithId = (categoryId) => {
         if (categories.value.length) {
             category.value = categories.value.find((e) => e.id === categoryId);
-
             return category.value;
         }
     };
