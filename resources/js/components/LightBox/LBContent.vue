@@ -1,6 +1,6 @@
 <template>
     <div
-        class="fixed inset-0 z-[2003] grid grid-rows-[auto,1fr,auto] bg-black bg-opacity-50 text-white"
+        class="fixed inset-0 z-[2003] grid grid-rows-[auto,1fr,auto] bg-black bg-opacity-95 text-white"
     >
         <div class="container flex items-center py-3 text-sm">
             <p class="flex items-center text-[min(2vw+.1rem,_.8rem)]">

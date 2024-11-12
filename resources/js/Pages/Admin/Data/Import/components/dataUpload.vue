@@ -33,15 +33,7 @@
                     </ul>
                 </li>
                 <li v-show="templateNotes.length > 0"></li>
-                <li>
-                    <input
-                        ref="fileUpload"
-                        @change="fileSelected"
-                        class="block w-full rounded-full border text-sm text-slate-500 file:mr-4 file:rounded-full file:border file:px-4 file:py-2 file:text-sm file:font-semibold file:text-black hover:file:bg-black hover:file:text-white"
-                        accept=".xlsx"
-                        type="file"
-                    />
-                </li>
+
                 <li>
                     <p v-for="(checkbox, index) in CheckList">
                         <v-checkbox
@@ -49,10 +41,24 @@
                             :label="checkbox.label"
                         ></v-checkbox>
                     </p>
-                    <v-button
+                </li>
+                <li class="py-2">
+                    <input
                         :disabled="
                             CheckList.filter((el) => el.isChecked == false)
-                                .length > 0 || form.eFile == null
+                                .length > 0 
+                        "
+                        ref="fileUpload"
+                        @change="fileSelected"
+                        class="block w-full rounded-full border text-sm text-slate-500 file:mr-4 file:rounded-full file:border file:px-4 file:py-2 file:text-sm file:font-semibold file:text-black hover:file:bg-black hover:file:text-white"
+                        accept=".xlsx"
+                        type="file"
+                        :multiple="allowMultiple"
+                    />
+                    <v-button
+                        :disabled="
+                            !(list.length > 0) ||
+                            !CheckList.filter((el) => el.isChecked == false).length == 0
                         "
                         class="ml-auto mt-6 rounded-full border bg-green-500 text-white disabled:bg-gray-300 disabled:text-black"
                         @click="submit"
@@ -64,6 +70,29 @@
                         The data has been received. Updates will reflect soon
                     </p>
                 </li>
+                <ul class="max-h-[300px] overflow-auto">
+                    <li v-for="(file, fileIndex) in list" class="py-2 text-xs">
+                        <v-icon
+                            class="me-1"
+                            color="green"
+                            name="bi-check-circle-fill"
+                            v-if="file.isDone == true"
+                        />
+                        <v-icon
+                            class="me-1"
+                            color="red"
+                            name="pr-times-circle"
+                            v-if="file.isDone == null"
+                        />
+                        <v-icon
+                            class="me-1"
+                            color="warning"
+                            name="bi-circle"
+                            v-if="file.isDone == false"
+                        />
+                        {{ file.file_name }}
+                    </li>
+                </ul>
                 <li v-show="pageNotes.length > 0">
                     <ul class="text-sm">
                         <li v-for="notes in pageNotes" class="my-2">
@@ -91,6 +120,10 @@
 <script setup>
 import { ref } from "vue";
 const props = defineProps({
+    allowMultiple: {
+        type: Boolean,
+        default: false,
+    },
     pageTitle: {
         type: String,
         default: "No Title",
@@ -132,22 +165,38 @@ const { exec } = useAxios();
 const isLoading = ref(false);
 
 //!SECTION -> File Upload
-const form = ref({
-    eFile: null,
-});
+const list = ref([]);
+const selectedFiles = ref([]);
 const submit = async () => {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-        const res = await exec(props.actionURL, "post", form.value);
-        if (res.status == 200){
-            isLoading.value = false
+        for (let index = 0; index < selectedFiles.value.length; index++) {
+            const file = selectedFiles.value[index];
+            const res = await exec(props.actionURL, "post", {
+                eFile: file,
+            });
+            console.log(res)
+            if(res.status == 200){
+                list.value[index].isDone = true
+            }
         }
-        this.$refs.fileUpload.value = "";
-    } catch (error) {}
+
+    } catch (error) {}finally{
+        isLoading.value =false;
+    }
 };
 
 const fileSelected = (e) => {
-    const file = e.target.files[0];
-    form.value.eFile = file;
+    list.value = []
+    selectedFiles.value = e.target.files;
+    for (let index = 0; index < e.target.files.length; index++) {
+        const file = e.target.files[index];
+
+        list.value.push({
+            file_name: file.name,
+            file_size: (file.size / (1024 * 1024)).toFixed(2) + "MB",
+            isDone: false,
+        });
+    }
 };
 </script>

@@ -76,6 +76,7 @@ pages.value = [
     ...pages.value,
     {
         pageTitle: "Related and Recommended Products",
+        allowMultiple: true,
         templateURL: null,
         actionURL: "/api/data-imports/related-and-recommended-products",
         pageNotes: [
@@ -98,6 +99,7 @@ pages.value = [
     ...pages.value,
     {
         pageTitle: "Product Components",
+        allowMultiple: true,
         templateURL: null,
         actionURL: "/api/data-imports/product-components",
         pageNotes: [

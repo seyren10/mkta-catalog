@@ -82,7 +82,7 @@ class Product extends Model
 
     public function variants()
     {
-        return $this->hasMany(Product::class,'parent_code', 'parent_code')->withOutEagerLoads();
+        return $this->hasMany(Product::class,'parent_code', 'parent_code')->withOutEagerLoads()->with(['product_images']);
 
 
         // return static::whereNot(function ($query) use ($product) {

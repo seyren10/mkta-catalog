@@ -8,6 +8,7 @@ use App\Models\RelatedProduct;
 use App\Services\DataImportService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
@@ -39,6 +40,7 @@ class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithSt
     {
         $this->filePath = $filePath;
         $this->key = $key;
+        Log::info($this->key);
     }
     public function sheets(): array
     {
@@ -68,7 +70,8 @@ class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithSt
                     return;
                 }
 
-                $importData = DataImportService::getDataImport('import-products', $this->product_id, $this->key);
+                $importData = DataImportService::getDataImport('import-products-links', $this->product_id, $this->key);
+                
                 if( $importData->pass_key != $this->key ){
                     // Pass key is Different
                     // things should update
@@ -85,6 +88,8 @@ class RelatedAndRecommendedProducts implements ToCollection, ShouldQueue, WithSt
     #endregion
     public function collection(Collection $rows)
     {
+        
+        Log::info($this->product_id);
         if( $this->product_id === -1 ){ return; }
 
         $related = [];

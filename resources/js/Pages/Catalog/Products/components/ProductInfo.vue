@@ -69,12 +69,12 @@
                 <ContactSales class="p-5" :item="product"></ContactSales>
             </v-dialog>
         </div>
-        <div v-if="variants.length">
+        <div v-if="variants.length" class="">
             <h3 class="mb-3 text-slate-500">Variants:</h3>
-            <ul class="flex flex-wrap gap-3">
+            <ul class="flex flex-wrap gap-2">
                 <li
                     v-for="variant in variants"
-                    class="overflow-hidden rounded-lg border hover:border-accent"
+                    class="overflow-hidden rounded-lg border hover:border-accent "
                 >
                     <router-link
                         :to="{ name: 'product', params: { id: variant.id } }"
@@ -85,7 +85,7 @@
                                 s3(variant.product_images?.at(0)?.file.filename)
                             "
                             no-overlay
-                            class="max-w-12"
+                            class="max-w-24"
                         ></v-text-on-image>
                     </router-link>
                     <v-tooltip activator="parent"

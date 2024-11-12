@@ -54,7 +54,7 @@ class ExcelImportController extends Controller
         $path = Storage::disk('local')->put("public", $request->file('eFile'));
         $filePath = Storage::disk('local')->path($path);
         Excel::queueImport(new RelatedAndRecommendedProducts($filePath, Carbon::now()), $filePath);
-        return response()->json(['message' => 'File is being processed!']);
+        return response()->json(['message' => 'Recommended and Related Product File is being processed!']);
     }
     public static function importProductComponents(Request $request)
     {

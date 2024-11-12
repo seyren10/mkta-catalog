@@ -20,16 +20,13 @@ class ProductComponents implements ToCollection, WithMultipleSheets, WithEvents
 {
 
     use Importable, RegistersEventListeners;
-    public function chunkSize(): int
-    {
-        return 10000;
-    }
     #region for Data
     private $filePath;
     private $product_id;
     private $key;
     public function __construct($filePath, $key)
     {
+        Log::info(__FILE__ . " -> " . __FUNCTION__);
         $this->filePath = $filePath;
         $this->key = $key;
     }
@@ -40,10 +37,14 @@ class ProductComponents implements ToCollection, WithMultipleSheets, WithEvents
         foreach ($sheetNames as $sheetName) {
             $sheets[$sheetName] = new ProductComponents($this->filePath, $this->key);
         }
+        Log::info(__FILE__ . " -> " . __FUNCTION__);
+
         return $sheets;
     }
     private function getSheetNames(): array
     {
+        Log::info(__FILE__ . " -> " . __FUNCTION__);
+
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($this->filePath);
         return $spreadsheet->getSheetNames();
     }
@@ -54,6 +55,8 @@ class ProductComponents implements ToCollection, WithMultipleSheets, WithEvents
             BeforeSheet::class => function (BeforeSheet $event) {
                 $this->product_id = $event->sheet->getTitle();
                 $curProduct = Product::find($this->product_id);
+                Log::info(__FILE__ . " -> " . __FUNCTION__ . " -> " . $this->product_id);
+
                 if ($curProduct === null) {
                     $this->product_id = -1;
                     return;

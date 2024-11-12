@@ -3,7 +3,19 @@
         <div
             class="scrollbar hidden max-h-[30rem] min-w-[4rem] max-w-[4rem] gap-5 self-center overflow-y-auto p-2 lg:grid"
         >
-            <img
+            <v-text-on-image
+                v-for="(img, index) in productImages"
+                :key="img"
+                :image="img"
+                no-overlay
+                class="aspect-square rounded-lg object-cover border"
+                :class="{
+                    ' ring ring-accent ring-offset-4':
+                        currentImageIndex === index,
+                }"
+                @click="currentImageIndex = index"
+            />
+            <!-- <img
                 v-for="(img, index) in productImages"
                 :key="img"
                 :src="img"
@@ -13,7 +25,7 @@
                         currentImageIndex === index,
                 }"
                 @click="currentImageIndex = index"
-            />
+            /> -->
         </div>
         <v-horizontal-scroller
             :items="productImages"
