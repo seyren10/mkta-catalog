@@ -34,6 +34,7 @@ require __DIR__ . '/resources/related-products.php';
 require __DIR__ . '/resources/users.php';
 require __DIR__ . '/resources/imports.php';
 require __DIR__ . '/resources/recycle-bin.php';
+require __DIR__ . '/resources/email-registration.php';
 
 Route::get('current', [currentController::class, 'current']);
 Route::get('current-user/{user}', [UserServices::class, 'getRestrictedProducts']);
