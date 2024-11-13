@@ -49,7 +49,7 @@
         </div>
         <div>
             <VCircularImages
-                class="mx-auto"
+                class="z-[1000]"
                 :img-src="circleImageData"
                 base-img="/mk-images/rocket-removebg-preview.png"
                 :offset="300"

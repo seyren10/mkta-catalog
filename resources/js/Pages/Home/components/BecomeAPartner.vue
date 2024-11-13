@@ -60,6 +60,32 @@
                 </v-button>
             </div>
         </div>
+
+        <v-dialog v-model="showRegistrationDialog" max-width="600">
+            <div class="relative isolate space-y-6 p-8">
+                <div class="rotate-45">
+                    <img
+                        src="/mk-images/rocket-removebg-preview.png"
+                        class="mx-auto max-w-[15rem] animate-wiggle"
+                    />
+                </div>
+
+                <p class="font-bold">
+                    Thank you for your interest in partnering with us!
+                </p>
+                <p>
+                    Your application has been received and is currently under
+                    review. We&quot;ll be in touch soon with the next steps.
+                </p>
+
+                <div class="mt-4">
+                    <p class="">Our Best,</p>
+                    <p class="text-sm font-bold">
+                        MK Themed Attractions Phils.
+                    </p>
+                </div>
+            </div>
+        </v-dialog>
     </section>
 </template>
 
@@ -68,10 +94,17 @@ import { computed, inject, ref } from "vue";
 import { useEmailRegistrationStore } from "@/stores/emailRegistrationStore";
 import { storeToRefs } from "pinia";
 import MKMap from "@/components/MKMap.vue";
+import VCircularImages from "./VCircularImages.vue";
 
-const { emailRegistrationFrom, registerEmail, errors, loading } =
-    useEmailRegistration();
+const {
+    emailRegistrationFrom,
+    registerEmail,
+    errors,
+    loading,
+    showRegistrationDialog,
+} = useEmailRegistration();
 const addToast = inject("addToast");
+
 const regions = computed(() => {
     return [
         { abr: "as", region: "Asia" },
@@ -105,6 +138,7 @@ const infoList = computed(() => {
 });
 
 function useEmailRegistration() {
+    const showRegistrationDialog = ref(false);
     const emailRegistrationStore = useEmailRegistrationStore();
     const { loading, errors } = storeToRefs(emailRegistrationStore);
 
@@ -118,19 +152,21 @@ function useEmailRegistration() {
     async function registerEmail() {
         await emailRegistrationStore.registerEmail(emailRegistrationFrom);
 
-        if (!errors.value)
-            addToast({
-                props: {
-                    type: "success",
-                },
-                timeout: 5000,
-                content:
-                    "We have received your registration, we will send you an email once we confirmed your credentials. Thank you",
-            });
+        if (!errors.value) {
+        }
+        showRegistrationDialog.value = true;
+
+        emailRegistrationFrom.value = {
+            email: null,
+            company: null,
+            region: "as",
+            comment: null,
+        };
     }
 
     return {
         emailRegistrationFrom,
+        showRegistrationDialog,
         registerEmail,
         loading,
         errors,
