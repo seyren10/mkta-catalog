@@ -7,28 +7,29 @@
             ></v-text-on-image>
         </div>
         <ul class="mt-5 space-y-4">
-            <li class="flex flex-wrap justify-start gap-2">
+            <li class="flex gap-2">
                 <span class="text-slate-400">Name:</span>
-                <span>{{ user.name }}</span>
+                <p class="line-clamp-1">{{ user.name }}</p>
             </li>
-            <li class="flex flex-wrap justify-start gap-2">
+            <li class="flex gap-2">
                 <span class="text-slate-400">Email:</span>
-                <span>{{ user.email }}</span>
+                <p class="line-clamp-1">{{ user.email }}</p>
             </li>
-            <li class="flex flex-wrap justify-start gap-2">
+            <li class="flex gap-2">
                 <span class="text-slate-400">Status:</span>
-                <span
+                <p
                     :class="`${userStatusColor} w-fit rounded-lg px-2 py-1 text-xs`"
-                    >{{ userStatus }}</span
                 >
+                    {{ userStatus }}
+                </p>
             </li>
-            <li class="flex flex-wrap justify-start gap-2">
+            <li class="flex gap-2">
                 <span class="text-slate-400">Areas:</span>
-                <span> {{ userAreas }}</span>
+                <p class="line-clamp-1">{{ userAreas }}</p>
             </li>
-            <li class="flex flex-wrap justify-start gap-2">
+            <li class="flex gap-2">
                 <span class="text-slate-400">Companies:</span>
-                <span> {{ userCompanies }}</span>
+                <p class="line-clamp-1">{{ userCompanies }}</p>
             </li>
         </ul>
     </div>

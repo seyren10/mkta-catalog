@@ -106,11 +106,6 @@ const Pages = ref([
         text: "Wishlist",
         key: "Wishlist",
     },
-    {
-        icon: "ri-customer-service-2-line",
-        text: "Contact Customer Service",
-        key: "Contact Customer Service",
-    },
 ]);
 const setPage = () => {
     switch (currentPage.value.key) {
@@ -122,9 +117,6 @@ const setPage = () => {
             break;
         case "Wishlist":
             return Wishlist;
-            break;
-        case "Contact Customer Service":
-            return CustomerService;
             break;
     }
 };
