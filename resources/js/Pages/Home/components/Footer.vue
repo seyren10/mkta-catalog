@@ -57,30 +57,30 @@ const locations = computed(() => {
             title: "Philippines",
             value: "Lot 19, 21, 23 Livelihood St Pampanga Economic Zone, Angeles City, Pampanga 2009, Philippines",
         },
-        {
-            title: "Denmark",
-            value: "Fluebæksvej 190 4100 Ringsted Denmark",
-        },
+        // {
+        //     title: "Denmark",
+        //     value: "Fluebæksvej 190 4100 Ringsted Denmark",
+        // },
     ];
 });
 
 const socials = computed(() => {
     return [
-        {
-            icon: "ri-facebook-line",
-            title: "Facebook",
-            link: "https://facebook.com",
-        },
-        {
-            icon: "ri-twitter-line",
-            title: "Twitter",
-            link: "https://twitter.com",
-        },
-        {
-            icon: "ri-instagram-line",
-            title: "Instagram",
-            link: "https://instagram.com",
-        },
+        // {
+        //     icon: "ri-facebook-line",
+        //     title: "Facebook",
+        //     link: "https://facebook.com",
+        // },
+        // {
+        //     icon: "ri-twitter-line",
+        //     title: "Twitter",
+        //     link: "https://twitter.com",
+        // },
+        // {
+        //     icon: "ri-instagram-line",
+        //     title: "Instagram",
+        //     link: "https://instagram.com",
+        // },
     ];
 });
 </script>

@@ -33,9 +33,14 @@
                         name="md-keyboardarrowright-round"
                         class="w-0 duration-300 group-hover:w-5"
                     ></v-icon>
-                    <a href="#">
-                        {{ sub.title }}
-                    </a>
+                    <router-link
+                        :to="{
+                            name: 'categories',
+                            params: { id: selectedFeature?.id },
+                            query: { sub: sub.id },
+                        }"
+                        >{{ sub.title }}</router-link
+                    >
                 </li>
                 <li v-else>No sub categories</li>
             </ul>
