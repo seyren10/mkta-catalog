@@ -153,8 +153,8 @@ function useEmailRegistration() {
         await emailRegistrationStore.registerEmail(emailRegistrationFrom);
 
         if (!errors.value) {
+            showRegistrationDialog.value = true;
         }
-        showRegistrationDialog.value = true;
 
         emailRegistrationFrom.value = {
             email: null,
