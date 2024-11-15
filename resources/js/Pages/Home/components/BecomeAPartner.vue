@@ -123,11 +123,11 @@ const infoList = computed(() => {
             title: "Contact (Philippines): ",
             value: "+63 917 564 9864",
         },
-        {
-            icon: "la-heart",
-            title: "Contact (Denmark): ",
-            value: "+45 41 10 64 74",
-        },
+        // {
+        //     icon: "la-heart",
+        //     title: "Contact (Denmark): ",
+        //     value: "+45 41 10 64 74",
+        // },
         { icon: "io-mail-outline", title: "Email", value: "sales@mkta.com.ph" },
         {
             icon: "io-location-outline",

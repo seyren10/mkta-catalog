@@ -11,8 +11,26 @@ use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserWishlistController;
 use App\Models\ProductAccessType;
+use App\Models\ProductImage;
 use App\Services\UserServices;
 use Illuminate\Support\Facades\Route;
+
+
+
+#region OPEN API
+Route::get('open-api/product-images', function () {
+    $collect = ProductImage::get();
+    return $collect->map(function($row){
+        unset($row['id']);
+        unset($row['file_id']);
+        unset($row['is_thumbnail']);
+        unset($row['index']);
+        unset($row['file']['id']);
+        unset($row['file']['type']);
+        return $row;
+    });
+});
+#endregion
 
 $except = ['create', 'edit', 'destroy'];
 

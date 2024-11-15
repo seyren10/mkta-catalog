@@ -7,9 +7,9 @@
         >
             <slot name="aside"> </slot>
         </aside>
-        <div class="rounded-lg bg-white p-5">
+        <!-- <div class="rounded-lg bg-white p-5">
             <slot name="top"></slot>
-        </div>
+        </div> -->
         <div
             class="relative grid h-full auto-rows-min grid-cols-2 gap-5 rounded-lg bg-white p-5 md:grid-cols-3 lg:grid-cols-4"
         >

@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-8">
+    <div class="container my-2">
         <header class="relative overflow-hidden rounded-lg bg-white">
             <BreadCrumb
                 class="absolute left-1 top-0 z-10 text-white"
@@ -15,11 +15,10 @@
                 class="aspect-[11/1] h-full"
             ></v-text-on-image>
         </header>
-        <nav class="mt-8">
-            <div class="flex flex-wrap gap-3">
+        <nav class="mt-2">
+            <div class="flex flex-wrap gap-1">
                 <button
                     @click="fetchProductsBySub(item)"
-                    
                     v-for="item in category.sub_categories"
                     class="min-w-fit rounded-lg px-3 py-1 text-[.75rem] text-slate-500"
                     :key="category.id + '-' + item.id"
@@ -33,23 +32,20 @@
                 </button>
             </div>
         </nav>
-        <main class="mt-8">
+        <main class="mt-2">
             <ProductListing :loading="loading">
                 <template #aside>
-                    <Filter @change="fetchProducts(id)"></Filter>
-                </template>
-                <template #top>
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col items-center justify-between mb-4">
                         <div class="text-[.8rem] text-slate-500">
                             <strong>{{ totalPages }}</strong> item(s) found for
                             "
                             {{ category.title }}
-                            {{ route.query.sub ? '>' : '' }}
-                            {{ category.sub_categories.find( 
-                                    (subCat)=>{
-                                        return subCat.id == route.query.sub
-                                    }
-                                )?.title }}
+                            {{ route.query.sub ? ">" : "" }}
+                            {{
+                                category.sub_categories.find((subCat) => {
+                                    return subCat.id == route.query.sub;
+                                })?.title
+                            }}
                             "
                         </div>
                         <div class="flex items-center gap-3">
@@ -62,7 +58,9 @@
                             ></v-select>
                         </div>
                     </div>
+                    <Filter @change="fetchProducts(id)"></Filter>
                 </template>
+                <!-- <template #top> </template> -->
                 <template #default>
                     <Product
                         no-overlay

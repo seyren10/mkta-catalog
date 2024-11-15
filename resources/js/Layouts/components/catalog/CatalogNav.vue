@@ -101,7 +101,7 @@
                     <template #default="{ loaded }">
                         <div
                             v-if="loaded"
-                            class="scrollbar bg-[#04151f] max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain p-5"
+                            class="scrollbar max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain bg-[#04151f] p-5"
                         >
                             <div class="mb-8">
                                 <h1
@@ -154,7 +154,14 @@
                                                 class="w-0 duration-200 group-hover:w-5"
                                                 name="md-keyboardarrowright-round"
                                             ></v-icon>
-                                            <span>{{ child.title }}</span>
+                                            <router-link
+                                                :to="{
+                                                    name: 'categories',
+                                                    params: { id: category.id },
+                                                    query : { sub: child.id}
+                                                }"
+                                                >{{ child.title }}</router-link
+                                            >
                                         </li>
                                     </ul>
                                 </div>
@@ -189,9 +196,9 @@ const s3 = inject("s3");
 
 //non-reactives
 const headerData = [
-    { title: "Contact Sales Support", icon: "ri-customer-service-2-line" },
-    { title: "Report a problem", icon: "ri-bug-2-line" },
-    { title: "Asia", icon: "pr-globe" },
+    // { title: "Contact Sales Support", icon: "ri-customer-service-2-line" },
+    // { title: "Report a problem", icon: "ri-bug-2-line" },
+    // { title: "Asia", icon: "pr-globe" },
 ];
 
 const handleSearch = () => {

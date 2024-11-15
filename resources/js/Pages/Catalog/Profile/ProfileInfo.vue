@@ -1,6 +1,6 @@
 <template>
     <div
-        class="grid grid-rows-[auto,auto,1fr] place-content-start justify-center gap-6"
+        class="grid grid-rows-[auto,auto,1fr] place-content-start justify-center gap-2"
     >
         <div class="mx-auto max-w-[10rem] overflow-hidden rounded-full">
             <v-text-on-image
@@ -9,15 +9,15 @@
             ></v-text-on-image>
         </div>
         <ul class="mt-5 grid gap-2">
-            <li class="flex items-center gap-3">
+            <li class="flex flex-col gap-3 justify-start">
                 <span class="text-slate-400">Name:</span>
                 <span>{{ user.name }}</span>
             </li>
-            <li class="flex items-center gap-3">
+            <li class="flex flex-col gap-3 justify-start">
                 <span class="text-slate-400">Email:</span>
                 <span>{{ user.email }}</span>
             </li>
-            <li class="flex items-center gap-3">
+            <li class="flex flex-col gap-3 justify-start">
                 <span class="text-slate-400">Status:</span>
                 <span
                     :class="`${userStatusColor} rounded-lg px-2 py-1 text-xs`"
@@ -26,11 +26,11 @@
             </li>
         </ul>
         <ul>
-            <li class="flex items-center gap-3">
+            <li class="flex flex-col gap-3 justify-start">
                 <span class="text-slate-400">Areas:</span>
                 <span> {{ userAreas }}</span>
             </li>
-            <li class="flex items-center gap-3">
+            <li class="flex flex-col gap-3 justify-start">
                 <span class="text-slate-400">Companies:</span>
                 <span> {{ userCompanies }}</span>
             </li>
