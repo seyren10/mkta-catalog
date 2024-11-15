@@ -1,12 +1,10 @@
 <template>
     <section class="container mt-10 p-0">
-        <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            <div class="col-span-1">
-                <div
-                    class="rounded-lg border bg-white p-6 md:h-[min(65vh+_1rem,_45rem)]"
-                >
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-[20rem,auto]">
+            <div>
+                <div class="rounded-lg border bg-white p-6">
                     <ProfileInfo />
-                    <div class="mt-6 grid grid-cols-2 gap-2 lg:grid-cols-1">
+                    <div class="mt-6 grid gap-2">
                         <v-button
                             v-for="page in Pages"
                             :prepend-inner-icon="page.icon"
@@ -38,7 +36,7 @@
                 </div>
             </div>
 
-            <div class="grid rounded-lg border bg-white lg:col-span-2">
+            <div class="grid rounded-lg border bg-white">
                 <v-card>
                     <template #title>
                         <div>
