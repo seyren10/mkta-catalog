@@ -42,7 +42,7 @@ export const useCustomerStore = defineStore("customer", () => {
     };
     const addCustomer = async () => {
         try {
-            const res = await exec("/api/customers", "post", form.value.value);
+            const res = await exec("/api/customers", "post", form.value);
         } catch (e) {
             console.log(e);
         }

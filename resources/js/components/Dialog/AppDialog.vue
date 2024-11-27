@@ -66,7 +66,7 @@ const props = defineProps({
 const dialog = defineModel({ default: false });
 const slots = useSlots();
 
-console.log(slots);
+// console.log(slots);
 useKey("Escape", handleCloseDialog);
 
 const listeners = {

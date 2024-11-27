@@ -5,13 +5,15 @@
             class="capitalize [&:not(:last-of-type)]:after:ml-3 [&:not(:last-of-type)]:after:content-['>']"
             :key="index"
         >
+
             <router-link
                 :key="link.path"
                 :to="link"
                 v-if="index !== links.length - 1"
                 class="underline-offset-4 hover:underline"
             >
-                {{ link.text }}</router-link
+                {{ link.text }}
+                </router-link
             >
             <span v-else class="text-slate-500">{{ link.name }}</span>
         </li>
