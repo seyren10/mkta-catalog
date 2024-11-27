@@ -2,37 +2,37 @@
     <section id="about">
         <v-heading class="text-center">About us</v-heading>
         <div class="grid gap-3 md:grid-cols-6 md:grid-rows-4">
-            <div
-                class="overflow-hidden rounded-lg bg-red-100 md:col-span-3 md:max-h-56"
-            >
+            <div class="overflow-hidden rounded-lg bg-red-100 md:col-span-3">
                 <v-text-on-image
-                    title="Nutcrackers"
-                    :image="s3('aiayJKSffhV6yJkYmlfaOVThtayDrlFh61tgWU7o.jpg')"
-                    class="h-full"
+                    :image="s3('resources/homepage-images/16x9+v2.jpg')"
+                    class="h-[15rem]"
                     no-overlay
                 ></v-text-on-image>
             </div>
 
             <div class="overflow-hidden rounded-lg bg-red-200">
                 <v-text-on-image
-                    title="Witch"
-                    :image="s3('ikKZguF9HWpoa6jRM6sjlqoiOxYEd9ZBX8d03Lwp.jpg')"
+                    :image="
+                        s3(
+                            'resources/homepage-images/1x1_animal_nutcrackers.jpg',
+                        )
+                    "
                     class="h-full"
                     no-overlay
                 ></v-text-on-image>
             </div>
             <div class="overflow-hidden rounded-lg bg-red-300 md:col-span-2">
                 <v-text-on-image
-                    title="InLiteFi"
-                    :image="s3('msIIdY6EnCf4VDIFnnROQ78WEaWQSliUpYrjv4tm.jpg')"
-                    class="h-full"
+                    :image="s3('resources/homepage-images/3x2+v1.jpg')"
+                    class="h-[15rem]"
                     no-overlay
                 ></v-text-on-image>
             </div>
+
             <div class="overflow-hidden rounded-lg bg-red-400 md:row-span-2">
                 <v-text-on-image
                     title="Winter"
-                    :image="s3('EwWzSTCCLqXOGCYOOFsucvEI1XcwKIV7QgXnhiIL.jpg')"
+                    :image="s3('resources/homepage-images/9x16+v2.jpg')"
                     class="h-full"
                     no-overlay
                 ></v-text-on-image>
@@ -72,7 +72,7 @@
             >
                 <v-text-on-image
                     title="Witch"
-                    :image="s3('CF4K0me1eX98nDZgffM2yvZakGryDBWw91SGRf6s.jpg')"
+                    :image="s3('resources/homepage-images/9x16+v1.jpg')"
                     class="h-full"
                     no-overlay
                 ></v-text-on-image>
@@ -81,7 +81,7 @@
                 class="overflow-hidden rounded-lg bg-red-800 md:col-span-4 md:max-h-56"
             >
                 <v-text-on-image
-                    :image="s3('qHAjp9RAHnR8CUsxd7nQzqZTzXKdrluHECZQmZ0M.jpg')"
+                    :image="s3('resources/homepage-images/16X9+v1.jpg')"
                     no-overlay
                     class="h-full"
                 ></v-text-on-image>
@@ -91,7 +91,7 @@
             >
                 <v-text-on-image
                     title="Winter"
-                    :image="s3('xtMDWidjQGtrUQuFHL8p1pgWnNMNfsTv9xNKgqXo.jpg')"
+                    :image="s3('resources/homepage-images/3x2+v2.jpg')"
                     class="h-full w-full"
                     no-overlay
                 ></v-text-on-image>
