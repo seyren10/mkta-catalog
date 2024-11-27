@@ -42,7 +42,7 @@
                                 :key="value"
                                 class="rounded-lg bg-slate-200 px-2 text-slate-500"
                             >
-                                {{ value.value }}
+                                {{ value }}
                             </div>
                         </div>
                     </li>

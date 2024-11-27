@@ -59,7 +59,7 @@ await init();
 
 const category = product.value.product_categories;
 
-console.log(category)
+// console.log(category)
 const productImages = computed(() => {
     return product.value.product_images?.reduce((acc, cur) => {
         acc.push(s3(cur.file.filename));

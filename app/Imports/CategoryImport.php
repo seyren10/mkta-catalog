@@ -20,7 +20,7 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Sheet;
 
-class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithMultipleSheets, WithEvents
+class CategoryImport implements ToCollection, WithStartRow, WithMultipleSheets, WithEvents
 {
 
     use Importable, RegistersEventListeners;
@@ -86,8 +86,13 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
     {
         $products = [];
         foreach ($rows as $key => $row) {
+            if($key <2 ){
+                continue;
+            }
             $products[] = $row[0];
         }
+        
+        
         $curCat = $this->id;
         $products = collect(Product::whereIn('id', $products)->get())->pluck('id');
         $temp = array_map(
@@ -95,17 +100,23 @@ class CategoryImport implements ToCollection, ShouldQueue, WithStartRow, WithChu
             return [
                 'category_id' => $curCat,
                 'product_id' => $productId,
+                "created_at" => now(),
+                "updated_at" => now()
             ];
         }, $products->toArray() );
+
         ProductCategory::insert($temp);
 
         if($this->parent != null){
             $parent = $this->parent;
+    
             $temp = array_map(
                 function($productId) use ($parent) {
                     $data= [
                         'category_id' => $parent,
                         'product_id' => $productId,
+                        "created_at" => now(),
+                        "updated_at" => now()
                     ];
                 return $data;
             }, $products->toArray() );

@@ -74,7 +74,7 @@
             <ul class="flex flex-wrap gap-2">
                 <li
                     v-for="variant in variants"
-                    class="overflow-hidden rounded-lg border hover:border-accent "
+                    class="overflow-hidden rounded-lg border hover:border-accent"
                 >
                     <router-link
                         :to="{ name: 'product', params: { id: variant.id } }"
@@ -117,6 +117,8 @@ import Download from "./ProductInfo/Download.vue";
 //reactives
 const injectedProduct = inject("product");
 const category = inject("category");
+const categoryX = inject("category");
+
 const s3 = inject("s3");
 
 const conversion = ref("metric");
@@ -164,14 +166,35 @@ const removeFromWishlist = async () => {
 };
 
 const breadCrumbData = computed(() => {
+    console.clear();
     const category = product.value.product_categories?.map((el) => {
         el["text"] = el["title"]; // Rename 'title' to 'name'
-        el['path'] = `/catalog/categories/${el.id}`;
+        el["name"] = "categories";
+        if (el.parent_id != 0) {
+            el["params"] = { id: el.parent_id };
+            el["query"] = { sub: el.id };
+        } else {
+            el["params"] = { id: el.id };
+        }
+
         return el; // Return the modified object
     });
+
+    let cat = category.reduce((acc, cur) => {
+        const foundItem = acc.find((e) => {
+            return e.title === cur.title;
+        });
+        if (foundItem == null) {
+            acc.push(cur);
+        }
+        return acc;
+    }, []);
+
+    console.log("Category", cat);
+
     return [
         { name: "catalog", text: "Catalog" },
-        ...category,
+        ...cat,
         {
             name: product.value?.id,
         },

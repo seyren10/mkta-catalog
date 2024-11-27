@@ -146,7 +146,7 @@ const updateComponent = async () => {
         is_visible: props.data.is_visible,
         index: props.data.index,
         title: props.data.title,
-        value: value.value,
+        value: value,
     });
     emit("change");
 };
