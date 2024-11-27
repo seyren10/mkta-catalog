@@ -68,7 +68,7 @@ class ExcelImportController extends Controller
     {
         $path = Storage::disk('local')->put("public", $request->file('eFile'));
         $filePath = Storage::disk('local')->path($path);
-        Excel::queueImport(new CategoryImport($filePath, Carbon::now()), $filePath);
+        Excel::import(new CategoryImport($filePath, Carbon::now()), $filePath);
         return response()->json(['message' => 'File is being processed!']);
     }
     public static function importFilters(Request $request)

@@ -50,9 +50,9 @@ const submitDelete = async()=>{
         loading.value = !true;
         return;
     }
-    console.log('C')
+    // console.log('C')
     await productStore.deleteProductItem(props.product_id);
-    console.log('D')
+    // console.log('D')
 
     loading.value = !true;
     router.push({ name: 'productItemIndex' });

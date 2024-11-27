@@ -19,7 +19,7 @@ export const useProductComponentStore = defineStore("productComponent", () => {
         form.value.is_visible = true;
         form.value.index = 100;
         form.value.title = "";
-        form.value.value = [];
+        form.value = [];
     };
     const addProductComponent = async (product_id) => {
         if (product_id == "") {
@@ -29,16 +29,16 @@ export const useProductComponentStore = defineStore("productComponent", () => {
             form.value.type = form.value.type.trim().toLowerCase();
             switch (form.value.type) {
                 case "list":
-                    form.value.value = JSON.stringify(form.value.value);
+                    form.value = JSON.stringify(form.value);
                     break;
                 case "file":
-                    form.value.value = JSON.stringify(form.value.value);
+                    form.value = JSON.stringify(form.value);
                     break;
                 case "album":
-                    form.value.value = JSON.stringify(form.value.value);
+                    form.value = JSON.stringify(form.value);
                     break;
                 case "table":
-                    form.value.value = JSON.stringify(form.value.value);
+                    form.value = JSON.stringify(form.value);
                     break;
             }
             const res = await exec(

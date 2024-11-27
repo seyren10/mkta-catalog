@@ -29,7 +29,7 @@
         </div>
         <div class="my-2">
             <v-text-field
-                @keyup.enter="refresh"
+                @keyup.enter="refresh(true)"
                 prepend-inner-icon="la-search-solid"
                 v-model="search"
             />
@@ -132,7 +132,17 @@ const showInsert = ref(false);
 const [page, setPage] = useQuery("page", () => refresh());
 const [searchQuery, setSearchQuery] = useQuery("search", () => refresh());
 const search = ref(searchQuery.value);
-const refresh = async()=>{
+const refresh = async(resetPage = false)=>{
+    if (resetPage) {
+        router.push({
+            name: "productItemIndex",
+            query: {  
+                search: search.value,
+            },
+        });
+        return;
+    }
+
     setSearchQuery(search.value)
     await productStore.getProductItems({ q: searchQuery.value, page: page.value,});
 }
