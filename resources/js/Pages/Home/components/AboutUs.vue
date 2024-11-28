@@ -4,7 +4,7 @@
         <div class="grid gap-3 md:grid-cols-6 md:grid-rows-4">
             <div class="overflow-hidden rounded-lg bg-red-100 md:col-span-3">
                 <v-text-on-image
-                    :image="s3('resources/homepage-images/16x9+v2.jpg')"
+                    :image="s3('resources/homepage-images/111x40.jpg')"
                     class="h-[15rem]"
                     no-overlay
                 ></v-text-on-image>
@@ -23,7 +23,7 @@
             </div>
             <div class="overflow-hidden rounded-lg bg-red-300 md:col-span-2">
                 <v-text-on-image
-                    :image="s3('resources/homepage-images/3x2+v1.jpg')"
+                    :image="s3('resources/homepage-images/11+x+6.jpg')"
                     class="h-[15rem]"
                     no-overlay
                 ></v-text-on-image>
@@ -31,8 +31,7 @@
 
             <div class="overflow-hidden rounded-lg bg-red-400 md:row-span-2">
                 <v-text-on-image
-                    title="Winter"
-                    :image="s3('resources/homepage-images/9x16+v2.jpg')"
+                    :image="s3('resources/homepage-images/107+x+246+v2.jpg')"
                     class="h-full"
                     no-overlay
                 ></v-text-on-image>
@@ -72,7 +71,7 @@
             >
                 <v-text-on-image
                     title="Witch"
-                    :image="s3('resources/homepage-images/9x16+v1.jpg')"
+                    :image="s3('resources/homepage-images/107+x+246.jpg')"
                     class="h-full"
                     no-overlay
                 ></v-text-on-image>
@@ -81,7 +80,7 @@
                 class="overflow-hidden rounded-lg bg-red-800 md:col-span-4 md:max-h-56"
             >
                 <v-text-on-image
-                    :image="s3('resources/homepage-images/16X9+v1.jpg')"
+                    :image="s3('resources/homepage-images/223+x+56+.jpg')"
                     no-overlay
                     class="h-full"
                 ></v-text-on-image>
@@ -90,8 +89,7 @@
                 class="overflow-hidden rounded-lg bg-red-600 md:col-span-2 md:max-h-56"
             >
                 <v-text-on-image
-                    title="Winter"
-                    :image="s3('resources/homepage-images/3x2+v2.jpg')"
+                    :image="s3('resources/homepage-images/55+x+28.jpg')"
                     class="h-full w-full"
                     no-overlay
                 ></v-text-on-image>
