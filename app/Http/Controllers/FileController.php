@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Decoders\Base64ImageDecoder;
-use Intervention\Image\Decoders\DataUriImageDecoder;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
@@ -71,13 +66,12 @@ class FileController extends Controller
             $generated_new_name = bin2hex(now() . $fileName) . "." . $ext;
             $data = '';
             if ((str_contains(trim(strtolower($type)), 'image'))) {
-                
-                /*
-                    user id
-                    w and h
-                    
-                */
 
+                /*
+                user id
+                w and h
+
+                 */
 
                 // $path = $request->file('eFile')->store("uploads", 'local');
                 // $fullPath = storage_path('app/' . $path);
@@ -177,42 +171,21 @@ class FileController extends Controller
         $res = array();
         $res["message"] = "File successfully deleted";
         $res["File"] = $portal_file->filename;
-        $res["isExist"] = Storage::disk('s3')->exists($portal_file->filename);
+        try {
+            if (Storage::disk('s3')->exists($portal_file->filename)) {
 
-        // $res["get"] = Storage::disk('s3')->get($portal_file->filename);
-        // $dd = Storage::disk('s3')->delete($res["get"]);
-
-        if (Storage::disk('s3')->exists($portal_file->filename)) {
-            try {
-                // $deleteFile = "https://mkta-portal.s3.us-east-2.amazonaws.com/".$portal_file->filename;
-                // $deleteFile = parse_url($deleteFile);
-                // $d = Storage::disk('s3')->delete($deleteFile);
                 $d = Storage::disk('s3')->delete($portal_file->filename);
-                // $d = Storage::disk('s3')->delete($portal_file->filename);
-                // $d = Storage::disk('s3')->delete("//mkta-portal//".$portal_file->filename);
-
-                // $s3 = new S3Client(config('filesystems.disks.s3.key'), config('filesystems.disks.s3.secret'));
-                // $bucket = config('filesystems.disks.s3.bucket');
-                // $keyname = config('filesystems.disks.s3.key');
-                // $s3 = new S3Client([
-                //     'version' => 'latest',
-                //     'region' => config('filesystems.disks.s3.region')]);
-                // // $result = $s3->deleteObject(array(
-                // //     'Bucket' => $bucket,
-                // //     'Key' => $keyname,
-                // // ));
-                // $s3->deleteObject($bucket, $portal_file->filename);
-
                 return array(
                     "file" => $portal_file,
                     "dd" => $d,
                     "res" => $res,
                 );
-            } catch (\Throwable $th) {
 
-                $res["error"] = $th;
-                $res['file'] = "\\" . $portal_file->filename;
             }
+        } catch (\Throwable $th) {
+
+            $res["error"] = $th;
+            $res['file'] = "\\" . $portal_file->filename;
         }
         $portal_file->delete();
         return response(array(
