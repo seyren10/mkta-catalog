@@ -85,7 +85,7 @@
 import { computed, inject, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuery } from "../../../composables/useQuery";
-import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRouter, useRoute } from "vue-router";
 
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductListing from "./components/ProductListing.vue";
@@ -93,17 +93,21 @@ import Filter from "./components/Filter.vue";
 import Product from "@/components/Product.vue";
 import PaginationLinks from "../../../components/PaginationLinks.vue";
 
+const router = useRouter();
+const route = useRoute();
+
 const props = defineProps({
     id: String,
 });
 
 const s3 = inject("s3");
 
+
 //stores
 const categoryStore = inject("categoryStore");
 const { category } = storeToRefs(categoryStore);
 const productStore = inject("productStore");
-const route = useRoute();
+
 
 const {
     product_items: products,
@@ -114,7 +118,7 @@ const {
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 
 const loading = ref(false);
-const [page, setPage] = useQuery("page", () => fetchProducts(+props.id));
+const [page, setPage] = useQuery("page", async() => await fetchProducts(+props.id));
 const sortData = [
     {
         title: "Any order",
@@ -141,11 +145,13 @@ const handlePageChange = (page) => {
 };
 
 const [sub, setSub] = useQuery("sub", async () => {
+
     await fetchProducts(category.value.id);
 });
 
-function fetchProductsBySub(item) {
-    setSub(item.id);
+async function fetchProductsBySub(item) {
+    router.push({name:'categories', params : { id : category.value.id}, query : { sub: item.id }})
+    // await setSub(item.id);
 }
 
 async function fetchProducts(categoryId) {
