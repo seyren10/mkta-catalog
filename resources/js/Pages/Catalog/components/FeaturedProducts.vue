@@ -5,7 +5,7 @@
                 class="sticky top-0 z-[10] rounded-lg bg-white py-5 text-primary"
                 :class="
                     environment === 'catalog'
-                        ? 'top-[7.5rem] sm:top-[16.5rem] md:top-[14rem] xl:top-[14rem] 2xl:top-[12.5rem]'
+                        ? 'top-[7.5rem] sm:top-[14.5rem] md:top-[12.7rem] xl:top-[12.5rem] 2xl:top-[11rem]'
                         : ''
                 "
             >
