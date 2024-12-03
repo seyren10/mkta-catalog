@@ -18,18 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 #region OPEN API
-Route::get('open-api/product-images', function () {
-    $collect = ProductImage::get();
-    return $collect->map(function($row){
-        unset($row['id']);
-        unset($row['file_id']);
-        unset($row['is_thumbnail']);
-        unset($row['index']);
-        unset($row['file']['id']);
-        unset($row['file']['type']);
-        return $row;
-    });
-});
+require __DIR__ . '/resources/open-api.php';
 #endregion
 
 $except = ['create', 'edit', 'destroy'];
