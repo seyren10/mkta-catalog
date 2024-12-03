@@ -35,6 +35,7 @@ import {
     PrExclamationCircle,
     HiMenuAlt4,
     MdKeyboardarrowdownRound,
+    MdKeyboardarrowupRound,
     OiStar,
     RiCustomerService2Line,
     RiBug2Line,
@@ -153,11 +154,12 @@ import {
     PrUser,
     BiRecycle,
     FaRecycle,
-MdRestoreSharp,
+    MdRestoreSharp,
 } from "oh-vue-icons/icons";
 
 addIcons(
-MdRestoreSharp,
+    MdKeyboardarrowupRound,
+    MdRestoreSharp,
     FaRecycle,
     BiRecycle,
     PrUser,

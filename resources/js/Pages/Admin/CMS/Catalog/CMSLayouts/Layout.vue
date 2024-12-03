@@ -5,6 +5,7 @@
         <CMSHeading>Grid</CMSHeading>
         <div class="col-span-full flex justify-between">
             <CMSButton @select="handleAddNode"></CMSButton>
+            <CMSArrange @up="handleMoveNodeUp" @down="handleMoveNodeDown" />
             <CMSButtonClose @click="handleDeleteNode(props)"></CMSButtonClose>
         </div>
 
@@ -20,6 +21,7 @@
 
 <script setup>
 import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
+import CMSArrange from "../CMSArrange.vue";
 
 import CMSButton from "../CMSButton/CMSButton.vue";
 import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
@@ -38,6 +40,13 @@ function handleAddNode(node) {
 
 function handleDeleteNode(node) {
     cmsStore.deleteNode(node);
+}
+
+function handleMoveNodeUp() {
+    cmsStore.moveNode(props);
+}
+function handleMoveNodeDown() {
+    cmsStore.moveNode(props, "down");
 }
 </script>
 

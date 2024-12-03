@@ -1,4 +1,5 @@
 <template>
+    <Maintenance v-if="currentUser?.role_data?.id === 2" />
     <RouterView v-slot="{ Component }">
         <template v-if="Component">
             <Suspense timeout="0">
@@ -31,6 +32,7 @@ import { useToaster } from "./composables/useToaster";
 
 import VLoader from "./components/base_components/VLoader.vue";
 import VToaster from "./components/Toast/VToaster.vue";
+import Maintenance from "./Maintenance.vue";
 
 const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
@@ -84,7 +86,7 @@ setInterval(async () => {
         if (currentUser.value !== null && isRefreshing) {
             // await notificationStore.getNotifications(currentUser.value.id);
         }
-    }else{
+    } else {
         // console.log('Skipped Notification Updates')
     }
 }, 1000 * sec.value);

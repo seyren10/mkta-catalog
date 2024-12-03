@@ -23,11 +23,12 @@ export const useAuthStore = defineStore("auth", () => {
             if (!errors.value) router.push({ name: "catalog" });
         } catch (e) {}
     };
-    const logout = async () => {
+
+    const logout = async (redirect = true) => {
         try {
             await exec("/logout", "delete");
 
-            if (!errors.value) await router.push({ name: "login" });
+            if (!errors.value && redirect) await router.push({ name: "login" });
         } catch (e) {}
     };
 

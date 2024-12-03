@@ -292,6 +292,39 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
         }
     }
 
+    function moveNode(node, direction = "up") {
+        const parentNode = findNode(nodes.value, node.parentId);
+
+        if (parentNode) {
+            console.log("a sub node");
+            //node is a sub-node (child of existing parent node)
+            // parentNode.component.props.children =
+            //     parentNode.component.props.children.filter(
+            //         (n) => n.component.props.id !== node.id,
+            //     );
+        } else {
+            //node is part of root nodes (top level node)
+            const nodeIndex = nodes.value.findIndex((n) => {
+                return n.component.props.id === node.id;
+            });
+
+            if (nodeIndex > 0 && direction === "up") {
+                [nodes.value[nodeIndex], nodes.value[nodeIndex - 1]] = [
+                    nodes.value[nodeIndex - 1],
+                    nodes.value[nodeIndex],
+                ];
+            } else if (
+                nodeIndex < nodes.value.length - 1 &&
+                direction === "down"
+            ) {
+                [nodes.value[nodeIndex], nodes.value[nodeIndex + 1]] = [
+                    nodes.value[nodeIndex + 1],
+                    nodes.value[nodeIndex],
+                ];
+            }
+        }
+    }
+
     return {
         addToNodes,
         deleteNode,
@@ -302,5 +335,6 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
         components,
         nodes,
         environment,
+        moveNode,
     };
 });

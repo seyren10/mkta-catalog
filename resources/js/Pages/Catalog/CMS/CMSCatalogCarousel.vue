@@ -3,14 +3,14 @@
         <v-horizontal-scroller :items="images" item-size="100%" auto-scroll>
             <template #default="{ item }">
                 <v-text-on-image
-                    class="aspect-[3/1]"
+                    class="mx-auto aspect-[3/1] h-full w-[99%]"
                     v-if="!item?.link"
                     :image="item.filename"
                     no-overlay
                 ></v-text-on-image>
                 <router-link v-else :to="item.path">
                     <v-text-on-image
-                        class="aspect-[3/1]"
+                        class="mx-auto aspect-[3/1] h-full w-[99%]"
                         :image="item.filename"
                         no-overlay
                     ></v-text-on-image>
