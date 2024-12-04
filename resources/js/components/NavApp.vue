@@ -1,7 +1,7 @@
 <template>
     <nav class="flex items-center justify-between bg-white p-2 shadow md:px-10">
-        <div class="w-[5rem]">
-            <img src="/Logo.png" alt="" />
+        <div class="w-[12rem]">
+            <img src="/Logo.png" alt="" class="invert" />
         </div>
         <ul class="hidden flex-wrap justify-center gap-5 md:flex">
             <li

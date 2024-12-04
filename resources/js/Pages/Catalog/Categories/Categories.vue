@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-2">
+    <div class="container my-4 space-y-4">
         <header class="relative overflow-hidden rounded-lg bg-white">
             <BreadCrumb
                 class="absolute left-1 top-0 z-10 text-white"
@@ -16,11 +16,11 @@
             ></v-text-on-image>
         </header>
         <nav class="mt-2">
-            <div class="flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-2">
                 <button
                     @click="fetchProductsBySub(item)"
                     v-for="item in category.sub_categories"
-                    class="min-w-fit rounded-lg px-3 py-1 text-[.75rem] text-slate-500"
+                    class="min-w-fit rounded-lg px-3 py-2 text-[.75rem] text-slate-500"
                     :key="category.id + '-' + item.id"
                     :class="
                         route.query['sub'] == item.id
@@ -35,7 +35,9 @@
         <main class="mt-2">
             <ProductListing :loading="loading">
                 <template #aside>
-                    <div class="flex flex-col items-center justify-between mb-4">
+                    <div
+                        class="mb-4 flex flex-col items-center justify-between"
+                    >
                         <div class="text-[.8rem] text-slate-500">
                             <strong>{{ totalPages }}</strong> item(s) found for
                             "
@@ -102,12 +104,10 @@ const props = defineProps({
 
 const s3 = inject("s3");
 
-
 //stores
 const categoryStore = inject("categoryStore");
 const { category } = storeToRefs(categoryStore);
 const productStore = inject("productStore");
-
 
 const {
     product_items: products,
@@ -118,7 +118,10 @@ const {
 const getProductsWithCategoryId = productStore.getProductItemsWithCategoryId;
 
 const loading = ref(false);
-const [page, setPage] = useQuery("page", async() => await fetchProducts(+props.id));
+const [page, setPage] = useQuery(
+    "page",
+    async () => await fetchProducts(+props.id),
+);
 const sortData = [
     {
         title: "Any order",
@@ -145,12 +148,15 @@ const handlePageChange = (page) => {
 };
 
 const [sub, setSub] = useQuery("sub", async () => {
-
     await fetchProducts(category.value.id);
 });
 
 async function fetchProductsBySub(item) {
-    router.push({name:'categories', params : { id : category.value.id}, query : { sub: item.id }})
+    router.push({
+        name: "categories",
+        params: { id: category.value.id },
+        query: { sub: item.id },
+    });
     // await setSub(item.id);
 }
 

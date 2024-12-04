@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6 px-3">
         <h2
-            class="w-full border-b-2 py-2 text-[1.5rem] font-bold tracking-wide mb-2"
+            class="mb-2 w-full border-b-2 py-2 text-[1.5rem] font-bold tracking-wide"
         >
             Technical Information
         </h2>
@@ -61,8 +61,8 @@ const product = computed(() => {
             length: `${conversion.value === "metric" ? injectedProduct.value.dimension_length : (+injectedProduct.value.dimension_length / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
             width: `${conversion.value === "metric" ? injectedProduct.value.dimension_width : (+injectedProduct.value.dimension_width / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
             volume: `${injectedProduct.value.volume} <span class='text-slate-400'> m<sup>3</sup></span>`,
-            "weight(gross)": `${conversion.value === "metric" ? injectedProduct.value.weight_gross : (+injectedProduct.value.weight_gross / IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
-            "weight(net)": `${conversion.value === "metric" ? injectedProduct.value.weight_net : (+injectedProduct.value.weight_net / IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
+            "weight(gross)": `${conversion.value === "metric" ? injectedProduct.value.weight_gross : (+injectedProduct.value.weight_gross * IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
+            "weight(net)": `${conversion.value === "metric" ? injectedProduct.value.weight_net : (+injectedProduct.value.weight_net * IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
         },
     };
 });

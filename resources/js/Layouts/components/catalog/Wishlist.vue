@@ -117,9 +117,8 @@ const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
 
 const infoList = computed(() => {
     return [
-        { title: "Contact (Denmark)", value: "+45 41 10 64 74" },
         { title: "Contact (Philippines)", value: "+63 917 564 9864" },
-        { title: "Email", value: "sales@mkta.com.ph" },
+        { title: "Email", value: "sales@mkthemedattractions.com.ph" },
         {
             title: "Address",
             value: "Lot 19, 21, 23 Livelihood St Pampanga Economic Zone, Angeles City, Pampanga 2009, Philippines",

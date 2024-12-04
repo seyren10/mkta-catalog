@@ -73,7 +73,7 @@ const reasons = computed(() => {
             title: "Fiberglass Durability",
             description:
                 "Over <span class='text-accent text-xl'>4000</span> products made from fiberglass material, offering durability and versatility in various applications",
-            img: "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/homepage-images/fiberglass_durability.jpg",
+            img: "/mk-images/fiberglass_durability.jpg",
         },
         {
             title: "Illuminating Diversity",

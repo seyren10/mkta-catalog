@@ -7,7 +7,7 @@
             class="relative mt-[4rem] text-center md:order-2 md:mt-0 md:text-left"
         >
             <v-heading type="display">
-                Festive Lighting Solutions & Themed Decorations
+                Festive themed decorations and lighting solution
             </v-heading>
             <p class="mt-5 font-medium text-slate-500">
                 Creating magical experiences through design ingenuity and
@@ -51,7 +51,7 @@
             <VCircularImages
                 class="z-[1000]"
                 :img-src="circleImageData"
-                base-img="/mk-images/rocket-removebg-preview.png"
+                base-img="/mk-images/bear-removebg-preview.png"
                 :offset="300"
                 :circle-size="150"
                 :speed="0.05"

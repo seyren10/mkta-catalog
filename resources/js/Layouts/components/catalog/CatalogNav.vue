@@ -36,7 +36,7 @@
                 <img
                     src="/Logo.png"
                     alt=""
-                    class="mr-3 hidden max-w-[10rem] cursor-pointer sm:block"
+                    class="mr-3 hidden max-w-[12rem] cursor-pointer sm:block"
                     @click="$router.push({ name: 'catalog' })"
                 />
                 <!-- #endregion mk-logo -->
@@ -158,7 +158,7 @@
                                                 :to="{
                                                     name: 'categories',
                                                     params: { id: category.id },
-                                                    query : { sub: child.id}
+                                                    query: { sub: child.id },
                                                 }"
                                                 >{{ child.title }}</router-link
                                             >

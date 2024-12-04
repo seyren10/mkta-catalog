@@ -42,13 +42,13 @@
             >
                 <p>
                     <span class="text-accent"
-                        >MK Themed Attractions Philippines </span
-                    >(formerly Tema Design) is a fiberglass products
-                    manufacturer and is a part of the well-reputed Danish
-                    Company: Creation Group. Best known for the creative
-                    production of world-class products for decorations and
-                    displays within different themes and Christmas, Comic,
-                    Wildlife, Halloween, Wild West, Pirates, Easter, etc.
+                        >MK Themed Attractions Philippines
+                    </span>
+                    is a fiberglass products manufacturer. Best known for
+                    the creative production of world-class products for
+                    decorations and displays within different themes and
+                    Christmas, Comic, Wildlife, Halloween, Wild West, Pirates,
+                    Easter, etc.
                 </p>
                 <p>
                     We use high-quality materials in produing fiberglass

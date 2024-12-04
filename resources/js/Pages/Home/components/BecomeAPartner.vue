@@ -128,7 +128,7 @@ const infoList = computed(() => {
         //     title: "Contact (Denmark): ",
         //     value: "+45 41 10 64 74",
         // },
-        { icon: "io-mail-outline", title: "Email", value: "sales@mkta.com.ph" },
+        { icon: "io-mail-outline", title: "Email", value: "sales@mkthemedattractions.com.ph" },
         {
             icon: "io-location-outline",
             title: "Address",

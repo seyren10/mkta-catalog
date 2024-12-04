@@ -3,7 +3,7 @@
         class="grid grid-rows-[min-content,_1fr] items-start gap-5 md:grid-cols-[min(18vw_+_1rem,15rem)_1fr]"
     >
         <aside
-            class="sticky top-[11rem] row-span-2 hidden rounded-lg bg-white p-5 md:block"
+            class="sticky top-[9rem] row-span-2 hidden rounded-lg bg-white p-5 md:block"
         >
             <slot name="aside"> </slot>
         </aside>
