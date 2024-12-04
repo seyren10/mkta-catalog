@@ -14,7 +14,7 @@
             v-model="currentUser.email"
             label="Email"
         />
-        <div class="grid grid-cols-12 hidden">
+        <div class="hidden grid-cols-12">
             <div class="col-span-12 md:col-span-6">
                 <v-button
                     @click="
@@ -48,8 +48,4 @@ import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/userStore";
 const userStore = useUserStore();
 const { currentUser, form, loading } = storeToRefs(userStore);
-
-
-
-
 </script>
