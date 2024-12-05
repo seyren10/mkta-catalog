@@ -39,10 +39,10 @@
                         <div class="flex flex-wrap gap-1">
                             <div
                                 v-for="value in values"
-                                :key="value"
+                                :key="value.value"
                                 class="rounded-lg bg-slate-200 px-2 text-slate-500"
                             >
-                                {{ value }}
+                                {{ value.value }}
                             </div>
                         </div>
                     </li>
@@ -201,7 +201,7 @@ init();
 
 function init() {
     for (const key in route.query) {
-        if(['page', 'sub'].includes(key)){
+        if (["page", "sub"].includes(key)) {
             continue;
         }
         if (route.query[key].trim() !== "" && !selectedFilters.value[key]) {
