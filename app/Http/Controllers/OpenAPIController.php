@@ -5,9 +5,67 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class OpenAPIController extends Controller
 {
+
+    public function current_test(Request $request)
+    {
+        $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
+        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/'.$imageKey));
+        $image = Image::read($stream);
+        $image->resize(300, 300, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image->save(Storage::disk('public')->path('') . $imageKey, quality: 50, progressive: true);
+        Storage::disk('s3')->put("thumbs\\".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+        return;
+    }
+
+    public function current_test_all(Request $request)
+    {
+        $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
+        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/'.$imageKey));
+        $image = Image::read($stream);
+        $image->resize(150, 150, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image->save(Storage::disk('public')->path('') . $imageKey, quality: 10, progressive: true);
+        Storage::disk('s3')->put("thumbs\\".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+        return;
+    }
+
+    public function current_test_working_local(Request $request)
+    {
+        // https: //mkta-portal.s3.us-east-2.amazonaws.com/
+
+        $data = Storage::disk('public')->get("SampleCompression.PNG");
+        $image = Image::read($data);
+        $image->resize(300, 300, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image->save(Storage::disk('public')->path('') . "/fuckthislife.jpg", quality: 10, progressive: true);
+    }
+
+    public function get_TMSProductAlbum(Request $request)
+    {
+        $passPhrase = env('APP_OPEN_KEY');
+        if ($passPhrase != $request->passPhrase) {
+            return response()->json(['message' => 'Incorrect passphrase.'], 401);
+        }
+        $collect = ProductImage::get();
+        $prodImages = $collect->map(function ($row) {
+            $data = array();
+            $data['prod_code'] = $row['product_id'];
+            $data['img_index'] = $row['index'];
+            $data['filename'] = $row['file']['filename'];
+            // return $data;
+            return $data;
+        })->groupBy('prod_code');
+        return response()->json(['message' => 'Product Images Exported', 'data' => $prodImages], 200);
+    }
 
     public function getProductImages(Request $request)
     {
@@ -60,7 +118,7 @@ class OpenAPIController extends Controller
             foreach ($data as $key => $product) {
 
                 // echo gettype($product);
-                $product = (array)$product;
+                $product = (array) $product;
                 // die();
                 Product::upsert(
                     $product,

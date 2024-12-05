@@ -14,7 +14,7 @@ return [
     |   - \Intervention\Image\Drivers\Gd\Driver::class
     |   - \Intervention\Image\Drivers\Imagick\Driver::class
     |
-    */
+     */
 
     'driver' => \Intervention\Image\Drivers\Gd\Driver::class,
 
@@ -32,11 +32,11 @@ return [
     |    decoded as such or whether the animation is discarded.
     |
     | - "blendingColor" Defines the default blending color.
-    */
+     */
 
     'options' => [
         'autoOrientation' => true,
         'decodeAnimation' => true,
         'blendingColor' => 'ffffff',
-    ]
+    ],
 ];

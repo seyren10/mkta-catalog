@@ -33,6 +33,7 @@ return [
         https://dev-catalog.mkthemedattractions.com.ph,
         http://dev-catalog.mkthemedattractions.com.ph,
         dev-catalog.mkthemedattractions.com.ph,
+        mkthemedattractions.com.ph,
 
         107.180.113.41',
         Sanctum::currentApplicationUrlWithPort()
