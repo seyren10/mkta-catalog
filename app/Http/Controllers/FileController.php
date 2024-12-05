@@ -12,10 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
-
-
 use Intervention\Image\Laravel\Facades\Image;
-
 
 class FileController extends Controller
 {
@@ -59,13 +56,15 @@ class FileController extends Controller
             $data = '';
             if ((str_contains(trim(strtolower($type)), 'image'))) {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
-                
-                $image = Image::read(Storage::disk('s3')->get($data));
-                $image->resize(300,300, function($constraint){
+                $imageKey = $data;
+                $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
+                $image = Image::read($stream);
+                $image->resize(300, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $image->save('thumbs/fuckthis_example.jpg', quality: 10, progressive: true);
-                // $data = Storage::disk('s3')->put("thumbs/".$fileName.".jpeg", $image);
+                $image->save(Storage::disk('public')->path('') . $imageKey, quality: 50, progressive: true);
+                Storage::disk('s3')->put("thumbs\\" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+                Storage::disk('public')->delete( Storage::disk('s3')->path($imageKey) );
             } else {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
             }
