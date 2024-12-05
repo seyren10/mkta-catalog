@@ -22,7 +22,7 @@
                         @click.stop="handleSelect(file)"
                     >
                         <v-text-on-image
-                            :image="s3(file.filename)"
+                            :image="s3Thumbnail(file.filename)"
                             :subtitle="file.title"
                             no-overlay
                         >
@@ -85,7 +85,7 @@ const props = defineProps({
     items: Array,
 });
 
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 const emits = defineEmits(["submit"]);
 const { files, getFiles, loading } = useFiles(useFileStore());
 const search = ref("");

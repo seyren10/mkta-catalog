@@ -12,7 +12,7 @@
             v-model="firstTimeLogin"
             max-width="500"
             persistent
-            v-if="user.first_time_login"
+            v-if="user.first_time_login && !dontShowAgain"
         >
             <template #header="data">
                 <div class="flex items-center justify-between p-4 pb-0">
@@ -30,7 +30,10 @@
                 <em class="text-xs text-slate-400">
                     ( or set it later by clicking on your profile )
                 </em>
-                <FirstTimeLoginForm class="mt-4 p-3"></FirstTimeLoginForm>
+                <FirstTimeLoginForm
+                    class="mt-4 p-3"
+                    @dont-show-again="(value) => (dontShowAgain = value)"
+                ></FirstTimeLoginForm>
             </div>
         </v-dialog>
     </div>
@@ -47,6 +50,8 @@ import FirstTimeLoginForm from "./FirstTimeLoginForm.vue";
 const user = inject("currentUser");
 const firstTimeLogin = ref(true);
 const { nodes } = await useTemplate();
+const dontShowAgain = ref(false);
+
 async function useTemplate() {
     const cmsSTore = useCMSStore();
     const cmsUIStore = useCMSUIStore();

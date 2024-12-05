@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from "vue";
+import { inject, onBeforeUnmount, onMounted, onUnmounted, ref } from "vue";
 import { useAuthStore } from "@/stores/authStore";
 const showMaintenance = ref(true);
 const authStore = useAuthStore();
@@ -29,6 +29,10 @@ onMounted(() => {
             router.push({ name: "index" });
         }
     }, 5000);
+});
+
+onBeforeUnmount(() => {
+    document.body.style.overflow = "auto";
 });
 </script>
 

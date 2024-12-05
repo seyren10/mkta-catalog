@@ -39,7 +39,7 @@
                 <v-text-on-image
                     :noOverlay="true"
                     :class="`aspect-square cursor-pointer rounded-none`"
-                    :image="s3(item.product_thumbnail?.file?.filename)"
+                    :image="s3Thumbnail(item.product_thumbnail?.file?.filename)"
                 >
                 </v-text-on-image>
                 <div class="p-2">
@@ -118,7 +118,7 @@ import pagination from "@/components/PaginationLinks.vue"
 import productItemForm from "./components/productItemForm.vue";
 
 const router = inject("router");
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 import { useQuery } from "../../../composables/useQuery";
 
 

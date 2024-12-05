@@ -82,7 +82,10 @@
                     >
                         <v-text-on-image
                             :image="
-                                s3(variant.product_images?.at(0)?.file.filename)
+                                s3Thumbnail(
+                                    variant.product_images?.at(0)?.file
+                                        .filename,
+                                )
                             "
                             no-overlay
                             class="max-w-24"
@@ -97,6 +100,7 @@
         <div class="py-3">
             {{ product.description }}
         </div>
+        <Download />
     </div>
 </template>
 
@@ -119,7 +123,7 @@ const injectedProduct = inject("product");
 const category = inject("category");
 const categoryX = inject("category");
 
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 
 const conversion = ref("metric");
 const contact = ref(false);

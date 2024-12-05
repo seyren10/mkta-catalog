@@ -41,7 +41,7 @@
                     >
                         <v-text-on-image
                             :image="
-                                s3(product.product_thumbnail?.file.filename)
+                                s3Thumbnail(product.product_thumbnail?.file.filename)
                             "
                             no-overlay
                         ></v-text-on-image>
@@ -130,7 +130,7 @@ const {
     unSelectAll,
     selectedProducts,
 } = useSelectedProducts(products);
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 const viewSelected = ref(false);
 
 const viewingProducts = computed(() => {

@@ -12,7 +12,7 @@
 
             <div v-if="selectedImage" class="flex items-center gap-3">
                 <img
-                    :src="s3(selectedImage.filename)"
+                    :src="s3Thumbnail(selectedImage.filename)"
                     alt=""
                     class="aspect-square max-w-10 rounded-lg object-cover"
                 />
@@ -94,7 +94,7 @@ const props = defineProps({
 const dialog = ref(false);
 const cmsStore = useCMSUIStore();
 const selectedImage = ref(props.data);
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 const addToast = inject("addToast");
 const aspectRatio = ref(props.data?.aspectRatio ?? "aspect-square");
 

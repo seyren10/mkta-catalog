@@ -4,9 +4,7 @@
             <v-text-on-image
                 v-bind="$attrs"
                 :class="`aspect-square cursor-pointer rounded-none`"
-                :image="
-                    productThumbnail(item?.product_thumbnail?.file?.filename)
-                "
+                :image="s3Thumbnail(item?.product_thumbnail?.file?.filename)"
             >
                 <template #overlay="overlayProps">
                     <slot name="overlay" :item="item">
@@ -133,11 +131,7 @@ const handleRemoveFromWishlist = async () => {
         content: `${props.item.title} removed from wishlist`,
     });
 };
-const s3 = inject("s3");
-
-function productThumbnail(path) {
-    return s3(`thumbs/${path}`);
-}
+const s3Thumbnail = inject("s3Thumbnail");
 </script>
 
 <style lang="scss" scoped></style>
