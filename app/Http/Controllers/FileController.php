@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
 
+
+use Intervention\Image\Laravel\Facades\Image;
+
+
 class FileController extends Controller
 {
     #region Others
@@ -25,17 +29,6 @@ class FileController extends Controller
      */
     public function indexCache()
     {
-        /* add reset params to get the latest File data */
-        // if (request()->has('reset')) {
-        //     Cache::store('file')->forget('portal-files');
-        // }
-
-        // $files = Cache::store('file')->remember('portal-files', now()->addHour(), function () {
-        //     return File::orderBy('created_at', "DESC")->get();
-        // });
-
-        // return FileResource::collection($files);
-
         return FileResource::collection(File::orderBy('created_at', "DESC")->get());
     }
 
@@ -63,33 +56,19 @@ class FileController extends Controller
             $ext = $curFile->getClientOriginalExtension();
             $type = $curFile->getClientMimeType();
 
-            $generated_new_name = bin2hex(now() . $fileName) . "." . $ext;
             $data = '';
             if ((str_contains(trim(strtolower($type)), 'image'))) {
-
-                /*
-                user id
-                w and h
-
-                 */
-
-                // $path = $request->file('eFile')->store("uploads", 'local');
-                // $fullPath = storage_path('app/' . $path);
-                // $manager = new ImageManager(new Driver());
-                // $image = $manager->read($fullPath);
-                // $image->scale(1000,1000);
-                // $image->save();
-                // return response(array(
-                //     "fullPath" => $fullPath,
-                //     "message" => "File uploaded successfully.",
-                // ), 200);
-
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
-
+                
+                $image = Image::read(Storage::disk('s3')->get($data));
+                $image->resize(300,300, function($constraint){
+                    $constraint->aspectRatio();
+                });
+                $image->save('thumbs/fuckthis_example.jpg', quality: 10, progressive: true);
+                // $data = Storage::disk('s3')->put("thumbs/".$fileName.".jpeg", $image);
             } else {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
             }
-
             #endregion
             $curFile = File::create(
                 array(
@@ -98,9 +77,7 @@ class FileController extends Controller
                     'type' => $type,
                 )
             );
-
             DB::commit();
-
             return response(array(
                 "s3" => $data,
                 "data" => $curFile,
