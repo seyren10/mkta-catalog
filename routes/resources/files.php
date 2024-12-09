@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 
 
-Route::get('files-files', [FileController::class, 'index']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {

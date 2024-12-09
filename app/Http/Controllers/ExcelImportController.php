@@ -9,7 +9,7 @@ use App\Imports\CategoryImport;
 use App\Imports\ProductComponents;
 use App\Imports\ProductFilters;
 use App\Imports\ProductImport;
-use App\Imports\ProductRestrictionAndExemption;
+use App\Imports\ProductRestrictionAndExemptionv3;
 use App\Imports\RelatedAndRecommendedProducts;
 use App\Models\DataImport;
 use App\Services\DataImportService;
@@ -82,7 +82,7 @@ class ExcelImportController extends Controller
     {
         $path = Storage::disk('local')->put("public", $request->file('eFile'));
         $filePath = Storage::disk('local')->path($path);
-        Excel::queueImport(new ProductRestrictionAndExemption($filePath, Carbon::now()), $filePath);
+        Excel::queueImport(new ProductRestrictionAndExemptionv3($filePath, Carbon::now()), $filePath);
         return response()->json(['message' => 'File is being processed!']);
     }
 }

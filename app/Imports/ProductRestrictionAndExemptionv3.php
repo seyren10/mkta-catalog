@@ -2,7 +2,6 @@
 
 namespace App\Imports;
 
-use App\Models\Product;
 use App\Models\ProductExemption;
 use App\Models\ProductRestriction;
 use App\Services\DataImportService;
@@ -18,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithEvents, WithMultipleSheets
+class ProductRestrictionAndExemptionv3 implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithEvents, WithMultipleSheets
 {
     use Importable;
     public function chunkSize(): int
@@ -49,7 +48,7 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
         $sheetNames = $spreadsheet->getSheetNames();
         $sheets = [];
         foreach ($sheetNames as $sheetName) {
-            $sheets[$sheetName] = new ProductRestrictionAndExemption($this->filePath, $this->key);
+            $sheets[$sheetName] = new ProductRestrictionAndExemptionv3($this->filePath, $this->key);
         }
         return $sheets;
     }
@@ -85,66 +84,7 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
     #endregion
     public function collection(Collection $rows)
     {
-
-
-
-        #region Old 
-
         
-
-        $formattedRows = [];
-        foreach ($rows as $key => $row) {
-            $product_id = "";
-            foreach ($row as $cellIndex => $cell) {
-                $refValue = $this->rowsValue[$cellIndex];
-                $keyExist = array_key_exists($refValue, $formattedRows);
-                if (!$keyExist) {
-                    $formattedRows[$refValue] = array(
-                        'restricted' => [],
-                        'exempted' => []
-                    );
-                }
-                if ($cellIndex == 0) {
-                    $product_id = $cell;
-                    continue;
-                }
-                if (in_array(trim(strtolower($cell)), ['yes', 'true'])) {
-                    $formattedRows[$refValue]['restricted'] = [ ...$formattedRows[$refValue]['restricted'], $product_id];
-                }
-                if (in_array(trim(strtolower($cell)), ['no', 'false'])) {
-                    $formattedRows[$refValue]['exempted'] = [ ...$formattedRows[$refValue]['exempted'], $product_id];
-                }
-            }
-        }
-        $ProductList = array_keys($formattedRows);
-        $ProductList = collect(Product::whereIn('id', $ProductList)->get())->pluck('id')->toArray();
-
-        foreach ($formattedRows as $refValue => $Products) {
-
-            if ($refValue == '') {continue;}
-            
-            $cur_PAT = $this->product_access_type_id;
-            $temp = array_map(
-                function ($productId) use ($refValue, $cur_PAT) {
-                    return [
-                        "product_access_type_id" => $cur_PAT,
-                        "value" => $refValue,
-                        'product_id' => $productId,
-                    ];
-                }, $Products['restricted']);
-            ProductRestriction::insert($temp);
-
-            $temp = array_map(
-                function ($productId) use ($refValue, $cur_PAT) {
-                    return [
-                        "product_access_type_id" => $cur_PAT,
-                        "value" => $refValue,
-                        'product_id' => $productId,
-                    ];
-                }, $Products['exempted']);
-            ProductExemption::insert($temp);
-        }
-#endregion
     }
 
     #region Functions

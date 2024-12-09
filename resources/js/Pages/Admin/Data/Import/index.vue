@@ -162,8 +162,7 @@ pages.value = [
     ...pages.value,
     {
         pageTitle: "Product Restriction and Exemption",
-        templateURL:
-            "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/product-restriction-and-exemptions.xlsx",
+        // templateURL: "https://mkta-portal.s3.us-east-2.amazonaws.com/resources/product-restriction-and-exemptions.xlsx",
         actionURL: "/api/data-imports/product-restriction-and-exemptions",
         templateNotes: [],
         pageNotes: [],

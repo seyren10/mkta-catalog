@@ -23,8 +23,14 @@ class UserServices
             $filterValue = array($user->id);
             if( $data->ref_type == 'indirect' ){
                 $filterValue = DB::table($data->ref_table)->where('user_id', $user->id)->get()->pluck($data->ref_column)->toArray();
+                
             }
-            $restrictedProducts[$key] = ProductRestriction::whereIn('value', $filterValue)->where('product_access_type_id', $data->id)->get()->pluck('product_id')->toArray();
+            $isAllSelected = ProductRestriction::where('value',0)->where('product_access_type_id', $data->id)->get();
+            if($isAllSelected->count() > 0){
+                $restrictedProducts[$key] = ProductRestriction::where('value',0)->where('product_access_type_id', $data->id)->get()->pluck('product_id')->toArray();
+            }else{
+                $restrictedProducts[$key] = ProductRestriction::whereIn('value', $filterValue)->where('product_access_type_id', $data->id)->get()->pluck('product_id')->toArray();
+            }
         }
         $mergeRestricted = array();
         foreach ($restrictedProducts as $key => $value) {
@@ -39,7 +45,12 @@ class UserServices
             if( $data->ref_type == 'indirect' ){
                 $filterValue = DB::table($data->ref_table)->where('user_id', $user->id)->get()->pluck($data->ref_column)->toArray();
             }
-            $exemptedProducts[$key] = ProductExemption::whereIn('value', $filterValue)->where('product_access_type_id', $data->id)->get()->pluck('product_id')->toArray();
+            $isAllSelected = ProductExemption::where('value',0)->where('product_access_type_id', $data->id)->get();
+            if($isAllSelected->count() > 0){
+                $exemptedProducts[$key] = ProductExemption::where('value',0)->where('product_access_type_id', $data->id)->get()->pluck('product_id')->toArray();
+            }else{
+                $exemptedProducts[$key] = ProductExemption::whereIn('value', $filterValue)->where('product_access_type_id', $data->id)->get()->pluck('product_id')->toArray();
+            }
         }
         $mergeExempted = array();
         foreach ($exemptedProducts as $key => $value) {
@@ -50,6 +61,8 @@ class UserServices
         $result = array_filter($mergeRestricted, function($value) use ($mergeExempted) {
             return !in_array($value, $mergeExempted);
         });
+
+        
         return array_values($result);
     }
     public function getNonWishlistProducts(User $user){
