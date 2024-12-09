@@ -2,31 +2,27 @@
 
 namespace App\Imports;
 
+use App\Models\Product;
 use App\Models\ProductExemption;
 use App\Models\ProductRestriction;
 use App\Services\DataImportService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ProductRestrictionAndExemptionv3 implements ToCollection, ShouldQueue, WithStartRow, WithChunkReading, WithEvents, WithMultipleSheets
+class ProductRestrictionAndExemptionv3 implements ToCollection, WithStartRow, WithEvents, WithMultipleSheets
 {
     use Importable;
-    public function chunkSize(): int
-    {
-        return 100;
-    }
     public function startRow(): int
     {
-        return 7;
+        return 2;
     }
     #region for Data
     private $filePath;
@@ -52,28 +48,14 @@ class ProductRestrictionAndExemptionv3 implements ToCollection, ShouldQueue, Wit
         }
         return $sheets;
     }
-    private $rowsValue;
-    private $product_access_type_id;
     #endregion
     #region Events
     public function registerEvents(): array
     {
         return [
             BeforeSheet::class => function (BeforeSheet $event) {
-
-                $curSheet = $event->sheet;
-                $curSheet = $this->getSheet($event->sheet->getTitle());
-                $this->product_access_type_id = $curSheet->getCell('B1')->getValue();
-                $this->rowsValue = self::cellIterator($curSheet, 5);
-
-                $importData = DataImportService::getDataImport('import-product-restriction-and-exception', $this->product_access_type_id, $this->key);
+                $importData = DataImportService::getDataImport('import-product-restriction-and-exception', "", $this->key);
                 if ($importData->pass_key != $this->key) {
-                    // Pass key is Different
-                    // things should update
-                    Schema::disableForeignKeyConstraints();
-                    ProductRestriction::where('product_access_type_id', $this->product_access_type_id)->delete();
-                    ProductExemption::where('product_access_type_id', $this->product_access_type_id)->delete();
-                    Schema::enableForeignKeyConstraints();
                     $importData->pass_key = $this->key;
                     $importData->save();
                 }
@@ -84,7 +66,55 @@ class ProductRestrictionAndExemptionv3 implements ToCollection, ShouldQueue, Wit
     #endregion
     public function collection(Collection $rows)
     {
-        
+        $Products = Product::get()->pluck('id')->toArray();
+        $restricted = collect();
+        $exempted = collect();
+        $missingProducts = collect([]);
+        foreach ($rows as $row) {
+            $productID = $row[0];
+            // Removing the first column (productID)
+            $temp = array_slice($row->toArray(), 1);
+            // Chunk the remaining values into pairs
+            $chunks = array_chunk($temp, 2);
+            if (!in_array($productID, $Products)) {
+                $missingProducts->push($productID);
+                // continue;
+            }
+            // Schema::disableForeignKeyConstraints();
+            foreach ($chunks as $key => $chunk) {
+                if ($chunk[0] != null) {
+                    $tempData = [
+                        "product_access_type_id" => $key + 1,
+                        "value" => ($chunk[0] !== 'All') ? $chunk[0] : 0,
+                        "product_id" => $productID,
+                    ];
+                    // ProductExemption::create($tempData);
+                    $exempted->push($tempData);
+                }
+                if ($chunk[1] != null) {
+                    $tempData = [
+                        "product_access_type_id" => $key + 1,
+                        "value" => ($chunk[1] !== 'All') ? $chunk[1] : 0,
+                        "product_id" => $productID,
+                    ];
+                    // ProductRestriction::create($tempData);
+                    $restricted->push($tempData);
+                }
+            }
+            // Schema::enableForeignKeyConstraints();
+        }
+        // Log::info($restricted->chunk(200)->toArray());
+        // Insert the restricted and exempted data in chunks of 100
+        Log::info($missingProducts->toArray());
+        // return;
+        Schema::disableForeignKeyConstraints();
+        $restricted->chunk(200)->map(function ($allData) {
+           ProductRestriction::insert($allData->toArray()); 
+        });
+        $exempted->chunk(200)->map(function ($allData) {
+           ProductExemption::insert($allData->toArray()); 
+        });
+        Schema::enableForeignKeyConstraints();
     }
 
     #region Functions

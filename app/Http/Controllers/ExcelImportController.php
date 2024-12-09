@@ -82,7 +82,7 @@ class ExcelImportController extends Controller
     {
         $path = Storage::disk('local')->put("public", $request->file('eFile'));
         $filePath = Storage::disk('local')->path($path);
-        Excel::queueImport(new ProductRestrictionAndExemptionv3($filePath, Carbon::now()), $filePath);
+        Excel::import(new ProductRestrictionAndExemptionv3($filePath, Carbon::now()), $filePath);
         return response()->json(['message' => 'File is being processed!']);
     }
 }
