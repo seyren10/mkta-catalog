@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaCodeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyCodeController;
 use App\Http\Controllers\currentController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\NonWishlistController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionController;

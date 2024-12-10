@@ -12,6 +12,7 @@ class ProductAccessTypeResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        
         $data = parent::toArray($request);
         #region Source Data
         if ($request->has('includeSourceData')) {
@@ -19,6 +20,7 @@ class ProductAccessTypeResource extends JsonResource
                 $sourceData = DB::table($data['source_table'])
                     ->select(['id', $data['source_column']])
                     ->get();
+                
                 if ($request->has('includeSourceDataProducts')) {
                     if ($request->includeSourceDataProducts === 'true' || $request->includeSourceDataProducts === true) {
                         $sourceData = $sourceData->map(function ($item) use ($data) {
@@ -31,10 +33,15 @@ class ProductAccessTypeResource extends JsonResource
                     }
 
                 }
+                $tempData = [];
+                $tempData['id'] = 0;
+                $tempData[$data['source_column']] = 'All';
 
-                $data['source_data'] = $sourceData;
+                $sourceData = array_merge( $tempData, $sourceData->toArray());
+                // $data['source_data'] = $sourceData;
             }
         }
+        $data['fuck'] = 'fuck';
         #endregion
         #region Other Data
         $removeOtherData = true;

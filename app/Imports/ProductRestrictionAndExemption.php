@@ -86,6 +86,12 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
     public function collection(Collection $rows)
     {
 
+
+
+        #region Old 
+
+        
+
         $formattedRows = [];
         foreach ($rows as $key => $row) {
             $product_id = "";
@@ -138,7 +144,7 @@ class ProductRestrictionAndExemption implements ToCollection, ShouldQueue, WithS
                 }, $Products['exempted']);
             ProductExemption::insert($temp);
         }
-
+#endregion
     }
 
     #region Functions
