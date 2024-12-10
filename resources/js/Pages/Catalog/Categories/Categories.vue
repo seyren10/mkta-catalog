@@ -204,7 +204,7 @@ function useSortBy(cb) {
 onBeforeMount(async () => {
     sortBy.value = sortData.at(0).value;
 
-    await fetchProducts(+props.id);
+    // await fetchProducts(+props.id);
 });
 </script>
 
