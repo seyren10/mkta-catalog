@@ -13,6 +13,6 @@ class ProductImage extends Model
     protected $with = ['file'];
     public function file()
     {
-        return $this->hasOne(File::class, 'id', 'file_id');
+        return $this->hasOne(File::class, 'id', 'file_id')->withTrashed();
     }
 }

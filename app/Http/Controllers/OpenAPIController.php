@@ -10,30 +10,32 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class OpenAPIController extends Controller
 {
-
     public function current_test(Request $request)
     {
         $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
-        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/'.$imageKey));
+        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
         $image = Image::read($stream);
         $image->resize(300, 300, function ($constraint) {
             $constraint->aspectRatio();
         });
         $image->save(Storage::disk('public')->path('') . $imageKey, quality: 50, progressive: true);
-        Storage::disk('s3')->put("thumbs\\".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+        Storage::disk('s3')->makeDirectory('thumbs\\150x150');
+        Storage::disk('s3')->makeDirectory('thumbs\\200x200');
+        Storage::disk('s3')->makeDirectory('thumbs\\300x300');
+        Storage::disk('s3')->put("thumbs\\" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
         return;
     }
 
     public function current_test_all(Request $request)
     {
         $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
-        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/'.$imageKey));
+        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
         $image = Image::read($stream);
         $image->resize(150, 150, function ($constraint) {
             $constraint->aspectRatio();
         });
         $image->save(Storage::disk('public')->path('') . $imageKey, quality: 10, progressive: true);
-        Storage::disk('s3')->put("thumbs\\".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+        Storage::disk('s3')->put("thumbs\\" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
         return;
     }
 
@@ -48,7 +50,29 @@ class OpenAPIController extends Controller
         });
         $image->save(Storage::disk('public')->path('') . "/fuckthislife.jpg", quality: 10, progressive: true);
     }
+    #region Working Functions
+    public function streamSave($imageKey, $size = 150)
+    {
+        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
+        $image = Image::read($stream);
+        $image->resize($size, $size, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image->save(Storage::disk('public')->path($size . 'x' . $size) . '\\' . $imageKey, quality: 10, progressive: true);
+    }
 
+    public function productVerification(Product $product)
+    {
+        $passPhrase = env('APP_OPEN_KEY');
+        if ($passPhrase != $request->passPhrase) {
+            return response()->json(['message' => 'Incorrect passphrase.'], 401);
+        }
+        return response()->json(
+            [
+                'message' => 'Product Found',
+            ], 200);
+
+    }
     public function get_TMSProductAlbum(Request $request)
     {
         $passPhrase = env('APP_OPEN_KEY');
@@ -147,4 +171,5 @@ class OpenAPIController extends Controller
             return response()->json(['message' => $msg], $msgCode);
         }
     }
+    #endregion
 }
