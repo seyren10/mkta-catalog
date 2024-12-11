@@ -1,6 +1,6 @@
 <template>
     <header>
-        <NavApp class="fixed top-0 z-50 w-full" />
+        <NavApp class="fixed top-0 z-[9999] w-full" />
     </header>
 
     <main class="container space-y-20">

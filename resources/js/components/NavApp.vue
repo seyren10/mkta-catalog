@@ -3,11 +3,11 @@
         <div class="w-[12rem]">
             <img src="/Logo.png" alt="" class="invert" />
         </div>
-        <ul class="hidden flex-wrap justify-center gap-5 md:flex">
+        <ul class="hidden w-full justify-center gap-5 lg:flex">
             <li
                 v-for="link in links"
                 :key="link.title"
-                class="line-effect relative cursor-pointer"
+                class="line-effect relative cursor-pointer text-[min(.5vw+.5rem,1rem)]"
                 :class="{
                     'font-bold before:w-full before:opacity-100':
                         $route.hash === link.to,
@@ -24,7 +24,7 @@
                 <router-link :to="{ name: 'catalog' }">Catalog</router-link>
             </li>
         </ul>
-        <div class="hidden items-center gap-7 md:flex">
+        <div class="hidden items-center gap-7 lg:flex">
             <v-button v-if="!user" class="font-bold" @click="dialog = true"
                 >Login</v-button
             >
@@ -72,7 +72,7 @@
         </div>
 
         <!-- navigation toggler -->
-        <div class="md:hidden">
+        <div class="lg:hidden">
             <v-icon
                 class="cursor-pointer"
                 name="la-bars-solid"
