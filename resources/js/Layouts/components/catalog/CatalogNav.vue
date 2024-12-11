@@ -95,19 +95,19 @@
                                             <v-text-on-image
                                                 :image="s3(category.img)"
                                                 :title="category.title"
-                                                appear
+                                                no-overlay
                                                 class="aspect-[2/1]"
                                             >
-                                                <template #overlay="data">
+                                                <!-- <template #overlay="data">
                                                     <div
                                                         class="absolute left-0 top-0 bg-black bg-opacity-25 px-2 py-1 text-[.7rem] text-white [border-bottom-right-radius:0.5rem]"
                                                     >
                                                         {{ data.title }}
                                                     </div>
-                                                </template>
+                                                </template> -->
                                             </v-text-on-image>
                                         </router-link>
-                                        <ul
+                                        <!-- <ul
                                             class="flex max-h-[15rem] cursor-pointer flex-col flex-wrap gap-3 pl-1 pt-2 text-[.8rem] text-slate-400 md:max-h-fit md:flex-nowrap"
                                         >
                                             <li
@@ -133,7 +133,7 @@
                                                     }}</router-link
                                                 >
                                             </li>
-                                        </ul>
+                                        </ul> -->
                                     </div>
                                 </div>
                             </div>

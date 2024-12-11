@@ -34,7 +34,7 @@
         </nav>
         <main class="mt-2">
             <ProductListing :loading="loading">
-                <template #aside>
+                <!-- <template #aside>
                     <div
                         class="mb-4 flex flex-col items-center justify-between"
                     >
@@ -61,7 +61,8 @@
                         </div>
                     </div>
                     <Filter @change="fetchProducts(id)"></Filter>
-                </template>
+                </template> -->
+
                 <!-- <template #top> </template> -->
                 <template #default>
                     <Product
