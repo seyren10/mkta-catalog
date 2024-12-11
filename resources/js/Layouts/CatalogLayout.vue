@@ -1,10 +1,10 @@
 <template>
     <div class="bg-slate-100 text-sm text-slate-100">
-        <header class="sticky top-0 z-[2000]" v-if="user !== null">
+        <header class="fixed top-0 z-[2000] w-full" v-if="user !== null">
             <CatalogNav></CatalogNav>
         </header>
 
-        <main class="text-slate-600">
+        <main class="text-slate-600 mt-[9rem]">
             <RouterView v-slot="{ Component }" :key="$route.path">
                 <template v-if="Component">
                     <Suspense timeout="0">

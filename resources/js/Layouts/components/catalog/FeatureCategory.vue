@@ -1,5 +1,5 @@
 <template>
-    <div class="hidden flex-wrap gap-2 text-[.7rem] text-slate-400 sm:flex">
+    <div class="hidden lg:flex gap-2 text-[.7rem] text-slate-400">
         <div
             class="flex cursor-pointer items-center overflow-hidden rounded-lg border border-slate-500 duration-300 hover:border-slate-500"
             v-for="feature in categories"
@@ -7,7 +7,7 @@
         >
             <router-link
                 :to="{ name: 'categories', params: { id: feature.id } }"
-                class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white"
+                class="p-1 px-2 duration-300 hover:bg-slate-500 hover:text-white text-nowrap"
             >
                 {{ feature.title }}
             </router-link>

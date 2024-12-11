@@ -7,7 +7,7 @@
             <li
                 v-for="link in links"
                 :key="link.title"
-                class="line-effect relative cursor-pointer text-[min(.5vw+.5rem,1rem)]"
+                class="line-effect relative cursor-pointer text-[min(.5vw+.5rem,1rem)] text-nowrap"
                 :class="{
                     'font-bold before:w-full before:opacity-100':
                         $route.hash === link.to,
@@ -19,7 +19,7 @@
             </li>
             <li
                 v-if="user"
-                class="bg-[#04151f] bg-clip-text font-bold text-transparent"
+                class="bg-[#04151f] bg-clip-text text-[min(.5vw+.5rem,1rem)] font-bold text-transparent"
             >
                 <router-link :to="{ name: 'catalog' }">Catalog</router-link>
             </li>
@@ -28,13 +28,13 @@
             <v-button v-if="!user" class="font-bold" @click="dialog = true"
                 >Login</v-button
             >
-            <div
+            <!-- <div
                 v-else
                 class="text-sm font-medium underline underline-offset-1"
             >
                 <span>Welcome Back, </span
                 ><span class="text-accent"> {{ user.name }}!</span>
-            </div>
+            </div> -->
             <span class="text-slate-300">|</span>
             <div class="flex items-center gap-3" v-if="user">
                 <div>
