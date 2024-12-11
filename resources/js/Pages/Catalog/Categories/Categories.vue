@@ -34,7 +34,7 @@
         </nav>
         <main class="mt-2">
             <ProductListing :loading="loading">
-                <template #aside>
+                <!-- <template #aside>
                     <div
                         class="mb-4 flex flex-col items-center justify-between"
                     >
@@ -61,7 +61,8 @@
                         </div>
                     </div>
                     <Filter @change="fetchProducts(id)"></Filter>
-                </template>
+                </template> -->
+
                 <!-- <template #top> </template> -->
                 <template #default>
                     <Product
@@ -204,7 +205,7 @@ function useSortBy(cb) {
 onBeforeMount(async () => {
     sortBy.value = sortData.at(0).value;
 
-    await fetchProducts(+props.id);
+    // await fetchProducts(+props.id);
 });
 </script>
 

@@ -3,11 +3,11 @@
         <div class="w-[12rem]">
             <img src="/Logo.png" alt="" class="invert" />
         </div>
-        <ul class="hidden flex-wrap justify-center gap-5 md:flex">
+        <ul class="hidden w-full justify-center gap-5 lg:flex">
             <li
                 v-for="link in links"
                 :key="link.title"
-                class="line-effect relative cursor-pointer"
+                class="line-effect relative cursor-pointer text-[min(.5vw+.5rem,1rem)] text-nowrap"
                 :class="{
                     'font-bold before:w-full before:opacity-100':
                         $route.hash === link.to,
@@ -19,22 +19,22 @@
             </li>
             <li
                 v-if="user"
-                class="bg-[#04151f] bg-clip-text font-bold text-transparent"
+                class="bg-[#04151f] bg-clip-text text-[min(.5vw+.5rem,1rem)] font-bold text-transparent"
             >
                 <router-link :to="{ name: 'catalog' }">Catalog</router-link>
             </li>
         </ul>
-        <div class="hidden items-center gap-7 md:flex">
+        <div class="hidden items-center gap-7 lg:flex">
             <v-button v-if="!user" class="font-bold" @click="dialog = true"
                 >Login</v-button
             >
-            <div
+            <!-- <div
                 v-else
                 class="text-sm font-medium underline underline-offset-1"
             >
                 <span>Welcome Back, </span
                 ><span class="text-accent"> {{ user.name }}!</span>
-            </div>
+            </div> -->
             <span class="text-slate-300">|</span>
             <div class="flex items-center gap-3" v-if="user">
                 <div>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- navigation toggler -->
-        <div class="md:hidden">
+        <div class="lg:hidden">
             <v-icon
                 class="cursor-pointer"
                 name="la-bars-solid"

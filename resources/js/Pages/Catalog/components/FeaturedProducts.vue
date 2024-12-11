@@ -2,12 +2,8 @@
     <v-card class="relative border-none">
         <template #header>
             <div
-                class="sticky top-0 z-[10] rounded-lg bg-white py-5 text-primary"
-                :class="
-                    environment === 'catalog'
-                        ? 'top-[7rem] sm:top-[11rem] md:top-[9rem] xl:top-[8.5rem] 2xl:top-[7rem]'
-                        : ''
-                "
+                class="rounded-lg bg-white py-5 text-primary"
+            
             >
                 <div class="item-center flex justify-between gap-2">
                     <div class="flex flex-1 items-center justify-center gap-2">

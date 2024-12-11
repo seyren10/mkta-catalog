@@ -2,7 +2,7 @@
     <div class="hidden" ref="activator">
         <Teleport to="#overlay">
             <div
-                class="fixed z-[2001] rounded-lg bg-black bg-opacity-25 px-2 py-1 text-[.7rem] text-white"
+                class="fixed z-[9999] rounded-lg bg-black bg-opacity-25 px-2 py-1 text-[.7rem] text-white"
                 v-show="model"
                 ref="el"
             >
