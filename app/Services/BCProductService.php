@@ -2,6 +2,8 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+
+use App\Models\NewProductNotfication;
 class BCProductService
 {
     public function __construct(){
@@ -13,6 +15,24 @@ class BCProductService
     public function get_products()
     {
         $params = "/get-product-details";
+        $url = $this->endPoint.$params;
+
+        $client = new Client();
+
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'client_id' => $this->client_id,
+                'client_secret' => $this->client_secret
+            ]
+        ]);
+        
+        return json_decode($response->getBody(), true);
+    }
+
+    public function get_product($token){
+        $new_product = NewProductNotfication::where("toke", $token)->first();
+
+        $params = "/get-product-detail"."/".$new_product->product_id;
         $url = $this->endPoint.$params;
 
         $client = new Client();
