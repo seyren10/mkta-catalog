@@ -62,13 +62,12 @@ class NewProductNotification extends Command
             // Send Email
             $email = new EntraMailService;
             $test = $email->sendMail("New Product", $mail_message, "carlog@mkthemedattractions.com.ph");
-            dd($test);
 
             // Log New Product Notification
-            // NewProductNotificationModel::create([
-            //     'token' => $token,
-            //     'product_id' => $newProduct["id"],
-            // ]);
+            NewProductNotificationModel::create([
+                'token' => $token,
+                'product_id' => $newProduct["id"],
+            ]);
         }
 
         $this->info(count($newProducts) . ' new product(s) processed.');

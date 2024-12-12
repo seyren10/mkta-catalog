@@ -24,12 +24,11 @@ class EntraMailService
         $tokenRequestContext = new ClientCredentialContext(
             $this->tenant_id,
             $this->client_id,
-            $this->client_secret
+            $this->client_secret,
+            ['https://graph.microsoft.com/.default'] // Use only .default to leverage app permissions
         );
 
-        $scopes = ['Mail.Send'];
-
-        $graphServiceClient = new GraphServiceClient($tokenRequestContext, $scopes);
+        $graphServiceClient = new GraphServiceClient($tokenRequestContext);
 
         $requestBody = new SendMailPostRequestBody();
         $message = new Message();
@@ -48,6 +47,6 @@ class EntraMailService
         $requestBody->setMessage($message);
         $requestBody->setSaveToSentItems(false);
 
-        return $graphServiceClient->me()->sendMail()->post($requestBody)->wait();
+        return $graphServiceClient->users()->byUserId("b2a4cffb-cca0-4a44-af7b-24fed12cb40a")->sendMail()->post($requestBody)->wait();
     }
 }
