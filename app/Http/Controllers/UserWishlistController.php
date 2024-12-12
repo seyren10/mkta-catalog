@@ -48,7 +48,7 @@ class UserWishlistController extends Controller
     {
         $product_list = UserWishlist::where('user_id', $user->id)->get()->pluck('product_id');
 
-        return ProductResource::collection(Product::whereIn('id', $product_list)->get());
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereIn('id', $product_list)->get());
     }
 
     public function store(Request $request)

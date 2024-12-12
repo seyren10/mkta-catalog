@@ -14,7 +14,6 @@ use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -25,7 +24,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $restricted_products = $request->session()->get('restricted_products', array());
-
         $products = Product::whereNotIn('id', $restricted_products);
 
         /* Searching products */
@@ -62,7 +60,7 @@ class ProductController extends Controller
         }
 
         $products = Cache::store('file')->remember('products', $time, function () {
-            return Product::all(['id', 'title']);
+            return Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->select('id', 'title')->get();
         });
 
         return ProductResource::collection($products);
@@ -72,19 +70,19 @@ class ProductController extends Controller
     {
         $count = $request->has('count') ? $request->count : 20;
 
-        return ProductResource::collection(Product::latest()->take($count)->get());
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->latest()->take($count)->get());
     }
 
     public function randomProducts(Request $request)
     {
         $count = $request->has('count') ? $request->count : 20;
 
-        return ProductResource::collection(Product::inRandomOrder()->take($count)->get());
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->inRandomOrder()->take($count)->get());
     }
 
     public function getProductsWithCategoryId(Request $request, Category $category)
     {
-        $query = Product::whereHas('product_categories', function ($query) use ($category) {
+        $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereHas('product_categories', function ($query) use ($category) {
             if ($category->id) {
                 $query->where('product_categories.category_id', $category->id);
             }
@@ -153,6 +151,10 @@ class ProductController extends Controller
     }
     public function show(Request $request, Product $product)
     {
+        $restricted_products = $request->session()->get('restricted_products', array());
+        if (in_array($product->id, $restricted_products)) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
         return new ProductResource($product);
     }
     public function update(ProductRequest $request, Product $product)
@@ -222,7 +224,7 @@ class ProductController extends Controller
     public static function batchUpdate(Request $request)
     {
         foreach ($request->products as $key => $value) {
-            $curProduct = Product::where('id', $key)->with([])->first();
+            $curProduct = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->where('id', $key)->with([])->first();
             #region Data Structure Validation
             $allowContinue = [
                 !($curProduct === null),
