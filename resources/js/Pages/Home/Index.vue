@@ -8,7 +8,7 @@
         <OurSpecialtiesSection />
         <OurProcesses />
         <WorkWithUs />
-        <AboutUs />
+        <AboutUsNew />
         <BecomeAPartner />
     </main>
 
@@ -21,7 +21,7 @@
 import HeroSection from "./components/HeroSection.vue";
 import OurSpecialtiesSection from "./components/OurSpecialtiesSection.vue";
 import WorkWithUs from "./components/WorkWithUs.vue";
-import AboutUs from "./components/AboutUs.vue";
+import AboutUsNew from "./components/AboutUsNew.vue";
 import OurProcesses from "./components/OurProcesses.vue";
 import BecomeAPartner from "./components/BecomeAPartner.vue";
 import Footer from "./components/Footer.vue";

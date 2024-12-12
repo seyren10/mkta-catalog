@@ -52,8 +52,8 @@
                 class="z-[1000]"
                 :img-src="circleImageData"
                 base-img="/mk-images/bear-removebg-preview.png"
-                :offset="300"
-                :circle-size="150"
+                :offset="240"
+                :circle-size="120"
                 :speed="0.05"
             />
         </div>
