@@ -61,10 +61,9 @@
                             ></v-icon>
                         </div>
                     </button>
-                    <v-menu class="p-3" v-model="menu">
+                    <v-menu class="p-3" v-model="menu" center>
                         <template #default="{ loaded }">
                             <div
-                                v-if="loaded"
                                 class="scrollbar max-h-[70vh] max-w-[80rem] overflow-y-auto overscroll-contain bg-[#04151f] p-5"
                             >
                                 <div class="mb-8">

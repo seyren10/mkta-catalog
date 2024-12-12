@@ -11,7 +11,7 @@
                 @after-leave="emits('close')"
             >
                 <div
-                    class="fixed z-[2001] overflow-hidden rounded-lg bg-white text-sm shadow-lg duration-200"
+                    class="fixed left-0 z-[2001] overflow-hidden rounded-lg bg-white text-sm shadow-lg duration-200"
                     ref="menu"
                     v-show="show"
                 >
@@ -34,6 +34,10 @@ const props = defineProps({
         default: 500,
     },
     persistent: {
+        type: Boolean,
+        default: false,
+    },
+    center: {
         type: Boolean,
         default: false,
     },
@@ -75,7 +79,7 @@ const showMenu = async (e) => {
     }
 };
 
-const handleShowMenu = (parent, child) => {
+const handleShowMenu = async (parent, child) => {
     loaded.value = true;
     const parentBound = parent.getBoundingClientRect();
     const parentTop = parentBound.top;
@@ -84,6 +88,12 @@ const handleShowMenu = (parent, child) => {
     const windowWidth = window.innerWidth;
 
     child.style.top = parentTop + parentHeight + 8 + "px";
+
+    if (props.center) {
+        child.style.left = (windowWidth - childBound.width) / 2 + "px";
+
+        return;
+    }
 
     if (parentBound.left > windowWidth / 2) {
         //the parent element is on the right side of the screen
