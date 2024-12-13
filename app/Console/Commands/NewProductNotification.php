@@ -41,7 +41,9 @@ class NewProductNotification extends Command
         $productData = $bcProductService->get_products();
         $products = $productData["data"] ?? [];
 
-        $newProducts = [];
+        $product_count = 0;
+        $mail_message = "<p>Hi,</p>";
+        $mail_message .= "<p>New Product has been created. Please check the URL and complete the missing details!</p>";
 
         foreach ($products as $product) {
             $apiUpdatedAt = Carbon::parse($product['updated_at']);
@@ -50,26 +52,30 @@ class NewProductNotification extends Command
             $existsInNotifications = NewProductNotificationModel::where('product_id', $product["id"])->exists();
 
             if (!$existsInProducts && $apiUpdatedAt->isCurrentWeek() && !$existsInNotifications) {
-                $newProducts[] = $product;
+                $token = $bcProductService->generateToken();
+
+                $mail_message .= "<hr>";
+                $mail_message .= "<p><b>SKU:</b> ".$product["id"]."<br>";
+                $mail_message .= "<b>Product:</b> ".$product["title"]."<br><br>";
+                $mail_message .= "<b>URL:</b> ".$token."</p>";
+
+                // Log New Product Notification
+                NewProductNotificationModel::create([
+                    'token' => $token,
+                    'product_id' => $product["id"],
+                ]);
+
+                $product_count += 1;
             }
         }
 
-        foreach ($newProducts as $newProduct) {
-            $token = $bcProductService->generateToken();
+        $mail_message .= "<hr>";
+        $mail_message .= "<p>Best Regards,<br>".config('mail.from.name')."</p>";
 
-            $mail_message = "New Product has been created please check click the URL and complete the missing details! \n Token: ".$token."\n SKU: ".$newProduct["id"]."\n Product: ".$newProduct["title"];
+        // Send Email
+        $email = new EntraMailService;
+        $test = $email->sendMail("New Product", $mail_message, config('api.new_details_notifications.email'), true); // Pass true for HTML email
 
-            // Send Email
-            $email = new EntraMailService;
-            $test = $email->sendMail("New Product", $mail_message, "carlog@mkthemedattractions.com.ph");
-
-            // Log New Product Notification
-            NewProductNotificationModel::create([
-                'token' => $token,
-                'product_id' => $newProduct["id"],
-            ]);
-        }
-
-        $this->info(count($newProducts) . ' new product(s) processed.');
+        $this->info($product_count . ' new product(s) processed.');
     }
 }

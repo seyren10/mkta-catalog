@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
+
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Jobs\ZipProductImages;
@@ -14,6 +16,8 @@ use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+
+use App\Services\BCProductService;
 
 class ProductController extends Controller
 {
@@ -304,5 +308,27 @@ class ProductController extends Controller
         return response()->noContent(200);
     }
     #endregion
+
+    public function bcProductDetails(Request $request){
+        try{
+            $product_service = new BCProductService;
+            $product = $product_service->get_product($request->token);
+
+            $data = [
+                "status" => 200,
+                "data" => $product
+            ];
+        }catch(Thorwable $e){
+            \Log::error($e);
+            $message = "Error: ".$e->getMessage();
+
+            $data = [
+                "message" => $message,
+                "status" => 400
+            ];
+        }
+
+        return response()->json($data)
+    }
 
 }

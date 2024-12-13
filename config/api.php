@@ -27,5 +27,9 @@ return [
         'tenant_id' => env('ENTRA_TENAT_ID'),
         'object_id' => env('ENTRA_OBJECT_ID'),
         'email_id' => env('ENTRA_EMAIL_ID')
+    ],
+
+    'new_details_notifications' => [
+        'email' => env('NEW_PRODUCT_DETAILS_RECIPIENT')
     ]
 ];

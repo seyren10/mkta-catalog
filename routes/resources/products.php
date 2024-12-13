@@ -10,6 +10,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/cached', [ProductController::class, 'indexCached']);
         Route::put('product-batch', [ProductController::class, 'batchUpdate']);
         Route::get('/random', [ProductController::class, 'randomProducts']);
+        Route::get('/bc-product-details', [ProductController::class, 'bcProductDetails']);
     });
 
     Route::get('product-images/zip/{product}', [ProductController::class, "zipProductImages"]);

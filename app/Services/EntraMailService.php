@@ -34,15 +34,17 @@ class EntraMailService
         $requestBody = new SendMailPostRequestBody();
         $message = new Message();
         $message->setSubject($subject);
+
         $messageBody = new ItemBody();
-        $messageBody->setContentType(new BodyType('text'));
+        $messageBody->setContentType(new BodyType('HTML'));
         $messageBody->setContent($mail_message);
         $message->setBody($messageBody);
-        $toRecipientsRecipient1 = new Recipient();
-        $toRecipientsRecipient1EmailAddress = new EmailAddress();
-        $toRecipientsRecipient1EmailAddress->setAddress($recipient);
-        $toRecipientsRecipient1->setEmailAddress($toRecipientsRecipient1EmailAddress);
-        $toRecipientsArray []= $toRecipientsRecipient1;
+
+        $toRecipientsRecipient = new Recipient();
+        $toRecipientsRecipientEmailAddress = new EmailAddress();
+        $toRecipientsRecipientEmailAddress->setAddress($recipient);
+        $toRecipientsRecipient->setEmailAddress($toRecipientsRecipientEmailAddress);
+        $toRecipientsArray []= $toRecipientsRecipient;
         $message->setToRecipients($toRecipientsArray);
 
         $requestBody->setMessage($message);
