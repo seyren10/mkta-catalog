@@ -11,6 +11,9 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('notification:new-product')->everyFiveMinutes();
 
 Artisan::command('current', function () {
 
