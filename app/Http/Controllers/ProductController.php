@@ -320,22 +320,14 @@ class ProductController extends Controller
                     "data" => $product
                 ];
             }else{
-                $data = [
-                    "message" => "Product not found",
-                    "status" => 404
-                ];
-
-                abort(404);
+                abort(404, "Product not found");
             }
 
         }catch(Throwable $e){
             \Log::error($e);
             $message = "Error: ".$e->getMessage();
 
-            $data = [
-                "message" => $message,
-                "status" => 400
-            ];
+            abort(400, $message);
         }
 
         return response()->json($data);
