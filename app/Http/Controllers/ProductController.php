@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Throwable;
-
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Jobs\ZipProductImages;
@@ -324,8 +322,7 @@ class ProductController extends Controller
                     "message" => "Product not found"
                 ], 404);
             }
-
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
 
