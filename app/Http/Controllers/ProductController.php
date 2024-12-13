@@ -318,7 +318,7 @@ class ProductController extends Controller
                 "status" => 200,
                 "data" => $product
             ];
-        }catch(Thorwable $e){
+        }catch(Throwable $e){
             \Log::error($e);
             $message = "Error: ".$e->getMessage();
 
