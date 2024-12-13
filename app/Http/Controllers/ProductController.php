@@ -309,28 +309,34 @@ class ProductController extends Controller
     }
     #endregion
 
-    public function bcProductDetails(Request $request){
-        try{
+    public function bcProductDetails(Request $request)
+    {
+        try {
             $product_service = new BCProductService;
             $product = $product_service->get_product($request->token);
 
-            if($product){
+            if ($product) {
                 $data = [
                     "status" => 200,
                     "data" => $product
                 ];
-            }else{
-                abort(404, "Product not found");
+            } else {
+                return response()->json([
+                    "status" => 404,
+                    "message" => "Product not found"
+                ], 404);
             }
 
-        }catch(Throwable $e){
+        } catch (Throwable $e) {
             \Log::error($e);
-            $message = "Error: ".$e->getMessage();
+            $message = "Error: " . $e->getMessage();
 
-            abort(400, $message);
+            return response()->json([
+                "status" => 400,
+                "message" => $message
+            ], 400);
         }
 
         return response()->json($data);
     }
-
 }
