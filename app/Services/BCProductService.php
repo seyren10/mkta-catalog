@@ -30,7 +30,7 @@ class BCProductService
     }
 
     public function get_product($token){
-        $new_product = NewProductNotfication::where("toke", $token)->first();
+        $new_product = NewProductNotfication::where("token", $token)->first();
 
         $params = "/get-product-detail"."/".$new_product->product_id;
         $url = $this->endPoint.$params;
