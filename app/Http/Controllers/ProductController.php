@@ -317,12 +317,10 @@ class ProductController extends Controller
 
             if ($product) {
                 $data = [
-                    "status" => 200,
                     "data" => $product
                 ];
             } else {
                 return response()->json([
-                    "status" => 404,
                     "message" => "Product not found"
                 ], 404);
             }
@@ -332,7 +330,6 @@ class ProductController extends Controller
             $message = "Error: " . $e->getMessage();
 
             return response()->json([
-                "status" => 400,
                 "message" => $message
             ], 400);
         }
