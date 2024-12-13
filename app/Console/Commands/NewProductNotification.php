@@ -10,6 +10,7 @@ use App\Services\EntraMailService;
 use App\Mail\NewProductMail;
 
 use App\Models\Product;
+use App\Models\ProductBasicDetail;
 use App\Models\NewProductNotfication as NewProductNotificationModel;
 
 use Carbon\Carbon;
@@ -37,11 +38,15 @@ class NewProductNotification extends Command
      */
     public function handle()
     {
+        // Fetch Product Data
         $bcProductService = new BCProductService();
         $productData = $bcProductService->get_products();
+        // End Fetch Products Data
+
         $products = $productData["data"] ?? [];
 
         $product_count = 0;
+
         $mail_message = "<p>Hi,</p>";
         $mail_message .= "<p>New Product has been created.<br>Please check the URL and complete the missing details!</p>";
 
@@ -65,6 +70,19 @@ class NewProductNotification extends Command
                     'product_id' => $product["id"],
                 ]);
 
+                ProductBasicDetail::create([
+                    "product_id" => $product["id"],
+                    "parent_code" => $product["parent_code"],
+                    "title" => $product["title"],
+                    "description" => $product["description"],
+                    "volume" => ($product["volume"] ?? 0),
+                    "weight_net" => ($product["weight_net"] ?? 0),
+                    "weight_gross" => ($product["weight_gross"] ?? 0),
+                    "dimension_length" => ($product["dimension_length"] ?? 0),
+                    "dimension_width" => ($product["dimension_width"] ?? 0),
+                    "dimension_height" => ($product["dimension_height"] ?? 0)
+                ]);
+
                 $product_count += 1;
             }
         }
@@ -72,9 +90,11 @@ class NewProductNotification extends Command
         $mail_message .= "<hr>";
         $mail_message .= "<p>Best Regards,<br>".config('mail.from.name')."</p>";
 
-        // Send Email
-        $email = new EntraMailService;
-        $test = $email->sendMail("New Product", $mail_message, config('api.new_details_notifications.email'), true); // Pass true for HTML email
+        if($product_count > 0){
+            // Send Email
+            $email = new EntraMailService;
+            $test = $email->sendMail("New Product", $mail_message, config('api.new_details_notifications.email'), true); // Pass true for HTML email
+        }
 
         $this->info($product_count . ' new product(s) processed.');
     }
