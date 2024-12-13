@@ -319,7 +319,8 @@ class ProductController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    "message" => "Product not found"
+                    'message' => 'product not found',
+                    'status' => 404
                 ], 404);
             }
         } catch (\Throwable $e) {

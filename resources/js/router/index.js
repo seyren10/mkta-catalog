@@ -4,6 +4,8 @@ import { useUserStore } from "@/stores/userStore";
 import home_routes from "./router_home.js";
 import admin_routes from "./router_admin.js";
 import catalog_routes from "./router_catalog.js";
+import product_verification_routes from "./router_product_verification.js";
+
 import { storeToRefs } from "pinia";
 
 const routes = [
@@ -21,7 +23,13 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    routes: [...home_routes, ...catalog_routes, ...admin_routes, ...routes],
+    routes: [
+        ...home_routes,
+        ...catalog_routes,
+        ...admin_routes,
+        ...routes,
+        ...product_verification_routes,
+    ],
 
     // scrollBehavior(to, from, savedPosition) {
     //     if (to.hash) {

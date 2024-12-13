@@ -12,6 +12,7 @@
             :id="id"
             class="hidden h-0 w-0"
             v-model="model"
+            @change="(e) => $emit('change', e)"
             :value="value"
         />
         <label :for="id" v-bind="$attrs" class="cursor-pointer">{{
@@ -31,6 +32,7 @@ const props = defineProps({
     label: String,
     value: [String, Object],
 });
+const emit = defineEmits(["change"]);
 const model = defineModel();
 
 //reactives
