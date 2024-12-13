@@ -18,6 +18,7 @@ class EntraMailService
         $this->client_secret = config('api.entra.client_secret');
         $this->tenant_id = config('api.entra.tenant_id');
         $this->object_id = config('api.entra.object_id');
+        $this->email_id = config('api.entra.email_id');
     }
 
     public function sendMail($subject, $mail_message, $recipient){
@@ -47,6 +48,10 @@ class EntraMailService
         $requestBody->setMessage($message);
         $requestBody->setSaveToSentItems(false);
 
-        return $graphServiceClient->users()->byUserId("b2a4cffb-cca0-4a44-af7b-24fed12cb40a")->sendMail()->post($requestBody)->wait();
+        return $graphServiceClient->users()
+                                ->byUserId($this->email_id)
+                                ->sendMail()
+                                ->post($requestBody)
+                                ->wait();
     }
 }
