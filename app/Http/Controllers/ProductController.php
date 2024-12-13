@@ -324,6 +324,8 @@ class ProductController extends Controller
                     "message" => "Product not found",
                     "status" => 404
                 ];
+
+                abort(404);
             }
 
         }catch(Throwable $e){
