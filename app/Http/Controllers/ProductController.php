@@ -316,9 +316,9 @@ class ProductController extends Controller
             $product = $product_service->get_product($request->token);
 
             if ($product) {
-                $data = [
-                    "data" => $product
-                ];
+                return response()->json([
+                    "data" =>$product
+                ], 200);
             } else {
                 return response()->json([
                     "message" => "Product not found"
@@ -333,7 +333,5 @@ class ProductController extends Controller
                 "message" => $message
             ], 400);
         }
-
-        return response()->json($data);
     }
 }
