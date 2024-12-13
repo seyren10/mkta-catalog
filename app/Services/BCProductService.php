@@ -32,19 +32,23 @@ class BCProductService
     public function get_product($token){
         $new_product = NewProductNotfication::where("token", $token)->first();
 
-        $params = "/get-product-detail"."/".$new_product->product_id;
-        $url = $this->endPoint.$params;
+        if($new_product){
+            $params = "/get-product-detail"."/".$new_product->product_id;
+            $url = $this->endPoint.$params;
 
-        $client = new Client();
+            $client = new Client();
 
-        $response = $client->request('GET', $url, [
-            'headers' => [
-                'client_id' => $this->client_id,
-                'client_secret' => $this->client_secret
-            ]
-        ]);
-        
-        return json_decode($response->getBody(), true);
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'client_id' => $this->client_id,
+                    'client_secret' => $this->client_secret
+                ]
+            ]);
+            
+            return json_decode($response->getBody(), true);
+        }else{
+            return false;
+        }
     }
 
     public function generateToken($length = 32) {

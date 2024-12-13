@@ -314,10 +314,18 @@ class ProductController extends Controller
             $product_service = new BCProductService;
             $product = $product_service->get_product($request->token);
 
-            $data = [
-                "status" => 200,
-                "data" => $product
-            ];
+            if($product){
+                $data = [
+                    "status" => 200,
+                    "data" => $product
+                ];
+            }else{
+                $data = [
+                    "message" => "Product not found",
+                    "status" => 404
+                ];
+            }
+
         }catch(Throwable $e){
             \Log::error($e);
             $message = "Error: ".$e->getMessage();
