@@ -61,7 +61,7 @@ class NewProductNotification extends Command
 
                 $mail_message .= "<hr>";
                 $mail_message .= "<p><b>SKU:</b> ".$product["id"]."<br>";
-                $mail_message .= "<b>Product:</b> ".$product["title"]."<br>";
+                $mail_message .= "<b>Product:</b> ".$product["title"]."<p>";
                 $mail_message .= '<p><b>URL:</b> <a href="' . url('/verify-product') . '?token=' . $token . '">' . url('/verify-product') . '?token=' . $token . '</a></p>';
 
                 // Log New Product Notification
