@@ -43,7 +43,7 @@ class NewProductNotification extends Command
 
         $product_count = 0;
         $mail_message = "<p>Hi,</p>";
-        $mail_message .= "<p>New Product has been created. Please check the URL and complete the missing details!</p>";
+        $mail_message .= "<p>New Product has been created.<br>Please check the URL and complete the missing details!</p>";
 
         foreach ($products as $product) {
             $apiUpdatedAt = Carbon::parse($product['updated_at']);
