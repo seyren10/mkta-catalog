@@ -20,7 +20,9 @@
             </div>
 
             <div class="space-y-3">
-                <v-alert type="error" v-if="errors">{{ errors }}</v-alert>
+                <v-alert type="error" v-if="errors">{{
+                    errors.data.message
+                }}</v-alert>
                 <v-text-field
                     prepend-inner-icon="co-mail-ru"
                     label="Email"
@@ -128,7 +130,11 @@ const infoList = computed(() => {
         //     title: "Contact (Denmark): ",
         //     value: "+45 41 10 64 74",
         // },
-        { icon: "io-mail-outline", title: "Email", value: "sales@mkthemedattractions.com.ph" },
+        {
+            icon: "io-mail-outline",
+            title: "Email",
+            value: "sales@mkthemedattractions.com.ph",
+        },
         {
             icon: "io-location-outline",
             title: "Address",

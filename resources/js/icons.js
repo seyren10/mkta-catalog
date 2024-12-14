@@ -155,9 +155,11 @@ import {
     BiRecycle,
     FaRecycle,
     MdRestoreSharp,
+    PrInfo,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    PrInfo,
     MdKeyboardarrowupRound,
     MdRestoreSharp,
     FaRecycle,

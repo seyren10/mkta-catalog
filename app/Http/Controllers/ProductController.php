@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+use App\Services\BCProductService;
+
 class ProductController extends Controller
 {
     #region Default Function for Controllers
@@ -305,4 +307,29 @@ class ProductController extends Controller
     }
     #endregion
 
+    public function bcProductDetails(Request $request)
+    {
+        try {
+            $product_service = new BCProductService;
+            $product = $product_service->get_product($request->token);
+
+            if ($product) {
+                return response()->json([
+                    "data" =>$product
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'product not found',
+                    'status' => 404
+                ], 404);
+            }
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            return response()->json([
+                "message" => $message
+            ], 400);
+        }
+    }
 }

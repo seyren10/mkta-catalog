@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class Truncate extends Command
+class GetRestrictions extends Command
 {
     protected $signature = 'retrieve-restrictions';
     protected $description = 'Backup the database to individual SQL files for each table with structure and data';
