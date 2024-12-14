@@ -175,7 +175,6 @@ const submit = async () => {
             const res = await exec(props.actionURL, "post", {
                 eFile: file,
             });
-            // console.log(res)
             if(res.status == 200){
                 list.value[index].isDone = true
             }

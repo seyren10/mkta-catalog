@@ -236,7 +236,6 @@ const handleSearch = () => {
 const user = inject("currentUser");
 
 function handleHide(el, hidden) {
-    console.log(hidden);
     el.classList.toggle("!h-0", !hidden);
 }
 </script>

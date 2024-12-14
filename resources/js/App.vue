@@ -90,7 +90,6 @@ setInterval(async () => {
             // await notificationStore.getNotifications(currentUser.value.id);
         }
     } else {
-        // console.log('Skipped Notification Updates')
     }
 }, 1000 * sec.value);
 </script>

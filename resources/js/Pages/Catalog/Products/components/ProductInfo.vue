@@ -194,7 +194,6 @@ const breadCrumbData = computed(() => {
         return acc;
     }, []);
 
-    console.log("Category", cat);
 
     return [
         { name: "catalog", text: "Catalog" },
