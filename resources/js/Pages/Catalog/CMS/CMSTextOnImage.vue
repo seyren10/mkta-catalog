@@ -3,7 +3,7 @@
         <v-text-on-image
             :class="`${data.aspectRatio}`"
             v-if="!data?.link"
-            :image="s3(data.filename)"
+            :image="s3Thumbnail(data.filename)"
             :no-overlay="!data.overlay"
             :title="data.heading"
             :subtitle="data.paragraph"
@@ -11,7 +11,7 @@
         <router-link v-else :to="data.path">
             <v-text-on-image
                 :class="`${data.aspectRatio}`"
-                :image="s3(data.filename)"
+                :image="s3Thumbnail(data.filename)"
                 :no-overlay="!data.overlay"
                 :title="data.heading"
                 :subtitle="data.paragraph"
@@ -27,7 +27,7 @@ const props = defineProps({
     data: Object,
 });
 
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 </script>
 
 <style lang="scss" scoped></style>
