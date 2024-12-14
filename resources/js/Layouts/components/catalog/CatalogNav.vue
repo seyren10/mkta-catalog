@@ -92,7 +92,9 @@
                                             }"
                                         >
                                             <v-text-on-image
-                                                :image="s3(category.img)"
+                                                :image="
+                                                    s3Thumbnail(category.img)
+                                                "
                                                 :title="category.title"
                                                 no-overlay
                                                 class="aspect-[2/1]"
@@ -217,7 +219,7 @@ const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
 const search = ref(route.query.q || "");
-const s3 = inject("s3");
+const s3Thumbnail = inject("s3Thumbnail");
 
 //non-reactives
 const headerData = [
