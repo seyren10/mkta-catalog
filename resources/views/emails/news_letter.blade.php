@@ -25,6 +25,10 @@
             padding: 20px;
             text-align: center;
         }
+        .header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
         .header h1 {
             margin: 0;
             font-size: 24px;
@@ -57,11 +61,13 @@
             color: #555;
         }
         .product-button {
+            display: inline-block;
             background-color: #007bff;
             color: #ffffff;
             padding: 10px 15px;
             text-decoration: none;
             border-radius: 3px;
+            text-align: center;
         }
         .footer {
             background-color: #f1f1f1;
@@ -75,6 +81,7 @@
 <body>
     <div class="email-container">
         <div class="header">
+            <img src="{{ asset('Logo.png') }}" alt="Company Logo">
             <h1>Check Out Our New Products!</h1>
         </div>
         <div class="content">
@@ -86,7 +93,7 @@
                 <div class="product-details">
                     <h2 class="product-title">{{ $product->title }}</h2>
                     <p class="product-description">{{ $product->description }}</p>
-                    <a href="{{ $product['url'] }}" class="product-button">Shop Now</a>
+                    <a href="{{ url('/catalog/product/'.$product->id) }}" class="product-button">Shop Now</a>
                 </div>
             </div>
             @endforeach
