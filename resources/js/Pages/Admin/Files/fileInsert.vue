@@ -32,7 +32,7 @@
                 {{ file.file_name }}
             </li>
         </ul>
-        {{ errors }}
+        {{ errors.data.message }}
         <div class="flex justify-end">
             <v-button
                 @click="close()"

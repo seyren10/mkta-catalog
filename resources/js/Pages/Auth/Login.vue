@@ -23,7 +23,7 @@
 
                 <form class="mb-20 mt-10 grid gap-3" @submit="handleSubmit">
                     <v-alert type="error" v-if="errors" class="text-sm">
-                        {{ errors }}
+                        {{ errors.data.message }}
                     </v-alert>
                     <v-text-field
                         v-model="form.email"
