@@ -21,7 +21,7 @@ class EntraMailService
         $this->email_id = config('api.entra.email_id');
     }
 
-    public function sendMail($subject, $mail_message, $recipient){
+    public function sendMail($subject, $mail_message, $recipient, $is_html){
         $tokenRequestContext = new ClientCredentialContext(
             $this->tenant_id,
             $this->client_id,
@@ -36,7 +36,13 @@ class EntraMailService
         $message->setSubject($subject);
 
         $messageBody = new ItemBody();
-        $messageBody->setContentType(new BodyType('HTML'));
+
+        if($is_html){
+            $messageBody->setContentType(new BodyType('HTML'));
+        }else{
+            $messageBody->setContentType(new BodyType('text'));
+        }
+
         $messageBody->setContent($mail_message);
         $message->setBody($messageBody);
 
