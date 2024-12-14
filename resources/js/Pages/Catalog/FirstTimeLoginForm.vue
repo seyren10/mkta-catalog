@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-alert type="error" v-if="errors"> {{ errors }}</v-alert>
+        <v-alert type="error" v-if="errors"> {{ errors.data.message }}</v-alert>
         <form class="space-y-4" @submit.prevent="handleSubmit">
             <VPasswordField
                 v-model="form.password"
