@@ -15,6 +15,15 @@ export const useWishlistStore = defineStore("wishlists", () => {
             ...payload,
         });
     }
+    async function sendProductInquiry(payload) {
+        const res = await exec(
+            "/api/customer-wishlist/product-inquery",
+            "post",
+            {
+                ...payload,
+            },
+        );
+    }
 
     const getWishlists = async () => {
         let data = [];
@@ -85,6 +94,7 @@ export const useWishlistStore = defineStore("wishlists", () => {
         deleteAllWishlist,
         isIncludedOnWishlist,
         sendWishlist,
+        sendProductInquiry,
 
         loading,
         errors,

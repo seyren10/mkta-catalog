@@ -175,6 +175,7 @@ const handleSendWishlist = async () => {
             },
             content: `Your request has been successfully submitted. Our team will review it and contact you shortly.
                  Thank you for reaching out to us, and we appreciate your patience while we process your request.`,
+            timeout: 5000,
         });
     }
 };

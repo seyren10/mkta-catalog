@@ -22,7 +22,15 @@
             <v-textarea
                 label="Message"
                 prepend-inner-icon="fa-regular-comment-alt"
+                v-model="message"
             ></v-textarea>
+
+            <v-button
+                class="mt-4 bg-accent text-white shadow-sm"
+                :loading="loading"
+                @click="handleSend"
+                >Send</v-button
+            >
         </section>
         <section class="hidden md:block">
             <MKMap
@@ -44,11 +52,18 @@
 
 <script setup>
 import MKMap from "@/components/MKMap.vue";
-import { computed } from "vue";
+import { computed, inject, ref } from "vue";
+import { useWishlistStore } from "../stores/wishlistStore";
+import { storeToRefs } from "pinia";
 
-defineProps({
+const props = defineProps({
     item: Object,
 });
+const emit = defineEmits(["send"]);
+const wishlistStore = useWishlistStore();
+const { loading, errors } = storeToRefs(wishlistStore);
+const message = ref("");
+const addToast = inject("addToast");
 
 const infoList = computed(() => {
     return [
@@ -60,6 +75,32 @@ const infoList = computed(() => {
         },
     ];
 });
+
+async function handleSend() {
+    await wishlistStore.sendProductInquiry({
+        productCode: props.item.id,
+        message: message.value,
+    });
+
+    if (!errors.value) {
+        addToast({
+            props: {
+                type: "success",
+            },
+            content: `Your request has been successfully submitted. Our team will review it and contact you shortly.
+                 Thank you for reaching out to us, and we appreciate your patience while we process your request.`,
+            timeout: 5000,
+        });
+        message.value = "";
+    } else {
+        addToast({
+            props: {
+                type: "danger",
+            },
+            content: "Something went wrong. Please try again later",
+        });
+    }
+}
 </script>
 
 <style lang="scss" scoped></style>
