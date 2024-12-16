@@ -5,10 +5,10 @@
         >
             <v-text-on-image
                 v-for="(img, index) in productImages"
-                :key="img"
+                :key="s3Thumbnail(img)"
                 :image="img"
                 no-overlay
-                class="aspect-square rounded-lg object-cover border"
+                class="aspect-square rounded-lg border object-cover"
                 :class="{
                     ' ring ring-accent ring-offset-4':
                         currentImageIndex === index,
@@ -55,6 +55,8 @@ const productImages = inject("productImages");
 const id = inject("id");
 const currentImageIndex = inject("currentImageIndex");
 const lightbox = inject("lightbox");
+
+const s3Thumbnail = inject("s3Thumbnail");
 </script>
 
 <style lang="scss" scoped></style>
