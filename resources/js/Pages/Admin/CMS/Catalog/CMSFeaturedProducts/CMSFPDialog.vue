@@ -6,8 +6,8 @@
             <template #default="{ data }">
                 <div class="flex items-center gap-2">
                     <div class="text-slate-500">
-                        {{ pagination.current_page }} of
-                        {{ pagination.last_page }}
+                        {{ pagination?.current_page }} of
+                        {{ pagination?.last_page }}
                     </div>
 
                     <div class="flex text-slate-500">

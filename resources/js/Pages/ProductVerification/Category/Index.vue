@@ -1,15 +1,17 @@
 <script setup>
 import { useCategoryStore } from "@/stores/categoryStore";
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, inject, ref, watchEffect } from "vue";
 
 const categoryStore = useCategoryStore();
 const { categories, fetch, selectedCategories, handleCategorySelection } =
     useCategory();
 if (!categories.value.length) await fetch();
 
-const form = computed(() => {
-    return Object.keys(selectedCategories.value).filter(
+const form = inject("verifyForm");
+
+watchEffect(() => {
+    form.value["category"] = Object.keys(selectedCategories.value).filter(
         (e) => selectedCategories.value[e] === true,
     );
 });

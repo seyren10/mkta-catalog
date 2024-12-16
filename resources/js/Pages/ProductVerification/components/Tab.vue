@@ -32,6 +32,7 @@ function isSelected(item) {
             @click="handleItemSelected(item)"
             >{{ item.name }}</Button
         >
+        <slot />
     </ul>
 </template>
 

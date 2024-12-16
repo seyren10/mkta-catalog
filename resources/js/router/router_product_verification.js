@@ -5,6 +5,7 @@ const product_verification_routes = [
         path: "/verify-product",
         name: "verifyProduct",
         component: ProductVerification,
+        meta: { requiresAuth: true },
         children: [
             {
                 path: "information",

@@ -1,13 +1,15 @@
 <script setup>
 import CMSImageFileSelection from "@/Pages/Admin/CMS/Catalog/CMSImage/CMSImageFileSelection.vue";
 import SelectedImages from "./SelectedImages.vue";
-import { ref } from "vue";
+import { inject, ref } from "vue";
 
 const imageUploadDialog = ref(false);
 const selectedImages = ref([]);
+const form = inject("verifyForm");
 
 function handleUpdloadBanner(images) {
     selectedImages.value = images;
+    form.value["images"] = selectedImages.value;
     imageUploadDialog.value = false;
 }
 </script>

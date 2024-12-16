@@ -1,13 +1,15 @@
 <script setup>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import Dialog from "./Dialog.vue";
 import Selection from "./Selection.vue";
+
+const form = inject("verifyForm");
 
 const showRelatedDialog = ref(false);
 const showRecommendedDialog = ref(false);
 
-const selectedRelatedProducts = ref([]);
-const selectedRecommendedProducts = ref([]);
+form.value["related"] = [];
+form.value["recommended"] = [];
 </script>
 <template>
     <div class="space-y-10 p-4">
@@ -16,13 +18,13 @@ const selectedRecommendedProducts = ref([]);
             description="Select the products related to this item. These may include variants
             or products that share similarities."
             v-model:showDialog="showRelatedDialog"
-            v-model:selectedProducts="selectedRelatedProducts"
+            v-model:selectedProducts="form['related']"
         />
 
         <Selection
             title="Recommended Products"
             v-model:showDialog="showRecommendedDialog"
-            v-model:selectedProducts="selectedRecommendedProducts"
+            v-model:selectedProducts="form['recommended']"
         >
             <template #description>
                 <p class="mb-2 max-w-[80ch] text-gray-500">
@@ -36,12 +38,12 @@ const selectedRecommendedProducts = ref([]);
 
         <Dialog
             v-model:dialog="showRelatedDialog"
-            v-model:selected="selectedRelatedProducts"
+            v-model:selected="form['related']"
             title="Select related products"
         />
         <Dialog
             v-model:dialog="showRecommendedDialog"
-            v-model:selected="selectedRecommendedProducts"
+            v-model:selected="form['recommended']"
             title="Select recommended products"
         />
     </div>
