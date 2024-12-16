@@ -1,9 +1,8 @@
 <table>
     <thead>
         <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Description</th>
+            <th><b>SKU</b></th>
+            <th><b>Name</b></th>
         </tr>
     </thead>
     <tbody>
@@ -11,7 +10,6 @@
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->title }}</td>
-                <td>{{ $product->description }}</td>
             </tr>
         @endforeach
     </tbody>

@@ -171,7 +171,6 @@ class UserWishlistController extends Controller
 
             return response()->json([
                 "message" => "Wishlist has been sent!",
-                "data" => $response
             ], 200);
         } catch (\Throwable $e) {
             \Log::error($e);
