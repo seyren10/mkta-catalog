@@ -56,7 +56,7 @@ provide("s3", (img) => {
     return `https://mkta-portal.s3.us-east-2.amazonaws.com/${img}`;
 });
 provide("s3Thumbnail", (img) => {
-    return `https://mkta-portal.s3.us-east-2.amazonaws.com/thumbs/${img}`;
+    return `https://mkta-portal.s3.us-east-2.amazonaws.com/thumbs/300x300/${img}`;
 });
 provide("copyText", (text) => {
     const el = document.createElement("textarea"); // Create a <textarea> element

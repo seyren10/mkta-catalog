@@ -174,7 +174,7 @@
 
                 <!-- #region user-avatar -->
                 <div class="flex cursor-pointer items-center gap-2">
-                    <!-- <span class="underline">{{ user?.name }}</span> -->
+                    <span class="underline">{{ user?.name.split(' ').map( (word)=>{ return word[0]; } ).join(' ') }}</span>
                     <router-link :to="{ name: 'profile' }">
                         <v-tooltip activator="parent">Profile</v-tooltip>
                         <img

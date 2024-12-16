@@ -41,7 +41,6 @@ class ProductAccessTypeResource extends JsonResource
                 // $data['source_data'] = $sourceData;
             }
         }
-        $data['fuck'] = 'fuck';
         #endregion
         #region Other Data
         $removeOtherData = true;

@@ -1,7 +1,13 @@
 <?php
 
 use App\Http\Controllers\OpenAPIController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('current-test', [ProductController::class, 'seasonProducts']);
+
+
 
 Route::prefix('open-api')
     ->group(function () {

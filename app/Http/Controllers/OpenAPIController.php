@@ -10,6 +10,8 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class OpenAPIController extends Controller
 {
+
+
     public function current_test(Request $request)
     {
         $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
@@ -140,28 +142,22 @@ class OpenAPIController extends Controller
             $msg = 'Product Updated Successfully';
             $msgCode = 200;
             foreach ($data as $key => $product) {
-
-                // echo gettype($product);
-                $product = (array) $product;
-                // die();
-                Product::upsert(
-                    $product,
-                    uniqueBy: [
-                        'id',
-                    ],
-                    update: [
-                        'parent_code',
-                        'title',
-                        'description',
-
-                        'volume',
-                        'weight_net',
-                        'weight_gross',
-                        'dimension_length',
-                        'dimension_width',
-                        'dimension_height',
-                    ]
-                );
+                $products = (array) $product;
+                foreach ($products as $key => $prod) {
+                    $curProduct = Product::find($prod->id);
+                    if ($curProduct) {
+                        $curProduct['parent_code'] = $prod['parent_code'];
+                        $curProduct['title'] = $prod['title'];
+                        $curProduct['description'] = $prod['description'];
+                        $curProduct['volume'] = $prod['volume'];
+                        $curProduct['weight_net'] = $prod['weight_net'];
+                        $curProduct['weight_gross'] = $prod['weight_gross'];
+                        $curProduct['dimension_length'] = $prod['dimension_length'];
+                        $curProduct['dimension_width'] = $prod['dimension_width'];
+                        $curProduct['dimension_height'] = $prod['dimension_height'];
+                        $curProduct->save();
+                    }
+                }
             }
 
         } catch (\Throwable $th) {

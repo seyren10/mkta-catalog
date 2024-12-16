@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\RecommendedProduct;
 use App\Models\RelatedProduct;
+use App\Models\Season;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -67,19 +69,70 @@ class ProductController extends Controller
 
         return ProductResource::collection($products);
     }
-
     public function latestProducts(Request $request)
     {
         $count = $request->has('count') ? $request->count : 20;
-
         return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->latest()->take($count)->get());
+    }
+    public function seasonProducts(Request $request)
+    {
+        $current = Carbon::now();
+        $inSeason = collect(Season::get())
+            ->filter(function ($season) use ($current) {
+                return $current->between($season->actual_start_date, $season->actual_end_date);
+            })
+            ->map(function ($season) {
+                return $season->categories->map(function ($cur) {
+                    return $cur->category_id;
+                });
+            })
+            ->flatten()
+            ->unique();
+
+        // $restricted_products = $request->session()->get('restricted_products', []);
+        $restricted_products = [];
+        
+        #region Preparation for Products
+        // Get categories with a single query that checks both 'id' and 'parent_id' conditions
+        $categoryPool = Category::whereIn('id', $inSeason)
+            ->orWhereIn('parent_id', $inSeason)
+            ->pluck('id')
+            ->toArray(); // convert to array for use in whereIn query
+
+        // Get product IDs directly through a join between ProductCategory and Category
+        $productPool = ProductCategory::whereIn('category_id', $categoryPool)
+            ->pluck('product_id')
+            ->toArray();
+
+        // Fetch products, apply restriction, and order them randomly in one query
+        $products = Product::whereIn('id', $productPool)
+            ->whereNotIn('id', $restricted_products)
+            ->limit(30)
+            ->get();
+
+        // Return the response with optimized data
+        return response()->json(
+            [
+                'title' => 'On Season',
+                'data' => $products,
+                // 'data' => ProductResource::collection($products),
+            ],
+            200
+        );
+        #endregion
     }
 
     public function randomProducts(Request $request)
     {
         $count = $request->has('count') ? $request->count : 20;
 
-        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->inRandomOrder()->take($count)->get());
+        return ProductResource::collection(
+            Product::whereNotIn(
+                'id',
+                $request->session()->get('restricted_products', array())
+            )
+                ->inRandomOrder()
+                ->take($count)->get());
     }
 
     public function getProductsWithCategoryId(Request $request, Category $category)
