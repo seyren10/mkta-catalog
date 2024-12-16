@@ -84,6 +84,8 @@
                     class="bg-accent text-white"
                     prepend-inner-icon="pr-send"
                     icon-size="1"
+                    @click="handleSendWishlist"
+                    :loading="loading"
                     >Send</v-button
                 >
             </div>
@@ -114,15 +116,10 @@ const wishlistDialog = ref(false);
 
 //injects
 const wishlistStore = inject("wishlistStore");
+const addToast = inject("addToast");
 
-const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
-
-const wishListItemCodeArray = computed(() => {
-    return wishlists.value.reduce((acc, cur) => {
-        acc.push(cur.product.id);
-        return acc;
-    }, []);
-});
+const { wishlistCount, wishlists, loading, errors } =
+    storeToRefs(wishlistStore);
 
 const form = ref({
     productCodes: [],
@@ -155,6 +152,31 @@ const handleDeleteWishlist = async (item) => {
 const handleDeleteAllWishlist = async () => {
     await wishlistStore.deleteAllWishlist();
     await wishlistStore.getWishlists();
+};
+
+const handleSendWishlist = async () => {
+    await wishlistStore.sendWishlist(form.value);
+
+    if (errors.value?.status === 400) {
+        addToast({
+            props: {
+                type: "danger",
+            },
+            content: "Something went wrong. Please try again later",
+        });
+    } else {
+        await wishlistStore.deleteAllWishlist();
+        await wishlistStore.getWishlists();
+        form.value.message = "";
+
+        addToast({
+            props: {
+                type: "success",
+            },
+            content: `Your request has been successfully submitted. Our team will review it and contact you shortly.
+                 Thank you for reaching out to us, and we appreciate your patience while we process your request.`,
+        });
+    }
 };
 </script>
 
