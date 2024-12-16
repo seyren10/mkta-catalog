@@ -11,6 +11,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAccessTypeController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserWishlistController;
+use App\Http\Controllers\ProductController;
 use App\Models\ProductAccessType;
 use App\Models\ProductImage;
 use App\Services\UserServices;
@@ -60,3 +61,5 @@ Route::post('customer-wishlist/send-wishlist', [UserWishlistController::class, '
 Route::post('customer-wishlist/product-inquery', [UserWishlistController::class, 'inquireProduct']);
 Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store', 'index', 'destroy']);
 Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
+
+Route::get('product-details-completion/bc-product-details', [ProductController::class, 'bcProductDetails']);
