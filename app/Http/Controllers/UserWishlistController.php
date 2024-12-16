@@ -153,16 +153,9 @@ class UserWishlistController extends Controller
             $filePath = storage_path('/app/' . $filename);
             Excel::store(new WishListExport($products), $filename, 'local');
 
-            // Open the file and convert it to a Guzzle stream
-            $fileStream = fopen($filePath, 'r');
-            if ($fileStream === false) {
-                throw new \RuntimeException("Failed to open file: $filePath");
-            }
-
-            // Send the stream directly
-            $response = $this->email_service->sendMailWithAttachment(
+            $this->email_service->sendMailWithAttachment(
                 'Wishlist Request from ' . ($user ? $user->name : "Test User"),
-                $request->message,
+                $request->message ?? '',
                 $recipient,
                 $filePath,
                 $filename,
@@ -173,6 +166,41 @@ class UserWishlistController extends Controller
                 "message" => "Wishlist has been sent!",
             ], 200);
         } catch (\Throwable $e) {
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            return response()->json([
+                "message" => $message
+            ], 400);
+        }
+    }
+
+    public function inquireProduct(Request $request){
+        try{
+            $user = Auth::user();
+            $recipient = config('notification.wishlist.recipient');
+
+            $product = Product::find($request->productCode);
+
+            $template = "emails.product_inquery";
+            $data = [
+                "product" => $product,
+                'message' => $request->message ?? ""
+            ];
+
+            $mail_message = view($template, $data)->render();
+
+            $this->email_service->sendMail(
+                'Product Inquery from ' . ($user ? $user->name : "Test User"),
+                $mail_message,
+                $recipient,
+                true // Use HTML body
+            );
+
+            return response()->json([
+                "message" => "Product inquery has been sent!",
+            ], 200);
+        }catch(\Throwable $e){
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
 
