@@ -51,14 +51,17 @@ class ZipProductImages implements ShouldQueue
             //     $data = "zip/".$zipFile;
             //     return;
             // }
+
             $zipper = new Madzipper;
             $zipper->make($zipFile);
             foreach ($product->product_images as $key => $value) {
                 $filename = $value->file->filename;
-                $zipper->addString($filename, Storage::disk('s3')->get($filename));
+                $imgFile = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $filename));
+
+                $zipper->addString($filename, $imgFile);
             }
             $zipper->close();
-            Storage::disk('public')->putFileAs('zip', new File($zipFile), $zipFile);
+            // Storage::disk('public')->putFileAs('zip', new File($zipFile), $zipFile);
             $data = Storage::disk('s3')->putFileAs('zip', new File($zipFile), $zipFile);
             // unlink($zipFile);
         } catch (\Throwable $th) {

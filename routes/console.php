@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::command('notification:new-product')->everyFiveMinutes();
 Schedule::command('app:generate-news-letter')->thursdays()->at('08:00');
 
+Artisan::command('fuck', function () {
+    
+});
 Artisan::command('current', function () {
 
     $images = File::where('type', 'like', '%image%')->get();
