@@ -10,8 +10,16 @@ use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Exports\WishListExport;
+use App\Services\EntraMailService;
+
+use Maatwebsite\Excel\Facades\Excel;
+
 class UserWishlistController extends Controller
 {
+    public function __construct(){
+        $this->email_service = new EntraMailService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -129,5 +137,76 @@ class UserWishlistController extends Controller
     public function create()
     {
         //
+    }
+
+    public function sendWishlist(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $recipient = config('notification.wishlist.recipient');
+
+            // Retrieve products from request
+            $products = Product::whereIn('id', $request->productCodes)->get();
+            $filename = 'wishlist.xlsx';
+
+            // Store the Excel as a file
+            $filePath = storage_path('/app/' . $filename);
+            Excel::store(new WishListExport($products), $filename, 'local');
+
+            $this->email_service->sendMailWithAttachment(
+                'Wishlist Request from ' . ($user ? $user->name : "Test User"),
+                $request->message ?? '',
+                $recipient,
+                $filePath,
+                $filename,
+                false // Use HTML body
+            );
+
+            return response()->json([
+                "message" => "Wishlist has been sent!",
+            ], 200);
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            return response()->json([
+                "message" => $message
+            ], 400);
+        }
+    }
+
+    public function inquireProduct(Request $request){
+        try{
+            $user = Auth::user();
+            $recipient = config('notification.wishlist.recipient');
+
+            $product = Product::find($request->productCode);
+
+            $template = "emails.product_inquery";
+            $data = [
+                "product" => $product,
+                'message' => $request->message ?? ""
+            ];
+
+            $mail_message = view($template, $data)->render();
+
+            $this->email_service->sendMail(
+                'Product Inquery from ' . ($user ? $user->name : "Test User"),
+                $mail_message,
+                $recipient,
+                true // Use HTML body
+            );
+
+            return response()->json([
+                "message" => "Product inquery has been sent!",
+            ], 200);
+        }catch(\Throwable $e){
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            return response()->json([
+                "message" => $message
+            ], 400);
+        }
     }
 }

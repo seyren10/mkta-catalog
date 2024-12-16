@@ -156,9 +156,17 @@ import {
     FaRecycle,
     MdRestoreSharp,
     PrInfo,
+    PrBox,
+    PrBars,
+    PrLock,
+    PrShareAlt,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    PrShareAlt,
+    PrLock,
+    PrBars,
+    PrBox,
     PrInfo,
     MdKeyboardarrowupRound,
     MdRestoreSharp,

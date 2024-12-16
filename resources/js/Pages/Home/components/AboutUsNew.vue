@@ -7,29 +7,26 @@
             <div class="col-start-1 row-start-1">
                 <img src="/mk-images/about_us.png" alt="" />
             </div>
-            <div class="col-start-1 row-start-1 max-w-[60ch] text-center text-[min(1vw+.2rem,1rem)] bg-gray-100">
+            <div
+                class="col-start-1 row-start-1 max-w-[60ch] bg-gray-100 text-center text-[min(1vw+.2rem,2rem)]"
+            >
                 <p>
                     <span class="text-accent"
                         >MK Themed Attractions Philippines
                     </span>
-                    is a fiberglass products manufacturer. Best known for the
-                    creative production of world-class products for decorations
-                    and displays within different themes and Christmas, Comic,
-                    Wildlife, Halloween, Wild West, Pirates, Easter, etc.
+                    is best known for the creative production of world-class
+                    products for decorations and displays within different
+                    themes.
                 </p>
                 <p>
-                    We use high-quality materials in produing fiberglass
-                    products and projects to ensure the best quality and meet
-                    the satisfactions of our partners. Our main markets are
-                    amusement parks, malls, hotels, bars, resorts, and family
-                    entertainment
+                    We use high-quality materials in manufacturing fiberglass
+                    products and projects to ensure the best result and meet the
+                    satisfactions of our partners.
                 </p>
                 <p>
                     We are a group of designers, architects, sculptors, casters,
-                    painters, welders, installers, projects, and techinical
-                    managers that can help our client with the requirements for
-                    custom design, development, manufacturing, and installations
-                    of small to large scale projects worldwide.
+                    painters, welders, installers, project and technical
+                    managers that can help our client with any requirements.
                 </p>
             </div>
         </div>

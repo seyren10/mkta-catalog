@@ -55,7 +55,7 @@
                     <button @click="(e) => (menu = e.currentTarget)">
                         <div class="px-2">
                             <v-icon
-                                name="md-category-outlined"
+                                name="pr-bars"
                                 scale="1.5"
                                 class="fill-accent"
                             ></v-icon>
@@ -97,7 +97,7 @@
                                                 "
                                                 :title="category.title"
                                                 no-overlay
-                                                class="aspect-[2/1]"
+                                                class="aspect-[16/9]"
                                             >
                                                 <!-- <template #overlay="data">
                                                     <div

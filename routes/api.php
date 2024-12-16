@@ -56,5 +56,7 @@ Route::put('data-table/product-access-type', [ProductAccessTypeController::class
 Route::get('notifications/{user}', [NotificationController::class, 'index']);
 
 Route::delete('customer-wishlist/delete-all-user-wishlists', [UserWishlistController::class, 'destroyUserWishlistAll']);
+Route::post('customer-wishlist/send-wishlist', [UserWishlistController::class, 'sendWishlist']);
+Route::post('customer-wishlist/product-inquery', [UserWishlistController::class, 'inquireProduct']);
 Route::apiResource('customer-wishlist', UserWishlistController::class)->only(['store', 'index', 'destroy']);
 Route::apiResource('non-wishlist', NonWishlistController::class)->only(["index", "store", "destroy"]);
