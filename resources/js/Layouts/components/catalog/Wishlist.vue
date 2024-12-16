@@ -39,10 +39,11 @@
                         v-if="!wishlists.length"
                         class="text-center text-[1rem] tracking-wide text-slate-500"
                     >
-                        <img
-                            src="/mk-images/rocket-removebg-preview.png"
-                            alt=""
-                        />
+                        <v-icon
+                            name="pr-box"
+                            scale="8"
+                            class="fill-gray-300"
+                        ></v-icon>
                         <div>
                             Your wishlist is empty. start adding by clicking on
                             <v-icon
@@ -76,6 +77,7 @@
                     label="Message"
                     prepend-inner-icon="fa-regular-comment-alt"
                     rows="5"
+                    v-model="form.message"
                 ></v-textarea>
 
                 <v-button
@@ -102,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, inject, computed } from "vue";
+import { ref, inject, computed, watch, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 
 import WishlistItem from "./WishlistItem.vue";
@@ -114,6 +116,25 @@ const wishlistDialog = ref(false);
 const wishlistStore = inject("wishlistStore");
 
 const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
+
+const wishListItemCodeArray = computed(() => {
+    return wishlists.value.reduce((acc, cur) => {
+        acc.push(cur.product.id);
+        return acc;
+    }, []);
+});
+
+const form = ref({
+    productCodes: [],
+    message: "",
+});
+
+watchEffect(() => {
+    form.value.productCodes = wishlists.value.reduce((acc, cur) => {
+        acc.push(cur.product.id);
+        return acc;
+    }, []);
+});
 
 const infoList = computed(() => {
     return [

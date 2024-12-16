@@ -23,7 +23,7 @@ function isSelected(item) {
 }
 </script>
 <template>
-    <ul class="flex flex-wrap gap-1.5 rounded-md bg-gray-200 p-1.5">
+    <ul class="flex flex-wrap gap-1.5 rounded-md bg-gray-100 p-1.5">
         <Button
             v-for="item in items"
             :key="item.name"
