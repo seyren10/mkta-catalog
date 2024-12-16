@@ -14,22 +14,7 @@ return [
     |
     */
 
-    'bc' => [
-        'endpoint' => env('BC_ENDPOINT'),
-        'client_id' => env('BC_CLIENT_ID'),
-        'client_secret' => env('BC_CLIENT_SECRET')
-
-    ],
-
-    'entra' => [
-        'client_id' => env('ENTRA_CLIENT_ID'),
-        'client_secret' => env('ENTRA_CLIENT_SECRET'),
-        'tenant_id' => env('ENTRA_TENAT_ID'),
-        'object_id' => env('ENTRA_OBJECT_ID'),
-        'email_id' => env('ENTRA_EMAIL_ID')
-    ],
-
-    'new_details_notifications' => [
-        'email' => env('NEW_PRODUCT_DETAILS_RECIPIENT')
-    ],
+    'wishlist' => [
+        "recipient" => env('WISHLIST_RECIPIENT')
+    ]
 ];
