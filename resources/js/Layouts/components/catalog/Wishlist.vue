@@ -39,10 +39,11 @@
                         v-if="!wishlists.length"
                         class="text-center text-[1rem] tracking-wide text-slate-500"
                     >
-                        <img
-                            src="/mk-images/rocket-removebg-preview.png"
-                            alt=""
-                        />
+                        <v-icon
+                            name="pr-box"
+                            scale="8"
+                            class="fill-gray-300"
+                        ></v-icon>
                         <div>
                             Your wishlist is empty. start adding by clicking on
                             <v-icon
@@ -76,12 +77,15 @@
                     label="Message"
                     prepend-inner-icon="fa-regular-comment-alt"
                     rows="5"
+                    v-model="form.message"
                 ></v-textarea>
 
                 <v-button
                     class="bg-accent text-white"
                     prepend-inner-icon="pr-send"
                     icon-size="1"
+                    @click="handleSendWishlist"
+                    :loading="loading"
                     >Send</v-button
                 >
             </div>
@@ -102,7 +106,7 @@
 </template>
 
 <script setup>
-import { ref, inject, computed } from "vue";
+import { ref, inject, computed, watch, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 
 import WishlistItem from "./WishlistItem.vue";
@@ -112,8 +116,22 @@ const wishlistDialog = ref(false);
 
 //injects
 const wishlistStore = inject("wishlistStore");
+const addToast = inject("addToast");
 
-const { wishlistCount, wishlists, loading } = storeToRefs(wishlistStore);
+const { wishlistCount, wishlists, loading, errors } =
+    storeToRefs(wishlistStore);
+
+const form = ref({
+    productCodes: [],
+    message: "",
+});
+
+watchEffect(() => {
+    form.value.productCodes = wishlists.value.reduce((acc, cur) => {
+        acc.push(cur.product.id);
+        return acc;
+    }, []);
+});
 
 const infoList = computed(() => {
     return [
@@ -134,6 +152,31 @@ const handleDeleteWishlist = async (item) => {
 const handleDeleteAllWishlist = async () => {
     await wishlistStore.deleteAllWishlist();
     await wishlistStore.getWishlists();
+};
+
+const handleSendWishlist = async () => {
+    await wishlistStore.sendWishlist(form.value);
+
+    if (errors.value?.status === 400) {
+        addToast({
+            props: {
+                type: "danger",
+            },
+            content: "Something went wrong. Please try again later",
+        });
+    } else {
+        await wishlistStore.deleteAllWishlist();
+        await wishlistStore.getWishlists();
+        form.value.message = "";
+
+        addToast({
+            props: {
+                type: "success",
+            },
+            content: `Your request has been successfully submitted. Our team will review it and contact you shortly.
+                 Thank you for reaching out to us, and we appreciate your patience while we process your request.`,
+        });
+    }
 };
 </script>
 

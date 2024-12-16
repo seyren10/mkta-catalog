@@ -24,6 +24,22 @@ const product_verification_routes = [
                 component: () =>
                     import("@/Pages/ProductVerification/Images/Index.vue"),
             },
+            {
+                path: "restrictions-and-excemptions",
+                name: "verifyProductRestrictionsAndExcemptions",
+                component: () =>
+                    import(
+                        "@/Pages/ProductVerification/RestrictionsAndExcemptions/Index.vue"
+                    ),
+            },
+            {
+                path: "related-and-recommended",
+                name: "verifyProductRelatedAndRecommended",
+                component: () =>
+                    import(
+                        "@/Pages/ProductVerification/RelatedAndRecommended/Index.vue"
+                    ),
+            },
         ],
     },
 ];

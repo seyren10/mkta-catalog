@@ -26,6 +26,16 @@ const tabItems = [
         to: "verifyProductImages",
         icon: "pr-images",
     },
+    {
+        name: "Restrictions and excemptions",
+        to: "verifyProductRestrictionsAndExcemptions",
+        icon: "pr-lock",
+    },
+    {
+        name: "Related and recommended",
+        to: "verifyProductRelatedAndRecommended",
+        icon: "pr-share-alt",
+    },
 ];
 
 function useVerify() {

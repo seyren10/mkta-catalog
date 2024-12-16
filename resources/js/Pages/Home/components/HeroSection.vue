@@ -49,7 +49,7 @@
         </div>
         <div>
             <VCircularImages
-                class="z-[1000]"
+                class="z-[-1]"
                 :img-src="circleImageData"
                 base-img="/mk-images/bear-removebg-preview.png"
                 :offset="240"

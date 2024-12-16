@@ -8,8 +8,8 @@ const props = defineProps({
 <template>
     <li>
         <button
-            class="flex items-center rounded-md px-3 py-1.5 uppercase text-gray-400 hover:bg-white/95 gap-1"
-            :class="{ 'bg-white text-primary': selected }"
+            class="flex items-center gap-1 rounded-md px-3 py-1.5 uppercase text-gray-400 hover:bg-white/95"
+            :class="{ 'bg-white text-primary shadow-sm': selected }"
             icon-size=".8"
         >
             <v-icon :name="icon" v-if="icon"></v-icon>
