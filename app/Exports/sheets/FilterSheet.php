@@ -50,7 +50,7 @@ class FilterSheet implements FromCollection, WithTitle, WithStyles, ShouldAutoSi
     {
         return
             collect(
-               [ ['ID', $this->filter_data->id],
+                [ ['ID', $this->filter_data->id],
                 ['title', $this->filter_data->title],
                 ['description', $this->filter_data->description],
                 ['icon', $this->filter_data->icon],
