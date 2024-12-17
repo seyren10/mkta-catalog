@@ -16,6 +16,9 @@ use App\Models\ProductImage;
 use App\Models\RelatedProduct;
 use App\Models\ProductCategory;
 use App\Models\NewProductNotfication;
+use App\Models\ProductRestriction;
+use App\Models\ProductExemption;
+use App\Models\RecommendedProduct;
 
 use Carbon\Carbon;
 
