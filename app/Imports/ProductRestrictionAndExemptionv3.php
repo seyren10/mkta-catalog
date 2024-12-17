@@ -3,26 +3,33 @@
 namespace App\Imports;
 
 use App\Models\Product;
+use App\Models\ProductAccessType;
 use App\Models\ProductExemption;
 use App\Models\ProductRestriction;
 use App\Services\DataImportService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ProductRestrictionAndExemptionv3 implements ToCollection, WithStartRow, WithEvents, WithMultipleSheets
+class ProductRestrictionAndExemptionv3 implements ToCollection, WithStartRow, WithEvents, WithMultipleSheets, ShouldQueue, WithChunkReading
 {
     use Importable;
     public function startRow(): int
     {
         return 2;
+    }
+    public function chunkSize(): int
+    {
+        return 500;
     }
     #region for Data
     private $filePath;
@@ -66,12 +73,15 @@ class ProductRestrictionAndExemptionv3 implements ToCollection, WithStartRow, Wi
     #endregion
     public function collection(Collection $rows)
     {
+        $maxIndex = ProductAccessType::get()->count();
         $Products = Product::get()->pluck('id')->toArray();
         $restricted = collect();
         $exempted = collect();
         $missingProducts = collect([]);
+
         foreach ($rows as $row) {
             $productID = $row[0];
+
             // Removing the first column (productID)
             $temp = array_slice($row->toArray(), 1);
             // Chunk the remaining values into pairs
@@ -80,39 +90,47 @@ class ProductRestrictionAndExemptionv3 implements ToCollection, WithStartRow, Wi
                 $missingProducts->push($productID);
                 // continue;
             }
-            // Schema::disableForeignKeyConstraints();
-            foreach ($chunks as $key => $chunk) {
-                if ($chunk[0] != null) {
-                    $tempData = [
-                        "product_access_type_id" => $key + 1,
-                        "value" => ($chunk[0] !== 'All') ? $chunk[0] : 0,
-                        "product_id" => $productID,
-                    ];
-                    // ProductExemption::create($tempData);
-                    $exempted->push($tempData);
-                }
-                if ($chunk[1] != null) {
-                    $tempData = [
-                        "product_access_type_id" => $key + 1,
-                        "value" => ($chunk[1] !== 'All') ? $chunk[1] : 0,
-                        "product_id" => $productID,
-                    ];
-                    // ProductRestriction::create($tempData);
-                    $restricted->push($tempData);
+
+            foreach ($chunks as $index => $chunk) {
+                if ($index < $maxIndex) {
+
+                    $exemptionChunk = explode(',', $chunk[0]);
+                    foreach ($exemptionChunk as $thisChunk) {
+                        if (trim((string) ($thisChunk)) != '') {
+                            $tempData = [
+                                "product_access_type_id" => ((int) $index + 1),
+                                "value" => (int) $thisChunk,
+                                "product_id" => $productID,
+                            ];
+                            $exempted->push($tempData);
+                            // Log::info('Exemption for .' . $productID, $tempData);
+                        }
+                    }
+
+                    $restrictionChunk = explode(',', $chunk[1]);
+                    foreach ($restrictionChunk as $thisChunk) {
+                        if (trim((string) ($thisChunk)) != '') {
+                            $tempData = [
+                                "product_access_type_id" => ((int) $index + 1),
+                                "value" => $thisChunk,
+                                "product_id" => $productID,
+                            ];
+                            $restricted->push($tempData);
+                            // Log::info('Restriction for .' . $productID, $tempData);
+                        }
+                    }
+
                 }
             }
-            // Schema::enableForeignKeyConstraints();
         }
-        // Log::info($restricted->chunk(200)->toArray());
-        // Insert the restricted and exempted data in chunks of 100
-        Log::info($missingProducts->toArray());
-        // return;
+        // Log::info($restricted);
+        // Log::info($missingProducts->toArray());
         Schema::disableForeignKeyConstraints();
         $restricted->chunk(200)->map(function ($allData) {
-           ProductRestriction::insert($allData->toArray()); 
+            ProductRestriction::insert($allData->toArray());
         });
         $exempted->chunk(200)->map(function ($allData) {
-           ProductExemption::insert($allData->toArray()); 
+            ProductExemption::insert($allData->toArray());
         });
         Schema::enableForeignKeyConstraints();
     }
