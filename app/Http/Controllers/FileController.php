@@ -57,12 +57,12 @@ class FileController extends Controller
             $data = '';
             $open = new OpenAPIController();
 
-            if(!Storage::disk('public')->exists('100x100')){
+            // if(!Storage::disk('public')->exists('100x100')){
                 Storage::disk('public')->makeDirectory('100x100');
                 Storage::disk('public')->makeDirectory('150x150');
                 Storage::disk('public')->makeDirectory('200x200');
                 Storage::disk('public')->makeDirectory('300x300');
-            }
+            // }
 
             if ((str_contains(trim(strtolower($type)), 'image'))) {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
