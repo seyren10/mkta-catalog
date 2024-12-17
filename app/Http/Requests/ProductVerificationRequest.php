@@ -23,7 +23,7 @@ class ProductVerificationRequest extends FormRequest
     {
         return [
             'info' => 'required|array',
-            'info.id' => 'required|string',
+            'info.product_id' => 'required|string',
             'info.parent_code' => 'required|string',
             'info.title' => 'required|string|max:255',
             'info.description' => 'required|string|max:1000',
