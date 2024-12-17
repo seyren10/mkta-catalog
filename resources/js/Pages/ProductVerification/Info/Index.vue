@@ -5,7 +5,7 @@ const item = inject("item", null);
 const form = inject("verifyForm");
 
 form.value["info"] = {
-    id: item.value.product_id,
+    product_id: item.value.product_id,
     parent_code: item.value.parent_code,
     title: item.value.title,
     description: item.value.description,
@@ -23,7 +23,7 @@ form.value["info"] = {
             <div class="grid md:grid-cols-3">
                 <h3 class="col-span-full mb-1 text-gray-500">General</h3>
                 <v-text-field
-                    v-model="form['info'].id"
+                    v-model="form['info'].product_id"
                     label="SKU/code"
                 ></v-text-field>
                 <v-text-field

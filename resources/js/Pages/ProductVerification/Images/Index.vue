@@ -21,9 +21,6 @@ function handleUpdloadBanner(images) {
                 class="border bg-none text-primary"
                 >Select Images</v-button
             >
-            <v-button class="bg-accent text-white" v-if="selectedImages.length"
-                >Upload</v-button
-            >
         </div>
 
         <SelectedImages :selected-images="selectedImages"></SelectedImages>
