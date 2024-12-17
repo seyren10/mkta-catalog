@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_areas', function (Blueprint $table) {
+        Schema::create('season_categories', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(\App\Models\CompanyCode::class)->nullable()->constrained('company_codes')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(\App\Models\AreaCode::class)->nullable()->constrained('area_codes')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(\App\Models\Season::class)->nullable()->constrained('seasons')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(\App\Models\Category::class)->nullable()->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
+
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('company_areas');
+        Schema::dropIfExists('season_categories');
     }
 };

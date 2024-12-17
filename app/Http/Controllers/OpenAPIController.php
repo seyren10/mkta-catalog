@@ -10,46 +10,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class OpenAPIController extends Controller
 {
-    public function current_test(Request $request)
-    {
-        $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
-        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
-        $image = Image::read($stream);
-        $image->resize(300, 300, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save(Storage::disk('public')->path('') . $imageKey, quality: 50, progressive: true);
-        Storage::disk('s3')->makeDirectory('thumbs\\150x150');
-        Storage::disk('s3')->makeDirectory('thumbs\\200x200');
-        Storage::disk('s3')->makeDirectory('thumbs\\300x300');
-        Storage::disk('s3')->put("thumbs\\" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
-        return;
-    }
 
-    public function current_test_all(Request $request)
-    {
-        $imageKey = '004MdEUfvAl8eUXeON7NYGhLoQKTKJTKQHdrVuCD.jpg';
-        $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
-        $image = Image::read($stream);
-        $image->resize(150, 150, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save(Storage::disk('public')->path('') . $imageKey, quality: 10, progressive: true);
-        Storage::disk('s3')->put("thumbs\\" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
-        return;
-    }
-
-    public function current_test_working_local(Request $request)
-    {
-        // https: //mkta-portal.s3.us-east-2.amazonaws.com/
-
-        $data = Storage::disk('public')->get("SampleCompression.PNG");
-        $image = Image::read($data);
-        $image->resize(300, 300, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save(Storage::disk('public')->path('') . "/fuckthislife.jpg", quality: 10, progressive: true);
-    }
     #region Working Functions
     public function streamSave($imageKey, $size = 150)
     {
@@ -58,7 +19,7 @@ class OpenAPIController extends Controller
         $image->resize($size, $size, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $image->save(Storage::disk('public')->path($size . 'x' . $size) . '\\' . $imageKey, quality: 10, progressive: true);
+        $image->save(Storage::disk('public')->path($size . 'x' . $size) . '//' . $imageKey, quality: 50, progressive: true);
     }
 
     public function productVerification(Product $product)
@@ -140,28 +101,22 @@ class OpenAPIController extends Controller
             $msg = 'Product Updated Successfully';
             $msgCode = 200;
             foreach ($data as $key => $product) {
-
-                // echo gettype($product);
-                $product = (array) $product;
-                // die();
-                Product::upsert(
-                    $product,
-                    uniqueBy: [
-                        'id',
-                    ],
-                    update: [
-                        'parent_code',
-                        'title',
-                        'description',
-
-                        'volume',
-                        'weight_net',
-                        'weight_gross',
-                        'dimension_length',
-                        'dimension_width',
-                        'dimension_height',
-                    ]
-                );
+                $products = (array) $product;
+                foreach ($products as $key => $prod) {
+                    $curProduct = Product::find($prod->id);
+                    if ($curProduct) {
+                        $curProduct['parent_code'] = $prod['parent_code'];
+                        $curProduct['title'] = $prod['title'];
+                        $curProduct['description'] = $prod['description'];
+                        $curProduct['volume'] = $prod['volume'];
+                        $curProduct['weight_net'] = $prod['weight_net'];
+                        $curProduct['weight_gross'] = $prod['weight_gross'];
+                        $curProduct['dimension_length'] = $prod['dimension_length'];
+                        $curProduct['dimension_width'] = $prod['dimension_width'];
+                        $curProduct['dimension_height'] = $prod['dimension_height'];
+                        $curProduct->save();
+                    }
+                }
             }
 
         } catch (\Throwable $th) {

@@ -14,21 +14,21 @@
 <script setup>
 import { inject, onBeforeUnmount, onMounted, onUnmounted, ref } from "vue";
 import { useAuthStore } from "@/stores/authStore";
-const showMaintenance = ref(true);
+const showMaintenance = ref(false);
 const authStore = useAuthStore();
 
 const router = inject("router");
 
 onMounted(() => {
-    document.body.style.overflow = "hidden";
-
-    setTimeout(async () => {
-        await authStore.logout(false);
-
-        if (router) {
-            router.push({ name: "index" });
-        }
-    }, 5000);
+    if (showMaintenance.value) {
+        document.body.style.overflow = "hidden";
+        setTimeout(async () => {
+            await authStore.logout(false);
+            if (router) {
+                router.push({ name: "index" });
+            }
+        }, 5000);
+    }
 });
 
 onBeforeUnmount(() => {
