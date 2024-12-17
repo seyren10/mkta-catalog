@@ -160,9 +160,16 @@ import {
     PrBars,
     PrLock,
     PrShareAlt,
+    PrCircleOff,
+    BiDot,
+    PrCloud,
+    PrSpinner,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    PrSpinner,
+    PrCloud,
+    BiDot,
     PrShareAlt,
     PrLock,
     PrBars,
@@ -291,6 +298,7 @@ addIcons(
     RiKey2Line,
     PrInfoCircle,
     PrCheckCircle,
+    PrCircleOff,
     PrTimesCircle,
     PrExclamationCircle,
     HiMenuAlt4,

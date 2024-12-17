@@ -2,6 +2,7 @@
     <div class="relative p-3">
         <CMSImageToolbar
             @refresh="getFiles"
+            @upload="openUploadDialog = true"
             @next="nextPage"
             @prev="prevPage"
             v-model="search"
@@ -63,11 +64,66 @@
                 <strong>{{ selectedItems.length }}</strong> file(s) selected.
             </p>
         </CMSImageFooter>
+
+        <CMSImageUploadDialog
+            v-model="openUploadDialog"
+            max-width="500"
+            @upload="handleSelectImages"
+        >
+            <div class="space-y-4 p-3 text-xs">
+                <p v-if="!selectedUploadFiles?.length">
+                    No Files has been selected.
+                </p>
+                <ul class="space-y-2">
+                    <li
+                        v-for="uploadFile in selectedUploadFiles"
+                        class="flex items-center gap-2"
+                    >
+                        <v-icon
+                            name="bi-dot"
+                            class="fill-gray-400"
+                            v-if="uploadFile.status === 'pending'"
+                        ></v-icon>
+                        <v-icon
+                            v-else-if="uploadFile.status === 'uploading'"
+                            name="pr-spinner"
+                            class="animate-spin fill-gray-400"
+                        ></v-icon>
+                        <v-icon
+                            v-else-if="uploadFile.status === 'failed'"
+                            name="la-times-solid"
+                            class="fill-red-400"
+                        ></v-icon>
+                        <v-icon
+                            name="pr-cloud"
+                            class="fill-green-400"
+                            v-else
+                        ></v-icon>
+                        <span>{{ uploadFile.file.name }}</span>
+                    </li>
+                </ul>
+                <div v-if="selectedUploadFiles.length">
+                    <v-button
+                        class="w-full bg-primary text-white"
+                        @click="handleUploadFiles"
+                        :loading="uploadLoading"
+                        >Upload</v-button
+                    >
+                </div>
+            </div>
+        </CMSImageUploadDialog>
     </div>
 </template>
 
 <script setup>
-import { computed, inject, onBeforeMount, provide, ref } from "vue";
+import {
+    computed,
+    inject,
+    onBeforeMount,
+    provide,
+    ref,
+    watchEffect,
+} from "vue";
 import { storeToRefs } from "pinia";
 import { useFileStore } from "../../../../../stores/fileStore";
 import { usePaginate } from "../../../../../composables/usePaginate";
@@ -75,6 +131,7 @@ import { usePaginate } from "../../../../../composables/usePaginate";
 import VLoader from "@/components/base_components/VLoader.vue";
 import CMSImageToolbar from "./CMSImageToolbar.vue";
 import CMSImageFooter from "./CMSImageFooter.vue";
+import CMSImageUploadDialog from "./CMSImageUploadDialog.vue";
 
 const props = defineProps({
     itemsPerPage: {
@@ -86,6 +143,7 @@ const props = defineProps({
 });
 
 const s3Thumbnail = inject("s3Thumbnail");
+const addToast = inject("addToast");
 const emits = defineEmits(["submit"]);
 const { files, getFiles, loading } = useFiles(useFileStore());
 const search = ref("");
@@ -93,6 +151,13 @@ const showSelected = ref(false);
 const { handleClearSelection, handleSelect, selectedItems } = useSelection(
     props.items,
 );
+const {
+    openUploadDialog,
+    handleSelectImages,
+    selectedUploadFiles,
+    handleUploadFiles,
+    uploadLoading,
+} = useUpload();
 
 const searchItems = computed(() => {
     if (showSelected.value) {
@@ -159,6 +224,64 @@ function useSelection(selected = []) {
     );
 
     return { handleSelect, handleClearSelection, selectedItems };
+}
+
+function useUpload() {
+    const fileStore = useFileStore();
+    const { form, errors } = storeToRefs(fileStore);
+    const openUploadDialog = ref(false);
+    const selectedUploadFiles = ref([]);
+    const uploadLoading = ref(false);
+
+    watchEffect(() => {});
+
+    function handleSelectImages(event) {
+        if (event.target?.files?.length) {
+            for (const file of event.target.files) {
+                selectedUploadFiles.value.push({
+                    id: crypto.randomUUID(),
+                    file: file,
+                    status: "pending",
+                });
+            }
+        }
+    }
+
+    async function handleUploadFiles() {
+        for (const file of selectedUploadFiles.value) {
+            file.status = "uploading";
+            uploadLoading.value = true;
+            form.value = {
+                title: file.file.name,
+                eFile: file.file,
+            };
+            await fileStore.uploadFile();
+
+            if (!errors.value) {
+                file.status = "completed";
+                uploadLoading.value = false;
+            } else {
+                uploadLoading.value = false;
+                file.status = "failed";
+
+                addToast({
+                    props: {
+                        type: "danger",
+                    },
+                    content: "Something went wrong, please try again later.",
+                });
+                break;
+            }
+        }
+    }
+
+    return {
+        openUploadDialog,
+        selectedUploadFiles,
+        handleSelectImages,
+        handleUploadFiles,
+        uploadLoading,
+    };
 }
 
 onBeforeMount(async () => {

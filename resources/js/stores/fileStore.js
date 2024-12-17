@@ -21,9 +21,10 @@ export const useFileStore = defineStore("portalFiles", () => {
         try {
             const res = await exec("/api/portal-files", "post", form.value);
         } catch (e) {
-            form.value.eFile = null
+            form.value.eFile = null;
         }
     };
+
     const renameFile = async (id, FileName) => {
         try {
             const res = await exec("/api/portal-files/" + id, "put", {
@@ -50,7 +51,7 @@ export const useFileStore = defineStore("portalFiles", () => {
             console.log(e);
         }
     };
-    
+
     return {
         resetform,
         uploadFile,
