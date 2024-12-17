@@ -66,27 +66,31 @@ class FileController extends Controller
 
             if ((str_contains(trim(strtolower($type)), 'image'))) {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
+                
+                Storage::disk('public')->put("", $request->file('eFile'));
+
                 $imageKey = $data;
                 $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
-
-                Storage::disk('s3')->put("thumbs\\" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+                // Storage::disk('s3')->put("thumbs/".$imageKey, $request->file('eFile'));
+                Storage::disk('s3')->put("thumbs/".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
 
                 $open->streamSave($imageKey, 100);
-                Storage::disk('s3')->put("thumbs\\100x100\\" . $imageKey, file_get_contents(Storage::disk('public')->path('100x100\\' . $imageKey)));
+                Storage::disk('s3')->put("thumbs/100x100/" . $imageKey, file_get_contents(Storage::disk('public')->path('100x100/' . $imageKey)));
 
                 $open->streamSave($imageKey, 150);
-                Storage::disk('s3')->put("thumbs\\150x150\\" . $imageKey, file_get_contents(Storage::disk('public')->path('150x150\\' . $imageKey)));
+                Storage::disk('s3')->put("thumbs/150x150/" . $imageKey, file_get_contents(Storage::disk('public')->path('150x150/' . $imageKey)));
 
                 $open->streamSave($imageKey, 200);
-                Storage::disk('s3')->put("thumbs\\200x200\\" . $imageKey, file_get_contents(Storage::disk('public')->path('200x200\\' . $imageKey)));
+                Storage::disk('s3')->put("thumbs/200x200/" . $imageKey, file_get_contents(Storage::disk('public')->path('200x200/' . $imageKey)));
 
                 $open->streamSave($imageKey, 300);
-                Storage::disk('s3')->put("thumbs\\300x300\\" . $imageKey, file_get_contents(Storage::disk('public')->path('300x300\\' . $imageKey)));
+                Storage::disk('s3')->put("thumbs/300x300/" . $imageKey, file_get_contents(Storage::disk('public')->path('300x300/' . $imageKey)));
 
-                Storage::disk('public')->delete("100x100\\".$imageKey);
-                Storage::disk('public')->delete("150x150\\".$imageKey);
-                Storage::disk('public')->delete("200x200\\".$imageKey);
-                Storage::disk('public')->delete("300x300\\".$imageKey);
+                Storage::disk('public')->delete("100x100/".$imageKey);
+                Storage::disk('public')->delete("150x150/".$imageKey);
+                Storage::disk('public')->delete("200x200/".$imageKey);
+                Storage::disk('public')->delete("300x300/".$imageKey);
+                Storage::disk('public')->delete($imageKey);
 
 
 

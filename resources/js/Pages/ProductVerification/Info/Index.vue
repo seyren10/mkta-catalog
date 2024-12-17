@@ -5,7 +5,7 @@ const item = inject("item", null);
 const form = inject("verifyForm");
 
 form.value["info"] = {
-    id: item.value.id,
+    id: item.value.product_id,
     parent_code: item.value.parent_code,
     title: item.value.title,
     description: item.value.description,

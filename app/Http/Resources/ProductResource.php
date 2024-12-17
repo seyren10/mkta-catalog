@@ -10,9 +10,9 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
-
+        $restricted_products = $request->session()->get('restricted_products', array());
         #region Wishlist Button
-        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array())->toArray();
+        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array());
         $data['show_wishlist_button'] = true || !in_array($data['id'], $nonwishlistproduct);
         $data['show_wishlist_button_data'] = $nonwishlistproduct;
         #endregion
@@ -119,15 +119,14 @@ class ProductResource extends JsonResource
         $removeVariants = true;
         if ($request->has('includeVariants')) {
             if ($request->includeVariants === 'true' || $request->includeVariants === true) {
-                $restricted_products = $request->session()->get('restricted_products', array());
-
-                $collect = collect($data['variants'])->whereNotIn('id', $restricted_products);
-                $data['variants'] = $collect->whereNotIn('id', [$data['id']])->toArray();
                 $removeVariants = !true;
             }
         }
         if ($removeVariants) {
             unset($data['variants']);
+        }else{
+            $data['variants'] = collect($data['variants'])->whereNotIn('id', $restricted_products)->toArray();
+            // $data['variants'] = $collect->whereNotIn('id', [$data['id']])->toArray();
         }
 
         #endregion
@@ -140,6 +139,8 @@ class ProductResource extends JsonResource
         }
         if ($removeRelatedProduct) {
             unset($data['related_product']);
+        }else{
+            $data['related_product']  = collect($data['related_product'])->whereNotIn('related_product_id', $restricted_products)->toArray();
         }
         #endregion
         #region Recommended Products
@@ -151,6 +152,8 @@ class ProductResource extends JsonResource
         }
         if ($removeRecommendedProduct) {
             unset($data['recommended_product']);
+        }else{
+            $data['recommended_product'] = collect($data['recommended_product'])->whereNotIn('recommended_product_id', $restricted_products)->toArray();
         }
         #endregion
         #region Product Filter
