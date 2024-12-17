@@ -1,13 +1,15 @@
 <script setup>
 import CMSImageFileSelection from "@/Pages/Admin/CMS/Catalog/CMSImage/CMSImageFileSelection.vue";
 import SelectedImages from "./SelectedImages.vue";
-import { ref } from "vue";
+import { inject, ref } from "vue";
 
 const imageUploadDialog = ref(false);
 const selectedImages = ref([]);
+const form = inject("verifyForm");
 
 function handleUpdloadBanner(images) {
     selectedImages.value = images;
+    form.value["images"] = selectedImages.value;
     imageUploadDialog.value = false;
 }
 </script>
@@ -18,9 +20,6 @@ function handleUpdloadBanner(images) {
                 @click="imageUploadDialog = true"
                 class="border bg-none text-primary"
                 >Select Images</v-button
-            >
-            <v-button class="bg-accent text-white" v-if="selectedImages.length"
-                >Upload</v-button
             >
         </div>
 

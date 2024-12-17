@@ -4,14 +4,9 @@ import { storeToRefs } from "pinia";
 import { inject, ref } from "vue";
 
 const item = inject("item");
+const form = inject("verifyForm");
 
-const {
-    fetch,
-    productAccessTypes,
-    productAccess,
-    getProductAccess,
-    selectedProductAccess,
-} = useProductAccessType();
+const { fetch, productAccessTypes, getProductAccess } = useProductAccessType();
 
 if (!productAccessTypes.value.length) await fetch();
 
@@ -21,7 +16,7 @@ function useProductAccessType() {
         productAccessTypeStore,
     );
     const productAccess = ref({});
-    const selectedProductAccess = ref({});
+    form.value["restrictionAndExcemption"] = {};
 
     async function fetch() {
         await productAccessTypeStore.getProductAccessTypes();
@@ -44,7 +39,7 @@ function useProductAccessType() {
                     productAccess.value[data.id] = data;
                 }
 
-                selectedProductAccess.value[data.id] = {
+                form.value["restrictionAndExcemption"][data.id] = {
                     restricted: [],
                     excempted: [],
                 };
@@ -66,14 +61,13 @@ function useProductAccessType() {
         productAccessTypes,
         productAccess,
         getProductAccess,
-        selectedProductAccess,
     };
 }
 </script>
 
 <template>
     <div class="space-y-4">
-        <p class="flex gap-2 text-gray-500 items-center">
+        <p class="flex items-center gap-2 text-gray-500">
             <v-icon name="pr-info-circle"></v-icon>
             <span>
                 Select the customers, companies, or areas that should not have
@@ -92,10 +86,12 @@ function useProductAccessType() {
                 <div>
                     <p class="mb-2 font-medium">Restricted</p>
                     <v-chip-input
-                        v-if="selectedProductAccess[accessType.id]"
+                        v-if="form['restrictionAndExcemption'][accessType.id]"
                         :items="getProductAccess(accessType.id)"
                         v-model="
-                            selectedProductAccess[accessType.id]['restricted']
+                            form['restrictionAndExcemption'][accessType.id][
+                                'restricted'
+                            ]
                         "
                         clearable
                     ></v-chip-input>
@@ -103,10 +99,12 @@ function useProductAccessType() {
                 <div>
                     <p class="mb-2 font-medium">Excempted</p>
                     <v-chip-input
-                        v-if="selectedProductAccess[accessType.id]"
+                        v-if="form['restrictionAndExcemption'][accessType.id]"
                         :items="getProductAccess(accessType.id)"
                         v-model="
-                            selectedProductAccess[accessType.id]['excempted']
+                            form['restrictionAndExcemption'][accessType.id][
+                                'excempted'
+                            ]
                         "
                         clearable
                     ></v-chip-input>

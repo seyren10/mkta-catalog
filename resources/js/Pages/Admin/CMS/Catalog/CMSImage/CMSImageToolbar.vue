@@ -32,12 +32,11 @@
             </p>
         </div>
 
+  
         <div class="flex items-center gap-2">
-            <v-button
-                icon="md-refresh-sharp"
-                icon-size="1"
-                @click="$emit('refresh')"
-            ></v-button>
+            <v-button @click="$emit('upload')" class="border shadow-sm"
+                >Upload</v-button
+            >
         </div>
     </div>
 </template>
@@ -46,7 +45,7 @@
 const props = defineProps({
     pageInfo: Object,
 });
-const emits = defineEmits(["refresh", "next", "prev"]);
+const emits = defineEmits(["refresh", "next", "prev", "upload"]);
 const model = defineModel({ default: "" });
 </script>
 

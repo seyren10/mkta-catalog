@@ -2,9 +2,10 @@
 import { inject, ref } from "vue";
 
 const item = inject("item", null);
+const form = inject("verifyForm");
 
-const form = ref({
-    id: item.value.id,
+form.value["info"] = {
+    product_id: item.value.product_id,
     parent_code: item.value.parent_code,
     title: item.value.title,
     description: item.value.description,
@@ -14,22 +15,28 @@ const form = ref({
     dimension_length: item.value.dimension_length,
     dimension_width: item.value.dimension_width,
     dimension_height: item.value.dimension_height,
-});
+};
 </script>
 <template>
     <div>
         <form class="space-y-4">
             <div class="grid md:grid-cols-3">
                 <h3 class="col-span-full mb-1 text-gray-500">General</h3>
-                <v-text-field v-model="form.id" label="SKU/code"></v-text-field>
                 <v-text-field
-                    v-model="form.parent_code"
+                    v-model="form['info'].product_id"
+                    label="SKU/code"
+                ></v-text-field>
+                <v-text-field
+                    v-model="form['info'].parent_code"
                     label="Parent code"
                 ></v-text-field>
-                <v-text-field v-model="form.title" label="title"></v-text-field>
+                <v-text-field
+                    v-model="form['info'].title"
+                    label="title"
+                ></v-text-field>
                 <div class="col-span-full">
                     <v-textarea
-                        v-model="form.description"
+                        v-model="form['info'].description"
                         label="description"
                     ></v-textarea>
                 </div>
@@ -38,7 +45,7 @@ const form = ref({
                 <h3 class="col-span-full mb-1 text-gray-500">Weight</h3>
 
                 <v-text-field
-                    v-model="form.volume"
+                    v-model="form['info'].volume"
                     type="number"
                     label="volume"
                 >
@@ -47,7 +54,7 @@ const form = ref({
                     </template>
                 </v-text-field>
                 <v-text-field
-                    v-model="form.weight_net"
+                    v-model="form['info'].weight_net"
                     type="number"
                     label="Net"
                 >
@@ -56,7 +63,7 @@ const form = ref({
                     </template>
                 </v-text-field>
                 <v-text-field
-                    v-model="form.weight_gross"
+                    v-model="form['info'].weight_gross"
                     type="number"
                     label="Gross"
                 >
@@ -69,7 +76,7 @@ const form = ref({
                 <h3 class="col-span-full mb-1 text-gray-500">Dimension</h3>
 
                 <v-text-field
-                    v-model="form.dimension_length"
+                    v-model="form['info'].dimension_length"
                     type="number"
                     label="Length"
                 >
@@ -78,7 +85,7 @@ const form = ref({
                     </template>
                 </v-text-field>
                 <v-text-field
-                    v-model="form.dimension_width"
+                    v-model="form['info'].dimension_width"
                     type="number"
                     label="Width"
                 >
@@ -87,7 +94,7 @@ const form = ref({
                     </template>
                 </v-text-field>
                 <v-text-field
-                    v-model="form.dimension_height"
+                    v-model="form['info'].dimension_height"
                     type="number"
                     label="Height"
                 >

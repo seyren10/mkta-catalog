@@ -65,11 +65,8 @@
 
         <v-dialog v-model="showRegistrationDialog" max-width="600">
             <div class="relative isolate space-y-6 p-8">
-                <div class="rotate-45">
-                    <img
-                        src="/mk-images/rocket-removebg-preview.png"
-                        class="mx-auto max-w-[15rem] animate-wiggle"
-                    />
+                <div class="w-fit mx-auto">
+                    <v-icon name="la-heart" scale="5" class="fill-accent"></v-icon>
                 </div>
 
                 <p class="font-bold">
