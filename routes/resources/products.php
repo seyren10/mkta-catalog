@@ -12,7 +12,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('product-batch', [ProductController::class, 'batchUpdate']);
         Route::get('/random', [ProductController::class, 'randomProducts']);
         Route::get('/bc-product-details', [ProductController::class, 'bcProductDetails']);
-        route::get('/seasonal', [ProductController::class, 'seasonProducts']);
+        Route::get('/seasonal', [ProductController::class, 'seasonProducts']);
+        Route::post('/store-product-verification', [ProductController::class, 'storeProductVerification']);
     });
 
     Route::get('product-images/zip/{product}', [ProductController::class, "zipProductImages"]);
@@ -21,5 +22,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('product', ProductController::class)->except(['create', 'edit']);
     Route::put('data-table/product', [ProductController::class, 'batchUpdate']);
 });
-
-Route::post('/store-product-verification', [ProductController::class, 'storeProductVerification']);
