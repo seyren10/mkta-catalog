@@ -14,7 +14,10 @@ use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\RelatedProduct;
 use App\Models\Season;
+use App\Models\NewProductNotfication;
+
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -368,16 +371,25 @@ class ProductController extends Controller
     public function bcProductDetails(Request $request)
     {
         try {
-            $product_service = new BCProductService;
-            $product = $product_service->get_product($request->token);
+            $product_notification = NewProductNotfication::where("token", $request->token)->first();
 
-            if ($product) {
+            if($product_notification && !$product_notification->processed_at){
+                $product_service = new BCProductService;
+                $product = $product_service->get_product($request->token);
+    
+                if ($product) {
+                    return response()->json([
+                        "data" =>$product
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'message' => 'product not found',
+                        'status' => 404
+                    ], 404);
+                }
+            }else{
                 return response()->json([
-                    "data" =>$product
-                ], 200);
-            } else {
-                return response()->json([
-                    'message' => 'product not found',
+                    'message' => 'Token expired',
                     'status' => 404
                 ], 404);
             }
@@ -510,6 +522,10 @@ class ProductController extends Controller
                     }
                 }
             }
+
+            $product_notification = NewProductNotfication::where("token", $request->token)->first();
+            $product_notification->processed_at = Carbon::now();
+            $product_notification->save();
 
             DB::commit();
 
