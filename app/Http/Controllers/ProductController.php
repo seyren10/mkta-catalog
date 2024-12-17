@@ -383,7 +383,7 @@ class ProductController extends Controller
                     ], 200);
                 } else {
                     return response()->json([
-                        'message' => 'product not found',
+                        'message' => 'Product not found',
                         'status' => 404
                     ], 404);
                 }
