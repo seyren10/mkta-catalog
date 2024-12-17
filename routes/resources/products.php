@@ -19,3 +19,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('product', ProductController::class)->except(['create', 'edit']);
     Route::put('data-table/product', [ProductController::class, 'batchUpdate']);
 });
+
+Route::post('/store-product-verification', [ProductController::class, 'storeProductVerification']);

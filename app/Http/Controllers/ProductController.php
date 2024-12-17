@@ -4,16 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Requests\ProductVerificationRequest;
+
 use App\Jobs\ZipProductImages;
-use App\Models\Category;
+
 use App\Models\Filter;
 use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\RecommendedProduct;
+use App\Models\Category;
+use App\Models\ProductImage;
 use App\Models\RelatedProduct;
+use App\Models\ProductCategory;
+use App\Models\ProductExemption;
+use App\Models\RecommendedProduct;
+use App\Models\ProductRestriction;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 use App\Services\BCProductService;
 
@@ -326,6 +333,143 @@ class ProductController extends Controller
         } catch (\Throwable $e) {
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
+
+            return response()->json([
+                "message" => $message
+            ], 400);
+        }
+    }
+
+    public function storeProductVerification(ProductVerificationRequest $request){
+        DB::beginTransaction();
+        try{
+            if($request->has("info")){
+                // Product Basic Info
+                $product_request = (object) $request->info;
+                
+                // Set Product Basic Info
+                $product = new Product;
+                $product->id = $product_request->product_id;
+                $product->parent_code = $product_request->parent_code;
+                $product->title = $product_request->title;
+                $product->description = $product_request->description;
+                $product->volume = $product_request->volume;
+                $product->weight_net = $product_request->weight_net;
+                $product->weight_gross = $product_request->weight_gross;
+                $product->dimension_length = $product_request->dimension_length;
+                $product->dimension_width = $product_request->dimension_width;
+                $product->dimension_height = $product_request->dimension_height;
+                $product->save();
+
+                // Set Product Category upon detection
+                ProductCategory::where('product_id', $product->id)->delete();
+                if ($request->has('category')) {
+                    $categories = $request->category;
+
+                    foreach ($categories as $key => $value) {
+                        ProductCategory::create(
+                            array(
+                                "product_id" => $product->id,
+                                "category_id" => $value,
+                            )
+                        );
+                    }
+                }
+
+                // Set Product Image
+                if($request->has("images")){
+                    $count = ProductImage::where('product_id')->get()->count() + 1;
+                    $product_images = $request->images;
+
+                    foreach($product_images as $product_image_array){
+                        $product_image = (object) $product_image_array;
+
+                        ProductImage::create(
+                            array(
+                                "product_id" => $product->id,
+                                "is_thumbnail" => true,
+                                "file_id" => $product_image->id,
+                                "index" =>  $count
+                            )
+                        );
+
+                        $count += 1;
+                    }
+                }
+
+                // Set Product Restriction and Excemption
+                if($request->has('restrictionAndExcemption')){
+                    $restriction_excemptions = $request->restrictionAndExcemption;
+
+                    foreach($restriction_excemptions as $product_access_type => $restriction_excemption_array){
+                        foreach($restriction_excemption_array as $index => $restriction_excemption){
+                            if($index == "restricted"){
+                                foreach($restriction_excemption as $restricted_array){
+                                    $restricted = (object) $restricted_array;
+
+                                    ProductRestriction::create(array(
+                                        "product_id" => $product->id,
+                                        "product_access_type_id" => $product_access_type,
+                                        "value" => $restricted->id,
+                                    ));
+                                }
+                            }else{
+                                foreach($restriction_excemption as $excempted_array){
+                                    $excempted = (object) $excempted_array;
+
+                                    ProductExemption::create(array(
+                                        "product_id" => $product->id,
+                                        "product_access_type_id" => $product_access_type,
+                                        "value" => $excempted->id,
+                                    ));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Set Related Products
+                if($request->has("related")){
+                    $relateds = $request->related;
+
+                    foreach($relateds as $related_array){
+                        $related = (object) $related_array;
+                        RelatedProduct::create(
+                            array(
+                                'product_id' => $product->id,
+                                'related_product_id' => $related->id,
+                            )
+                        );
+                    }
+                }
+
+                // Set Recommended Productss
+                if($request->has("recommended")){
+                    $recommendeds = $request->recommended;
+
+                    foreach($recommendeds as $recommended_array){
+                        $recommended = (object) $recommended_array;
+
+                        RecommendedProduct::create(
+                            array(
+                                'product_id' => $product->id,
+                                'recommended_product_id' => $recommended->id,
+                            )
+                        );
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                "message" => "Product details has been successfully saved!"
+            ], 200);
+        }catch(\Throwable $e){
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            DB::rollback();
 
             return response()->json([
                 "message" => $message
