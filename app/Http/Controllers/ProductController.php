@@ -11,9 +11,10 @@ use App\Jobs\ZipProductImages;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Season;
 use App\Models\ProductImage;
 use App\Models\RelatedProduct;
-use App\Models\Season;
+use App\Models\ProductCategory;
 use App\Models\NewProductNotfication;
 
 use Carbon\Carbon;
