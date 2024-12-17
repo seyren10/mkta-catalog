@@ -26,8 +26,7 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-
-        $remember = $request->remember === 'true' ?  true : false;
+        $remember = $request->remember === 'true' ? true : false;
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
@@ -57,6 +56,10 @@ class AuthController extends Controller
         $request->merge(['includeRoleData' => true]);
         $request->session()->put('restricted_products', $this->UserServices->getRestrictedProducts(Auth()->user()));
         $request->session()->put('nonwishlist_products', $this->UserServices->getNonWishlistProducts(Auth()->user()));
+        if (Auth()->user()->role_data['id'] != 2) {
+            $request->session()->put('restricted_products', []);
+            $request->session()->put('nonwishlist_products', []);
+        }
         return new UserResource($request->user());
     }
 }

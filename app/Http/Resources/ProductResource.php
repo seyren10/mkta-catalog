@@ -12,7 +12,7 @@ class ProductResource extends JsonResource
         $data = parent::toArray($request);
         $restricted_products = $request->session()->get('restricted_products', array());
         #region Wishlist Button
-        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array())->toArray();
+        $nonwishlistproduct = $request->session()->get('nonwishlist_products', array());
         $data['show_wishlist_button'] = true || !in_array($data['id'], $nonwishlistproduct);
         $data['show_wishlist_button_data'] = $nonwishlistproduct;
         #endregion

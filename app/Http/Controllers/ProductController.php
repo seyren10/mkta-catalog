@@ -30,6 +30,9 @@ class ProductController extends Controller
         $restricted_products = $request->session()->get('restricted_products', array());
         $products = Product::whereNotIn('id', $restricted_products);
 
+
+
+        
         /* Searching products */
         $query = $request->q;
         $perPage = $request->perPage ?? 30;
