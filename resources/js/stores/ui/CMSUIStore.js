@@ -15,6 +15,7 @@ import CMSH from "../../Pages/Admin/CMS/Catalog/CMSTypography/CMSH.vue";
 import CMSParagraph from "../../Pages/Admin/CMS/Catalog/CMSTypography/CMSParagraph.vue";
 import CMSCatalogHeading from "../../Pages/Catalog/CMS/CMSCatalogHeading.vue";
 import CMSCatalogParagraph from "../../Pages/Catalog/CMS/CMSCatalogParagraph.vue";
+import CMSSeasonalProducts from "../../Pages/Admin/CMS/Catalog/CMSSeasonalProducts/CMSSeasonalProducts.vue";
 
 export const useCMSUIStore = defineStore("CMSUIStore", () => {
     const nodes = ref([]);
@@ -77,6 +78,14 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
                     props: {},
                 },
                 type: "products",
+            },
+            {
+                title: "Seasonal Products",
+                icon: "ri-leaf-line",
+                component: {
+                    type: markRaw(CMSSeasonalProducts),
+                },
+                type: "seasonal",
             },
         ],
         typography: [

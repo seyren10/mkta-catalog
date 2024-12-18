@@ -165,7 +165,6 @@ export const useProductStore = defineStore("products", () => {
             form.dimension_height = product_item.value.dimension_height;
             return product_item.value;
         } catch (e) {
-            
             await router.push({ name: "notFound" });
         }
     };
@@ -258,12 +257,18 @@ export const useProductStore = defineStore("products", () => {
             const res = await exec("/api/data-table/product", "put", {
                 products: product_data,
             });
+
+            return res.data;
         } catch (e) {
             console.log(e);
         } finally {
             resetForm();
         }
     };
+
+    async function getSeasonalProducts() {
+        const res = await exec("/api/product/seasonal");
+    }
 
     return {
         tablebatch_updateProducts,
@@ -301,5 +306,6 @@ export const useProductStore = defineStore("products", () => {
         getProductItems,
 
         NonWishlistProduct,
+        getSeasonalProducts,
     };
 });
