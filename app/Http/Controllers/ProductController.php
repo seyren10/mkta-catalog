@@ -122,8 +122,8 @@ class ProductController extends Controller
         return response()->json(
             [
                 'title' => 'On Season',
-                'data' => $products,
-                // 'data' => ProductResource::collection($products),
+                // 'data' => $products,
+                'data' => ProductResource::collection($products),
             ],
             200
         );
