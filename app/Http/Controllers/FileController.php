@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\OpenAPIController;
 use App\Http\Resources\FileResource;
 use App\Http\Resources\ProductAccessTypeResource;
+use App\Jobs\ImageCompressor;
 use App\Models\File;
 use App\Models\ProductAccessType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
@@ -58,21 +59,21 @@ class FileController extends Controller
             $open = new OpenAPIController();
 
             // if(!Storage::disk('public')->exists('100x100')){
-                Storage::disk('public')->makeDirectory('100x100');
-                Storage::disk('public')->makeDirectory('150x150');
-                Storage::disk('public')->makeDirectory('200x200');
-                Storage::disk('public')->makeDirectory('300x300');
+            Storage::disk('public')->makeDirectory('100x100');
+            Storage::disk('public')->makeDirectory('150x150');
+            Storage::disk('public')->makeDirectory('200x200');
+            Storage::disk('public')->makeDirectory('300x300');
             // }
 
             if ((str_contains(trim(strtolower($type)), 'image'))) {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
-                
+
                 Storage::disk('public')->put("", $request->file('eFile'));
 
                 $imageKey = $data;
                 $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
                 // Storage::disk('s3')->put("thumbs/".$imageKey, $request->file('eFile'));
-                Storage::disk('s3')->put("thumbs/".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+                Storage::disk('s3')->put("thumbs/" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
 
                 $open->streamSave($imageKey, 100);
                 Storage::disk('s3')->put("thumbs/100x100/" . $imageKey, file_get_contents(Storage::disk('public')->path('100x100/' . $imageKey)));
@@ -86,13 +87,11 @@ class FileController extends Controller
                 $open->streamSave($imageKey, 300);
                 Storage::disk('s3')->put("thumbs/300x300/" . $imageKey, file_get_contents(Storage::disk('public')->path('300x300/' . $imageKey)));
 
-                Storage::disk('public')->delete("100x100/".$imageKey);
-                Storage::disk('public')->delete("150x150/".$imageKey);
-                Storage::disk('public')->delete("200x200/".$imageKey);
-                Storage::disk('public')->delete("300x300/".$imageKey);
+                Storage::disk('public')->delete("100x100/" . $imageKey);
+                Storage::disk('public')->delete("150x150/" . $imageKey);
+                Storage::disk('public')->delete("200x200/" . $imageKey);
+                Storage::disk('public')->delete("300x300/" . $imageKey);
                 Storage::disk('public')->delete($imageKey);
-
-
 
             } else {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
@@ -115,7 +114,7 @@ class FileController extends Controller
             DB::rollback();
             // Log::error($th);
             return $th;
-            
+
         }
     }
 
@@ -147,6 +146,29 @@ class FileController extends Controller
         } else {
             return Storage::disk('s3')->get("defaultImage.png");
         }
+    }
+
+    /**
+     * Compress a Image File to a specific resolution
+     *
+     * @param File $portal_file -> File Record
+     */
+    public function imageCompressor(File $file, Request $request)
+    {
+        if (!Str::contains($file->type, 'image')) {
+            return response(
+                array(
+                    "message" => "Method not allowed since the File is not an Image Type",
+                    "type" => $file,
+                ),
+                405);
+        }
+        dispatch(new ImageCompressor($file->filename, $request->has('size') ? $request->size : 600));
+        return response(
+            array(
+                "message" => "Image File Compression in Progress",
+            ),
+            200);
     }
 
     /**
