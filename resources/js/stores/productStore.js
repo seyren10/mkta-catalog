@@ -257,7 +257,6 @@ export const useProductStore = defineStore("products", () => {
             const res = await exec("/api/data-table/product", "put", {
                 products: product_data,
             });
-
             return res.data;
         } catch (e) {
             console.log(e);
@@ -268,6 +267,7 @@ export const useProductStore = defineStore("products", () => {
 
     async function getSeasonalProducts() {
         const res = await exec("/api/product/seasonal");
+        return res.data;
     }
 
     return {

@@ -84,6 +84,7 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
                 icon: "ri-leaf-line",
                 component: {
                     type: markRaw(CMSSeasonalProducts),
+                    props: {},
                 },
                 type: "seasonal",
             },
@@ -283,6 +284,12 @@ export const useCMSUIStore = defineStore("CMSUIStore", () => {
                 return markRaw(
                     environment.value === "admin"
                         ? CMSFeaturedProducts
+                        : CMSCatalogFeaturedProducts,
+                );
+            case "seasonal":
+                return markRaw(
+                    environment.value === "admin"
+                        ? CMSSeasonalProducts
                         : CMSCatalogFeaturedProducts,
                 );
             case "heading":

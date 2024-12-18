@@ -15,6 +15,8 @@
             ></CMSButtonClose>
         </div>
 
+        <CMSSPOptions ref="options" />
+
         <div class="flex justify-end">
             <CMSButtonSave @click="handleUpdateNode"></CMSButtonSave>
         </div>
@@ -23,30 +25,50 @@
 
 <script setup>
 import { useCMSUIStore } from "../../../../../stores/ui/CMSUIStore";
-import CMSButtonSave from "../CMSButton/CMSButtonSave.vue";
 import { useProductStore } from "../../../../../stores/productStore";
 
 import CMSButtonClose from "../CMSButton/CMSButtonClose.vue";
 import CMSHeading from "../CMSHeading.vue";
+import CMSButtonSave from "../CMSButton/CMSButtonSave.vue";
+import CMSSPOptions from "./CMSSPOptions.vue";
+import { computed, inject, provide, ref } from "vue";
 
 const props = defineProps({
     id: String,
     parentId: String,
     data: Object,
 });
+
+const addToast = inject("addToast");
 const cmsUiStore = useCMSUIStore();
 const productStore = useProductStore();
+
+const seasonalProducts = ref(props.data?.selectedProducts ?? null);
+
+if (!seasonalProducts.value)
+    seasonalProducts.value = await productStore.getSeasonalProducts();
+
+provide(
+    "selectedProductsCount",
+    computed(() => seasonalProducts?.value?.data?.length),
+);
+provide(
+    "data",
+    computed(() => props.data ?? seasonalProducts.value),
+);
+const options = ref(null);
 
 function handleDeleteNode() {
     cmsUiStore.deleteNode(props);
 }
 
-async function handleUpdateNode() {
-    const seasonalProducts = await productStore.getSeasonalProducts();
-    console.log(seasonalProducts);
+function handleUpdateNode() {
     cmsUiStore.updateNode({
         ...props,
-        data: {},
+        data: {
+            ...options.value,
+            selectedProducts: seasonalProducts?.value.data ?? seasonalProducts.value,
+        },
     });
 
     addToast({
