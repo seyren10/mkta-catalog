@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView, useRoute } from "vue-router";
 import { useProductVerificationStore } from "@/stores/productVerificationStore";
-import { provide, ref } from "vue";
+import { inject, provide, ref } from "vue";
 
 import Tab from "./components/Tab.vue";
 import VLoader from "@/components/base_components/VLoader.vue";
@@ -13,6 +13,7 @@ await verify();
 
 provide("item", item);
 provide("verifyForm", verifyForm);
+const addToast = inject("addToast");
 const showConfirmationDialog = ref(false);
 
 const tabItems = [
@@ -45,7 +46,7 @@ const tabItems = [
 
 function useVerify() {
     const productVerificationStore = useProductVerificationStore();
-    const { form: verifyForm } = storeToRefs(productVerificationStore);
+    const { form: verifyForm, errors } = storeToRefs(productVerificationStore);
 
     const token = route.query.token;
     const item = ref(null);
@@ -55,7 +56,26 @@ function useVerify() {
     }
 
     async function sendProduct() {
-        await productVerificationStore.sendProduct();
+        await productVerificationStore.sendProduct(token);
+
+        if (!errors.value) {
+            showConfirmationDialog.value = false;
+            addToast({
+                props: {
+                    type: "success",
+                },
+                content: "Product successfully verified.",
+            });
+        } else {
+            addToast({
+                props: {
+                    type: "danger",
+                },
+                content:
+                    "Product verification failed. Please check for missing fields and try again",
+            });
+            showConfirmationDialog.value = false;
+        }
     }
 
     return {

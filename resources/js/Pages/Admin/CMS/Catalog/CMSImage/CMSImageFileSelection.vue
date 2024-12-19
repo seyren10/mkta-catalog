@@ -102,7 +102,11 @@
                         <span>{{ uploadFile.file.name }}</span>
                     </li>
                 </ul>
-                <div v-if="selectedUploadFiles.length">
+                <div v-if="selectedUploadFiles.length" class="space-y-4">
+                    <v-alert type="warning">
+                        Important: Please do not close this window while the
+                        upload is in progress.</v-alert
+                    >
                     <v-button
                         class="w-full bg-primary text-white"
                         @click="handleUploadFiles"
@@ -233,8 +237,6 @@ function useUpload() {
     const selectedUploadFiles = ref([]);
     const uploadLoading = ref(false);
 
-    watchEffect(() => {});
-
     function handleSelectImages(event) {
         if (event.target?.files?.length) {
             for (const file of event.target.files) {
@@ -273,6 +275,8 @@ function useUpload() {
                 break;
             }
         }
+
+        await fileStore.getFiles();
     }
 
     return {

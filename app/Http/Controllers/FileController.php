@@ -112,9 +112,10 @@ class FileController extends Controller
                 "message" => "File uploaded successfully.",
             ), 200);
         } catch (\Throwable $th) {
+            DB::rollback();
             // Log::error($th);
             return $th;
-            DB::rollback();
+            
         }
     }
 

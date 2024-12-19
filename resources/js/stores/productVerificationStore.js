@@ -8,6 +8,7 @@ export const useProductVerificationStore = defineStore(
         const { loading, exec, errors } = useAxios();
 
         const form = ref({
+            token: null,
             info: null,
             category: null,
             images: null,
@@ -24,8 +25,14 @@ export const useProductVerificationStore = defineStore(
             return res.data?.data;
         }
 
-        async function sendProduct() {
-            console.log(form.value);
+        async function sendProduct(token) {
+            form.value.token = token;
+
+            const res = await exec(
+                "/api/product/store-product-verification",
+                "post",
+                form.value,
+            );
         }
 
         return {
