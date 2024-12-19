@@ -164,9 +164,11 @@ import {
     BiDot,
     PrCloud,
     PrSpinner,
+    RiLeafLine,
 } from "oh-vue-icons/icons";
 
 addIcons(
+    RiLeafLine,
     PrSpinner,
     PrCloud,
     BiDot,

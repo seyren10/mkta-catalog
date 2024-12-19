@@ -3,30 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
-use App\Http\Resources\ProductResource;
 use App\Http\Requests\ProductVerificationRequest;
-
+use App\Http\Resources\ProductResource;
 use App\Jobs\ZipProductImages;
-
-use App\Models\Filter;
-use App\Models\Product;
 use App\Models\Category;
-use App\Models\Season;
-use App\Models\ProductImage;
-use App\Models\RelatedProduct;
-use App\Models\ProductCategory;
+use App\Models\Filter;
 use App\Models\NewProductNotfication;
-use App\Models\ProductRestriction;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductExemption;
+use App\Models\ProductImage;
+use App\Models\ProductRestriction;
 use App\Models\RecommendedProduct;
-
-use Carbon\Carbon;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-
+use App\Models\RelatedProduct;
+use App\Models\Season;
 use App\Services\BCProductService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -39,9 +35,6 @@ class ProductController extends Controller
         $restricted_products = $request->session()->get('restricted_products', array());
         $products = Product::whereNotIn('id', $restricted_products);
 
-
-
-        
         /* Searching products */
         $query = $request->q;
         $perPage = $request->perPage ?? 30;
@@ -91,7 +84,11 @@ class ProductController extends Controller
         $current = Carbon::now();
         $inSeason = collect(Season::get())
             ->filter(function ($season) use ($current) {
-                return $current->between($season->actual_start_date, $season->actual_end_date);
+                return $current->between(
+                    Carbon::parse($season->actual_start_date)
+                    ,
+                    Carbon::parse($season->actual_end_date)
+                );
             })
             ->map(function ($season) {
                 return $season->categories->map(function ($cur) {
@@ -101,9 +98,8 @@ class ProductController extends Controller
             ->flatten()
             ->unique();
 
-        // $restricted_products = $request->session()->get('restricted_products', []);
-        $restricted_products = [];
-        
+        $restricted_products = $request->session()->get('restricted_products', []);
+        // $restricted_products = [];
         #region Preparation for Products
         // Get categories with a single query that checks both 'id' and 'parent_id' conditions
         $categoryPool = Category::whereIn('id', $inSeason)
@@ -126,8 +122,8 @@ class ProductController extends Controller
         return response()->json(
             [
                 'title' => 'On Season',
-                'data' => $products,
-                // 'data' => ProductResource::collection($products),
+                // 'data' => $products,
+                'data' => ProductResource::collection($products),
             ],
             200
         );
@@ -377,24 +373,24 @@ class ProductController extends Controller
         try {
             $product_notification = NewProductNotfication::where("token", $request->token)->first();
 
-            if($product_notification && !$product_notification->processed_at){
+            if ($product_notification && !$product_notification->processed_at) {
                 $product_service = new BCProductService;
                 $product = $product_service->get_product($request->token);
-    
+
                 if ($product) {
                     return response()->json([
-                        "data" =>$product
+                        "data" => $product,
                     ], 200);
                 } else {
                     return response()->json([
                         'message' => 'Product not found',
-                        'status' => 404
+                        'status' => 404,
                     ], 404);
                 }
-            }else{
+            } else {
                 return response()->json([
                     'message' => 'Token expired',
-                    'status' => 404
+                    'status' => 404,
                 ], 404);
             }
         } catch (\Throwable $e) {
@@ -402,18 +398,19 @@ class ProductController extends Controller
             $message = "Error: " . $e->getMessage();
 
             return response()->json([
-                "message" => $message
+                "message" => $message,
             ], 400);
         }
     }
 
-    public function storeProductVerification(ProductVerificationRequest $request){
+    public function storeProductVerification(ProductVerificationRequest $request)
+    {
         DB::beginTransaction();
-        try{
-            if($request->has("info")){
+        try {
+            if ($request->has("info")) {
                 // Product Basic Info
                 $product_request = (object) $request->info;
-                
+
                 // Set Product Basic Info
                 $product = new Product;
                 $product->id = $product_request->product_id;
@@ -444,11 +441,11 @@ class ProductController extends Controller
                 }
 
                 // Set Product Image
-                if($request->has("images")){
+                if ($request->has("images")) {
                     $count = ProductImage::where('product_id')->get()->count() + 1;
                     $product_images = $request->images;
 
-                    foreach($product_images as $product_image_array){
+                    foreach ($product_images as $product_image_array) {
                         $product_image = (object) $product_image_array;
 
                         ProductImage::create(
@@ -456,7 +453,7 @@ class ProductController extends Controller
                                 "product_id" => $product->id,
                                 "is_thumbnail" => true,
                                 "file_id" => $product_image->id,
-                                "index" =>  $count
+                                "index" => $count,
                             )
                         );
 
@@ -465,13 +462,13 @@ class ProductController extends Controller
                 }
 
                 // Set Product Restriction and Excemption
-                if($request->has('restrictionAndExcemption')){
+                if ($request->has('restrictionAndExcemption')) {
                     $restriction_excemptions = $request->restrictionAndExcemption;
 
-                    foreach($restriction_excemptions as $product_access_type => $restriction_excemption_array){
-                        foreach($restriction_excemption_array as $index => $restriction_excemption){
-                            if($index == "restricted"){
-                                foreach($restriction_excemption as $restricted_array){
+                    foreach ($restriction_excemptions as $product_access_type => $restriction_excemption_array) {
+                        foreach ($restriction_excemption_array as $index => $restriction_excemption) {
+                            if ($index == "restricted") {
+                                foreach ($restriction_excemption as $restricted_array) {
                                     $restricted = (object) $restricted_array;
 
                                     ProductRestriction::create(array(
@@ -480,8 +477,8 @@ class ProductController extends Controller
                                         "value" => $restricted->id,
                                     ));
                                 }
-                            }else{
-                                foreach($restriction_excemption as $excempted_array){
+                            } else {
+                                foreach ($restriction_excemption as $excempted_array) {
                                     $excempted = (object) $excempted_array;
 
                                     ProductExemption::create(array(
@@ -496,10 +493,10 @@ class ProductController extends Controller
                 }
 
                 // Set Related Products
-                if($request->has("related")){
+                if ($request->has("related")) {
                     $relateds = $request->related;
 
-                    foreach($relateds as $related_array){
+                    foreach ($relateds as $related_array) {
                         $related = (object) $related_array;
                         RelatedProduct::create(
                             array(
@@ -511,10 +508,10 @@ class ProductController extends Controller
                 }
 
                 // Set Recommended Productss
-                if($request->has("recommended")){
+                if ($request->has("recommended")) {
                     $recommendeds = $request->recommended;
 
-                    foreach($recommendeds as $recommended_array){
+                    foreach ($recommendeds as $recommended_array) {
                         $recommended = (object) $recommended_array;
 
                         RecommendedProduct::create(
@@ -534,16 +531,16 @@ class ProductController extends Controller
             DB::commit();
 
             return response()->json([
-                "message" => "Product details has been successfully saved!"
+                "message" => "Product details has been successfully saved!",
             ], 200);
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
 
             DB::rollback();
 
             return response()->json([
-                "message" => $message
+                "message" => $message,
             ], 400);
         }
     }
