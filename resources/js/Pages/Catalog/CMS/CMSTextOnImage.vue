@@ -10,7 +10,7 @@
         ></v-text-on-image>
         <router-link v-else :to="data.path">
             <v-text-on-image
-                :class="`${data.aspectRatio}`"
+                :class="`${data.aspectRatio}` "
                 :image="s3Thumbnail(data.filename)"
                 :no-overlay="!data.overlay"
                 :title="data.heading"

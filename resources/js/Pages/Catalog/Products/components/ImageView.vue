@@ -34,12 +34,13 @@
             scrim
             v-model="currentImageIndex"
             :key="id"
+            showNavigation
         >
-            <template #default="{ item }">
+            <template #default="{ item, isMatched }">
                 <v-text-on-image
                     :image="item"
                     class="aspect-square cursor-zoom-in"
-                    @click="lightbox = true"
+                    @click="handleImageClick(item, isMatched)"
                     no-overlay
                 >
                 </v-text-on-image>
@@ -57,6 +58,20 @@ const currentImageIndex = inject("currentImageIndex");
 const lightbox = inject("lightbox");
 
 const s3Thumbnail = inject("s3Thumbnail");
+
+function handleImageClick(item, isMatched) {
+    /* isMatched is variable that determined whether the screen is in desktop or mobile 
+        true for desktop
+        and false for mobile
+    */
+    if (isMatched) {
+        /* show the lightbox for desktop */
+        lightbox.value = true;
+    } else {
+        /* redirect the user to the full image on S3 */
+        window.open(item, "_blank");
+    }
+}
 </script>
 
 <style lang="scss" scoped></style>
