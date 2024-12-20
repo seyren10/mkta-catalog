@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Season extends Model
 {
@@ -23,18 +24,19 @@ class Season extends Model
         'actual_end_date',
 
     ];
-    protected $with = [ 'categories' ];
-    public function getActualStartDateAttribute(){
-        return Carbon::createFromDate(Carbon::now()->year, $this->start_month, $this->start_day)->toFormattedDateString();
+    protected $with = ['categories'];
+    public function getActualStartDateAttribute()
+    {
+        return Carbon::createFromDate(Carbon::now()->year, $this->start_month, $this->start_date)->toFormattedDateString();
     }
-    public function getActualEndDateAttribute(){
+    public function getActualEndDateAttribute()
+    {
         $curYear = Carbon::now()->year;
         if ($this->end_month < $this->start_month) {
             $curYear++;
         }
-        return Carbon::createFromDate($curYear, $this->end_month, $this->end_day)->toFormattedDateString();
+        return Carbon::createFromDate($curYear, $this->end_month, $this->end_date)->toFormattedDateString();
     }
-
 
     /**
      * Get all of the comments for the season

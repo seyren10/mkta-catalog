@@ -37,14 +37,17 @@ class GenerateNewsLetter extends Command
         $products = Product::whereBetween('created_at', [$start, $end])
                     ->get();
 
-        $template = "emails.news_letter";
-        $data = [
-            "products" => $products
-        ];
+        if(count($products) > 0){
+            $template = "emails.news_letter";
+            $data = [
+                "products" => $products
+            ];
+    
+            $mail_message = view($template, $data)->render();
+    
+            $email = new EntraMailService;
+            $test = $email->sendMail("New Products from MK Themed Attractions", $mail_message, config('api.new_details_notifications.email'), true);
+        }
 
-        $mail_message = view($template, $data)->render();
-
-        $email = new EntraMailService;
-        $test = $email->sendMail("New Products from MK Themed Attractions", $mail_message, config('api.new_details_notifications.email'), true); // Pass true for HTML email
     }
 }
