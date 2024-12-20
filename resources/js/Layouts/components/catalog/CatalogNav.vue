@@ -155,7 +155,7 @@
                                 }"
                             >
                                 <v-text-on-image
-                                    :image="s3Thumbnail(category.img)"
+                                    :image="s3Thumbnail600x600(category.img)"
                                     :title="category.title"
                                     no-overlay
                                     class="aspect-[10/2] md:aspect-[16/9]"
@@ -214,7 +214,7 @@ const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 const menu = ref(false);
 const search = ref(route.query.q || "");
-const s3Thumbnail = inject("s3Thumbnail");
+const s3Thumbnail600x600 = inject("s3Thumbnail600x600");
 const showMobileSearchDialog = ref(false);
 
 //non-reactives

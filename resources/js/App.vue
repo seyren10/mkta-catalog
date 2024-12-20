@@ -58,6 +58,9 @@ provide("s3", (img) => {
 provide("s3Thumbnail", (img) => {
     return `https://mkta-portal.s3.us-east-2.amazonaws.com/thumbs/${img}`;
 });
+provide("s3Thumbnail600x600", (img) => {
+    return `https://mkta-portal.s3.us-east-2.amazonaws.com/thumbs/600x600/${img}`;
+});
 provide("copyText", (text) => {
     const el = document.createElement("textarea"); // Create a <textarea> element
     el.value = text; // Set its value to the text that needs to be copied
