@@ -35,6 +35,7 @@ import VBadge from "./components/VBadge.vue";
 //custom directives
 import intersect from "@/directives/intersectionObserver.js";
 import hideOnScroll from "@/directives/hideOnScroll.js";
+import focus from "@/directives/focus.js";
 
 import { createPinia } from "pinia";
 
@@ -76,5 +77,6 @@ app.component("v-badge", VBadge);
 //directives
 app.directive("intersect", intersect);
 app.directive("hideOnScroll", hideOnScroll);
+app.directive("focus", focus);
 
 app.mount("#app");

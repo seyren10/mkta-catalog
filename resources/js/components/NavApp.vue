@@ -7,7 +7,7 @@
             <li
                 v-for="link in links"
                 :key="link.title"
-                class="line-effect relative cursor-pointer text-[min(.5vw+.5rem,1rem)] text-nowrap"
+                class="line-effect relative cursor-pointer text-nowrap text-[min(.5vw+.5rem,1rem)]"
                 :class="{
                     'font-bold before:w-full before:opacity-100':
                         $route.hash === link.to,
@@ -28,13 +28,7 @@
             <v-button v-if="!user" class="font-bold" @click="dialog = true"
                 >Login</v-button
             >
-            <!-- <div
-                v-else
-                class="text-sm font-medium underline underline-offset-1"
-            >
-                <span>Welcome Back, </span
-                ><span class="text-accent"> {{ user.name }}!</span>
-            </div> -->
+
             <span class="text-slate-300">|</span>
             <div class="flex items-center gap-3" v-if="user">
                 <div>
@@ -77,7 +71,7 @@
                 class="cursor-pointer"
                 name="la-bars-solid"
                 scale="1.3"
-                @click="expanded = true"
+                @click="expanded = !expanded"
             ></v-icon>
         </div>
 
@@ -87,15 +81,9 @@
                 v-if="expanded"
                 class="fixed right-0 z-[999] min-h-[100vh] w-[70%] border-l bg-white p-3"
             >
-                <v-icon
-                    name="la-times-solid"
-                    scale="1.3"
-                    class="absolute right-1.5 top-[1.2rem] cursor-pointer"
-                    @click="expanded = false"
-                ></v-icon>
-                <div class="mt-10 grid gap-5">
+                <div class="mt-[5rem] grid gap-5">
                     <div>
-                        <img src="/Logo.png" alt="" />
+                        <img src="/Logo.png" alt="" class="invert" />
                     </div>
                     <v-button
                         v-if="!user"

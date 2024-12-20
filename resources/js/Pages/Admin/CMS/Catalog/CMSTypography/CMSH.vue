@@ -85,7 +85,7 @@ const headingTypeData = [
 ];
 const justifyData = [
     { icon: "co-justify-left", class: "text-left" },
-    { icon: "co-justify-center", class: "text-center" },
+    { icon: "co-justify-center", class: "text-center " },
     { icon: "co-justify-right", class: "text-right" },
 ];
 
