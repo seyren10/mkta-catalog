@@ -18,7 +18,7 @@
                     ref="scroller"
                 >
                     <div v-for="(item, index) in items" class="overflow-hidden">
-                        <slot :item="item"> {{ item }} </slot>
+                        <slot :item="item" :isMatched="isMatched"> {{ item }} </slot>
                     </div>
                 </div>
             </slot>
@@ -26,8 +26,11 @@
             <template v-if="!noNavigation">
                 <button
                     @click="next"
-                    class="absolute inset-y-0 right-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:right-0"
-                    :class="{ 'bg-black bg-opacity-15': scrim }"
+                    class="absolute inset-y-0 right-0 cursor-pointer px-3 text-white duration-300"
+                    :class="{
+                        'bg-black bg-opacity-15': scrim,
+                        'right-[-30%] group-hover/scroller:right-0': isMatched,
+                    }"
                 >
                     <v-icon
                         name="md-keyboardarrowright-round"
@@ -36,8 +39,11 @@
                 </button>
                 <button
                     @click="prev"
-                    class="absolute inset-y-0 left-[-30%] cursor-pointer px-3 text-white duration-300 group-hover/scroller:left-0"
-                    :class="{ 'bg-black bg-opacity-15': scrim }"
+                    class="absolute inset-y-0 cursor-pointer px-3 text-white duration-300"
+                    :class="{
+                        'bg-black bg-opacity-15': scrim,
+                        'left-[-30%] group-hover/scroller:left-0': isMatched,
+                    }"
                 >
                     <v-icon
                         name="md-keyboardarrowleft-round"
@@ -71,6 +77,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { useHorizontalScroller } from "@/composables/useHorizontalScroller";
+import { useMedia } from "@/composables/useMedia";
 
 const props = defineProps({
     columns: {
@@ -97,6 +104,7 @@ const props = defineProps({
     noIndicator: Boolean,
     noNavigation: Boolean,
     activator: Object,
+    showNavigation: Boolean,
 });
 
 const model = defineModel();
@@ -110,6 +118,7 @@ const horizontalScroller = useHorizontalScroller(
     +props.interval,
     activator,
 );
+const { isMatched } = useMedia("(min-width: 768px )");
 
 const {
     scroller,
