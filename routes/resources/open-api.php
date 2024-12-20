@@ -1,16 +1,18 @@
 <?php
 
+use App\Http\Controllers\CompressImageController;
 use App\Http\Controllers\OpenAPIController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('current-test', [ProductController::class, 'seasonProducts']);
+
 
 
 
 Route::prefix('open-api')
     ->group(function () {
+        Route::post('compress-image/{image_size}/{image_key}', [CompressImageController::class, 'store']);
         Route::get('current', [OpenAPIController::class, 'current_test']);
         
         Route::get('product-verification/{product}', [OpenAPIController::class, 'productVerification']);
