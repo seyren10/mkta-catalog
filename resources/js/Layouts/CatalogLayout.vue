@@ -4,7 +4,7 @@
             <CatalogNav></CatalogNav>
         </header>
 
-        <main class="text-slate-600 mt-[9rem]">
+        <main class="mt-[5rem] text-slate-600 lg:mt-[9rem]">
             <RouterView v-slot="{ Component }" :key="$route.path">
                 <template v-if="Component">
                     <Suspense timeout="0">
@@ -64,7 +64,7 @@ if (!categories.value.length)
 if (!filters.value.length) await filterStore.getFilters();
 
 const handleHide = (el, hidden) => {
-    el.classList.toggle("bottom-[1%]", !hidden);
+    el.classList.toggle("bottom-[3%]", !hidden);
 };
 
 const handleScrollToTop = () => {

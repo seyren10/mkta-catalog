@@ -23,7 +23,7 @@
                 >Imperial</v-button
             >
         </div>
-        <ul class="grid grid-cols-2 gap-3">
+        <ul class="grid gap-3 lg:grid-cols-2">
             <li
                 v-for="(detail, key) in product.details"
                 :key="key"
@@ -35,7 +35,7 @@
                 <span v-html="detail"> </span>
             </li>
         </ul>
-        <div class="py-2 text-justify">
+        <div class="rounded-md bg-gray-50 p-2 text-xs mt-4 text-slate-400">
             <v-icon class="me-2" name="pr-info-circle"></v-icon>
             While we make every effort to ensure accuracy, actual product
             dimensions may vary slightly due to manufacturing processes or

@@ -1,8 +1,15 @@
 <template>
     <div class="container my-4 space-y-4">
+        <BreadCrumb
+            class="lg:hidden flex"
+            :items="[
+                { name: 'catalog', text: 'Catalog' },
+                { name: 'categories', text: 'Categories' },
+            ]"
+        ></BreadCrumb>
         <header class="relative overflow-hidden rounded-lg bg-white">
             <BreadCrumb
-                class="absolute left-1 top-0 z-10 text-white"
+                class="absolute left-1 top-0 z-10 hidden text-white lg:flex"
                 :items="[
                     { name: 'catalog', text: 'Catalog' },
                     { name: 'categories', text: 'Categories' },
