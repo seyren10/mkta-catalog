@@ -14,6 +14,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/bc-product-details', [ProductController::class, 'bcProductDetails']);
         Route::get('/seasonal', [ProductController::class, 'seasonProducts']);
         Route::post('/store-product-verification', [ProductController::class, 'storeProductVerification']);
+        Route::post('/temp-image-upload/{product}', [ProductController::class, 'directUploadImage']);
     });
 
     Route::get('product-images/zip/{product}', [ProductController::class, "zipProductImages"]);
