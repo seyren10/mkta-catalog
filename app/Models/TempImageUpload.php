@@ -11,4 +11,8 @@ class TempImageUpload extends Model
 
     protected $fillable = ["product_id", "json"];
     protected $hidden = [ "created_at", "updated_at"];
+
+    protected $casts = [
+        'json' => 'array',
+    ];
 }
