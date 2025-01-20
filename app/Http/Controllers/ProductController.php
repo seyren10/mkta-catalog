@@ -562,6 +562,7 @@ class ProductController extends Controller
             }else{
                 $temp_upload = new TempImageUpload;
             }
+
             $temp_upload->data = json_encode($request->images);
             $temp_upload->sku = $sku;
             $temp_upload->save();
