@@ -10,6 +10,7 @@ const { item } = storeToRefs(productVerificationStore);
 const imageUploadDialog = ref(false);
 const selectedImages = ref([]);
 const form = inject("verifyForm");
+const addToast = inject("addToast");
 
 async function handleUpdloadBanner(images) {
     selectedImages.value = images;
@@ -19,16 +20,25 @@ async function handleUpdloadBanner(images) {
         images,
     );
     imageUploadDialog.value = false;
+
+    addToast({
+        props: {
+            type: "info",
+        },
+        content: "Your work has been automatically saved.",
+    });
 }
 
 async function getTempImages() {
     const images = await productVerificationStore.getTemporaryImages(
         item.value.product_id,
     );
-    console.log(images);
-    const parsedImages = JSON.parse(images.data);
-    selectedImages.value = parsedImages;
-    form.value["images"] = parsedImages;
+
+    if (images) {
+        const parsedImages = JSON.parse(images.data);
+        selectedImages.value = parsedImages;
+        form.value["images"] = parsedImages;
+    }
 }
 
 /* INIT */
