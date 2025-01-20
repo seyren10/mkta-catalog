@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('temp_image_uploads', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Product::class)->nullable()->constrained('products')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('sku');
             $table->json('data');
             $table->timestamps();
         });

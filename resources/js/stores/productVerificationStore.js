@@ -17,10 +17,14 @@ export const useProductVerificationStore = defineStore(
             recommended: null,
         });
 
+        const item = ref();
+
         async function verifyProduct(token) {
             const res = await exec("/api/product/bc-product-details", "get", {
                 token,
             });
+
+            item.value = res.data?.data;
 
             return res.data?.data;
         }
@@ -35,12 +39,32 @@ export const useProductVerificationStore = defineStore(
             );
         }
 
+        async function temporarySaveImages(productId, images) {
+            const res = exec(
+                `/api/product/temp-image-upload/${productId}`,
+                "post",
+                {
+                    images,
+                },
+            );
+        }
+        async function getTemporaryImages(productId) {
+            const res = await exec(
+                `/api/product/temp-image-upload/${productId}`,
+            );
+
+            return res.data?.data;
+        }
+
         return {
             verifyProduct,
             sendProduct,
+            temporarySaveImages,
+            getTemporaryImages,
             errors,
             loading,
             form,
+            item,
         };
     },
 );

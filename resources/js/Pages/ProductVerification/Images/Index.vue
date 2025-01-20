@@ -2,16 +2,37 @@
 import CMSImageFileSelection from "@/Pages/Admin/CMS/Catalog/CMSImage/CMSImageFileSelection.vue";
 import SelectedImages from "./SelectedImages.vue";
 import { inject, ref } from "vue";
+import { useProductVerificationStore } from "../../../stores/productVerificationStore";
+import { storeToRefs } from "pinia";
 
+const productVerificationStore = useProductVerificationStore();
+const { item } = storeToRefs(productVerificationStore);
 const imageUploadDialog = ref(false);
 const selectedImages = ref([]);
 const form = inject("verifyForm");
 
-function handleUpdloadBanner(images) {
+async function handleUpdloadBanner(images) {
     selectedImages.value = images;
     form.value["images"] = selectedImages.value;
+    await productVerificationStore.temporarySaveImages(
+        item.value.product_id,
+        images,
+    );
     imageUploadDialog.value = false;
 }
+
+async function getTempImages() {
+    const images = await productVerificationStore.getTemporaryImages(
+        item.value.product_id,
+    );
+    console.log(images);
+    const parsedImages = JSON.parse(images.data);
+    selectedImages.value = parsedImages;
+    form.value["images"] = parsedImages;
+}
+
+/* INIT */
+await getTempImages();
 </script>
 <template>
     <div>

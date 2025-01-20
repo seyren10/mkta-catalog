@@ -6,7 +6,7 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductVerificationRequest;
 use App\Http\Resources\ProductResource;
 
-use App\Httt\Request\DirectUploadImageRequest;
+use App\Http\Requests\DirectUploadImageRequest;
 
 use App\Jobs\ZipProductImages;
 
@@ -577,7 +577,7 @@ class ProductController extends Controller
 
     public function getDirectUploadImage($sku){
         try{
-            $temp_upload = TempImageUpload::where('sku', $sku)->get();
+            $temp_upload = TempImageUpload::where('sku', $sku)->first();
 
             return response()->json([
                 "data" => $temp_upload
