@@ -6,6 +6,8 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductVerificationRequest;
 use App\Http\Resources\ProductResource;
 
+use App\Httt\Request\DirectUploadImageRequest;
+
 use App\Jobs\ZipProductImages;
 
 use App\Models\Category;
