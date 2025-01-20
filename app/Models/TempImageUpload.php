@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TempImageUpload extends Model
 {
     use HasFactory;
+
+    protected $fillable = ["product_id", "json"];
+    protected $hidden = [ "created_at", "updated_at"];
 }

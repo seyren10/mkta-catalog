@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('temp_image_uploads', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_thumbnail')->comment('0 -> false, 1 -> true')->default(false);
-            $table->foreignIdFor(\App\Models\File::class)->nullable()->constrained('files')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(\App\Models\Product::class)->nullable()->constrained('products')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('index')->default(100);
+            $table->json('data');
             $table->timestamps();
         });
     }

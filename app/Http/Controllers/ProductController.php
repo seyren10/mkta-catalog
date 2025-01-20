@@ -553,24 +553,12 @@ class ProductController extends Controller
 
     public function directUploadImage(Product $product, DirectUploadImageRequest $request){
         try{
-            // Set Product Image
-            $count = TempImageUpload::where('product_id')->get()->count() + 1;
-            $product_images = $request->images;
 
-            foreach ($product_images as $product_image_array) {
-                $product_image = (object) $product_image_array;
+            $tem_upload = new TempImageUpload;
+            $tem_upload->data = $request->images;
 
-                TempImageUpload::create(
-                    array(
-                        "product_id" => $product->id,
-                        "is_thumbnail" => true,
-                        "file_id" => $product_image->id,
-                        "index" => $count,
-                    )
-                );
-
-                $count += 1;
-            }
+            $product->temp_image_image_uploads()->attach($tem_upload);
+            $product->save();
 
             return response()->json([
                 "message" => "Successfully saved images"
