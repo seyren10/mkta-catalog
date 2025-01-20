@@ -22,7 +22,7 @@ class DirectUploadImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "images" => "required|string"
+            "images" => "required|array"
         ];
     }
 }
