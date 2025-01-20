@@ -555,7 +555,13 @@ class ProductController extends Controller
 
     public function directUploadImage($sku, DirectUploadImageRequest $request){
         try{
-            $temp_upload = new TempImageUpload;
+            $existing = TempImageUpload::where("sku", $sku)->first();
+
+            if($existing){
+                $temp_upload = $existing;
+            }else{
+                $temp_upload = new TempImageUpload;
+            }
             $temp_upload->data = json_encode($request->images);
             $temp_upload->sku = $sku;
             $temp_upload->save();
