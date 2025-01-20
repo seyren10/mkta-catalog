@@ -551,17 +551,34 @@ class ProductController extends Controller
         }
     }
 
-    public function directUploadImage(Product $product, DirectUploadImageRequest $request){
+    public function directUploadImage($sku, DirectUploadImageRequest $request){
         try{
-
-            $tem_upload = new TempImageUpload;
-            $tem_upload->data = $request->images;
-
-            $product->temp_image_image_uploads()->attach($tem_upload);
-            $product->save();
+            $temp_upload = new TempImageUpload;
+            $temp_upload->data = $request->images;
+            $temp_upload->sku = $sku;
+            $temp_upload->save();
 
             return response()->json([
                 "message" => "Successfully saved images"
+            ], 200);
+        }catch(\Throwable $e){
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            DB::rollback();
+
+            return response()->json([
+                "message" => $message,
+            ], 400);
+        }
+    }
+
+    public function getDirectUploadImage($sku){
+        try{
+            $temp_upload = TempImageUpload::where('sku', $sku)->get();
+
+            return response()->json([
+                "data" => $temp_upload
             ], 200);
         }catch(\Throwable $e){
             \Log::error($e);

@@ -101,8 +101,4 @@ class Product extends Model
     public function sync_recommended_products(){
         return $this->belongsToMany(RecommendedProduct::class, 'recommended_products', 'product_id', 'recommended_product_id');
     }
-
-    public function temp_image_image_uploads(){
-        return $this->hasMany(TempImageUpload::class, "product_id", "id");
-    }
 }
