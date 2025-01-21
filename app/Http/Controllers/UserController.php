@@ -70,6 +70,12 @@ class UserController extends Controller
                 "role_id" => $request->role_id ?? 2,
             )
         );
+        if( $request->has('company_id') ){
+            $company = \App\Models\CompanyCode::find($request->company_id);
+            if( $company ){
+                self::modifyUserCompanyCode( $user , 'append', $company);
+            }
+        }
         return response()->json([
             'message' => 'User created successfully',
             'user' => $user,

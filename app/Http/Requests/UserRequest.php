@@ -43,16 +43,16 @@ class UserRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($id)
+                Rule::unique('users', 'email')->ignore($id),
             ],
         ];
-        if ($this->getMethod() ==  'PUT') {
+        if ($this->getMethod() == 'PUT') {
             $rules = [
                 'password' => [
                     'required',
                     'min:8',
                     'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*_?&])[A-Za-z\d@$!%*_?&]+$/',
-                ]
+                ],
             ];
         }
         return $rules;
@@ -64,11 +64,18 @@ class UserRequest extends FormRequest
             'email.required' => 'The email field is required.',
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'The email has already been taken.',
-            'password.regex' => "Password should contain at least 1 Letter, 1 Number, 1 Special Characters( @ $ ! % * ? & _ ) and should not contain spaces"
+            'password.regex' => "Password should contain at least 1 Letter, 1 Number, 1 Special Characters( @ $ ! % * ? & _ ) and should not contain spaces",
         ];
     }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
+        throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            response()->json(
+                [
+                    'errors' => $validator->errors()->all(),
+                ],
+                422
+            )
+        );
     }
 }

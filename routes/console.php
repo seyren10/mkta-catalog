@@ -11,3 +11,4 @@ Schedule::command('app:image-compressor')->everyThreeMinutes();
 Schedule::call(function(){
     CompressImage::onlyTrashed()->forceDelete();
 })->dailyAt('00:00');
+

@@ -22,7 +22,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -73,6 +72,11 @@ class ProductController extends Controller
         });
 
         return ProductResource::collection($products);
+    }
+    public function newProductItems(Request $request)
+    {
+        $count = $request->has('count') ? $request->count : 20;
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->latest()->take($count)->get());
     }
     public function latestProducts(Request $request)
     {
@@ -143,13 +147,19 @@ class ProductController extends Controller
                 ->take($count)->get());
     }
 
-    public function getProductsWithCategoryId(Request $request, Category $category)
+    public function getProductsWithCategoryId(Request $request, $category)
     {
-        $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereHas('product_categories', function ($query) use ($category) {
-            if ($category->id) {
-                $query->where('product_categories.category_id', $category->id);
-            }
-        });
+
+        $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->where('created_at', '>', now()->subDays(3));
+
+        if ((int) $category != 1) {
+            $category = Category::find($category);
+            $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereHas('product_categories', function ($query) use ($category) {
+                if ($category->id) {
+                    $query->where('product_categories.category_id', $category->id);
+                }
+            });
+        }
 
         $search = $request->q;
         $perPage = $request->perPage ?? 32;
