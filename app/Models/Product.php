@@ -27,7 +27,7 @@ class Product extends Model
     public $incrementing = false;
     protected $keyType = "string";
     protected $hidden = ["laravel_through_key", 'updated_at'];
-    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail', 'related_product', 'recommended_product', 'product_filter', 'variants'];
+    protected $with = ['non_wishlist_users', 'product_images', 'product_components', 'product_categories', 'product_thumbnail', 'related_product', 'recommended_product', 'product_filter', 'variants', 'temp_image_image_uploads'];
     public function non_wishlist_users()
     {
         return $this->hasMany(NonWishlistUsers::class, 'product_id', 'id')->without(['product']);
@@ -101,5 +101,4 @@ class Product extends Model
     public function sync_recommended_products(){
         return $this->belongsToMany(RecommendedProduct::class, 'recommended_products', 'product_id', 'recommended_product_id');
     }
-
 }
