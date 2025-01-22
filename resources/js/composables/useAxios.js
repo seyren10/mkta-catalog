@@ -7,7 +7,6 @@ export const useAxios = (method, options) => {
     const router = useRouter();
 
     watch(errors, (newValue) => {
-        console.log(newValue);
         switch (newValue.status) {
             case 404:
                 router.push({ name: "notFound" });

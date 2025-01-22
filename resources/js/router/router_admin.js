@@ -282,7 +282,6 @@ const admin_routes = [
         beforeEnter: (to, from, next) => {
             const userStore = useUserStore();
             const { currentUser } = storeToRefs(userStore);
-            console.log(currentUser.value);
 
             if (currentUser.value.role_data.id === 2) {
                 return next({ name: "notFound" });
