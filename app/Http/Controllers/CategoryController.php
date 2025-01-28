@@ -24,13 +24,13 @@ class CategoryController extends Controller
             "sub_categories" => [],
             "parent_category" => null,
             "banner_file" => [
-                "id"=> 19798,
-                "title"=> "Christmas.jpg",
-                "filename"=> "a924FwkhDgAhCBaVugo55XK2rAf86gtoVKcfguUG.jpg",
+                "id"=> 19789,
+                "title"=> "New Items.jpg",
+                "filename"=> "OUCsBhrnmJ5DpqPxPLXHs3TwISLJnRBQHpZD5QJ0.jpg",
                 "type"=> "image\/jpeg",
                 "deleted_at"=> null
             ],
-            "img" => "4X6eNhalbAFAG9vWwtOLDiI7H9cFWRro6aWr4zoP.jpg"
+            "img" => "YWAO5MIpcSyZ0TxtMXhHJiBjKpS7EqmjWbdcdkzH.jpg"
         ];
         $category = Collect([]);
         $category->push($new_category);
