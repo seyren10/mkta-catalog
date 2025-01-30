@@ -88,7 +88,14 @@
                     </div>
 
                     <!-- #endregion SearchBar -->
-                    <Wishlist max-width="800"> </Wishlist>
+                    <router-link :to="{ name: 'wishlist' }">
+                        <v-badge v-if="wishlistCount">{{
+                            wishlistCount
+                        }}</v-badge>
+                        <v-tooltip activator="parent">Wishlist</v-tooltip>
+                        <v-icon name="la-heart" scale="1.5" class="fill-accent">
+                        </v-icon>
+                    </router-link>
                 </div>
                 <!-- #endregion searchbar -->
 
@@ -171,7 +178,7 @@
             <template #header> </template>
             <div class="w-screen border p-3">
                 <div
-                    class="flex grow overflow-hidden rounded-lg duration-500 has-[:focus]:ring-4 has-[:focus]:ring-accent bg-white"
+                    class="flex grow overflow-hidden rounded-lg bg-white duration-500 has-[:focus]:ring-4 has-[:focus]:ring-accent"
                 >
                     <div class="my-auto grow pt-1">
                         <textarea
@@ -205,7 +212,6 @@ import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
 
 import FeatureCategory from "./FeatureCategory.vue";
-import Wishlist from "./Wishlist.vue";
 
 //reactives
 const route = useRoute();
@@ -216,6 +222,8 @@ const menu = ref(false);
 const search = ref(route.query.q || "");
 const s3Thumbnail600x600 = inject("s3Thumbnail600x600");
 const showMobileSearchDialog = ref(false);
+const wishlistStore = inject("wishlistStore");
+const { wishlistCount } = storeToRefs(wishlistStore);
 
 //non-reactives
 const headerData = [
