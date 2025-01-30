@@ -1,23 +1,21 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Exports\WishListExport;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\UserWishlist;
+use App\Services\EntraMailService;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-use App\Exports\WishListExport;
-use App\Services\EntraMailService;
-
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserWishlistController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->email_service = new EntraMailService;
     }
 
@@ -43,20 +41,20 @@ class UserWishlistController extends Controller
         //map the wishlists to only contain the product and wishlistId and not other information
         $products = $wishlists->map(function ($wishlist) {
             return [
-                'id' => $wishlist->id,
-                'product' => $wishlist->product
+                'id'      => $wishlist->id,
+                'product' => $wishlist->product,
             ];
         });
 
         return response()->json([
-            'data' => $products
+            'data' => $products,
         ]);
     }
     public function getWishlist(User $user)
     {
         $product_list = UserWishlist::where('user_id', $user->id)->get()->pluck('product_id');
 
-        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereIn('id', $product_list)->get());
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', []))->whereIn('id', $product_list)->get());
     }
 
     public function store(Request $request)
@@ -85,7 +83,6 @@ class UserWishlistController extends Controller
         // }
 
     }
-
 
     /*  Delete the wishlist of the currently
     logged in user */
@@ -118,7 +115,7 @@ class UserWishlistController extends Controller
      */
     public function edit(UserWishlist $userWishlist)
     {
-        //
+
     }
 
     /**
@@ -126,10 +123,14 @@ class UserWishlistController extends Controller
      */
     public function update(Request $request, UserWishlist $userWishlist)
     {
-        //
+        $userWishlist->qty = $request->qty ?? $userWishlist->qty;
+        $userWishlist->save();
+        return response(
+            [
+                "message" => "Quantity is updated",
+            ]
+            , 200);
     }
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -142,7 +143,7 @@ class UserWishlistController extends Controller
     public function sendWishlist(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user      = Auth::user();
             $recipient = config('notification.wishlist.recipient');
 
             // Retrieve products from request
@@ -159,7 +160,7 @@ class UserWishlistController extends Controller
                 $recipient,
                 $filePath,
                 $filename,
-                false // Use HTML body
+                false// Use HTML body
             );
 
             return response()->json([
@@ -170,22 +171,23 @@ class UserWishlistController extends Controller
             $message = "Error: " . $e->getMessage();
 
             return response()->json([
-                "message" => $message
+                "message" => $message,
             ], 400);
         }
     }
 
-    public function inquireProduct(Request $request){
-        try{
-            $user = Auth::user();
+    public function inquireProduct(Request $request)
+    {
+        try {
+            $user      = Auth::user();
             $recipient = config('notification.wishlist.recipient');
 
             $product = Product::find($request->productCode);
 
             $template = "emails.product_inquery";
-            $data = [
+            $data     = [
                 "product" => $product,
-                'message' => $request->message ?? ""
+                'message' => $request->message ?? "",
             ];
 
             $mail_message = view($template, $data)->render();
@@ -194,18 +196,18 @@ class UserWishlistController extends Controller
                 'Product Inquery from ' . ($user ? $user->name : "Test User"),
                 $mail_message,
                 $recipient,
-                true // Use HTML body
+                true// Use HTML body
             );
 
             return response()->json([
                 "message" => "Product inquery has been sent!",
             ], 200);
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
 
             return response()->json([
-                "message" => $message
+                "message" => $message,
             ], 400);
         }
     }

@@ -56,6 +56,8 @@ Route::apiResource('product-access-type', ProductAccessTypeController::class)->e
 Route::put('data-table/product-access-type', [ProductAccessTypeController::class, 'batchUpdate']);
 Route::get('notifications/{user}', [NotificationController::class, 'index']);
 
+
+Route::put('customer-wishlist/{userWishlist}', [UserWishlistController::class, 'update']);
 Route::delete('customer-wishlist/delete-all-user-wishlists', [UserWishlistController::class, 'destroyUserWishlistAll']);
 Route::post('customer-wishlist/send-wishlist', [UserWishlistController::class, 'sendWishlist']);
 Route::post('customer-wishlist/product-inquery', [UserWishlistController::class, 'inquireProduct']);
