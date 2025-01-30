@@ -147,7 +147,15 @@ class UserWishlistController extends Controller
             $recipient = config('notification.wishlist.recipient');
 
             // Retrieve products from request
-            $products = Product::whereIn('id', $request->productCodes)->get();
+            $products = [];
+            foreach($request->products as $product){
+                array_push($products,
+                    [
+                        "data" => Product::find($product["id"]),
+                        "qty" => $product["qty"]
+                    ]
+                );
+            }
             $filename = 'wishlist.xlsx';
 
             // Store the Excel as a file
