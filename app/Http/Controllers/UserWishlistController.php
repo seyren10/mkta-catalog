@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Exports\WishListExport;
@@ -34,20 +35,20 @@ class UserWishlistController extends Controller
             ]);
         }
         */
-
         //User specific wishlist
         $wishlists = Auth::user()->wishlists()->with('product')->get();
 
-        //map the wishlists to only contain the product and wishlistId and not other information
-        $products = $wishlists->map(function ($wishlist) {
-            return [
-                'id'      => $wishlist->id,
-                'product' => $wishlist->product,
-            ];
-        });
+        // //map the wishlists to only contain the product and wishlistId and not other information
+        // $products = $wishlists->map(function ($wishlist) {
+        //     return [
+        //         'id'      => $wishlist->id,
+        //         'product' => $wishlist->product,
+        //         'qty' => $wishlist->qty
+        //     ];
+        // });
 
         return response()->json([
-            'data' => $products,
+            'data' => $wishlists,
         ]);
     }
     public function getWishlist(User $user)
@@ -113,10 +114,7 @@ class UserWishlistController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserWishlist $userWishlist)
-    {
-
-    }
+    public function edit(UserWishlist $userWishlist) {}
 
     /**
      * Update the specified resource in storage.
@@ -128,8 +126,9 @@ class UserWishlistController extends Controller
         return response(
             [
                 "message" => "Quantity is updated",
-            ]
-            , 200);
+            ],
+            200
+        );
     }
 
     /**
@@ -147,7 +146,15 @@ class UserWishlistController extends Controller
             $recipient = config('notification.wishlist.recipient');
 
             // Retrieve products from request
-            $products = Product::whereIn('id', $request->productCodes)->get();
+            $products = [];
+            foreach($request->products as $product){
+                array_push($products,
+                    [
+                        "data" => Product::find($product["id"]),
+                        "qty" => $product["qty"]
+                    ]
+                );
+            }
             $filename = 'wishlist.xlsx';
 
             // Store the Excel as a file
@@ -160,7 +167,7 @@ class UserWishlistController extends Controller
                 $recipient,
                 $filePath,
                 $filename,
-                false// Use HTML body
+                false // Use HTML body
             );
 
             return response()->json([
@@ -196,7 +203,7 @@ class UserWishlistController extends Controller
                 'Product Inquery from ' . ($user ? $user->name : "Test User"),
                 $mail_message,
                 $recipient,
-                true// Use HTML body
+                true // Use HTML body
             );
 
             return response()->json([

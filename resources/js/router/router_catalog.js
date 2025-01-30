@@ -105,6 +105,11 @@ const catalog_routes = [
                     fullUserData: true,
                 },
             },
+            {
+                path: "wishlist",
+                name: "wishlist",
+                component: () => import("@/Pages/Catalog/Wishlist/Index.vue"),
+            },
         ],
     },
 ];
