@@ -161,8 +161,15 @@ class UserWishlistController extends Controller
             $filePath = storage_path('/app/' . $filename);
             Excel::store(new WishListExport($products), $filename, 'local');
 
+            $company = $user->broker_company;
+            if($company){
+                $title = 'Wishlist Request from ' . ($user ? $user->name : "Unknow User") . " (" .$company->title . ")";
+            }else{
+                $title = 'Wishlist Request from ' . ($user ? $user->name : "Unknow User");
+            }
+
             $this->email_service->sendMailWithAttachment(
-                'Wishlist Request from ' . ($user ? $user->name : "Test User"),
+                $title,
                 $request->message ?? '',
                 $recipient,
                 $filePath,
