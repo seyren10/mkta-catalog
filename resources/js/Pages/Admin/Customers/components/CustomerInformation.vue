@@ -1,5 +1,6 @@
 <template>
     <v-card>
+        {{ form }}
         <div class="grid grid-cols-12 gap-2">
             <div class="col-span-12">
                 <v-text-field
@@ -31,7 +32,7 @@
                     :items="
                         [
                             {
-                                id: null,
+                                id: -1,
                                 title: 'Direct Client',
                                 description: '',
                             },
@@ -39,7 +40,6 @@
                     "
                 />
             </div>
-
             <div class="col-span-12">
                 <v-select
                     label="Status"

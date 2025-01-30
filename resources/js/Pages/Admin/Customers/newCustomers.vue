@@ -51,7 +51,7 @@
             hint="Leave it Blank if this Customer is a Direct Customer"
             persistent-hint
             label="Client of"
-            :items="[{ id: null, title: 'Direct Client', description: '' }].concat(companies)"
+            :items="[{ id: -1, title: 'Direct Client', description: '' }].concat(companies)"
         />
         <v-select
             v-model="customerStore.form.company_id"
