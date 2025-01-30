@@ -64,7 +64,6 @@ import ProfileInfo from "./ProfileInfo.vue";
 import ProfileForm from "./components/ProfileForm.vue";
 import Notifications from "./components/Notifications.vue";
 import Wishlist from "./components/Wishlist.vue";
-import CustomerService from "./components/CustomerService.vue";
 
 //!SECTION -> Required Init
 import { ref, shallowRef } from "vue";
@@ -101,11 +100,6 @@ const Pages = ref([
         text: "Notifications",
         key: "Notifications",
     },
-    {
-        icon: "la-heart",
-        text: "Wishlist",
-        key: "Wishlist",
-    },
 ]);
 const setPage = () => {
     switch (currentPage.value.key) {
@@ -114,9 +108,6 @@ const setPage = () => {
             break;
         case "Notifications":
             return Notifications;
-            break;
-        case "Wishlist":
-            return Wishlist;
             break;
     }
 };
