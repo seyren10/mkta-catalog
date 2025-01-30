@@ -18,6 +18,28 @@
                     disabled
                 />
             </div>
+
+            <div class="col-span-12">
+                <v-select
+                    v-model="form.broker_company_id"
+                    position="top"
+                    itemTitle="title"
+                    itemValue="id"
+                    hint="Leave it Blank if this Customer is a Direct Customer"
+                    persistent-hint
+                    label="Client of"
+                    :items="
+                        [
+                            {
+                                id: null,
+                                title: 'Direct Client',
+                                description: '',
+                            },
+                        ].concat(companies)
+                    "
+                />
+            </div>
+
             <div class="col-span-12">
                 <v-select
                     label="Status"
@@ -37,7 +59,7 @@
                         <v-button
                             @click="
                                 () => {
-                                    customerStore.resetPassword(id),
+                                    customerStore.resetPassword(customer.id),
                                         (showPassword = true);
                                 }
                             "
@@ -46,9 +68,12 @@
                             >Reset Password</v-button
                         >
                     </div>
+
                     <div class="col-span-12 md:col-span-6">
                         <v-button
-                            @click="customerStore.updateCustomer(id)"
+                            @click="()=>{
+                                emit('update');
+                            }"
                             prepend-inner-icon="md-save-round"
                             class="ml-auto bg-accent text-white"
                             >Update Customer Information</v-button
@@ -93,22 +118,15 @@ import { onBeforeMount, ref, watch, computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 
 const emit = defineEmits(["update"]);
-const props = defineProps({
-    id: String,
-});
 
-import { useCustomerStore } from "@/stores/customerStore";
-const customerStore = useCustomerStore();
-const { customer, form } = storeToRefs(customerStore);
-if (!customer.length) {
-    await customerStore.getCustomer(props.id, {
-        includeRoleData: true,
-        includePermissions: true,
-        includePermissionKeys: true,
-        includeRolePermissions: true,
-    });
-}
 
 const showPassword = ref(false);
+const form = inject('form');
+const customer = inject('customer');
+
+const customerStore = inject('customerStore');
+const companies = inject('companies');
+
+
 
 </script>

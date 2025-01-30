@@ -44,6 +44,16 @@
             >Generate Password</v-button
         >
         <v-select
+            v-model="customerStore.form.broker_company_id"
+            position="bottom"
+            itemTitle="title"
+            itemValue="id"
+            hint="Leave it Blank if this Customer is a Direct Customer"
+            persistent-hint
+            label="Client of"
+            :items="[{ id: null, title: 'Direct Client', description: '' }].concat(companies)"
+        />
+        <v-select
             v-model="customerStore.form.company_id"
             position="bottom"
             itemTitle="title"
@@ -51,6 +61,7 @@
             label="Company"
             :items="companies"
         />
+        
         <v-button
             prepend-inner-icon="fa-user-plus"
             outlined
@@ -60,6 +71,7 @@
             class="my-2 ml-auto mt-auto block rounded-lg bg-accent p-2 text-lg text-white disabled:bg-gray-500"
             >Save Customer</v-button
         >
+        
     </div>
 </template>
 <script setup>

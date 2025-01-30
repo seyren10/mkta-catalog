@@ -68,10 +68,17 @@ class UserController extends Controller
                 "password" => Hash::make($request->password),
                 "is_active" => true,
                 "role_id" => $request->role_id ?? 2,
+                "broker_company_id"=>$request->broker_company_id ?? null
             )
         );
         if( $request->has('company_id') ){
             $company = \App\Models\CompanyCode::find($request->company_id);
+            if( $company ){
+                self::modifyUserCompanyCode( $user , 'append', $company);
+            }
+        }
+        if( $request->has('broker_company_id') ){
+            $company = \App\Models\CompanyCode::find($request->broker_company_id);
             if( $company ){
                 self::modifyUserCompanyCode( $user , 'append', $company);
             }
@@ -102,10 +109,27 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if( $request->has('broker_company_id') ){
+            $company = \App\Models\CompanyCode::find($user->broker_company_id);
+
+            self::modifyUserCompanyCode( $user , 'remove', $company);
+
+            $company = \App\Models\CompanyCode::find($request->broker_company_id);
+            if( $company ){
+                self::modifyUserCompanyCode( $user , 'append', $company);
+            }
+
+        }else{
+            $company = \App\Models\CompanyCode::find($user->broker_company_id);
+            self::modifyUserCompanyCode( $user , 'remove', $company);
+            
+        }
         $user->name = $request->name ?? $user->name;
+        $user->broker_company_id = $request->broker_company_id ? $request->broker_company_id : $user->broker_company_id;
         $user->is_active = $request->is_active ? ($request->is_active ? 1 : 0) : $user->is_active;
         $user->role_id = $request->role_id;
         $user->save();
+
         return response()->json(["message" => "User updated successfully"], 200);
     }
 

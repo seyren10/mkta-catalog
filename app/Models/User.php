@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -17,7 +16,8 @@ class User extends Authenticatable
         'password',
         'is_active',
         'role_id',
-        'first_time_login'
+        'first_time_login',
+        'broker_company_id',
     ];
     protected $hidden = [
         'created_at',
@@ -33,17 +33,19 @@ class User extends Authenticatable
         'user_areas',
         'user_companies',
         'non_wishlist_products',
-        'wishlist_products'
+        'wishlist_products',
+        'broker_company',
     ];
     /*
             remove eager loaded relation invoked by $with using ->withoutEagerLoads() or ->without(['relations'])
     */
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'first_time_login' => 'boolean'
+            'password'          => 'hashed',
+            'first_time_login'  => 'boolean',
         ];
     }
     public function non_wishlist_products()
@@ -55,7 +57,7 @@ class User extends Authenticatable
             'id',
             'id',
             'product_id'
-        )->withoutEagerLoads()->with(['product_thumbnail']);;
+        )->withoutEagerLoads()->with(['product_thumbnail']);
     }
     public function user_areas()
     {
@@ -106,20 +108,38 @@ class User extends Authenticatable
             'permission_id'
         );
     }
+    /**
+     * Get all of the comments for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function wishlist_products()
     {
-        return $this->hasManyThrough(
-            Product::class,
-            UserWishlist::class,
-            'user_id',
-            'id',
-            'id',
-            'product_id'
-        )->withoutEagerLoads()->with(['product_thumbnail']);
+        return $this->hasMany(UserWishlist::class, 'user_id', 'id')->with('product');
     }
+    // public function wishlist_products()
+    // {
+    //     return $this->hasManyThrough(
+    //         Product::class,
+    //         UserWishlist::class,
+    //         'user_id',
+    //         'id',
+    //         'id',
+    //         'product_id'
+    //     )->withoutEagerLoads()->with(['product_thumbnail']);
+    // }
 
     public function wishlists()
     {
         return $this->hasMany(UserWishlist::class);
+    }
+    /**
+     * Get the user that owns the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function broker_company()
+    {
+        return $this->belongsTo(CompanyCode::class, 'broker_company_id', 'id');
     }
 }
