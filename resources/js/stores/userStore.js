@@ -1,9 +1,12 @@
 import { computed, reactive, ref, shallowRef } from "vue";
 import { defineStore } from "pinia";
 import { useAxios } from "@/composables/useAxios";
+import { StorageSerializers, useStorage } from "@vueuse/core";
 
 export const useUserStore = defineStore("user", () => {
-    const currentUser = ref(null);
+    const currentUser = useStorage("user", null, undefined, {
+        serializer: StorageSerializers.object,
+    });
     const user = ref([]);
     const users = ref([]);
     const form = ref({

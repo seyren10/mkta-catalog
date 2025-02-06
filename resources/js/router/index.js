@@ -57,7 +57,7 @@ router.beforeEach(async (to, from) => {
 
     if (to.meta.fullUserData) {
         await userStore.getCurrentUserFullData();
-    } else await userStore.getCurrentUser();
+    } else if (!currentUser.value) await userStore.getCurrentUser();
 
     if (to.meta.requiresAuth && !currentUser.value) {
         return {
