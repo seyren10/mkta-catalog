@@ -1,14 +1,14 @@
 <script setup>
 import { RouterView, useRoute } from "vue-router";
 import { useProductVerificationStore } from "@/stores/productVerificationStore";
-import { inject, provide, ref } from "vue";
+import { computed, inject, provide, ref } from "vue";
 
 import Tab from "./components/Tab.vue";
 import VLoader from "@/components/base_components/VLoader.vue";
 import { storeToRefs } from "pinia";
 
 const route = useRoute();
-const { verify, item, verifyForm, sendProduct } = useVerify();
+const { verify, item, verifyForm, sendProduct, formValid } = useVerify();
 await verify();
 
 provide("item", item);
@@ -53,6 +53,34 @@ function useVerify() {
 
     async function verify() {
         item.value = await productVerificationStore.verifyProduct(token);
+
+        /* Initialize the value of form info to be the fetched item */
+        if (!errors.value) {
+            verifyForm.value["info"] = {
+                product_id: item.value.product_id,
+                parent_code: item.value.parent_code,
+                title: item.value.title,
+                description: item.value.description,
+                volume: item.value.volume,
+                weight_net: item.value.weight_net,
+                weight_gross: item.value.weight_gross,
+                dimension_length: item.value.dimension_length,
+                dimension_width: item.value.dimension_width,
+                dimension_height: item.value.dimension_height,
+            };
+        }
+
+        /* Initialize the value of form info to be the fetched item */
+        const images = await productVerificationStore.getTemporaryImages(
+            item.value.product_id,
+        );
+
+        if (!errors.value) {
+            if (images) {
+                const parsedImages = JSON.parse(images.data);
+                verifyForm.value["images"] = parsedImages;
+            }
+        }
     }
 
     async function sendProduct() {
@@ -67,16 +95,44 @@ function useVerify() {
                 content: "Product successfully verified.",
             });
         } else {
+            console.log(errors.value.data.errors);
+
+            const errorMessage = Object.keys(errors.value.data.errors)
+                .map((key) => {
+                    return errors.value.data.errors[key][0];
+                })
+                .join("\n");
+
             addToast({
                 props: {
                     type: "danger",
                 },
-                content:
-                    "Product verification failed. Please check for missing fields and try again",
+                timeout: 8000,
+                content: `Product verification failed. \n ${errorMessage} `,
             });
             showConfirmationDialog.value = false;
         }
     }
+
+    const formValid = computed(() => {
+        return (
+            verifyForm.value["info"] !== null &&
+            verifyForm.value["category"] !== null &&
+            verifyForm.value["category"].length &&
+            verifyForm.value["images"] !== null &&
+            verifyForm.value["images"].length &&
+            verifyForm.value["info"].description &&
+            verifyForm.value["info"].dimension_height &&
+            verifyForm.value["info"].dimension_length &&
+            verifyForm.value["info"].dimension_width &&
+            verifyForm.value["info"].parent_code &&
+            verifyForm.value["info"].product_id &&
+            verifyForm.value["info"].title &&
+            verifyForm.value["info"].volume &&
+            verifyForm.value["info"].weight_gross &&
+            verifyForm.value["info"].weight_net
+        );
+    });
 
     return {
         token,
@@ -84,6 +140,7 @@ function useVerify() {
         item,
         verifyForm,
         sendProduct,
+        formValid,
     };
 }
 </script>
@@ -92,7 +149,9 @@ function useVerify() {
     <div class="container mt-10 space-y-5 rounded-md bg-white py-5 text-xs">
         <div>
             <h1 class="text-lg">Product Verification</h1>
-            <p class="text-xs text-gray-500">Please fill in the missing data</p>
+            <p class="text-xs text-gray-500">
+                Click on each tab and fill in the missing data
+            </p>
         </div>
 
         <div class="space-y-2">
@@ -100,7 +159,9 @@ function useVerify() {
                 <div class="ml-auto">
                     <v-button
                         class="bg-accent text-white shadow-sm"
+                        :class="{ 'bg-gray-300': !formValid }"
                         @click="showConfirmationDialog = true"
+                        :disabled="!formValid"
                         >Save</v-button
                     >
                 </div>

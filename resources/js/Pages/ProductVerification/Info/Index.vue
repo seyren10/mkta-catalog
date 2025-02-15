@@ -4,18 +4,7 @@ import { inject, ref } from "vue";
 const item = inject("item", null);
 const form = inject("verifyForm");
 
-form.value["info"] = {
-    product_id: item.value.product_id,
-    parent_code: item.value.parent_code,
-    title: item.value.title,
-    description: item.value.description,
-    volume: item.value.volume,
-    weight_net: item.value.weight_net,
-    weight_gross: item.value.weight_gross,
-    dimension_length: item.value.dimension_length,
-    dimension_width: item.value.dimension_width,
-    dimension_height: item.value.dimension_height,
-};
+
 </script>
 <template>
     <div>

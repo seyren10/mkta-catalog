@@ -1,7 +1,7 @@
 <script setup>
 import CMSImageFileSelection from "@/Pages/Admin/CMS/Catalog/CMSImage/CMSImageFileSelection.vue";
 import SelectedImages from "./SelectedImages.vue";
-import { inject, ref } from "vue";
+import { inject, markRaw, onMounted, ref } from "vue";
 import { useProductVerificationStore } from "../../../stores/productVerificationStore";
 import { storeToRefs } from "pinia";
 
@@ -42,6 +42,7 @@ async function getTempImages() {
 }
 
 /* INIT */
+
 await getTempImages();
 </script>
 <template>
