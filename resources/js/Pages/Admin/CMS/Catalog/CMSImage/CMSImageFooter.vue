@@ -17,11 +17,11 @@
                 icon="bi-check"
                 @click="$emit('submit')"
             ></v-button>
-            <v-button
+            <!-- <v-button
                 icon="md-close-round"
                 icon-size="1"
                 @click="$emit('clear')"
-            ></v-button>
+            ></v-button> -->
         </div>
     </div>
 </template>

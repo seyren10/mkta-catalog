@@ -1,7 +1,7 @@
 <template>
     <div class="container my-4 space-y-4">
         <BreadCrumb
-            class="lg:hidden flex"
+            class="flex lg:hidden"
             :items="[
                 { name: 'catalog', text: 'Catalog' },
                 { name: 'categories', text: 'Categories' },
@@ -188,6 +188,7 @@ async function fetchProducts(categoryId) {
         includeProductCategoryKeys: true,
         includeProductImages: true,
         includeProductFilter: true,
+        includeProductVolume: true,
         page: page.value,
         sub: sub.value,
         filters: queriesExceptPage,

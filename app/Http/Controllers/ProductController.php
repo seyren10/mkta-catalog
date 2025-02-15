@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductVerificationRequest;
 use App\Http\Resources\ProductResource;
+
+use App\Http\Requests\DirectUploadImageRequest;
+
 use App\Jobs\ZipProductImages;
+
 use App\Models\Category;
 use App\Models\Filter;
 use App\Models\NewProductNotfication;
@@ -17,12 +21,15 @@ use App\Models\ProductRestriction;
 use App\Models\RecommendedProduct;
 use App\Models\RelatedProduct;
 use App\Models\Season;
+use App\Models\TempImageUpload;
+
 use App\Services\BCProductService;
+
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -73,6 +80,11 @@ class ProductController extends Controller
         });
 
         return ProductResource::collection($products);
+    }
+    public function newProductItems(Request $request)
+    {
+        $count = $request->has('count') ? $request->count : 20;
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->latest()->take($count)->get());
     }
     public function latestProducts(Request $request)
     {
@@ -143,13 +155,19 @@ class ProductController extends Controller
                 ->take($count)->get());
     }
 
-    public function getProductsWithCategoryId(Request $request, Category $category)
+    public function getProductsWithCategoryId(Request $request, $category)
     {
-        $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereHas('product_categories', function ($query) use ($category) {
-            if ($category->id) {
-                $query->where('product_categories.category_id', $category->id);
-            }
-        });
+
+        $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->where('created_at', '>', now()->subDays(3));
+
+        if ((int) $category != 1) {
+            $category = Category::find($category);
+            $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereHas('product_categories', function ($query) use ($category) {
+                if ($category->id) {
+                    $query->where('product_categories.category_id', $category->id);
+                }
+            });
+        }
 
         $search = $request->q;
         $perPage = $request->perPage ?? 32;
@@ -534,6 +552,54 @@ class ProductController extends Controller
                 "message" => "Product details has been successfully saved!",
             ], 200);
         } catch (\Throwable $e) {
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            DB::rollback();
+
+            return response()->json([
+                "message" => $message,
+            ], 400);
+        }
+    }
+
+    public function directUploadImage($sku, DirectUploadImageRequest $request){
+        try{
+            $existing = TempImageUpload::where("sku", $sku)->first();
+
+            if($existing){
+                $temp_upload = $existing;
+            }else{
+                $temp_upload = new TempImageUpload;
+            }
+
+            $temp_upload->data = json_encode($request->images);
+            $temp_upload->sku = $sku;
+            $temp_upload->save();
+
+            return response()->json([
+                "message" => "Successfully saved images"
+            ], 200);
+        }catch(\Throwable $e){
+            \Log::error($e);
+            $message = "Error: " . $e->getMessage();
+
+            DB::rollback();
+
+            return response()->json([
+                "message" => $message,
+            ], 400);
+        }
+    }
+
+    public function getDirectUploadImage($sku){
+        try{
+            $temp_upload = TempImageUpload::where('sku', $sku)->first();
+
+            return response()->json([
+                "data" => $temp_upload
+            ], 200);
+        }catch(\Throwable $e){
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
 

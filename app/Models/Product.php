@@ -101,5 +101,4 @@ class Product extends Model
     public function sync_recommended_products(){
         return $this->belongsToMany(RecommendedProduct::class, 'recommended_products', 'product_id', 'recommended_product_id');
     }
-
 }

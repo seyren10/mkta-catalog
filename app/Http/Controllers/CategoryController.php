@@ -16,7 +16,29 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::where('parent_id', 0)->get());
+        $new_category = [
+            "id" => 1,
+            "title" => "New Products",
+            "description" => "",
+            "parent_id" => 0,
+            "sub_categories" => [],
+            "parent_category" => null,
+            "banner_file" => [
+                "id"=> 19789,
+                "title"=> "New Items.jpg",
+                "filename"=> "OUCsBhrnmJ5DpqPxPLXHs3TwISLJnRBQHpZD5QJ0.jpg",
+                "type"=> "image\/jpeg",
+                "deleted_at"=> null
+            ],
+            "img" => "YWAO5MIpcSyZ0TxtMXhHJiBjKpS7EqmjWbdcdkzH.jpg"
+        ];
+        $category = Collect([]);
+        $category->push($new_category);
+        
+        $category = $category->merge(CategoryResource::collection(Category::where('parent_id', 0)->get()->toArray()));
+        return response([
+            "data" => $category
+        ],200);
     }
 
     /**
@@ -43,9 +65,21 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Request $request, $category)
     {
-        return new CategoryResource($category);
+        $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->where('created_at', '>', now()->subDays(3));
+
+        if ((int) $category != 1) {
+            $category = Category::find($category);
+            $query = Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereHas('product_categories', function ($query) use ($category) {
+                if ($category->id) {
+                    $query->where('product_categories.category_id', $category->id);
+                }
+            });
+        }
+        
+        return new CategoryResource(Category::find($category));
+        
     }
 
     /**

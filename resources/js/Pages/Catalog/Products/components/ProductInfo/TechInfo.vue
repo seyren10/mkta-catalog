@@ -35,7 +35,7 @@
                 <span v-html="detail"> </span>
             </li>
         </ul>
-        <div class="rounded-md bg-gray-50 p-2 text-xs mt-4 text-slate-400">
+        <div class="mt-4 rounded-md bg-gray-50 p-2 text-xs text-slate-400">
             <v-icon class="me-2" name="pr-info-circle"></v-icon>
             While we make every effort to ensure accuracy, actual product
             dimensions may vary slightly due to manufacturing processes or
@@ -51,16 +51,25 @@ const injectedProduct = inject("product");
 
 const IMPERIAL_lENGTH = 2.54;
 const IMPERIAL_POUND = 2.205;
+const IMPERIAL_CUBIC_FOOT = 35.3147;
+const CM_TO_M = 0.01; //cm to meter
+const CM_TO_FOOT = 0.0328084; // cm to foot
+const CUBICM_TO_CUBICCM = 1000000;
+const CUBICM_TO_CUBICINCH = 61023.7;
 
 const product = computed(() => {
     return {
         ...injectedProduct.value,
         details: {
             code: injectedProduct.value.id,
-            height: `${conversion.value === "metric" ? injectedProduct.value.dimension_height : (+injectedProduct.value.dimension_height / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
-            length: `${conversion.value === "metric" ? injectedProduct.value.dimension_length : (+injectedProduct.value.dimension_length / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
-            width: `${conversion.value === "metric" ? injectedProduct.value.dimension_width : (+injectedProduct.value.dimension_width / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>`,
-            volume: `${injectedProduct.value.volume} <span class='text-slate-400'> m<sup>3</sup></span>`,
+            height: `${conversion.value === "metric" ? injectedProduct.value.dimension_height : (+injectedProduct.value.dimension_height / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>
+             / ${conversion.value === "metric" ? (+injectedProduct.value.dimension_height * CM_TO_M).toFixed(2) : (+injectedProduct.value.dimension_height * CM_TO_FOOT).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "m" : "ft"}`,
+            length: `${conversion.value === "metric" ? injectedProduct.value.dimension_length : (+injectedProduct.value.dimension_length / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>
+            / ${conversion.value === "metric" ? (+injectedProduct.value.dimension_length * CM_TO_M).toFixed(2) : (+injectedProduct.value.dimension_length * CM_TO_FOOT).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "m" : "ft"}`,
+            width: `${conversion.value === "metric" ? injectedProduct.value.dimension_width : (+injectedProduct.value.dimension_width / IMPERIAL_lENGTH).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "cm" : "inch"}</span>
+              / ${conversion.value === "metric" ? (+injectedProduct.value.dimension_width * CM_TO_M).toFixed(2) : (+injectedProduct.value.dimension_width * CM_TO_FOOT).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "m" : "ft"}`,
+            volume: `${conversion.value === "metric" ? injectedProduct.value.volume : (+injectedProduct.value.volume * IMPERIAL_CUBIC_FOOT).toFixed(2)} <span class='text-slate-400'> ${conversion.value === "metric" ? "m<sup>3</sup>" : "ft<sup>3</sup>"}</span>
+             / ${conversion.value === "metric" ? (+injectedProduct.value.volume * CUBICM_TO_CUBICCM).toLocaleString() : (+injectedProduct.value.volume * CUBICM_TO_CUBICINCH).toLocaleString()} <span class='text-slate-400'>${conversion.value === "metric" ? "cm<sup>3</sup>" : "inch<sup>3</sup>"}`,
             "weight(gross)": `${conversion.value === "metric" ? injectedProduct.value.weight_gross : (+injectedProduct.value.weight_gross * IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
             "weight(net)": `${conversion.value === "metric" ? injectedProduct.value.weight_net : (+injectedProduct.value.weight_net * IMPERIAL_POUND).toFixed(2)} <span class='text-slate-400'>${conversion.value === "metric" ? "kg" : "lbs"}</span>`,
         },

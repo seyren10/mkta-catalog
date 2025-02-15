@@ -12,7 +12,7 @@ class OpenAPIController extends Controller
 {
 
     #region Working Functions
-    public function streamSave($imageKey, $size = 150)
+    public static function streamSave($imageKey, $size = 150)
     {
         $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
         $image = Image::read($stream);

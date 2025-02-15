@@ -30,7 +30,6 @@ export const useWishlistStore = defineStore("wishlists", () => {
         try {
             loading.value = true;
             const res = await exec("/api/customer-wishlist");
-
             wishlists.value = res.data.data;
             data = wishlists.value;
         } catch (e) {
@@ -46,6 +45,19 @@ export const useWishlistStore = defineStore("wishlists", () => {
             loading.value = true;
             await exec("/api/customer-wishlist", "post", {
                 product_id: item.id,
+            });
+        } catch (e) {
+            errors.value = e;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    const updateWishlist = async (wishlistId, qty) => {
+        try {
+            loading.value = true;
+            await exec(`/api/customer-wishlist/${wishlistId}`, "put", {
+                qty,
             });
         } catch (e) {
             errors.value = e;
@@ -95,6 +107,7 @@ export const useWishlistStore = defineStore("wishlists", () => {
         isIncludedOnWishlist,
         sendWishlist,
         sendProductInquiry,
+        updateWishlist,
 
         loading,
         errors,

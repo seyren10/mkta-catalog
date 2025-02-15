@@ -19,6 +19,7 @@ return [
         '%s%s',
         'localhost,
         localhost:3000,
+        127.0.0.1:*,
         127.0.0.1,
         127.0.0.1:8000,
         127.0.0.1:9000,
@@ -26,6 +27,7 @@ return [
         192.168.110.111:8000,
         192.168.110.21:8000,
         localhost:8000,
+        127.0.0.1:9500,
 
         https://catalog.mkthemedattractions.com.ph,
         http://catalog.mkthemedattractions.com.ph,

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
@@ -16,7 +15,6 @@ use App\Models\UserPermission;
 use App\Services\UserServices;
 use Error;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -62,17 +60,30 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = User::create(
-            array(
-                "name" => $request->name,
-                "email" => $request->email,
-                "password" => Hash::make($request->password),
-                "is_active" => true,
-                "role_id" => $request->role_id ?? 2,
-            )
+            [
+                "name"              => $request->name,
+                "email"             => $request->email,
+                "password"          => Hash::make($request->password),
+                "is_active"         => true,
+                "role_id"           => $request->role_id ?? 2,
+                "broker_company_id" => $request->broker_company_id ?? null,
+            ]
         );
+        if ($request->has('company_id')) {
+            $company = \App\Models\CompanyCode::find($request->company_id);
+            if ($company) {
+                self::modifyUserCompanyCode($user, 'append', $company);
+            }
+        }
+        if ($request->has('broker_company_id')) {
+            $company = \App\Models\CompanyCode::find($request->broker_company_id);
+            if ($company) {
+                self::modifyUserCompanyCode($user, 'append', $company);
+            }
+        }
         return response()->json([
             'message' => 'User created successfully',
-            'user' => $user,
+            'user'    => $user,
         ], 200);
     }
 
@@ -96,10 +107,34 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->name = $request->name ?? $user->name;
-        $user->is_active = $request->is_active ? ($request->is_active ? 1 : 0) : $user->is_active;
-        $user->role_id = $request->role_id;
+        if ($request->has('broker_company_id')) {
+            if ($user->broker_company_id != null) {
+                $company = \App\Models\CompanyCode::find($user->broker_company_id);
+                if ($company) {
+                    self::modifyUserCompanyCode($user, 'remove', $company);
+                }
+
+            }
+
+            $company = \App\Models\CompanyCode::find($request->broker_company_id);
+            if ($company) {
+                self::modifyUserCompanyCode($user, 'append', $company);
+            }
+
+        } else {
+
+            $company = \App\Models\CompanyCode::find($user->broker_company_id);
+            if ($company) {
+                self::modifyUserCompanyCode($user, 'remove', $company);
+            }
+
+        }
+        $user->name              = $request->name ?? $user->name;
+        $user->broker_company_id = $request->broker_company_id ? $request->broker_company_id : $user->broker_company_id;
+        $user->is_active         = $request->is_active ? ($request->is_active ? 1 : 0) : $user->is_active;
+        $user->role_id           = $request->role_id;
         $user->save();
+
         return response()->json(["message" => "User updated successfully"], 200);
     }
 
@@ -113,17 +148,18 @@ class UserController extends Controller
 
     public function changePasswordFirstTime(Request $request)
     {
-        if (!$request->user()->first_time_login) throw new Error('Password is already set');
+        if (! $request->user()->first_time_login) {
+            throw new Error('Password is already set');
+        }
 
         $validated = $request->validate([
-            'password' => ['required', 'confirmed', 'min:8']
+            'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
         $request->user()->update([
-            ...$validated,
+             ...$validated,
             'first_time_login' => false,
         ]);
-
 
         return response()->noContent();
     }
@@ -142,15 +178,15 @@ class UserController extends Controller
     }
     public static function resetPassword(User $user)
     {
-        $password = Str::random(10);
-        $user->password = Hash::make($password);
+        $password               = Str::random(10);
+        $user->password         = Hash::make($password);
         $user->first_time_login = true;
         $user->save();
         return response()->json(["message" => "Password has been reset", 'password' => $password], 200);
     }
     public static function modifyUserPermissions(User $user, $action, Permission $permission)
     {
-        if (!$user || !$permission) {
+        if (! $user || ! $permission) {
             return response()->json(["message" => "User or Permission not found"], 201);
         }
         switch ($action) {
@@ -160,10 +196,10 @@ class UserController extends Controller
                     return response()->json(["message" => "" . $user->name . " has already have permission " . $permission->title . ""], 201);
                 } else {
                     UserPermission::create(
-                        array(
+                        [
                             "permission_id" => $permission->id,
-                            "user_id" => $user->id,
-                        )
+                            "user_id"       => $user->id,
+                        ]
                     );
                     return response()->json(["message" => "Permission " . $permission->title . " is added to " . $user->name], 200);
                 }
@@ -179,7 +215,7 @@ class UserController extends Controller
     }
     public static function modifyUserAreaCodes(User $user, $action, AreaCode $areacode)
     {
-        if (!$user || !$areacode) {
+        if (! $user || ! $areacode) {
             return response()->json(["message" => "User or Area Code not found"], 201);
         }
         switch ($action) {
@@ -189,10 +225,10 @@ class UserController extends Controller
                     return response()->json(["message" => "" . $user->name . " is already in " . $areacode->title . ""], 201);
                 } else {
                     UserArea::create(
-                        array(
+                        [
                             "area_code_id" => $areacode->id,
-                            "user_id" => $user->id,
-                        )
+                            "user_id"      => $user->id,
+                        ]
                     );
                     return response()->json(["message" => $user->name . " is added to " . $areacode->title], 200);
                 }
@@ -208,7 +244,7 @@ class UserController extends Controller
     }
     public static function modifyUserCompanyCode(User $user, $action, CompanyCode $company_code)
     {
-        if (!$user || !$company_code) {
+        if (! $user || ! $company_code) {
             return response()->json(["message" => "User or Area Code not found"], 201);
         }
         switch ($action) {
@@ -218,10 +254,10 @@ class UserController extends Controller
                     return response()->json(["message" => "" . $user->name . " is already in " . $company_code->title . ""], 201);
                 } else {
                     UserCompany::create(
-                        array(
+                        [
                             "company_code_id" => $company_code->id,
-                            "user_id" => $user->id,
-                        )
+                            "user_id"         => $user->id,
+                        ]
                     );
                     return response()->json(["message" => $user->name . " is added to " . $company_code->title], 200);
                 }
@@ -241,29 +277,29 @@ class UserController extends Controller
             DB::beginTransaction();
 
             #region File Upload
-            $curFile = $request->file('eFile');
+            $curFile  = $request->file('eFile');
             $fileName = $curFile->getClientOriginalName();
-            $ext = $curFile->getClientOriginalExtension();
-            $type = $curFile->getClientMimeType();
+            $ext      = $curFile->getClientOriginalExtension();
+            $type     = $curFile->getClientMimeType();
 
             $generated_new_name = bin2hex(now() . $fileName) . "." . $ext;
-            $data = Storage::disk('s3')->put("profile-pictures", $request->file('eFile'));
+            $data               = Storage::disk('s3')->put("profile-pictures", $request->file('eFile'));
 
             #endregion
             $curFile = File::create(
-                array(
-                    'title' => $fileName,
+                [
+                    'title'    => $fileName,
                     'filename' => $data,
-                    'type' => $type,
-                )
+                    'type'     => $type,
+                ]
             );
             DB::commit();
 
-            return response(array(
-                "s3" => $data,
-                "data" => $curFile,
+            return response([
+                "s3"      => $data,
+                "data"    => $curFile,
                 "message" => "File uploaded successfully.",
-            ), 200);
+            ], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return $th;

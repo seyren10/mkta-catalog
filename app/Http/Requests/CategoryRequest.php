@@ -12,7 +12,7 @@ class CategoryRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return true;
+        return !true;
     }
     public function input($key = null, $default = null)
     {

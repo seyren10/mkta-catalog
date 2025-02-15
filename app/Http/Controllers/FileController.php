@@ -10,10 +10,8 @@ use App\Models\ProductAccessType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response as Download;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
@@ -43,6 +41,16 @@ class FileController extends Controller
         //
     }
     #endregion
+    public static function AWSFileExist($path)
+    {
+        try {
+            $stream = file_get_contents($path);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+
+    }
     public function store(Request $request)
     {
         try {
@@ -56,43 +64,19 @@ class FileController extends Controller
 
             $data = '';
             $open = new OpenAPIController();
-
-            // if(!Storage::disk('public')->exists('100x100')){
-                Storage::disk('public')->makeDirectory('100x100');
-                Storage::disk('public')->makeDirectory('150x150');
-                Storage::disk('public')->makeDirectory('200x200');
-                Storage::disk('public')->makeDirectory('300x300');
-            // }
-
             if ((str_contains(trim(strtolower($type)), 'image'))) {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
-                
+
                 Storage::disk('public')->put("", $request->file('eFile'));
-
                 $imageKey = $data;
-                $stream = (file_get_contents('https://mkta-portal.s3.us-east-2.amazonaws.com/' . $imageKey));
-                // Storage::disk('s3')->put("thumbs/".$imageKey, $request->file('eFile'));
-                Storage::disk('s3')->put("thumbs/".$imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
-
-                $open->streamSave($imageKey, 100);
-                Storage::disk('s3')->put("thumbs/100x100/" . $imageKey, file_get_contents(Storage::disk('public')->path('100x100/' . $imageKey)));
-
-                $open->streamSave($imageKey, 150);
-                Storage::disk('s3')->put("thumbs/150x150/" . $imageKey, file_get_contents(Storage::disk('public')->path('150x150/' . $imageKey)));
-
-                $open->streamSave($imageKey, 200);
-                Storage::disk('s3')->put("thumbs/200x200/" . $imageKey, file_get_contents(Storage::disk('public')->path('200x200/' . $imageKey)));
-
-                $open->streamSave($imageKey, 300);
-                Storage::disk('s3')->put("thumbs/300x300/" . $imageKey, file_get_contents(Storage::disk('public')->path('300x300/' . $imageKey)));
-
-                Storage::disk('public')->delete("100x100/".$imageKey);
-                Storage::disk('public')->delete("150x150/".$imageKey);
-                Storage::disk('public')->delete("200x200/".$imageKey);
-                Storage::disk('public')->delete("300x300/".$imageKey);
+                Storage::disk('s3')->put("thumbs/" . $imageKey, $request->file('eFile'));
+                Storage::disk('s3')->put("thumbs/" . $imageKey, file_get_contents(Storage::disk('public')->path($imageKey)));
+                foreach ([
+                    100, 150, 200, 300, 600,
+                ] as $size) {
+                    CompressImageController::createRequest($size, $imageKey);
+                }
                 Storage::disk('public')->delete($imageKey);
-
-
 
             } else {
                 $data = Storage::disk('s3')->put("", $request->file('eFile'));
@@ -115,7 +99,7 @@ class FileController extends Controller
             DB::rollback();
             // Log::error($th);
             return $th;
-            
+
         }
     }
 

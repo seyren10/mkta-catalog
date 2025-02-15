@@ -16,12 +16,12 @@
             </div>
         </template>
 
-        <div class="grid gap-5 p-5 text-sm md:grid-cols-2">
+        <div class="grid gap-5 p-5 text-sm lg:grid-cols-3">
             <div>
                 <h3 class="mb-3 text-lg font-bold">Summary:</h3>
 
                 <ul
-                    class="scrollbar grid max-h-[30rem] gap-3 overflow-y-auto py-3"
+                    class="scrollbar grid max-h-[25rem] gap-3 overflow-y-auto py-3"
                 >
                     <li
                         v-for="item in wishlists"
@@ -55,13 +55,15 @@
                     </div>
                 </ul>
 
-                <v-button
-                    v-if="wishlists.length"
-                    class="ml-auto bg-red-500 text-xs text-white"
-                    @click="handleDeleteAllWishlist"
-                    :loading="loading"
-                    >clear all</v-button
-                >
+                <div class="mt-auto">
+                    <v-button
+                        v-if="wishlists.length"
+                        class="bg-red-500 text-xs text-white"
+                        @click="handleDeleteAllWishlist"
+                        :loading="loading"
+                        >clear all</v-button
+                    >
+                </div>
             </div>
             <div class="space-y-5 rounded-lg bg-slate-100 p-5">
                 <p>
@@ -90,16 +92,17 @@
                 >
             </div>
             <section
-                class="grid rounded-lg bg-[#04151f] p-3 text-[.8rem] md:col-span-2 md:grid-cols-[1fr,18rem]"
+                class="grid grid-cols-[1fr,18rem] rounded-lg bg-[#04151f] p-3 text-[.8rem] lg:grid-cols-1"
             >
                 <v-text-icon
                     :items="infoList"
-                    class="grid text-slate-400 *:items-start"
+                    class="grid place-content-start text-slate-400 *:items-start"
                     value-class="text-white"
                     icon-size="1"
                 />
 
-                <MKMap class="overflow-hidden rounded-lg"> </MKMap>
+                <MKMap class="overflow-hidden rounded-lg lg:aspect-square">
+                </MKMap>
             </section>
         </div>
     </v-dialog>

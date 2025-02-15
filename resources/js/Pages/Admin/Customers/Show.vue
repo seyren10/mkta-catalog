@@ -25,19 +25,37 @@
             :tabs="tabs"
         >
             <template class="p-3" #content.AccountInformation>
-                <CustomerInformation :id="id" />
+                <CustomerInformation @update="()=>{
+                    customerStore.updateCustomer(id)
+                    getCustomer();
+                }"
+                 />
             </template>
             <template class="p-3" #content.Areas>
-                <CustomerAreas :id="id" />
+                <CustomerAreas
+                    @modify_area="
+                        (mode, area_id) => {
+                            customerStore.modifyCustomerAreas(mode, area_id);
+                            getCustomer();
+                        }
+                    "
+                />
             </template>
             <template class="p-3" #content.Companies>
-                <CustomerCompanies :id="id" />
-            </template>
-            <template class="p-3" #content.UnwishlistProducts>
-                <CustomerNonWishlistProducts :id="id" />
+                <CustomerCompanies
+                    @modify_company="
+                        (mode, company_id) => {
+                            customerStore.modifyCustomerCompanies(
+                                mode,
+                                company_id,
+                            );
+                            getCustomer();
+                        }
+                    "
+                />
             </template>
             <template class="p-3" #content.WishlistProducts>
-                <CustomerWishlistProducts :id="id" />
+                <CustomerWishlistProducts />
             </template>
         </v-tab>
     </div>
@@ -49,7 +67,7 @@ import CustomerCompanies from "./components/CustomerCompanies.vue";
 import CustomerNonWishlistProducts from "./components/CustomerNonWishlistProducts.vue";
 import CustomerWishlistProducts from "./components/CustomerWishlistProducts.vue";
 
-import { onBeforeMount, ref, watch, computed, inject } from "vue";
+import { onBeforeMount, ref, watch, computed, inject, provide } from "vue";
 import { storeToRefs } from "pinia";
 
 const props = defineProps({
@@ -57,18 +75,6 @@ const props = defineProps({
 });
 
 const router = inject("router");
-
-import { useCustomerStore } from "@/stores/customerStore";
-const customerStore = useCustomerStore();
-const { customer, form } = storeToRefs(customerStore);
-if (!customer.length) {
-    await customerStore.getCustomer(props.id, {
-        includeAreasData: true,
-        includeCompaniesData: true,
-        includeNonWishlistProducts: true,
-        includeNonWishlistProductsKeys: true,
-    });
-}
 
 const selectedTab = ref("AccountInformation");
 const tabs = ref([
@@ -96,13 +102,57 @@ const tabs = ref([
         title: "Wishlist",
         value: "WishlistProducts",
     },
-    {
-        icon: "bi-cart-x",
-        iconScale: "1.5",
-        title: "Unwishlist Products",
-        value: "UnwishlistProducts",
-    },
+    // {
+    //     icon: "bi-cart-x",
+    //     iconScale: "1.5",
+    //     title: "Unwishlist Products",
+    //     value: "UnwishlistProducts",
+    // },
 ]);
+
+//!SECTION - Customer
+import { useCustomerStore } from "@/stores/customerStore";
+const customerStore = useCustomerStore();
+const { customer, form } = storeToRefs(customerStore);
+const getCustomer = async () => {
+    await customerStore.getCustomer(props.id, {
+        includeAreasData: true,
+        includeCompaniesData: true,
+        includeNonWishlistProducts: true,
+        includeNonWishlistProductsKeys: true,
+    });
+};
+if (!customer.length) {
+    await getCustomer();
+}
+
+provide("customerStore", customerStore);
+
+provide(
+    "customer",
+    computed(() => customer.value),
+);
+provide(
+    "form",
+    computed(() => form.value),
+);
+
+//!SECTION - Area
+import { useAreaStore } from "@/stores/areaStore";
+const areaStore = useAreaStore();
+const { areas } = storeToRefs(areaStore);
+if (!areas.length) {
+    await areaStore.getAreas();
+}
+provide("areas", areas.value);
+
+//!SECTION - Company
+import { useCompanyStore } from "@/stores/companyStore";
+const companyStore = useCompanyStore();
+const { companies } = storeToRefs(companyStore);
+await companyStore.getCompanies();
+
+provide("companies", companies.value);
 </script>
 
 <style lang="scss" scoped></style>

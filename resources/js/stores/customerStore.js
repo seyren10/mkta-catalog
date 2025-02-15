@@ -12,6 +12,7 @@ export const useCustomerStore = defineStore("customer", () => {
         email: "",
         password: "",
         company_id: 0,
+        broker_company_id : null,
         is_active: true,
         role_id: 2,
     });
@@ -39,6 +40,7 @@ export const useCustomerStore = defineStore("customer", () => {
         form.value.password = "";
         form.value.is_active = 0;
         form.value.role_id = 2;
+        form.value.broker_company_id = null;
     };
     const addCustomer = async () => {
         try {
@@ -132,6 +134,8 @@ export const useCustomerStore = defineStore("customer", () => {
             form.value.email = customer.value.email;
             form.value.is_active = customer.value.is_active;
             form.value.role_id = 2;
+            form.value.broker_company_id = customer.value.broker_company_id;
+
         } catch (e) {
             console.log(e);
         }

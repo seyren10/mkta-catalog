@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\WishListExport;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\UserWishlist;
+use App\Services\EntraMailService;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-use App\Exports\WishListExport;
-use App\Services\EntraMailService;
-
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserWishlistController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->email_service = new EntraMailService;
     }
 
@@ -36,27 +35,27 @@ class UserWishlistController extends Controller
             ]);
         }
         */
-
         //User specific wishlist
         $wishlists = Auth::user()->wishlists()->with('product')->get();
 
-        //map the wishlists to only contain the product and wishlistId and not other information
-        $products = $wishlists->map(function ($wishlist) {
-            return [
-                'id' => $wishlist->id,
-                'product' => $wishlist->product
-            ];
-        });
+        // //map the wishlists to only contain the product and wishlistId and not other information
+        // $products = $wishlists->map(function ($wishlist) {
+        //     return [
+        //         'id'      => $wishlist->id,
+        //         'product' => $wishlist->product,
+        //         'qty' => $wishlist->qty
+        //     ];
+        // });
 
         return response()->json([
-            'data' => $products
+            'data' => $wishlists,
         ]);
     }
     public function getWishlist(User $user)
     {
         $product_list = UserWishlist::where('user_id', $user->id)->get()->pluck('product_id');
 
-        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', array()))->whereIn('id', $product_list)->get());
+        return ProductResource::collection(Product::whereNotIn('id', $request->session()->get('restricted_products', []))->whereIn('id', $product_list)->get());
     }
 
     public function store(Request $request)
@@ -85,7 +84,6 @@ class UserWishlistController extends Controller
         // }
 
     }
-
 
     /*  Delete the wishlist of the currently
     logged in user */
@@ -116,20 +114,22 @@ class UserWishlistController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserWishlist $userWishlist)
-    {
-        //
-    }
+    public function edit(UserWishlist $userWishlist) {}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, UserWishlist $userWishlist)
     {
-        //
+        $userWishlist->qty = $request->qty ?? $userWishlist->qty;
+        $userWishlist->save();
+        return response(
+            [
+                "message" => "Quantity is updated",
+            ],
+            200
+        );
     }
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -142,20 +142,41 @@ class UserWishlistController extends Controller
     public function sendWishlist(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user      = Auth::user();
             $recipient = config('notification.wishlist.recipient');
 
             // Retrieve products from request
-            $products = Product::whereIn('id', $request->productCodes)->get();
+            $products = [];
+            foreach($request->products as $product){
+                array_push($products,
+                    [
+                        "data" => Product::find($product["id"]),
+                        "qty" => $product["qty"]
+                    ]
+                );
+            }
             $filename = 'wishlist.xlsx';
 
             // Store the Excel as a file
             $filePath = storage_path('/app/' . $filename);
             Excel::store(new WishListExport($products), $filename, 'local');
 
+            $company = $user->broker_company;
+            $message = "Name: ".$user->name."\n"."Email: ".$user->email."\n";
+
+            if($company){
+                $message .= "Client of ".$company->title;
+                $title = 'Wishlist Request from ' . ($user ? $user->name : "Unknow User") . " (" .$company->title . ")";
+            }else{
+                $title = 'Wishlist Request from ' . ($user ? $user->name : "Unknow User");
+            }
+
+            $message .= "\n";
+            $message .= $request->message ?? "";
+
             $this->email_service->sendMailWithAttachment(
-                'Wishlist Request from ' . ($user ? $user->name : "Test User"),
-                $request->message ?? '',
+                $title,
+                $message,
                 $recipient,
                 $filePath,
                 $filename,
@@ -170,22 +191,23 @@ class UserWishlistController extends Controller
             $message = "Error: " . $e->getMessage();
 
             return response()->json([
-                "message" => $message
+                "message" => $message,
             ], 400);
         }
     }
 
-    public function inquireProduct(Request $request){
-        try{
-            $user = Auth::user();
+    public function inquireProduct(Request $request)
+    {
+        try {
+            $user      = Auth::user();
             $recipient = config('notification.wishlist.recipient');
 
             $product = Product::find($request->productCode);
 
             $template = "emails.product_inquery";
-            $data = [
+            $data     = [
                 "product" => $product,
-                'message' => $request->message ?? ""
+                'message' => $request->message ?? "",
             ];
 
             $mail_message = view($template, $data)->render();
@@ -200,12 +222,12 @@ class UserWishlistController extends Controller
             return response()->json([
                 "message" => "Product inquery has been sent!",
             ], 200);
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             \Log::error($e);
             $message = "Error: " . $e->getMessage();
 
             return response()->json([
-                "message" => $message
+                "message" => $message,
             ], 400);
         }
     }

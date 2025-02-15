@@ -1,6 +1,5 @@
 <template>
-    <v-card
-        >
+    <v-card>
         <div class="grid grid-cols-12 gap-2">
             <div
                 class="col-span-12 grid min-h-[10rem] grid-cols-1 content-between rounded-lg border p-2 md:col-span-3 lg:col-span-2"
@@ -20,11 +19,7 @@
                         "
                         @click="
                             () => {
-                                customerStore.modifyCustomerAreas(
-                                    'remove',
-                                    area.id,
-                                );
-                                customerStore.getCustomer(id);
+                                emit('modify_area', 'remove', area.id);
                             }
                         "
                         >Remove</v-button
@@ -33,11 +28,7 @@
                         class="mt-auto w-full bg-green-500"
                         @click="
                             () => {
-                                customerStore.modifyCustomerAreas(
-                                    'append',
-                                    area.id,
-                                );
-                                customerStore.getCustomer(id);
+                                emit('modify_area', 'append', area.id);
                             }
                         "
                         v-else
@@ -49,25 +40,10 @@
     </v-card>
 </template>
 <script setup>
-import { onBeforeMount, ref, watch, computed, inject } from "vue";
-import { storeToRefs } from "pinia";
+import { inject } from "vue";
 
-const emit = defineEmits(["update"]);
-const props = defineProps({
-    id: String,
-});
+const emit = defineEmits(["modify_area"]);
 
-import { useCustomerStore } from "@/stores/customerStore";
-const customerStore = useCustomerStore();
-const { customer, form } = storeToRefs(customerStore);
-if (!customer.length) {
-    await customerStore.getCustomer(props.id);
-}
-
-import { useAreaStore } from "@/stores/areaStore";
-const areaStore = useAreaStore();
-const { areas } = storeToRefs(areaStore);
-if (!areas.length) {
-    await areaStore.getAreas();
-}
+const areas = inject("areas");
+const customer = inject("customer");
 </script>
