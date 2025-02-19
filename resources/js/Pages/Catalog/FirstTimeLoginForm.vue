@@ -30,6 +30,7 @@ import { storeToRefs } from "pinia";
 import VPasswordField from "../../components/VPasswordField.vue";
 
 const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore);
 const { errors, loading } = storeToRefs(userStore);
 const emit = defineEmits(["dontShowAgain"]);
 
@@ -44,7 +45,10 @@ const dontShowAgain = ref(
 async function handleSubmit() {
     await userStore.changePasswordFirstTime(form);
 
-    if (!errors.value) await useAuthStore().logout();
+    if (!errors.value) {
+        currentUser.value = null;
+        await useAuthStore().logout();
+    }
 }
 
 watch(

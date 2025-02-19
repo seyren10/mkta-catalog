@@ -15,7 +15,7 @@
         <div
             class="grid overflow-hidden rounded-lg border border-white bg-white p-5 shadow-xl"
         >
-            <div class="p-6" v-if="!user">
+            <div class="p-6" v-if="!currentUser">
                 <v-heading class="text-center" type="h2">Login</v-heading>
                 <p class="text-center text-sm">
                     Please login to view our exciting products and offers.
@@ -85,13 +85,14 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "vue-router";
 import { inject, ref } from "vue";
-
+import { useUserStore } from "@/stores/userStore";
 import VPasswordField from "@/components/VPasswordField.vue";
 
 //reactives
 const emit = defineEmits(["submit"]);
 const router = useRouter();
-const user = inject("currentUser");
+const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore);
 
 //stores
 const authStore = useAuthStore();
@@ -108,6 +109,7 @@ const scrollToAnchor = async () => {
 };
 
 //hooks
+userStore.getCurrentUser();
 </script>
 
 <style lang="scss" scoped></style>

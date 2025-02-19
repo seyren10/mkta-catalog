@@ -1,16 +1,20 @@
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-
+import { useAuthStore } from "@/stores/authStore";
 export const useAxios = (method, options) => {
     const loading = ref(false);
     const errors = ref(null);
     const router = useRouter();
+    const authStore = useAuthStore();
 
     watch(errors, (newValue) => {
-        console.log(newValue);
         switch (newValue.status) {
             case 404:
                 router.push({ name: "notFound" });
+                break;
+            case 401:
+                authStore.logout();
+                break;
         }
     });
 

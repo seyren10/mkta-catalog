@@ -4,7 +4,7 @@ import { useAxios } from "@/composables/useAxios";
 import { StorageSerializers, useStorage } from "@vueuse/core";
 
 export const useUserStore = defineStore("user", () => {
-    const currentUser = useStorage("user", null, undefined, {
+    const currentUser = useStorage("user", null, localStorage, {
         serializer: StorageSerializers.object,
     });
     const user = ref([]);

@@ -68,7 +68,7 @@ import Wishlist from "./components/Wishlist.vue";
 //!SECTION -> Required Init
 import { ref, shallowRef } from "vue";
 import { useRouter } from "vue-router";
-
+import { useUserStore } from "@/stores/userStore";
 const router = useRouter();
 
 import { storeToRefs } from "pinia";
@@ -78,9 +78,12 @@ import { useAuthStore } from "@/stores/authStore";
 
 const authStore = useAuthStore();
 const { loading } = storeToRefs(authStore);
+const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore);
 
 //!SECTION -> Functions
 const handleLogout = async () => {
+    currentUser.value = null;
     await authStore.logout();
 };
 

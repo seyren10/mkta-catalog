@@ -181,6 +181,7 @@ watch(isMatched, (newValue) => {
 const user = inject("currentUser");
 
 async function logout() {
+    user.value = null;
     await authStore.logout();
 }
 </script>

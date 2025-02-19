@@ -2,13 +2,11 @@ import { ref } from "vue";
 import { defineStore, storeToRefs } from "pinia";
 import { useAxios } from "@/composables/useAxios";
 import { useRouter } from "vue-router";
-import { useUserStore } from "./userStore";
+import { useUserStore } from "@/stores/userStore";
 
 export const useAuthStore = defineStore("auth", () => {
     const router = useRouter();
     const { loading, errors, exec } = useAxios();
-    const userStore = useUserStore();
-    const { currentUser } = storeToRefs(userStore);
 
     const form = ref({
         email: null,
@@ -31,9 +29,6 @@ export const useAuthStore = defineStore("auth", () => {
         try {
             await exec("/logout", "delete");
 
-            if (!errors.value) {
-                currentUser.value = null;
-            }
             if (redirect) {
                 await router.push({ name: "login" });
             }
